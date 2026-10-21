@@ -4,6 +4,7 @@ pub mod callbacks;
 pub mod dl;
 pub mod dyld;
 pub mod libc;
+pub mod mach;
 pub mod stack;
 pub mod sync;
 pub mod thread_state;
@@ -83,6 +84,9 @@ pub fn symbol(name: &str) -> Option<u64> {
         return Some(value);
     }
     if let Some(value) = dyld::symbol(name) {
+        return Some(value);
+    }
+    if let Some(value) = mach::symbol(name) {
         return Some(value);
     }
     if let Some(value) = stack::symbol(name) {

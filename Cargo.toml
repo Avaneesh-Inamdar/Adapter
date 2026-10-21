@@ -16,6 +16,10 @@ path = "src/inspect/main.rs"
 name = "adapter-run"
 path = "src/runtime/main.rs"
 
+[[bin]]
+name = "adapter-broker"
+path = "src/broker/main.rs"
+
 [dependencies]
 object = { version = "=0.40.0", default-features = false, features = ["read", "std", "macho"] }
 serde = { version = "1.0", features = ["derive"] }

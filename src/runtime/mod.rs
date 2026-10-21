@@ -385,6 +385,7 @@ mod native {
             let _tls = crate::darwin::tlv::begin(self.tls.clone())?;
             let _thread_state = crate::darwin::thread_state::begin()?;
             let _threads = crate::darwin::threads::begin()?;
+            crate::darwin::mach::begin(trace)?;
             crate::darwin::libc::begin();
             crate::darwin::libc::set_executable_path(&argv[0]);
             unsafe { crate::darwin::libc::set_arguments(argv.len() as i32, av.as_ptr()) };
@@ -421,6 +422,7 @@ mod native {
             crate::darwin::callbacks::finalize(0)?;
             super::dynamic::finalize_all()?;
             self.finalize(trace);
+            crate::darwin::mach::finish()?;
             crate::darwin::libc::flush();
             if trace {
                 eprintln!(

@@ -1,3 +1,4 @@
+pub mod broker;
 pub mod darwin;
 pub mod frameworks;
 pub mod inspect;
