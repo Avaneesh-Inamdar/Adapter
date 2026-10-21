@@ -127,12 +127,13 @@ fn dependency_value(
     target: &DependencyTarget,
     name: &str,
     seen: &mut BTreeSet<(usize, String)>,
+    allow_weak: bool,
 ) -> Result<Option<Value>> {
     match target {
         DependencyTarget::Adapter(library) => {
             Ok(adapter_symbol(library, name).map(Value::Absolute))
         }
-        DependencyTarget::Image(index) => export_value(p, *index, name, seen),
+        DependencyTarget::Image(index) => export_value(p, *index, name, seen, allow_weak),
     }
 }
 fn export_value(
@@ -140,6 +141,7 @@ fn export_value(
     index: usize,
     name: &str,
     seen: &mut BTreeSet<(usize, String)>,
+    allow_weak: bool,
 ) -> Result<Option<Value>> {
     if seen.len() >= 256 {
         return Err("export indirection exceeds 256 entries".into());
@@ -156,7 +158,7 @@ fn export_value(
             .binary_search_by(|e| e.name.as_str().cmp(name))
         {
             let e = &node.image.exports[export_index];
-            if e.weak {
+            if e.weak && !allow_weak {
                 return Err(format!("weak export {name} requires coalescing"));
             }
             return match &e.target {
@@ -176,7 +178,7 @@ fn export_value(
                 } => {
                     let import = if import.is_empty() { name } else { import };
                     if library.is_empty() {
-                        export_value(p, index, import, seen)
+                        export_value(p, index, import, seen, allow_weak)
                     } else {
                         let ordinal = node
                             .image
@@ -184,7 +186,7 @@ fn export_value(
                             .iter()
                             .position(|d| d.name == *library)
                             .ok_or("reexport library missing from dependencies")?;
-                        dependency_value(p, &node.dependencies[ordinal], import, seen)
+                        dependency_value(p, &node.dependencies[ordinal], import, seen, allow_weak)
                     }
                 }
                 ExportTarget::TlvDescriptor { address } => {
@@ -208,7 +210,8 @@ fn export_value(
         // LC_REEXPORT_DYLIB makes the dependency's public namespace visible.
         for (ordinal, dep) in node.image.dependencies.iter().enumerate() {
             if dep.command == 0x8000001f
-                && let Some(v) = dependency_value(p, &node.dependencies[ordinal], name, seen)?
+                && let Some(v) =
+                    dependency_value(p, &node.dependencies[ordinal], name, seen, allow_weak)?
             {
                 return Ok(Some(v));
             }
@@ -217,6 +220,12 @@ fn export_value(
     })();
     seen.remove(&key);
     result
+}
+
+/// Public-export lookup for runtime `dlsym`; weak definitions are admissible
+/// here because no import is being coalesced against another image.
+pub fn resolve_export(p: &Program, index: usize, name: &str) -> Result<Option<Value>> {
+    export_value(p, index, name, &mut BTreeSet::new(), true)
 }
 
 pub fn bind_value(
@@ -231,12 +240,13 @@ pub fn bind_value(
         .dependencies
         .get(usize::try_from(ordinal - 1).map_err(|_| "invalid dylib ordinal")?)
         .ok_or("invalid dylib ordinal")?;
-    let value = dependency_value(p, target, symbol, &mut BTreeSet::new())?.ok_or_else(|| {
-        format!(
-            "unimplemented symbol {symbol} from {}",
-            node.image.dependencies[(ordinal - 1) as usize].name
-        )
-    })?;
+    let value =
+        dependency_value(p, target, symbol, &mut BTreeSet::new(), false)?.ok_or_else(|| {
+            format!(
+                "unimplemented symbol {symbol} from {}",
+                node.image.dependencies[(ordinal - 1) as usize].name
+            )
+        })?;
     match value {
         Value::Absolute(v) => {
             if addend != 0 && matches!(target, DependencyTarget::Adapter(_)) {
@@ -286,6 +296,17 @@ fn order(p: &Program) -> Result<Vec<usize>> {
 }
 
 pub fn prepare(path: &Path, cfg: &Config) -> Result<Program> {
+    prepare_kind(path, cfg, true)
+}
+
+/// Prepare a standalone `dlopen` root. The root must be a dylib or bundle and
+/// has no entry point; dynamic TLS is rejected because per-image template
+/// descriptors cannot be registered after guest execution has started.
+pub fn prepare_library(path: &Path, cfg: &Config) -> Result<Program> {
+    prepare_kind(path, cfg, false)
+}
+
+fn prepare_kind(path: &Path, cfg: &Config, executable_root: bool) -> Result<Program> {
     let graph = super::graph(path, cfg)?;
     if graph.unresolved_required != 0 {
         return Err(format!(
@@ -311,12 +332,20 @@ pub fn prepare(path: &Path, cfg: &Config) -> Result<Program> {
                 image.unsupported.join(", ")
             ));
         }
-        if (index == 0 && (image.filetype != 2 || image.flags & 0x200000 == 0))
-            || (index != 0 && image.filetype != 6)
-        {
+        let root_ok = if executable_root {
+            image.filetype == 2 && image.flags & 0x200000 != 0
+        } else {
+            image.filetype == 6 || image.filetype == 8
+        };
+        if (index == 0 && !root_ok) || (index != 0 && image.filetype != 6) {
             return Err(format!(
-                "preflight {}: requires PIE executable or MH_DYLIB dependency",
-                path.display()
+                "preflight {}: requires {}",
+                path.display(),
+                if executable_root {
+                    "PIE executable or MH_DYLIB dependency"
+                } else {
+                    "MH_DYLIB/MH_BUNDLE root or MH_DYLIB dependency"
+                }
             ));
         }
         if image.flags & 0x80 == 0 || image.flags & 0x100 != 0 {
@@ -331,7 +360,12 @@ pub fn prepare(path: &Path, cfg: &Config) -> Result<Program> {
         }
         let dependencies = dependency_targets(&graph, path, &image)?;
         let fixups = fixups::plan(&image).map_err(|e| format!("fixups {}: {e}", path.display()))?;
-        super::tls::plan(&image)?;
+        if !executable_root && super::tls::plan(&image)?.is_some() {
+            return Err(format!(
+                "preflight {}: dynamic TLS is unsupported",
+                path.display()
+            ));
+        }
         for s in &image.sections {
             let n = match s.flags & 0xff {
                 9 | 10 => 8,
@@ -350,7 +384,9 @@ pub fn prepare(path: &Path, cfg: &Config) -> Result<Program> {
             bindings: BTreeMap::new(),
         });
     }
-    entry(&p.images[0].image)?;
+    if executable_root {
+        entry(&p.images[0].image)?;
+    }
     p.init_order = order(&p)?;
     for idx in 0..p.images.len() {
         let mut values = BTreeMap::new();

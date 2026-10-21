@@ -1,6 +1,7 @@
 //! Narrow libSystem adapters. All guest interfaces use Darwin's x86-64 SysV
 //! calling convention, including when compiled for the Windows MSVC target.
 pub mod callbacks;
+pub mod dl;
 pub mod dyld;
 pub mod libc;
 pub mod stack;
@@ -76,6 +77,9 @@ pub fn symbol(name: &str) -> Option<u64> {
         return Some(value);
     }
     if let Some(value) = callbacks::symbol(name) {
+        return Some(value);
+    }
+    if let Some(value) = dl::symbol(name) {
         return Some(value);
     }
     if let Some(value) = dyld::symbol(name) {

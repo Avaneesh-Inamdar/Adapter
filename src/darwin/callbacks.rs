@@ -51,6 +51,16 @@ impl Drop for Guard {
         }
     }
 }
+pub fn add_ranges(ranges: Vec<(u64, u64)>) -> Result<()> {
+    let mut r = registry()
+        .lock()
+        .map_err(|_| "exit callback registry poisoned")?;
+    if !r.active {
+        return Err("exit callback registry is inactive".into());
+    }
+    r.ranges.extend(ranges);
+    Ok(())
+}
 fn register(function: Function, address: u64, dso: usize) -> i32 {
     let Ok(mut r) = registry().lock() else {
         return -1;

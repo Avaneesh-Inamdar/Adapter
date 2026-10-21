@@ -8,6 +8,19 @@ use crate::{
 };
 use std::path::Path;
 
+// Values pinned from Xcode 27's dlfcn.h (AppleTVOS hardlink carrier).
+pub const RTLD_LAZY: i32 = 0x1;
+pub const RTLD_NOW: i32 = 0x2;
+pub const RTLD_LOCAL: i32 = 0x4;
+pub const RTLD_GLOBAL: i32 = 0x8;
+pub const RTLD_NOLOAD: i32 = 0x10;
+pub const RTLD_NODELETE: i32 = 0x80;
+pub const RTLD_FIRST: i32 = 0x100;
+pub const RTLD_NEXT: isize = -1;
+pub const RTLD_DEFAULT: isize = -2;
+pub const RTLD_SELF: isize = -3;
+pub const RTLD_MAIN_ONLY: isize = -5;
+
 pub fn preflight(path: &Path, cfg: &Config) -> Result<Program> {
     link::prepare(path, cfg)
 }
@@ -16,10 +29,30 @@ pub fn preflight(path: &Path, cfg: &Config) -> Result<Program> {
 mod native {
     use super::*;
     use crate::{
-        loader::{fixups::Kind, link::Value},
+        loader::{
+            fixups::Kind,
+            link::{DependencyTarget, Value},
+        },
         platform::windows::Mapping,
     };
-    use std::ffi::{CString, c_char};
+    use std::{
+        collections::{BTreeMap, BTreeSet},
+        ffi::{CString, c_char},
+    };
+
+    type Init = unsafe extern "sysv64" fn(
+        i32,
+        *const *const c_char,
+        *const *const c_char,
+        *const *const c_char,
+    );
+    type Entry = unsafe extern "sysv64" fn(
+        i32,
+        *const *const c_char,
+        *const *const c_char,
+        *const *const c_char,
+    ) -> i32;
+    type Term = unsafe extern "sysv64" fn();
 
     pub struct LoadedProgram {
         pub plan: Program,
@@ -176,7 +209,126 @@ mod native {
                     })
                 })
         }
-        pub fn run(&self, args: &[String], trace: bool) -> Result<i32> {
+        /// Snapshot public exports and mapped ranges. `dlsym` uses these
+        /// absolute addresses and never borrows the loaded program again.
+        pub fn records(&self) -> Result<Vec<super::dynamic::ImageRecord>> {
+            let mut out = Vec::new();
+            for (index, node) in self.plan.images.iter().enumerate() {
+                let text = node
+                    .image
+                    .segments
+                    .iter()
+                    .find(|s| s.name == "__TEXT")
+                    .ok_or("image has no __TEXT segment")?;
+                let header = self.mappings[index].relocated(text.vmaddr)?;
+                let mut exports = BTreeMap::new();
+                for export in &node.image.exports {
+                    if let Ok(Some(value)) = link::resolve_export(&self.plan, index, &export.name) {
+                        let address = match value {
+                            Value::Image { index, address } => {
+                                self.mappings[index].relocated(address)?
+                            }
+                            Value::Absolute(value) => value,
+                        };
+                        exports.insert(export.name.clone(), address);
+                    }
+                }
+                let mut executable = Vec::new();
+                for segment in &node.image.segments {
+                    if segment.name == "__PAGEZERO" || segment.vmsize == 0 {
+                        continue;
+                    }
+                    if segment.initprot & 4 != 0 {
+                        let low = self.mappings[index].relocated(segment.vmaddr)?;
+                        let high = low
+                            .checked_add(segment.vmsize)
+                            .ok_or("relocated segment range overflow")?;
+                        executable.push((low, high));
+                    }
+                }
+                out.push(super::dynamic::ImageRecord {
+                    path: node.path.clone(),
+                    header,
+                    slide: header as i64 - text.vmaddr as i64,
+                    exports,
+                    executable,
+                });
+            }
+            Ok(out)
+        }
+        /// Root-first dependency order used by `dlsym(handle, ...)`.
+        pub fn search_order(&self) -> Vec<usize> {
+            fn visit(
+                plan: &Program,
+                index: usize,
+                seen: &mut BTreeSet<usize>,
+                out: &mut Vec<usize>,
+            ) {
+                if !seen.insert(index) {
+                    return;
+                }
+                out.push(index);
+                for dependency in &plan.images[index].dependencies {
+                    if let DependencyTarget::Image(child) = dependency {
+                        visit(plan, *child, seen, out);
+                    }
+                }
+            }
+            let mut out = Vec::new();
+            visit(&self.plan, 0, &mut BTreeSet::new(), &mut out);
+            out
+        }
+        pub fn adapter_names(&self) -> Vec<String> {
+            let mut names = BTreeSet::new();
+            for node in &self.plan.images {
+                for dependency in &node.dependencies {
+                    if let DependencyTarget::Adapter(name) = dependency {
+                        names.insert(name.clone());
+                    }
+                }
+            }
+            names.into_iter().collect()
+        }
+        pub fn initialize(
+            &self,
+            argc: i32,
+            argv: *const *const c_char,
+            env: *const *const c_char,
+            apple: *const *const c_char,
+            trace: bool,
+        ) {
+            for &index in &self.plan.init_order {
+                for &pointer in &self.initializers[index] {
+                    if trace {
+                        eprintln!(
+                            "adapter-run [initialize]: {} {pointer:#x}",
+                            self.plan.images[index].path.display()
+                        );
+                    }
+                    let init: Init = unsafe { std::mem::transmute(pointer as usize) };
+                    unsafe {
+                        init(argc, argv, env, apple);
+                    }
+                }
+            }
+        }
+        pub fn finalize(&self, trace: bool) {
+            for &index in self.plan.init_order.iter().rev() {
+                for &pointer in self.finalizers[index].iter().rev() {
+                    if trace {
+                        eprintln!(
+                            "adapter-run [finalize]: {}",
+                            self.plan.images[index].path.display()
+                        );
+                    }
+                    let term: Term = unsafe { std::mem::transmute(pointer as usize) };
+                    unsafe {
+                        term();
+                    }
+                }
+            }
+        }
+        pub fn run(&self, cfg: &Config, args: &[String], trace: bool) -> Result<i32> {
             let executable = &self.plan.images[0].path;
             let mut argv = vec![
                 CString::new(executable.to_string_lossy().as_bytes())
@@ -217,59 +369,43 @@ mod native {
                 })
                 .collect();
             let _callbacks = crate::darwin::callbacks::begin(ranges)?;
-            let images = self
-                .plan
-                .images
-                .iter()
-                .enumerate()
-                .map(|(index, node)| {
-                    let text = node
-                        .image
-                        .segments
-                        .iter()
-                        .find(|s| s.name == "__TEXT")
-                        .ok_or("image has no __TEXT segment")?;
-                    let header = self.mappings[index].relocated(text.vmaddr)?;
-                    Ok((
-                        node.path.display().to_string(),
-                        header,
-                        header as i64 - text.vmaddr as i64,
-                    ))
-                })
-                .collect::<Result<Vec<_>>>()?;
-            crate::darwin::dyld::begin(images);
+            let records = self.records()?;
+            crate::darwin::dyld::begin(
+                records
+                    .iter()
+                    .map(|record| {
+                        (
+                            record.path.display().to_string(),
+                            record.header,
+                            record.slide,
+                        )
+                    })
+                    .collect(),
+            );
             let _tls = crate::darwin::tlv::begin(self.tls.clone())?;
             let _thread_state = crate::darwin::thread_state::begin()?;
             let _threads = crate::darwin::threads::begin()?;
             crate::darwin::libc::begin();
             crate::darwin::libc::set_executable_path(&argv[0]);
             unsafe { crate::darwin::libc::set_arguments(argv.len() as i32, av.as_ptr()) };
-            type Init = unsafe extern "sysv64" fn(
-                i32,
-                *const *const c_char,
-                *const *const c_char,
-                *const *const c_char,
+            let _dynamic = super::dynamic::begin(
+                cfg.clone(),
+                records,
+                self.search_order(),
+                self.adapter_names(),
+                argv.len() as i32,
+                av.as_ptr() as usize,
+                ev.as_ptr() as usize,
+                ap.as_ptr() as usize,
+                trace,
+            )?;
+            self.initialize(
+                argv.len() as i32,
+                av.as_ptr(),
+                ev.as_ptr(),
+                ap.as_ptr(),
+                trace,
             );
-            type Entry = unsafe extern "sysv64" fn(
-                i32,
-                *const *const c_char,
-                *const *const c_char,
-                *const *const c_char,
-            ) -> i32;
-            for &index in &self.plan.init_order {
-                for &pointer in &self.initializers[index] {
-                    if trace {
-                        eprintln!(
-                            "adapter-run [initialize]: {} {pointer:#x}",
-                            self.plan.images[index].path.display()
-                        );
-                    }
-                    let init: Init = unsafe { std::mem::transmute(pointer as usize) };
-                    unsafe {
-                        init(argv.len() as i32, av.as_ptr(), ev.as_ptr(), ap.as_ptr());
-                    }
-                }
-            }
             let entry = link::entry(&self.plan.images[0].image)?;
             if trace {
                 eprintln!(
@@ -283,21 +419,8 @@ mod native {
             // Never unmap code/TLS while an owned guest thread can still use it.
             crate::darwin::threads::finish()?;
             crate::darwin::callbacks::finalize(0)?;
-            for &index in self.plan.init_order.iter().rev() {
-                for &pointer in self.finalizers[index].iter().rev() {
-                    if trace {
-                        eprintln!(
-                            "adapter-run [finalize]: {}",
-                            self.plan.images[index].path.display()
-                        );
-                    }
-                    let term: unsafe extern "sysv64" fn() =
-                        unsafe { std::mem::transmute(pointer as usize) };
-                    unsafe {
-                        term();
-                    }
-                }
-            }
+            super::dynamic::finalize_all()?;
+            self.finalize(trace);
             crate::darwin::libc::flush();
             if trace {
                 eprintln!(
@@ -310,13 +433,31 @@ mod native {
     }
     pub fn execute(path: &Path, cfg: &Config, args: &[String], trace: bool) -> Result<i32> {
         let loaded = LoadedProgram::load(preflight(path, cfg)?, trace)?;
-        loaded.run(args, trace)
+        loaded.run(cfg, args, trace)
     }
 }
+#[cfg(all(windows, target_arch = "x86_64"))]
+mod dynamic;
+#[cfg(all(windows, target_arch = "x86_64"))]
+pub use dynamic::{
+    ImageRecord, close as dynamic_close, load as dynamic_load, symbol as dynamic_symbol,
+};
 #[cfg(all(windows, target_arch = "x86_64"))]
 pub use native::execute;
 
 #[cfg(not(all(windows, target_arch = "x86_64")))]
 pub fn execute(_path: &Path, _cfg: &Config, _args: &[String], _trace: bool) -> Result<i32> {
     Err("execution requires Windows x86_64".into())
+}
+#[cfg(not(all(windows, target_arch = "x86_64")))]
+pub fn dynamic_load(_path: &str, _mode: i32) -> Result<usize> {
+    Err("dynamic loading requires Windows x86_64".into())
+}
+#[cfg(not(all(windows, target_arch = "x86_64")))]
+pub fn dynamic_symbol(_handle: isize, _name: &str) -> Result<Option<u64>> {
+    Err("dynamic loading requires Windows x86_64".into())
+}
+#[cfg(not(all(windows, target_arch = "x86_64")))]
+pub fn dynamic_close(_handle: isize) -> Result<()> {
+    Err("dynamic loading requires Windows x86_64".into())
 }

@@ -12,7 +12,7 @@ pub mod fixups;
 pub mod link;
 pub mod tls;
 
-#[derive(Debug, Default, Deserialize)]
+#[derive(Debug, Default, Clone, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Config {
     #[serde(default)]
