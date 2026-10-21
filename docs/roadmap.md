@@ -41,37 +41,45 @@ or general macOS/Xcode compatibility is established.
   and lookup, XNU receive-header inversion, right consumption and documented
   failure codes. See [results](mach-ipc-results.md) and
   [ABI evidence](reverse-engineering/mach-ipc-evidence.md). Complex messages,
-  port sets, notifications, launchd and XPC remain absent.
+  port sets, notifications and XPC remain absent.
+- [x] D3 launchd-style bootstrap slice: the broker loads job plists, reserves
+  `MachServices` names, starts jobs on first lookup or `RunAtLoad`, applies
+  environment/log redirection, waits for check-in, respawns after exit and
+  replays spawn failures as unknown-service. See [results](launchd-results.md)
+  and [evidence](reverse-engineering/launchd-bootstrap-evidence.md). This is an
+  Adapter control plane: no launchd PID 1, `launchctl`, `launch_msg`, KeepAlive,
+  socket activation or per-user domains.
 
 ## OS services and dynamic loading track
 
 macOS applications depend on services below and above the BSD/libc layer.
 These are separate implementation tracks, ordered by dependency; no layer is
-satisfied by adapters for another. D1 and D2 now have implemented slices with
-measured consumers; D3-D5 remain planning plus the measured gaps in the import
+satisfied by adapters for another. D1-D3 now have implemented slices with
+measured consumers; D4-D5 remain planning plus the measured gaps in the import
 inventory, not compatibility evidence.
 
 | Stage | Component | Current state | Required for | Acceptance gate |
 | --- | --- | --- | --- | --- |
 | D1 | Runtime dyld loading: `dlopen`/`dlsym`/`dlclose` of Intel dylibs and bundles | Implemented slice: per-image groups, refcounted handles, `RTLD_GLOBAL`/`LOCAL`/`NOLOAD`/`FIRST`, constructors and per-image finalizers, adapter-only install-name groups. Images are never unmapped; dynamic TLS, `@rpath` arguments, `RTLD_NEXT`/`RTLD_SELF`, `dladdr`, interposition and cross-group sharing are unsupported | Plugin architectures, Xcode's `libIDEApplicationLoader.dylib` path, many complex CLIs | Startup consumer met in-process over classic, chained and bundle plugins. Remaining: a pinned real Intel plugin consumer, true unload, dynamic TLS and cyclic initialization |
 | D2 | Mach IPC: ports, send/receive rights, messages, bootstrap namespace | Implemented slice: per-worker name spaces, broker-routed simple messages, send/send-once consumption, receive-header inversion, timeouts and LARGE retry, bootstrap check-in/lookup and lifecycle errors. No complex messages, port sets, notifications, introspection or launchd-managed check-in | `launchd`, XPC, parts of CF/Foundation and crash reporting | Met by two unchanged Mach-O processes over a loopback broker plus failure-semantics probes. Remaining: complex messages, port descriptors and a pinned real Intel Mach client |
-| D3 | `launchd`/bootstrap: job registration, spawn, on-demand activation, service namespace | Absent; `fork`/`exec` are explicit failures | XPC services, background tools, Xcode workers | A broker starts a registered job and a measured consumer reaches it; process model and teardown documented |
+| D3 | `launchd`/bootstrap: job registration, spawn, on-demand activation, service namespace | Implemented slice: broker-loadable job plists with the documented subset of keys, reserved `MachServices`, lookup- and `RunAtLoad`-triggered spawn through `adapter-run`, environment/log redirection, 15-second check-in wait, one respawn and unknown-service on failure. No launchd process, `launchctl`/`launch_msg`, KeepAlive, throttling, supervision, socket/event activation, per-user domains or pre-created receive rights | XPC services, background tools, Xcode workers | Met by a broker-started, unchanged Mach-O job reached by the unchanged client, including respawn, RunAtLoad, spawn failure and plist rejection. Remaining: KeepAlive/supervision, socket activation, privileged/per-user namespaces and a pinned real launchd consumer |
 | D4 | XPC: connections, serialization, peer validation | Absent; depends on D2 and D3 | Xcode subsystems and modern app services | Real libxpc client/server consumer or measured app service; sandbox and entitlement limits explicit |
 | D5 | Xcode service consumers: SourceKit, CoreSimulator, `xcodebuild`, plugins | Xcode is ARM64; Objective-C and GUI prerequisites are also missing | Xcode | Measured service call from a real Intel target after D1-D4 and Objective-C/Foundation |
 
-The proposed broker daemon (mapping Mach ports to Windows named pipes or local
-RPC) is an engineering hypothesis, not a measured design. Port rights, queue
-semantics, bootstrap registration and process teardown need probes before any
-broker is claimed. `launchd` is PID 1 on Darwin, and Adapter has no process
-personality, `fork` or `exec`, so D3 cannot be a thin plist translation. D1 was
-the first track because it is closed-loop, testable without IPC services, and a
-prerequisite for loading Xcode's own application-loader bundles. Its in-process
-consumer now exists; a real pinned plugin target and the unsupported load
-semantics remain before that Xcode path can be attempted. D2 followed because
-launchd and XPC are expressed in Mach messages; the cross-process consumer now
-exists, but complex messages and a pinned real Mach client remain before D3 can
-build job registration on it. The broker is deliberately a routing service for
-trusted local workers, not a kernel personality or security boundary.
+The broker daemon (mapping Mach ports to loopback TCP with a token) is an
+engineering choice, not a measured Apple design. `launchd` is PID 1 on Darwin,
+and Adapter has no process personality or `fork`/`exec`, so D3 is an
+adapter-defined job control plane rather than a thin plist translation: the
+broker spawns an unmodified Mach-O guest with `adapter-run` when a registered
+service is looked up. D1 was the first track because it is closed-loop, testable
+without IPC services, and a prerequisite for loading Xcode's own
+application-loader bundles. Its in-process consumer now exists; a real pinned
+plugin target and the unsupported load semantics remain before that Xcode path
+can be attempted. D2 followed because launchd and XPC are expressed in Mach
+messages; the cross-process consumer and the D3 job path now exist, but complex
+messages and a pinned real Mach client remain open. The broker is deliberately
+a routing and job-control service for trusted local workers, not a kernel
+personality or security boundary.
 
 ## Next acceptance gates
 
@@ -90,12 +98,14 @@ trusted local workers, not a kernel personality or security boundary.
    create/destroy. Current cycles and unsupported exports remain explicit
    pre-constructor failures.
 3. **Mach IPC depth and launchd bootstrap.** The two-process message path is
-   verified for simple messages. Remaining D2 work: complex messages and port
-   descriptors, out-of-line memory, port sets and notifications, introspection
-   calls, and a pinned real Intel Mach client. D3 then needs job registration,
-   spawn, on-demand activation and broker-managed check-in. Gate: a registered
-   job started by a broker and reached by a measured consumer; queue fairness,
-   right-transfer and broker-loss behavior compared with a reference Mac.
+   verified for simple messages, and the broker starts registered jobs on demand
+   or at load. Remaining D2 work: complex messages and port descriptors,
+   out-of-line memory, port sets and notifications, introspection calls, and a
+   pinned real Intel Mach client. Remaining D3 work: launchd `KeepAlive` and
+   supervision, socket/event activation, pre-created receive rights and
+   privileged/per-user domains. Gate: a pinned real launchd consumer plus
+   queue fairness, right-transfer and broker-loss behavior compared with a
+   reference Mac.
 4. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
    real Intel target. Register classes/metaclasses/selectors and implement
    dispatch, ownership and initialization from measured layouts. Gate: execute

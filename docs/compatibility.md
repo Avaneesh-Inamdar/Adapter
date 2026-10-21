@@ -22,8 +22,9 @@ general macOS application compatibility is established.
 | CF immutable UTF-8 strings | Five functions | Guest UTF-8/UTF-16 and ownership fixture | Runtime-created opaque strings only |
 | Bundle executable discovery | Yes | Hello.app, traversal rejection | Resource APIs/GUI absent |
 | Runtime dyld loading | Partial | A Mach-O consumer loads classic, chained and MH_BUNDLE plugins after startup, resolves function/data/string exports through handles, observes constructors/destructors, duplicate and `RTLD_NOLOAD` handles, `RTLD_LOCAL`/`FIRST` scope and per-thread one-shot errors | Images are never unmapped; dynamic TLS and `@rpath` arguments rejected before constructors; no `RTLD_NEXT`/`RTLD_SELF`, `dladdr`, dependency sharing across groups, interposition or ObjC registration |
-| Mach IPC / bootstrap | Partial | Two unchanged Mach-O processes over a loopback broker; send/receive, send-once replies, retirement and failure semantics in local and broker modes | Simple messages only; no complex messages, port sets, notifications, introspection or launchd-managed check-in |
-| launchd / XPC | Absent | — | Separate dependency-ordered tracks on top of D2; no POSIX substitute is claimed |
+| Mach IPC / bootstrap | Partial | Two unchanged Mach-O processes over a loopback broker; send/receive, send-once replies, retirement and failure semantics in local and broker modes | Simple messages only; no complex messages, port sets, notifications, introspection or launchd-precreated receive rights |
+| launchd jobs | Partial | Broker loads a documented plist subset, reserves `MachServices`, starts jobs on lookup or `RunAtLoad`, applies environment/log paths, waits 15 seconds for check-in, respawns after exit and reports spawn failure as unknown service | No launchd process, `launchctl`/`launch_msg`, KeepAlive/throttling/supervision, socket/event activation, privileged or per-user domains; check-in creates the receive right |
+| XPC | Absent | — | Depends on D2/D3; no POSIX substitute is claimed |
 | Objective-C | Detection only | Cross-linked metadata probe + Apple apps | Not executable |
 | jq macOS amd64 1.8.2 | Demonstrated tested workflows | 13 CLI methods plus the pinned upstream `jq.test` suite: 550/550 with module fixtures, debug and release | No reference-Mac comparison; suite excludes upstream shell/`man.test` harnesses |
 | ripgrep macOS amd64 15.2.0 | Demonstrated tested workflows | 11 CLI methods: version/help, literal/regex/context, ignore/hidden, JSON, PCRE2/UTF-8, stdin, binary, 2 MiB mmap, 40-file threads, exit codes, clean `--pre` failure; debug and release | No reference-Mac comparison; this target does not exercise condition variables; process spawning and signal delivery are absent |
@@ -74,8 +75,9 @@ CFIndex and size_t are 64-bit even though Windows C long is 32-bit.
 | mach_task_self_ / bootstrap_port | Exported data symbols holding stable per-worker names | Values are adapter names, not kernel task/bootstrap ports; no privilege checks | Mach failure fixture |
 | mach_port_allocate / deallocate / mod_refs / insert_right / destroy | Receive-right allocation, send/send-once reference counting, MAKE/COPY dispositions, dead-right tracking and broker retirement | Receive rights only from allocate; no port sets, dead-name requests, guarded or strict rights, or task ports other than self | Local and broker-backed Mach failure fixture; cross-process retirement |
 | mach_msg | Sends simple messages and receives with XNU header inversion, `MACH_RCV_LARGE`, `MACH_RCV_TIMEOUT` and 16 MiB cap; reply rights materialized in the receiver | Complex bits rejected; no OOL, descriptors, vouchers, trailers, port sets or notifications; no strict reply | Echo, header-bit, timeout, LARGE-retry, refcount and stale-right assertions |
-| bootstrap_check_in / look_up | Broker-owned service namespace; check-in allocates a receive right, duplicate reports 1103, lookup returns a send right or 1102 | Process-local fallback without `ADAPTER_MACH_BROKER`; no launchd job, demand creation, register/subset or privileged namespace | Duplicate check-in, absent lookup, bad bootstrap port, cross-process echo |
-| adapter-broker | Loopback TCP endpoint file with a random token; routes payloads between local workers and owns service names and retirement | Trusted-local-worker coordination, not a security boundary; dropped connections fail pending operations instead of hanging | Broker-backed failure fixture and cross-process test |
+| bootstrap_check_in / look_up | Broker-owned service namespace; check-in allocates a receive right, duplicate reports 1103, lookup returns a send right or 1102; a lookup for a registered job's service activates the job and waits for check-in | Process-local fallback without `ADAPTER_MACH_BROKER`; no launchd-precreated port, register/subset or privileged namespace | Duplicate check-in, absent lookup, bad bootstrap port, cross-process echo, on-demand job activation |
+| adapter-broker | Loopback TCP endpoint file with a random token; routes payloads between local workers and owns service names and retirement; optionally loads job plists and spawns registered jobs | Trusted-local-worker coordination and job control, not a security boundary; dropped connections fail pending operations instead of hanging; running jobs are not killed on broker exit | Broker-backed failure fixture, cross-process test and broker job tests |
+| adapter-broker `--job` | Loads `Label`, `Program`, `ProgramArguments`, `MachServices`, `EnvironmentVariables`, `StandardOutPath`, `StandardErrorPath` and `RunAtLoad`; spawns `adapter-run` on lookup or at load, waits 15 seconds for check-in, allows one respawn and reports spawn failure as 1102 | Unknown keys fail startup; no `launchctl`/`launch_msg`, KeepAlive, supervision, throttling, sockets, events, per-user domains or `StandardInPath`/umask/cwd | On-demand spawn and respawn, RunAtLoad, spawn failure and unsupported-key rejection |
 
 ## jq-oriented libc slice
 
@@ -130,6 +132,8 @@ an explicit terminating diagnostic; it is not a lazy linker. All supported lazy
 slots are bound eagerly before guest execution.
 
 Mach IPC uses a separate `adapter-broker` process; `ADAPTER_MACH_BROKER` must
+point at the broker's endpoint. A broker with `--job` also starts registered
+jobs; see the launchd row above.
 name its endpoint file for cross-process ports and bootstrap services. Without
 it, a worker has a process-local namespace and only self-send succeeds. The
 broker routes simple messages and owns service names; it does not enforce

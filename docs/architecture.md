@@ -32,7 +32,7 @@ Module boundaries:
 | `src/platform/windows.rs` | VirtualAlloc/VirtualProtect, copying, SG_READ_ONLY final protections, instruction-cache flush, RAII release |
 | `src/runtime` | Preflight, import availability, relocation, initialization, entry invocation, worker timeout |
 | `src/runtime/dynamic.rs` | Post-startup `dlopen` groups, reference-counted handles, export snapshots, `dlsym` scope, per-image close finalization |
-| `src/broker` | Loopback Mach transport protocol, endpoint/token handshake, per-connection request dispatch and payload routing |
+| `src/broker` | Loopback Mach transport protocol, endpoint/token handshake, per-connection request dispatch, payload routing, launchd-style job plist loading and on-demand job activation |
 | `src/broker/main.rs` | `adapter-broker`: endpoint file creation, service namespace, connection liveness and port retirement |
 | `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, `dlfcn`, Mach IPC and TLV ABI bridges, Darwin stack probe and exit callbacks |
 | `src/darwin/host` | C adapters for libSystem stdio/files/stat/time/locale, signals, process stubs, dispatch, mmap and directory iteration |
@@ -160,9 +160,34 @@ prevents a send/receive deadlock between workers. `bootstrap_check_in` creates
 the receive right and registers the service name; `bootstrap_look_up` returns a
 send right. Both use the process-local service table when no broker endpoint is
 configured. Complex messages, port descriptors, OOL memory, vouchers, trailers,
-port sets, notifications, introspection and launchd-managed check-in are not
-implemented. See [the ABI evidence](reverse-engineering/mach-ipc-evidence.md)
-and [the results](mach-ipc-results.md).
+port sets, notifications and introspection are not implemented. See
+[the ABI evidence](reverse-engineering/mach-ipc-evidence.md) and
+[the results](mach-ipc-results.md).
+
+## launchd-style jobs
+
+The D3 broker optionally loads property lists passed with `--job`. It parses the
+documented subset (`Label`, `Program`, `ProgramArguments`, `MachServices`,
+`EnvironmentVariables`, `StandardOutPath`, `StandardErrorPath`, `RunAtLoad`) and
+rejects every other key before publishing its endpoint. Labels and advertised
+services must be unique across jobs. Names in `MachServices` are reserved in the
+broker's service table; the job does not own a receive right until its guest
+checks in.
+
+A lookup for a reserved name with no live owner spawns
+`adapter-run <Program> -- <arguments>` with the broker endpoint and the job's
+environment. `RunAtLoad` jobs are spawned when the broker starts. The broker
+tracks `Idle`, `Starting`, `Running` and `Failed`, waits up to 15 seconds for
+check-in, allows one respawn after an exit during that wait, and returns
+`BOOTSTRAP_UNKNOWN_SERVICE` when activation fails. A watcher thread marks the job
+`Idle` when the child exits. The broker does not terminate running children on
+shutdown; they observe the lost namespace on their next Mach call.
+
+This is an Adapter control plane, not launchd. There is no PID 1, `launchctl`,
+`launch_msg`, KeepAlive, throttling, signal supervision, socket/event
+activation, privileged or per-user domain, or launchd-precreated receive right.
+See [the launchd evidence](reverse-engineering/launchd-bootstrap-evidence.md) and
+[the results](launchd-results.md).
 
 ## Darwin thread support
 

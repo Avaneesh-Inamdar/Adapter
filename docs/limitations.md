@@ -6,7 +6,7 @@
 | Apple Objective-C ABI | Metadata detected; no runtime implementation | Class/selector layouts, initialization/dispatch/ownership tests with real consumers |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
 | Darwin system calls / Mach services | No syscall interception or kernel personality. A D2 slice provides per-worker Mach namespaces, a loopback broker, simple messages with send/send-once rights, timeouts and a bootstrap service table | Complex messages, port sets, notifications and a pinned real Mach client; syscall probes |
-| Service management and XPC | `launchd` jobs, on-demand activation and XPC are absent; `fork`/`exec` fail. D2's bootstrap table accepts check-in/lookup but does not spawn or supervise jobs | A broker-spawned job consumer and a real libxpc client/server pair |
+| Service management and XPC | D3 lets the broker start launchd-style jobs on lookup or `RunAtLoad`, with a documented plist subset, environment/log redirection and check-in wait. There is no launchd process, `launchctl`/`launch_msg`, KeepAlive, supervision, throttling, socket/event activation or per-user domain; XPC and `fork`/`exec` are absent | KeepAlive/supervision, socket activation, pre-created receive rights and a real libxpc client/server pair |
 | TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming, normal/recursive mutexes, condition variables and C++ thread-exit destructors verified | Cancellation, process-shared condition variables and reference-Mac ordering |
 | Dynamic libraries | Local Intel graph execution, reexports and runtime `dlopen`/`dlclose` of classic/chained/bundle plugins verified; cycles rejected; close runs finalizers but never unmaps; no dynamic TLS, cross-group sharing, `RTLD_NEXT` or interposition | True unload, TLS-bearing and cyclic plugins, symbol interposition and a real plugin consumer |
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
@@ -46,8 +46,12 @@ send/send-once and receive rights, simple messages with the Darwin receive
 header inversion, timeouts and a loopback broker that owns service names. This
 broker routes messages between trusted local workers; it is not a Mach kernel,
 adds no memory protection or kernel-enforced right transfer, rejects complex
-messages, out-of-line memory, port sets and notifications, and cannot spawn
-`launchd` jobs. `launchd` job management and XPC remain absent. Mach ports are
+messages, out-of-line memory, port sets and notifications. The broker can also
+load launchd-style job plists and spawn registered guests on service lookup or
+`RunAtLoad`, but it is not launchd: there is no PID 1, `launchctl`, KeepAlive,
+supervision, throttling, socket activation, privileged/per-user namespace or
+pre-created receive right, and running jobs are not terminated when the broker
+exits. XPC remains absent. Mach ports are
 not substitutes for POSIX sockets or CRT process APIs. Signal handlers and
 alternate stacks are recorded but never invoked; pause blocks. pthread stack-size attributes are
 honored, but guard size, scheduling and cancellation are not. ripgrep's

@@ -56,16 +56,18 @@ When adding a new target, see the inventory refresh command in
 | TLS and threads | Per-image/per-thread TLV storage, C++ thread-local destruction, create/join, keys/destructor passes, once, errno, condition variables with signal/broadcast/timedwait | [Darwin modules](src/darwin), [thread probes](tests/fixtures/thread_state.c), [results](docs/thread-lifecycle-results.md) |
 | libc | C/POSIX rune data, separate Darwin FILE objects, binary I/O, printf-family varargs, UTF-8 paths/stat64, environment, selected time/string/math APIs | [Native adapters](src/darwin/host), [libc tests](tests/integration/test_libc.py) |
 | Mach IPC | Simple messages between unchanged Mach-O processes through a loopback broker; receive/send/send-once rights, XNU header inversion, timeouts, LARGE retry, bootstrap check-in/lookup and retirement errors | [Mach adapter](src/darwin/mach.rs), [broker](src/broker), [fixtures](tests/fixtures/mach_server.c), [results](docs/mach-ipc-results.md) |
+| launchd jobs | Broker loads launchd-style plists, reserves `MachServices` names and starts registered jobs on first lookup or `RunAtLoad`; environment and log redirection, check-in wait, respawn after exit | [job parser](src/broker/job.rs), [broker activation](src/broker/main.rs), [results](docs/launchd-results.md) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 118 distinct tests: 25 Rust, nine archive
-and 84 integration tests. All 84 integration tests also passed in release. The
+**Test state:** the current run passed 126 distinct tests: 29 Rust, nine archive
+and 88 integration tests. All 88 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
-ripgrep binary exercising 11 CLI workflows, and two unchanged Mach-O processes
-exchanging Mach messages through the broker. This is Windows-side evidence; no
+ripgrep binary exercising 11 CLI workflows, two unchanged Mach-O processes
+exchanging Mach messages through the broker, and a broker-started launchd-style
+job reached by the same unchanged client. This is Windows-side evidence; no
 reference-Mac run exists.
 [Current run](docs/test-results/latest.json) ·
 [Summary](docs/test-results/summary.json).
@@ -78,11 +80,11 @@ reference-Mac run exists.
 | TLS lifecycle | In-process C++ TLV destruction works; shared-cache TLVs, `__cxa_thread_atexit` and exact Darwin destructor ordering are unverified | [TLS planning](src/loader/tls.rs), [TLV runtime](src/darwin/tlv.rs) | Shared-cache and cross-compiler consumers plus reference ordering |
 | Synchronization | Condition variables work in-process; no cancellation, process-shared objects, errorcheck/adaptive mutexes or nondefault scheduling | [Sync adapters](src/darwin/sync.rs), [threads](src/darwin/threads.rs) | Cancellation/cleanup and cross-process lifetime tests |
 | Dynamic loading | Runtime load works, but images are never unmapped; dynamic TLS and `@rpath` arguments are rejected, `RTLD_NEXT`/`RTLD_SELF` and `dladdr` are absent, and cross-group dependency sharing, interposition, ObjC registration and cyclic initialization are unsupported | [Dynamic registry](src/runtime/dynamic.rs), [roadmap D1](docs/roadmap.md) | True unload, TLS-bearing plugins, `RTLD_NEXT`/interposition and a pinned real plugin consumer |
-| OS services | Mach ports, simple messages and a bootstrap table work across processes through `adapter-broker`; complex messages, `launchd` jobs, XPC and `fork`/`exec` are absent | [Roadmap D2-D4](docs/roadmap.md), [Mach results](docs/mach-ipc-results.md) | Complex-message and pinned real Mach consumers, a broker-spawned job, and a real libxpc consumer; none is implied by POSIX adapters |
+| OS services | Mach ports, simple messages, a bootstrap table and broker-started launchd-style jobs work across processes; complex messages, launchd supervision/`launchctl`, XPC and `fork`/`exec` are absent | [Roadmap D2-D4](docs/roadmap.md), [Mach results](docs/mach-ipc-results.md), [launchd results](docs/launchd-results.md) | Complex-message and pinned real Mach consumers, launchd supervision/KeepAlive and socket activation, and a real libxpc consumer; none is implied by POSIX adapters |
 | Objective-C | No class/selector registration, dispatch, ownership or class initialization | [Metadata probe](tests/fixtures/objc.m), [missing imports](docs/progress/status.json) | Execute a small Apple-ABI object/method consumer before trying an app |
 | Frameworks and GUI | Foundation, AppKit and SwiftUI absent; CF limited to strings | [Framework adapters](src/frameworks), [Apple target inventory](docs/reverse-engineering/apple-inputs/targets.json) | Grow APIs from a chosen target; test object lifetime, resources, windows and events |
 | libc completeness | Missing APIs and partial semantics: Unicode locales, cookie streams, wide/positional/long-double formatting, filesystem metadata, date formats and timezone behavior | [ABI adapters](src/darwin/host), [API contracts](docs/compatibility.md) | Focused Mach-O probes and same-artifact output/error comparisons |
-| Exceptions and OS services | No Darwin unwinder, general signal model, syscall personality, Mach IPC, networking or fork/exec | [Runtime](src/runtime), [limitations](docs/limitations.md) | Separate consumers for each service and failure path |
+| Exceptions and OS services | No Darwin unwinder, general signal model, syscall personality, complex Mach messages, networking or fork/exec | [Runtime](src/runtime), [limitations](docs/limitations.md) | Separate consumers for each service and failure path |
 | ARM64 and Xcode | ARM instructions cannot execute through the Intel loader; private frameworks/services also missing | [Xcode findings](docs/reverse-engineering/xcode27.md), [roadmap](docs/roadmap.md) | ARM64 execution first, then measured framework/service bring-up |
 
 Choose a consumer from the missing-API inventory, implement the required
@@ -134,9 +136,13 @@ target\debug\adapter-broker.exe --endpoint broker.json
 $env:ADAPTER_MACH_BROKER = (Resolve-Path broker.json).Path
 ```
 
-The broker is a trusted local message router, not a security boundary, and it
-does not spawn processes. A missing endpoint file makes `adapter-run` exit 125
-before guest entry.
+Pass `--job job.plist` to register a launchd-style job. A lookup for one of its
+`MachServices` names starts `adapter-run` with the job's program, arguments,
+environment and log paths; `RunAtLoad` starts it when the broker loads. The
+broker is a trusted local message and job router, not a security boundary and
+not launchd: there is no `launchctl`, `KeepAlive`, supervision, socket activation
+or XPC. A missing endpoint file makes `adapter-run` exit 125 before guest entry.
+See [launchd results](docs/launchd-results.md).
 
 Guest paths `/C/Users/...` and `/E/...` map to Windows drives. Use that spelling
 for jq `-L` module search paths so macOS code recognizes them as absolute.
