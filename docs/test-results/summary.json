@@ -1,16 +1,16 @@
 {
-  "rust_tests_passed": 25,
+  "rust_tests_passed": 29,
   "rust_test_status": "passed",
   "archive_tests_passed": 9,
   "integration_tests_attempted": {
-    "debug": 84,
-    "release": 84
+    "debug": 88,
+    "release": 88
   },
   "integration_status": {
     "debug": "passed",
     "release": "passed"
   },
-  "distinct_tests_passed_final": 118,
+  "distinct_tests_passed_final": 126,
   "jq_test_methods": 14,
   "ripgrep_test_methods": 11,
   "reference_macos_verified": false
