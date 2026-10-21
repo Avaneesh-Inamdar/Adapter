@@ -20,7 +20,7 @@ Status: **verified-slice**. Dependencies: none.
 | # | Work item | Status | Remaining work / boundary |
 | ---: | --- | --- | --- |
 | 1 | Real macOS reference execution | reference-verified | Hosted Intel Mac reference executed successfully (run39667131995); compressed native capture, OS/build and exact executable hash retained. Physical device/GPU/desktop traces remain separate. |
-| 2 | Differential harness: thousands of probes | verified-slice | 4096 same-artifact cases across eight libc families match in debug and release after correcting strtol no-conversion errno and timegm pre-1900 rejection (236 of 4096 differed before the fix). Expand to other subsystems and programs. |
+| 2 | Differential harness: thousands of probes | verified-slice | Two same-artifact suites now match a hosted Intel Mac in debug and release: 4096 libc cases (after correcting strtol no-conversion errno and timegm pre-1900 rejection) and 4096 Objective-C cases over eight dispatch/metadata families (after the Darwin capture disproved an isa-inclusive instance-size assumption). Expand to threading, services and whole programs. |
 | 4 | Guest crash debugging and single-step | verified-slice | Nine Windows LLDB tests cover genuine guest UD2, register/disassembly/backtrace capture, relocated symbols, VM breakpoints, instruction step and timeout cleanup, in debug and release; the release hook needed a unique body to survive identical-code folding. Darwin debugserver APIs remain P5. |
 | 5 | Strict subsystem ABI contracts | implemented-contracts | Seven versioned subsystem contracts and automated layout/path/symbol-drift checks exist. Extend contracts and native reference coverage with every new subsystem. |
 
@@ -33,7 +33,7 @@ Status: **implemented-slices**. Dependencies: P0.
 | # | Work item | Status | Remaining work / boundary |
 | ---: | --- | --- | --- |
 | 7 | System image and dyld shared cache | not-started | Acquire identified user-supplied image, extract/rebase caches and subcaches, resolve shared-cache fixups and image lifecycle. Existing XIP extraction is not cache loading. |
-| 8 | Apple-ABI Objective-C runtime | verified-slice | Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms. Protocols/properties, ARC, direct-selector lists, exceptions and dynamic registration remain. |
+| 8 | Apple-ABI Objective-C runtime | verified-slice | Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms, with all 4096 same-binary Objective-C differential cases matching a hosted Intel Mac. Protocols/properties, ARC, exceptions and dynamic registration remain. |
 | 9 | Swift guest runtime | not-started | Apple Mach-O Swift metadata/refcounting/concurrency/reflection and ObjC interop. Native Windows Swift alone does not satisfy this ABI. |
 | 10 | Darwin compact unwind and DWARF | not-started | Loaded-image unwind lookup, personalities and C++/ObjC exceptions across guest/host frames; distinguish Windows SEH. |
 | 11 | Mach VM emulation | not-started | vm_*/mach_vm_* address spaces, protection, region queries, task rights, sharing and exact errors over host VM. |

@@ -24,6 +24,7 @@ The exact admission rules, imports and remaining exclusions are in [Objective-C 
 | Negative constructor checks | No constructor marker or other guest stdout before rejection; status 125 |
 | `src/objc/mod.rs` unit test | Passed native Windows dispatch and atomic registration checks, including invalid IMP and ARC flags |
 | `cargo clippy --locked --all-targets -- -D warnings` | Passed |
+| Same-binary Darwin differential, run 39673099968 | `adapter-objc-v1`: 4,096 cases, 0 mismatched in debug and release against one hosted Intel Mac capture ([details](differential-testing.md#recorded-objective-c-run-2026-10-22)) |
 
 The positive consumers print:
 
@@ -42,6 +43,6 @@ The consumer sources are [objc_core.m](../tests/fixtures/objc_core.m) and [objc_
 
 The full verification run passed all 16 stages with **159 distinct tests: 32 Rust, 22 archive and 105 integration**; every integration test also passed against the release build, and the Objective-C tests are in both profiles.
 
-No Objective-C reference process has been executed on a real Mac. The compiled metadata evidence uses LLVM on Windows targeting macOS. Darwin equivalence of category attachment order and relative-list decoding, concurrent initialization, selector uniqueness across multiple startup images and broader real application behavior remain unverified.
+A hosted Intel Mac executed the same 4,096-case binary and matched Adapter in every case, so selector registration, dispatch, Super2 sends, category override, nil returns, class identity/size/metaclass state, object creation/identity and `+load` order now have Darwin reference evidence. That reference is a hosted macOS VM, and it covers compiler-emitted classes only. Concurrent initialization, selector uniqueness across multiple startup images, Foundation/AppKit behavior and broader real application behavior remain unverified.
 
-The next runtime work is protocols and properties, ARC/weak with a Mac differential probe, stronger ownership/lifecycle coverage and combined category-plus-load ordering on a reference Mac. Foundation and AppKit require additional subsystems. Dynamic Objective-C plugins, shared-cache metadata, exceptions, Swift, packed/tagged isa and aggregate/x87 message returns remain unsupported; the contract lists the precise boundaries.
+The next runtime work is protocols and properties, ARC/weak with its own Mac differential probe, and real-library lifecycle coverage. Foundation and AppKit require additional subsystems. Dynamic Objective-C plugins, shared-cache metadata, exceptions, Swift, packed/tagged isa and aggregate/x87 message returns remain unsupported; the contract lists the precise boundaries.

@@ -105,3 +105,15 @@ With relative lists the linker moves every method list into `__objc_methlist`, a
 
 Limits: these are Windows cross-compiled fixtures linked with ld64.lld, not outputs from Apple's linker, and no reference Mac executed them. The `+load` sequence (every class `+load`, then each category `+load`) is implemented from objc4 `load_images`/`prepare_load_methods` and still needs a Darwin differential probe.
 
+## Revision 3: hosted Darwin differential
+
+2026-10-22 (run `39673099968`, workflow commit `de9fbd5`, standard `macos-15-intel`): `tests/differential/objc_cases.m` was compiled on the Mac into `objc-differential` (14,824 bytes, SHA-256 `95ab88d498c5bbf706f50b3392eef44b47a3c4f5536b1de743b103679f0e4f60`) and captured natively, then captured again through `adapter-run.exe` from the identical bytes on Windows. All 4,096 records matched in debug and release; the retained captures and hashes are in [differential testing](../differential-testing.md#recorded-objective-c-run-2026-10-22).
+
+Two assumptions were settled by that run rather than by reasoning:
+
+1. `class_getInstanceSize` answers `ro.instanceSize` unchanged. Adapter had been changed to round a class up to one isa word, and the Darwin capture disagreed for a compiler-emitted root class with no ivars (0, not 8). The change was reverted; allocation keeps its own minimum, so an object still has room for its isa.
+2. `objc_retain`/`objc_release` are **not** interchangeable with Apple's for a free-standing root class. On Darwin `objc_retain` sends `-retain`, which a compiler-emitted root class without ownership methods does not implement, so the first dispatch aborted with `unrecognized selector -[Probe retain]` after six families. Adapter's runtime-owned reference count and pool are therefore a documented divergence, not something the same-binary suite can probe with a plain root class; the probe now exercises object identity instead.
+
+The `+load` order the implementation follows from objc4 (`load_images`/`prepare_method_load`) is now confirmed on Darwin: the encoded order code was `123` with three calls, so both class `+load` methods ran before the category `+load`, which ran with the target class as receiver. The category's class method replaced the class's own for a send through the class object.
+
+Limits unchanged: this is a hosted macOS VM, the classes are compiler-emitted rather than Foundation classes, and ARC, weak tables, exceptions, tagged/packed isa and aggregate message returns remain unverified.

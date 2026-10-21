@@ -74,8 +74,10 @@ job reached by the same unchanged client, an unchanged libxpc client/server
 pair exchanging typed dictionary messages and replies, the Objective-C class and
 category consumers in classic, chained and relative fixup forms, and nine Windows
 LLDB guest-debugging cases. This is
-Windows-side evidence; the only reference-Mac execution is the hosted
-4,096-case libc [differential run](docs/differential-testing.md#recorded-run-2026-10-22).
+Windows-side evidence; the only reference-Mac executions are the hosted
+4,096-case libc [differential run](docs/differential-testing.md#recorded-run-2026-10-22)
+and the 4,096-case Objective-C
+[differential run](docs/differential-testing.md#recorded-objective-c-run-2026-10-22).
 [Current run](docs/test-results/latest.json) ·
 [Summary](docs/test-results/summary.json).
 

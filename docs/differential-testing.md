@@ -1,17 +1,17 @@
 # Same-binary Darwin/Windows differential testing
 
-The suite executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. It compares 4,096 deterministic JSONL cases across 8 libc families. A generator/build alone does not execute the guest and does not establish reference behavior.
+The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Two suites use it: `adapter-libc-v1` (4,096 deterministic cases across eight libc families) and `adapter-objc-v1` (4,096 cases across eight Objective-C families). A generator/build alone does not execute the guest and does not establish reference behavior.
 
 ## Commands
 
 On macOS with the existing Clang/system linker:
 
 ```sh
-python3 tools/differential.py build --output reference-bundle --count 4096
+python3 tools/differential.py build --suite adapter-libc-v1 --output reference-bundle --count 4096
 python3 tools/differential.py capture --bundle reference-bundle --output reference-bundle/reference.json
 ```
 
-Build uses `clang -target x86_64-apple-macos10.13 -std=c11 -O1 -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables -Wl,-no_uuid`. The C consumer declares its ABI without SDK headers; linking uses the Mac host's system library/toolchain. It never downloads an SDK. Build records compiler version/binary SHA-256, source SHA-256, command and host, and refuses an existing program/manifest. `--count` may be a balanced multiple of 8 in 8..65536; 4,096 is the reference milestone. The versioned suite identifier is `adapter-libc-v1`.
+Build uses `clang -target x86_64-apple-macos10.13 -std=c11 -O1 -fno-builtin -fno-stack-protector -fno-asynchronous-unwind-tables -Wl,-no_uuid`. The C consumer declares its ABI without SDK headers; linking uses the Mac host's system library/toolchain. It never downloads an SDK. Build records compiler version/binary SHA-256, source SHA-256, command and host, and refuses an existing program/manifest. `--count` may be a balanced multiple of 8 in 8..65536; 4,096 is the reference milestone. The versioned suite identifier defaults to `adapter-libc-v1`; `--suite adapter-objc-v1` builds the Objective-C consumer described below, which adds `-fno-objc-arc -lobjc` so clang links the host's libobjc.
 
 Download the **whole** bundle, retaining its binary, source, manifest and native capture. On Windows, from the repository:
 
@@ -43,11 +43,28 @@ Darwin LP64 `struct tm` is declared and statically checked as 56 bytes, with gmt
 
 ## Manual hosted Mac reference workflow
 
-`.github/workflows/mac-reference.yml` runs only on `workflow_dispatch`, at the selected workflow commit. It uses standard `macos-15-intel`, read-only repository contents permission, pinned checkout/upload actions and no secret, paid/custom runner or package installation. It builds `reference-bundle`, explicitly captures `reference-bundle/reference.json`, then uploads the entire bundle as `mac-reference-<commit>` for 14 days. Failed captures remain invalid; an uploaded artifact alone does not mean the workflow passed.
+`.github/workflows/mac-reference.yml` runs only on `workflow_dispatch`, at the selected workflow commit. It uses standard `macos-15-intel`, read-only repository contents permission, pinned checkout/upload actions and no secret, paid/custom runner or package installation. It builds `reference-bundle`, explicitly captures `reference-bundle/reference.json`, then uploads the entire bundle as `mac-reference-<suite>-<commit>` for 14 days. A matrix job covers both suites, so one dispatch produces the libc and Objective-C bundles independently; either can fail without hiding the other. Failed captures remain invalid; an uploaded artifact alone does not mean the workflow passed.
 
 GitHub's [official runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners) lists Intel `macos-15-intel` among standard runners free for public repositories. This is a hosted macOS **VM on Apple's infrastructure**, not a physical Mac measurement. The workflow does not claim a physical reference machine. Checkout v7 was resolved through GitHub's primary API to `3d3c42e5aac5ba805825da76410c181273ba90b1`; upload-artifact v7.0.2 was verified as `cf430e030ddbb5b0abf93d22962f4752f3646cd9` on 2026-10-22.
 
-Offline verifier tests: `python -m unittest discover -s tests/unit -p test_differential.py`. Synthetic unit-test captures exercise evidence validation only and are never published as macOS compatibility results. Building/capturing the optional Objective-C consumer is deferred until the primary libc bundle has actual Darwin and Windows captures.
+Offline verifier tests: `python -m unittest discover -s tests/unit -p test_differential.py`. Synthetic unit-test captures exercise evidence validation only and are never published as macOS compatibility results, and they cover both suites' record contracts.
+
+## Objective-C suite (`adapter-objc-v1`)
+
+`tests/differential/objc_cases.m` declares its runtime and C entry points without SDK headers and is compiled by the same host clang. It defines a compiler-emitted root class, a subclass, a category carrying `+load` and one category-only class method, then emits one record per index. The eight families exist because they separate failures: a selector-set bug shows up only in `selector`, a dispatch bug in `dispatch`/`super`, a category-ordering bug in `category`/`loadorder`, and a metadata bug in `classinfo`.
+
+| Family | Probe | Result vector |
+| --- | --- | --- |
+| selector | `sel_registerName` on a stack-built name, compared with `sel_getUid` | equality twice, name round-trip, name length |
+| dispatch | `-add:with:` with seeded arguments on a fresh instance | seeded arithmetic result |
+| super | subclass method calling `[super compute:]` | inherited `+1` result |
+| category | class method the category replaces | replacement result |
+| nil | `nil` receivers with integer returns | two zero results |
+| classinfo | `class_getName` FNV-1a of class and superclass, `class_getInstanceSize`, `class_isMetaClass` | two hashes, size, meta flag |
+| object | `class_createInstance`/`object_getClass`/`class_getName`/`object_dispose` | identity, name length |
+| loadorder | `+load` order encoded digit-per-call | order code, call count |
+
+Deliberate exclusions: the suite never probes runtime-owned retain counts, `objc_retain` on a root class without `-retain`, ARC, weak tables, exceptions, tagged or packed isa, or aggregate message returns, because those are documented divergences or unsupported rather than claims this slice makes. A first dispatch proved the point: `objc_retain` on a free-standing compiler root class aborts on Darwin (`unrecognized selector -[Probe retain]`) while Adapter counts runtime-owned references, so the probe now tests object identity instead.
 
 ## Recorded run (2026-10-22)
 
@@ -108,8 +125,45 @@ are not installed on this Windows host, so `rea inspect-macho` reports
 `capability_unavailable` and no decompilation-level claim is made here; the
 metadata above comes from REA's artifact-graph provider.
 
+## Recorded Objective-C run (2026-10-22)
+
+| Item | Recorded value |
+| --- | --- |
+| Native reference | GitHub Actions run `39673099968`, standard `macos-15-intel` hosted VM, workflow commit `de9fbd5` |
+| Reference host | `Darwin 24.6.0` (`xnu-11417.140.69.711.44~1`), `x86_64`, Python 3.14.7 |
+| Reference compiler | `/usr/bin/clang`, Apple clang 17.0.0 (`clang-1700.0.13.5`), SHA-256 `7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e` |
+| Consumer program | `objc-differential`, 14,824 bytes, thin x86-64 executable, SHA-256 `95ab88d498c5bbf706f50b3392eef44b47a3c4f5536b1de743b103679f0e4f60` |
+| Consumer source | `objc_cases.m`, SHA-256 `c76716d3964cf54835ba558d001481d36947b788d1a2388957be9ed9cd12ed4a` |
+| Cases | 4,096 (eight families, 512 each) |
+| Windows candidates | `target/debug/adapter-run.exe` SHA-256 `679f2856d568c00e50dba4255b75329539653ab1baa4e9a9433473fc963d1f0d`; `target/release/adapter-run.exe` SHA-256 `51bc98eea423f46cee072bb4b3a57a1c0a63778b167a7e42735e5a2c6ec7e92a`; Windows 10.0.26300 x64, Python 3.12.10 |
+| Result | `equal` in both profiles: 4,096 matched, 0 mismatched, 512/512 per family |
+
+Retained evidence from that run:
+
+| File | Bytes | SHA-256 (stored bytes) |
+| --- | ---: | --- |
+| `docs/test-results/mac-reference-objc-39673099968.json.gz` | 63,014 | `dce37a14323c0fed8f2fccbe0f8193753203295fde2604a63756b56212c1531b` |
+| `docs/test-results/differential-objc-candidate-debug.json.gz` | 62,941 | `eeeaf3c143db5ea12e52692df3d080466fecff7fc607d5da22aa85fc92ec647c` |
+| `docs/test-results/differential-objc-candidate-release.json.gz` | 62,940 | `1ef5970d4b66409dacae4eb8f4eb97e03026b0fcc3744be10c9ea81866993226` |
+| `docs/test-results/differential-objc-debug.json` | 1,085 | `5fe6033372b8cf84e57e49c2bed8a320c272ed56e2532b3165dcb0ca6b6b216a` |
+| `docs/test-results/differential-objc-release.json` | 1,079 | `76b77154de743fa0562221887dd6e8e9a08e3adee21608953d106d268cd0b06f` |
+
+The reference gzip decodes to the 926,224-byte native capture `reference.json`
+(SHA-256 `4b6ab0b3e031a63f04e44ccbb0e2b2101322cebfbcdbd7257830995944a50172`,
+`mode: native`, `system: Darwin`). The candidate gzips decode to captures with
+SHA-256 `239e3746e4e5aeb04ae26be2b07bd81ed25a2bfadefffa00d1c24f8fbfb6dce9`
+(debug) and `a63615abc6ee23a9749636dcc1c5bc31512cf6edb10e69a540a334dde112390d`
+(release). The gzip inputs are reproducible from the bundle manifest: program
+`objc-differential` SHA-256 `95ab88d4…`, source `objc_cases.m` SHA-256
+`c76716d3…`.
+
+The run also corrected an assumption rather than confirming one: Adapter had
+been changed to report `class_getInstanceSize` as at least one word, and the
+Darwin capture answered `0` for the compiler-emitted root class, so the change
+was reverted and allocation keeps its own minimum. Before the fix the `classinfo`
+family mismatched 512/512; after it every family matched.
+
 Limits of this evidence: the reference is a hosted macOS VM, not a physical Mac;
-the suite covers eight libc families and excludes addresses, wall clock, locale
-strings and zone names; JSONL equality is exact but `memcmp`/`memmove` vectors
-carry 32-bit hash collisions; Objective-C, threading, Mach/XPC/launchd, jq and
-ripgrep still have no reference capture.
+the Objective-C suite covers eight families and excludes the divergences listed
+above; JSONL equality is exact but `classinfo` carries 32-bit hashes. Threading,
+Mach/XPC/launchd, jq and ripgrep still have no reference capture.

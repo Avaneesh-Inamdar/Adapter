@@ -152,10 +152,10 @@ impl Session {
                 "Objective-C class flags {flags:#x} unsupported (ARC/C++/weak/Swift)"
             ));
         }
-        // ro.instanceSize omits nothing for a subclass but is 0 for a root class
-        // with no ivars; a realized class always carries the isa word, which is
-        // what class_getInstanceSize answers on Darwin.
-        let size = (self.u32(ro + 8)? as usize).max(8).next_multiple_of(8);
+        // Darwin answers class_getInstanceSize with ro.instanceSize unchanged, so a
+        // compiler-emitted root class with no ivars reports 0; allocation is what
+        // adds the isa word and the runtime's own minimum below.
+        let size = self.u32(ro + 8)? as usize;
         let start = self.u32(ro + 4)? as usize;
         if size > 1024 * 1024 || start > size {
             return Err("Objective-C instance layout invalid".into());

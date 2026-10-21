@@ -140,7 +140,7 @@
       "name": "Differential harness: thousands of probes",
       "phase": "P0",
       "status": "verified-slice",
-      "work": "4096 same-artifact cases across eight libc families match in debug and release after correcting strtol no-conversion errno and timegm pre-1900 rejection (236 of 4096 differed before the fix). Expand to other subsystems and programs.",
+      "work": "Two same-artifact suites now match a hosted Intel Mac in debug and release: 4096 libc cases (after correcting strtol no-conversion errno and timegm pre-1900 rejection) and 4096 Objective-C cases over eight dispatch/metadata families (after the Darwin capture disproved an isa-inclusive instance-size assumption). Expand to threading, services and whole programs.",
       "source": "upstream-sources.md"
     },
     {
@@ -188,7 +188,7 @@
       "name": "Apple-ABI Objective-C runtime",
       "phase": "P1",
       "status": "verified-slice",
-      "work": "Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms. Protocols/properties, ARC, direct-selector lists, exceptions and dynamic registration remain.",
+      "work": "Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms, with all 4096 same-binary Objective-C differential cases matching a hosted Intel Mac. Protocols/properties, ARC, exceptions and dynamic registration remain.",
       "source": "upstream-sources.md"
     },
     {

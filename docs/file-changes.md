@@ -18,7 +18,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `build.rs`
 - `docs/abi/README.md`
 - `docs/abi/contracts.json`
-- `docs/abi/objc-v1.md`
+- `docs/abi/objc-abi.md`
 - `docs/architecture.md`
 - `docs/compatibility.md`
 - `docs/component-research.md`
@@ -117,6 +117,10 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/differential-candidate-debug.json.gz`
 - `docs/test-results/differential-candidate-release.json.gz`
 - `docs/test-results/differential-debug.json`
+- `docs/test-results/differential-objc-candidate-debug.json.gz`
+- `docs/test-results/differential-objc-candidate-release.json.gz`
+- `docs/test-results/differential-objc-debug.json`
+- `docs/test-results/differential-objc-release.json`
 - `docs/test-results/differential-release.json`
 - `docs/test-results/fixtures.log`
 - `docs/test-results/format.log`
@@ -129,6 +133,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/jq-preflight.log`
 - `docs/test-results/latest.json`
 - `docs/test-results/mac-reference-39667131995.json.gz`
+- `docs/test-results/mac-reference-objc-39673099968.json.gz`
 - `docs/test-results/namespace-debug.log`
 - `docs/test-results/namespace-regression.json`
 - `docs/test-results/namespace-release.log`
@@ -193,6 +198,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/build_tls_abi.py`
 - `tests/compatibility/targets.json`
 - `tests/differential/libc_cases.c`
+- `tests/differential/objc_cases.m`
 - `tests/fetch_reference.py`
 - `tests/fixtures/abi.c`
 - `tests/fixtures/blocks.c`

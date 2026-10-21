@@ -10,11 +10,11 @@ Revision 2 adds relative ("small") method lists and startup categories. Revision
 
 The target is little-endian Darwin x86-64 LP64: pointers and `long` are 8 bytes. Windows host C `long` is not interchangeable. Guest methods use SysV64; Windows x64 is only the host calling convention.
 
-The layout evidence is pinned to Apple objc4 commit [`fb265098298302243cd7eeaa1f63f0ba7786dd9a`](https://github.com/apple-oss-distributions/objc4/tree/fb265098298302243cd7eeaa1f63f0ba7786dd9a) and LLVM 23.1.3 compiler outputs. Commands, hashes, source links and observed limitations are in [the evidence report](../reverse-engineering/objc-runtime-evidence.md). These source and binary observations are separate from runtime verification on macOS; no real Mac reference result has been collected for this slice.
+The layout evidence is pinned to Apple objc4 commit [`fb265098298302243cd7eeaa1f63f0ba7786dd9a`](https://github.com/apple-oss-distributions/objc4/tree/fb265098298302243cd7eeaa1f63f0ba7786dd9a) and LLVM 23.1.3 compiler outputs. Commands, hashes, source links and observed limitations are in [the evidence report](../reverse-engineering/objc-runtime-evidence.md). These source and binary observations are separate from runtime verification on macOS. A hosted Intel Mac has since matched all 4,096 cases of the same-binary `adapter-objc-v1` differential suite in debug and release, which is the reference evidence for the dispatch, category and `+load` behavior below; the macOS recorded run and its retained captures are in [differential testing](../differential-testing.md#recorded-objective-c-run-2026-10-22).
 
 ## Admitted records
 
-All addresses below are relocated guest addresses. Counts, ranges and strings are checked before dereference. The runtime keeps its state in host-owned maps; it does not rewrite a disk `class_ro_t` pointer into a fabricated Apple `class_rw_t`.
+All addresses below are relocated guest addresses. Counts, ranges and strings are checked before dereference. Names passed to a public entry point (`sel_registerName`, `sel_getUid`, `objc_getClass`) may live in a mapped metadata segment **or in the calling thread's stack frame**, so the runtime admits that bounded window for its one-byte string reads; it does not accept arbitrary guest addresses. `class_getInstanceSize` answers `ro.instanceSize` unchanged, so a compiler-emitted root class with no ivars reports 0 as Darwin does, while allocation still adds the isa word and the runtime's own minimum. The runtime keeps its state in host-owned maps; it does not rewrite a disk `class_ro_t` pointer into a fabricated Apple `class_rw_t`.
 
 | Record | Byte offsets and fields | Size |
 | --- | --- | ---: |

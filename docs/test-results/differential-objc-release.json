@@ -1,0 +1,48 @@
+{
+  "candidate": "target\\candidate-objc.json",
+  "case_count": 4096,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "category": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "classinfo": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "dispatch": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "loadorder": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "nil": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "object": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "selector": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "super": {
+      "matched": 512,
+      "mismatched": 0
+    }
+  },
+  "matched": 4096,
+  "mismatched": 0,
+  "program_sha256": "95ab88d498c5bbf706f50b3392eef44b47a3c4f5536b1de743b103679f0e4f60",
+  "reference": "E:\\Xcode\\target\\ref-run\\mac-reference-adapter-objc-v1-de9fbd59d6bf355f13903d7523e77be5268a0be6\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-objc-v1"
+}
