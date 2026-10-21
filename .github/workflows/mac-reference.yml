@@ -9,20 +9,26 @@ permissions:
 jobs:
   reference:
     runs-on: macos-15-intel
-    timeout-minutes: 15
+    timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
-        suite: [adapter-libc-v1, adapter-objc-v1]
+        include:
+          - suite: adapter-libc-v1
+            count: 4096
+          - suite: adapter-objc-v1
+            count: 4096
+          - suite: adapter-thread-v1
+            count: 1024
     steps:
       - name: Check out the workflow commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7, resolved 2026-10-22
         with:
           persist-credentials: false
       - name: Build the Intel Mach-O without executing it
-        run: python3 tools/differential.py build --suite ${{ matrix.suite }} --output reference-bundle --count 4096
+        run: python3 tools/differential.py build --suite ${{ matrix.suite }} --count ${{ matrix.count }} --output reference-bundle
       - name: Capture native Darwin results
-        run: python3 tools/differential.py capture --bundle reference-bundle --output reference-bundle/reference.json
+        run: python3 tools/differential.py capture --bundle reference-bundle --output reference-bundle/reference.json --timeout 120
       - name: Upload the exact executable, manifest, source and capture
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2

@@ -56,24 +56,26 @@ class DifferentialTests(unittest.TestCase):
         for family in diff.FAMILIES:
             self.assertEqual(sum(item["family"] == family for item in items), 512)
 
-    def test_objective_c_suite_records_and_manifest_identity(self):
-        suite = diff.SUITES["adapter-objc-v1"]
-        items = [{"id": f"{suite.families[i % 8]}:{i}", "family": suite.families[i % 8], "index": i,
-                  "result": [0] * suite.result_lengths[suite.families[i % 8]]} for i in range(16)]
-        parsed, errors = diff.parse_records(stdout_for(items), 16, suite)
-        self.assertEqual((parsed, errors), (items, []))
-        # The libc contract must not accept another suite's record vectors.
-        self.assertTrue(diff.parse_records(stdout_for(items), 16)[1])
+    def test_registered_suites_pin_their_own_record_and_manifest_identity(self):
+        for identifier in ("adapter-objc-v1", "adapter-thread-v1"):
+            suite = diff.SUITES[identifier]
+            items = [{"id": f"{suite.families[i % 8]}:{i}", "family": suite.families[i % 8], "index": i,
+                      "result": [0] * suite.result_lengths[suite.families[i % 8]]} for i in range(16)]
+            parsed, errors = diff.parse_records(stdout_for(items), 16, suite)
+            self.assertEqual((parsed, errors), (items, []), identifier)
+            # The libc contract must not accept another suite's record vectors.
+            self.assertTrue(diff.parse_records(stdout_for(items), 16)[1], identifier)
+            manifest_value = {"schema": 1, "suite": suite.id, "count": 16, "seed": diff.SEED,
+                              "families": list(suite.families),
+                              "program": {"file": suite.program, "sha256": "a" * 64},
+                              "source": {"file": Path(suite.source).name, "sha256": "b" * 64},
+                              "build": {"compiler": {"sha256": "c" * 64}}}
+            self.assertEqual(diff.manifest_errors(manifest_value), [], identifier)
+            self.assertIn("invalid manifest source identity",
+                          diff.manifest_errors({**manifest_value, "source": {"file": "libc_cases.c", "sha256": "b" * 64}}),
+                          identifier)
         self.assertEqual(diff.manifest_errors({"schema": 1, "suite": "adapter-unknown-v1"}),
                          ["manifest schema/suite mismatch"])
-        objc_manifest = {"schema": 1, "suite": suite.id, "count": 16, "seed": diff.SEED,
-                         "families": list(suite.families),
-                         "program": {"file": suite.program, "sha256": "a" * 64},
-                         "source": {"file": "objc_cases.m", "sha256": "b" * 64},
-                         "build": {"compiler": {"sha256": "c" * 64}}}
-        self.assertEqual(diff.manifest_errors(objc_manifest), [])
-        self.assertIn("invalid manifest source identity",
-                      diff.manifest_errors({**objc_manifest, "source": {"file": "libc_cases.c", "sha256": "b" * 64}}))
 
     def test_same_program_complete_evidence_compares_equal(self):
         result = self.compare(capture(), capture(windows=True))

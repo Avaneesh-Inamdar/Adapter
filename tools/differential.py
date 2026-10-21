@@ -49,7 +49,14 @@ OBJC = Suite("adapter-objc-v1",
              "objc-differential", "tests/differential/objc_cases.m",
              ["-std=c11", "-O1", "-fno-objc-arc", "-fno-stack-protector", "-fno-asynchronous-unwind-tables",
               "-lobjc"])
-SUITES = {suite.id: suite for suite in (LIBC, OBJC)}
+THREAD = Suite("adapter-thread-v1",
+                ("createjoin", "identity", "mutex", "once", "tls", "cond", "attr", "retval"),
+                dict(zip(("createjoin", "identity", "mutex", "once", "tls", "cond", "attr", "retval"),
+                         (3, 3, 2, 2, 2, 2, 2, 2))),
+                "thread-differential", "tests/differential/thread_cases.c",
+                ["-std=c11", "-O1", "-fno-builtin", "-fno-stack-protector",
+                 "-fno-asynchronous-unwind-tables"])
+SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD)}
 # Backwards-compatible aliases for the primary libc suite.
 SUITE, FAMILIES, RESULT_LENGTHS, PROGRAM, SOURCE = LIBC.id, LIBC.families, LIBC.result_lengths, LIBC.program, LIBC.source
 
