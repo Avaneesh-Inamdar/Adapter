@@ -92,9 +92,36 @@ impl Drop for Guard {
         }
     }
 }
+#[cfg(windows)]
+fn readable(pointer: *const c_void, length: usize) -> bool {
+    use windows_sys::Win32::System::Memory::{
+        MEM_COMMIT, MEMORY_BASIC_INFORMATION, PAGE_GUARD, PAGE_NOACCESS, VirtualQuery,
+    };
+    let mut info = std::mem::MaybeUninit::<MEMORY_BASIC_INFORMATION>::zeroed();
+    if unsafe { VirtualQuery(pointer, info.as_mut_ptr(), std::mem::size_of_val(&info)) } == 0 {
+        return false;
+    }
+    let info = unsafe { info.assume_init() };
+    if info.State != MEM_COMMIT || info.Protect & (PAGE_NOACCESS | PAGE_GUARD) != 0 {
+        return false;
+    }
+    let base = info.BaseAddress as usize;
+    let start = pointer as usize;
+    let end = base.saturating_add(info.RegionSize);
+    start >= base && start.checked_add(length).is_some_and(|e| e <= end)
+}
+
+#[cfg(not(windows))]
+fn readable(_pointer: *const c_void, _length: usize) -> bool {
+    true
+}
+
 unsafe fn attribute_stack_size(attributes: *const c_void) -> Option<usize> {
     if attributes.is_null() {
         return Some(0);
+    }
+    if !readable(attributes, 64) {
+        return None;
     }
     unsafe {
         if std::ptr::read_unaligned(attributes as *const i64) != ATTR_SIG {
@@ -342,6 +369,7 @@ mod tests {
             assert_eq!(attr_destroy(a), 0);
             assert_eq!(attr_destroy(a), EINVAL);
             assert_eq!(attribute_stack_size(std::ptr::null()), Some(0));
+            assert_eq!(attribute_stack_size(1 as *const c_void), None);
         }
     }
 }
