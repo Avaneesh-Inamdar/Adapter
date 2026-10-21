@@ -1,0 +1,10 @@
+{
+  "command": [
+    "target/debug/db-run.exe",
+    "--check",
+    "tests/fixtures/generated/reference/jq-macos-amd64"
+  ],
+  "executed": false,
+  "status": "blocked",
+  "reason": "Debug db-run execution denied in integration log; not retried here."
+}

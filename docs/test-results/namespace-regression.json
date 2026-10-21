@@ -1,0 +1,36 @@
+[
+  {
+    "profile": "debug",
+    "command": [
+      "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/integration",
+      "-k",
+      "two_level_duplicate_symbols",
+      "-v"
+    ],
+    "exit_code": 0,
+    "log": "namespace-debug.log",
+    "seconds": 0.125
+  },
+  {
+    "profile": "release",
+    "command": [
+      "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests/integration",
+      "-k",
+      "two_level_duplicate_symbols",
+      "-v"
+    ],
+    "exit_code": 0,
+    "log": "namespace-release.log",
+    "seconds": 0.125
+  }
+]

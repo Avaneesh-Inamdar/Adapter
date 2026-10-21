@@ -1,0 +1,167 @@
+{
+  "run_utc": "2026-10-21T14:44:18.962010+00:00",
+  "all_passed": false,
+  "stages": [
+    {
+      "stage": "format",
+      "command": [
+        "cargo",
+        "fmt",
+        "--all",
+        "--",
+        "--check"
+      ],
+      "exit_code": 0,
+      "seconds": 0.157,
+      "log": "format.log"
+    },
+    {
+      "stage": "native-format",
+      "command": [
+        "C:\\Program Files\\LLVM\\bin\\clang-format.exe",
+        "--dry-run",
+        "--Werror",
+        "src\\darwin\\host\\bridge.c",
+        "src\\darwin\\host\\bridge.h",
+        "src\\darwin\\host\\format.c",
+        "src\\darwin\\host\\system.c",
+        "tests/fixtures/libc.c",
+        "tests/fixtures/file_time.c"
+      ],
+      "exit_code": 0,
+      "seconds": 0.046,
+      "log": "native-format.log"
+    },
+    {
+      "stage": "clippy",
+      "command": [
+        "cargo",
+        "clippy",
+        "--locked",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "seconds": 0.172,
+      "log": "clippy.log"
+    },
+    {
+      "stage": "rust-tests",
+      "command": [
+        "cargo",
+        "test",
+        "--locked"
+      ],
+      "exit_code": 101,
+      "seconds": 0.485,
+      "log": "rust-tests.log",
+      "status": "blocked",
+      "reason": "Windows Application Control prevented executable launch (WinError 4551); see CodeIntegrity events 3033/3077."
+    },
+    {
+      "stage": "debug-build",
+      "command": [
+        "cargo",
+        "build",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "seconds": 0.078,
+      "log": "debug-build.log"
+    },
+    {
+      "stage": "reference-artifact",
+      "command": [
+        "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/fetch_jq.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.14,
+      "log": "reference-artifact.log"
+    },
+    {
+      "stage": "fixtures",
+      "command": [
+        "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tests/build_fixtures.py"
+      ],
+      "exit_code": 0,
+      "seconds": 2.329,
+      "log": "fixtures.log"
+    },
+    {
+      "stage": "archive-tests",
+      "command": [
+        "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/unit",
+        "-v"
+      ],
+      "exit_code": 0,
+      "seconds": 0.218,
+      "log": "archive-tests.log"
+    },
+    {
+      "stage": "integration-debug",
+      "command": [
+        "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/integration",
+        "-v"
+      ],
+      "exit_code": 1,
+      "seconds": 26.61,
+      "log": "integration-debug.log",
+      "status": "blocked",
+      "reason": "Windows Application Control prevented executable launch (WinError 4551); see CodeIntegrity events 3033/3077."
+    },
+    {
+      "stage": "release-build",
+      "command": [
+        "cargo",
+        "build",
+        "--release",
+        "--locked"
+      ],
+      "exit_code": 0,
+      "seconds": 3.859,
+      "log": "release-build.log"
+    },
+    {
+      "stage": "integration-release",
+      "command": [
+        "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/integration",
+        "-v"
+      ],
+      "exit_code": 1,
+      "seconds": 12.063,
+      "log": "integration-release.log",
+      "status": "blocked",
+      "reason": "Windows Application Control prevented executable launch (WinError 4551); see CodeIntegrity events 3033/3077."
+    },
+    {
+      "stage": "compatibility-report",
+      "command": [
+        "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/report_results.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.093,
+      "log": "compatibility-report.log"
+    }
+  ],
+  "verification_status": "blocked"
+}

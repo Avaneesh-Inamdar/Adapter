@@ -1,0 +1,112 @@
+{
+  "source": "E:\\Xcode\\target\\artifacts\\command-line-tools27\\Command Line Developer Tools\\Command Line Tools.pkg",
+  "payload_sha1": "18c014d5da388496472d972af54d243386a64849",
+  "payload_sha1_verified": true,
+  "apple_signature_verified": false,
+  "entries": 5420,
+  "decoded_bytes": 1748333711,
+  "seconds": 16.66,
+  "package_metadata": {
+    "PackageInfo": {
+      "size": 19675,
+      "encoding": "application/octet-stream"
+    },
+    "Bom": {
+      "size": 631716,
+      "encoding": "application/octet-stream"
+    }
+  },
+  "selected": [
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/ar",
+      "size": 73520,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "85d15bd3999895f659e8a483b17ea9ab44b924c8e0b3026abfe359f2de02cbd7"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/clang",
+      "size": 124676976,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/codesign_allocate",
+      "size": 194368,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "34c5ce1e16c595e90b1f131f9411b63fdc09a040b3393676ed3c83a794e9b286"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/ctags",
+      "size": 70432,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "1dd7681b7e733a2b0eb92702e61651474869868ea24616abf8e9f84d82d348df"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/dsymutil",
+      "size": 41931680,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "726aed01ee2a1127591836c58a021a4647da424bf082529e56512fc19a93ca5b"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/install_name_tool",
+      "size": 214272,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "ce7c944f855250c5df6b4de8ab024e94b5577f2385a122bd8993a531d466c0de"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/ld",
+      "size": 2749664,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "374d9f0713bce2c8a9e1e82bde51615d5433516a10d99b63107eb6ee70542e4c"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/lipo",
+      "size": 222848,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "f9fefcc95e50e31a65e72f7c186d9da5938a6ec267f3c3fa4bf5074b6a20f020"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/llvm-nm",
+      "size": 16367008,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "82e9189ec1a359699d4b680601c0a2930a9cbea7376c7320947dff5e9862cfa8"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/llvm-otool",
+      "size": 72672,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "8353ad3c42743a93e9ca7d0d4e9d3df22305252d169c42c543ee22eeb8c33809"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/size-classic",
+      "size": 177792,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "af1aa9b92974f00a83e0725fbfc2e70e3f20b992874b5c60e3ca73c4a423d47c"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/strings",
+      "size": 178432,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "42c0efda27cdf7e5da9c6e28f2de9f3c6940f186b4853b299dc5c46e1283892e"
+    },
+    {
+      "path": "Library/Developer/CommandLineTools/usr/bin/strip",
+      "size": 285696,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "e0d9859a299233c4b2bd48a21f55bb00e575e175eef9193616d3af8660fc846d"
+    }
+  ]
+}

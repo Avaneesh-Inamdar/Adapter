@@ -1,0 +1,17 @@
+{
+  "tool": "LLVM Clang 23.1.3 static analyzer",
+  "command": [
+    "clang",
+    "--analyze",
+    "--target=x86_64-pc-windows-msvc",
+    "-std=c11",
+    "-D_CRT_SECURE_NO_WARNINGS",
+    "-Xanalyzer",
+    "-analyzer-output=text",
+    "src/darwin/host/bridge.c",
+    "src/darwin/host/format.c",
+    "src/darwin/host/system.c"
+  ],
+  "exit_code": 0,
+  "diagnostics": []
+}

@@ -1,0 +1,61 @@
+{
+  "run_utc": "2026-10-21T14:36:53.218343+00:00",
+  "artifact_sha256": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0",
+  "reference_mac_run": false,
+  "executions": [
+    {
+      "profile": "debug",
+      "command": [
+        "target/debug/db-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "--version"
+      ],
+      "stdin": "",
+      "exit_code": 0,
+      "stdout": "jq-1.8.2\n",
+      "stderr": ""
+    },
+    {
+      "profile": "debug",
+      "command": [
+        "target/debug/db-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "-c",
+        "{x:.a|map(. * 2)}"
+      ],
+      "stdin": "{\"a\":[1,2,3]}\n",
+      "exit_code": 0,
+      "stdout": "{\"x\":[2,4,6]}\n",
+      "stderr": ""
+    },
+    {
+      "profile": "release",
+      "command": [
+        "target/release/db-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "--version"
+      ],
+      "stdin": "",
+      "exit_code": 0,
+      "stdout": "jq-1.8.2\n",
+      "stderr": ""
+    },
+    {
+      "profile": "release",
+      "command": [
+        "target/release/db-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "-c",
+        "{x:.a|map(. * 2)}"
+      ],
+      "stdin": "{\"a\":[1,2,3]}\n",
+      "exit_code": 0,
+      "stdout": "{\"x\":[2,4,6]}\n",
+      "stderr": ""
+    }
+  ]
+}

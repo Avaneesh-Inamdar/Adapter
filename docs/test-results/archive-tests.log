@@ -1,0 +1,98 @@
+Selected: Xcode.app/Contents/MacOS/Xcode (10 bytes)
+{
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpjb0a1gzg\\test.xip",
+  "source_size": 674,
+  "source_sha256": "12672b5c294034b1d92a7a20dd7ead3fa7c6d14acc72a283c7f6a0d9aa4d8801",
+  "content_sha1_verified": true,
+  "apple_signature_verified": false,
+  "metadata": {
+    "UncompressedSize": 206
+  },
+  "entries": 1,
+  "file_data_bytes": 10,
+  "decoded_bytes": 206,
+  "pbzx_blocks": 1,
+  "seconds": 0.0
+}
+Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
+{
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpfu4u6gbj\\test.xip",
+  "source_size": 706,
+  "source_sha256": "ebf62e7ec1099deaf668ee286cb9db82d68049c1096807cb902910ddb488488d",
+  "content_sha1_verified": true,
+  "apple_signature_verified": false,
+  "metadata": {
+    "UncompressedSize": 382
+  },
+  "entries": 3,
+  "file_data_bytes": 24,
+  "decoded_bytes": 382,
+  "pbzx_blocks": 1,
+  "seconds": 0.0
+}
+{
+  "source_sha256": "ebf62e7ec1099deaf668ee286cb9db82d68049c1096807cb902910ddb488488d",
+  "member": "Xcode.app/Contents/MacOS/Xcode",
+  "size": 13,
+  "sha256": "d65a3f878bd10ea32143bb3168cf9747b1927b358b3da52dc4d616eebb40b7cc",
+  "reconstructed_cpio_offset": 173,
+  "header_and_name_verified": true,
+  "raw_data_fork_only": true,
+  "filesystem_placeholder": false
+}
+Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
+{
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpwjomrurj\\test.xip",
+  "source_size": 696,
+  "source_sha256": "383439cf39de8e9a37a09c97c36d627f36b40ac96631ebb54cdc07f7a3445696",
+  "content_sha1_verified": true,
+  "apple_signature_verified": false,
+  "metadata": {
+    "UncompressedSize": 304
+  },
+  "entries": 2,
+  "file_data_bytes": 24,
+  "decoded_bytes": 304,
+  "pbzx_blocks": 1,
+  "seconds": 0.0
+}
+Selected: Xcode.app/Contents/MacOS/Xcode (42 bytes)
+{
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpzk_wlh45\\test.xip",
+  "source_size": 678,
+  "source_sha256": "4a93d4affff6dc8d0e1a0d007c19a760863dcc12242d0818a50db746c600a408",
+  "content_sha1_verified": true,
+  "apple_signature_verified": false,
+  "metadata": {
+    "UncompressedSize": 238
+  },
+  "entries": 1,
+  "file_data_bytes": 42,
+  "decoded_bytes": 238,
+  "pbzx_blocks": 1,
+  "seconds": 0.0
+}
+{
+  "source_sha256": "4a93d4affff6dc8d0e1a0d007c19a760863dcc12242d0818a50db746c600a408",
+  "member": "Xcode.app/Contents/MacOS/Xcode",
+  "size": 42,
+  "sha256": "cf8710d7b292a18325a6072929bba2f458488e60c40f04db613bd45106454bc6",
+  "reconstructed_cpio_offset": 0,
+  "header_and_name_verified": true,
+  "raw_data_fork_only": true,
+  "filesystem_placeholder": true
+}
+test_compressed_and_plain_pbzx (test_archives.ArchiveTests.test_compressed_and_plain_pbzx) ... ok
+test_end_to_end_selective_extraction_and_integrity (test_archives.ArchiveTests.test_end_to_end_selective_extraction_and_integrity) ... ok
+test_existing_output_is_preserved (test_archives.ArchiveTests.test_existing_output_is_preserved) ... ok
+test_pbzx_block_length_mismatch (test_archives.ArchiveTests.test_pbzx_block_length_mismatch) ... ok
+test_random_access_member_is_bound_to_source_and_header (test_archives.ArchiveTests.test_random_access_member_is_bound_to_source_and_header) ... ok
+test_random_access_member_rejects_wrong_inventory_offset (test_archives.ArchiveTests.test_random_access_member_rejects_wrong_inventory_offset) ... ok
+test_raw_filesystem_placeholder_is_reported (test_archives.ArchiveTests.test_raw_filesystem_placeholder_is_reported) ... ok
+test_traversal_rejected (test_archives.ArchiveTests.test_traversal_rejected) ... ok
+test_truncated_xar (test_archives.ArchiveTests.test_truncated_xar) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.092s
+
+OK

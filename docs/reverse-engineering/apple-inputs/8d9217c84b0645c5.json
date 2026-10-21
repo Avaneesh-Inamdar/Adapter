@@ -1,0 +1,1257 @@
+{
+  "inspection_status": "inspected (execution not established)",
+  "architecture": "arm64",
+  "cpu_subtype": 0,
+  "filetype": 2,
+  "flags": 10551429,
+  "slices": [],
+  "selected_slice_offset": 0,
+  "commands": [
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 32,
+      "size": 72
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 104,
+      "size": 712
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 816,
+      "size": 232
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1048,
+      "size": 472
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1520,
+      "size": 72
+    },
+    {
+      "code": 2147483700,
+      "name": "LC_DYLD_CHAINED_FIXUPS",
+      "offset": 1592,
+      "size": 16
+    },
+    {
+      "code": 2147483699,
+      "name": "LC_DYLD_EXPORTS_TRIE",
+      "offset": 1608,
+      "size": 16
+    },
+    {
+      "code": 2,
+      "name": "LC_SYMTAB",
+      "offset": 1624,
+      "size": 24
+    },
+    {
+      "code": 11,
+      "name": "LC_DYSYMTAB",
+      "offset": 1648,
+      "size": 80
+    },
+    {
+      "code": 14,
+      "name": "LC_LOAD_DYLINKER",
+      "offset": 1728,
+      "size": 32
+    },
+    {
+      "code": 27,
+      "name": "LC_UUID",
+      "offset": 1760,
+      "size": 24
+    },
+    {
+      "code": 50,
+      "name": "LC_BUILD_VERSION",
+      "offset": 1784,
+      "size": 32
+    },
+    {
+      "code": 42,
+      "name": "LC_SOURCE_VERSION",
+      "offset": 1816,
+      "size": 16
+    },
+    {
+      "code": 2147483688,
+      "name": "LC_MAIN",
+      "offset": 1832,
+      "size": 24
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1856,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1912,
+      "size": 48
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1960,
+      "size": 48
+    },
+    {
+      "code": 2147483676,
+      "name": "LC_RPATH",
+      "offset": 2008,
+      "size": 32
+    },
+    {
+      "code": 38,
+      "name": "LC_FUNCTION_STARTS",
+      "offset": 2040,
+      "size": 16
+    },
+    {
+      "code": 41,
+      "name": "LC_DATA_IN_CODE",
+      "offset": 2056,
+      "size": 16
+    },
+    {
+      "code": 29,
+      "name": "LC_CODE_SIGNATURE",
+      "offset": 2072,
+      "size": 16
+    }
+  ],
+  "segments": [
+    {
+      "name": "__PAGEZERO",
+      "vmaddr": 0,
+      "vmsize": 4294967296,
+      "fileoff": 0,
+      "filesize": 0,
+      "maxprot": 0,
+      "initprot": 0,
+      "flags": 0
+    },
+    {
+      "name": "__TEXT",
+      "vmaddr": 4294967296,
+      "vmsize": 12943360,
+      "fileoff": 0,
+      "filesize": 12943360,
+      "maxprot": 5,
+      "initprot": 5,
+      "flags": 0
+    },
+    {
+      "name": "__DATA_CONST",
+      "vmaddr": 4307910656,
+      "vmsize": 655360,
+      "fileoff": 12943360,
+      "filesize": 655360,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 16
+    },
+    {
+      "name": "__DATA",
+      "vmaddr": 4308566016,
+      "vmsize": 32768,
+      "fileoff": 13598720,
+      "filesize": 16384,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 0
+    },
+    {
+      "name": "__LINKEDIT",
+      "vmaddr": 4308598784,
+      "vmsize": 2752512,
+      "fileoff": 13615104,
+      "filesize": 2751904,
+      "maxprot": 1,
+      "initprot": 1,
+      "flags": 0
+    }
+  ],
+  "sections": [
+    {
+      "segment": "__TEXT",
+      "name": "__text",
+      "address": 4294972472,
+      "size": 3574152,
+      "offset": 5176,
+      "flags": 2147484672,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__stubs",
+      "address": 4298546624,
+      "size": 1884,
+      "offset": 3579328,
+      "flags": 2147484680,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__init_offsets",
+      "address": 4298548508,
+      "size": 144,
+      "offset": 3581212,
+      "flags": 22,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__const",
+      "address": 4298548656,
+      "size": 8905543,
+      "offset": 3581360,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__cstring",
+      "address": 4307454199,
+      "size": 398908,
+      "offset": 12486903,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__ustring",
+      "address": 4307853108,
+      "size": 28,
+      "offset": 12885812,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__unwind_info",
+      "address": 4307853136,
+      "size": 40024,
+      "offset": 12885840,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__eh_frame",
+      "address": 4307893160,
+      "size": 2100,
+      "offset": 12925864,
+      "flags": 1744830475,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__got",
+      "address": 4307910656,
+      "size": 1344,
+      "offset": 12943360,
+      "flags": 6,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__const",
+      "address": 4307912000,
+      "size": 645528,
+      "offset": 12944704,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__data",
+      "address": 4308566016,
+      "size": 1960,
+      "offset": 13598720,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__thread_vars",
+      "address": 4308567976,
+      "size": 24,
+      "offset": 13600680,
+      "flags": 19,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__thread_data",
+      "address": 4308568000,
+      "size": 4,
+      "offset": 13600704,
+      "flags": 17,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__bss",
+      "address": 4308568016,
+      "size": 22552,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__common",
+      "address": 4308590576,
+      "size": 1689,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "/usr/lib/libSystem.B.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libz.1.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libc++.1.dylib",
+      "weak": false,
+      "command": 12
+    }
+  ],
+  "rpaths": [
+    "@loader_path/../lib"
+  ],
+  "symbols": [
+    {
+      "name": "_main",
+      "address": 4295047468,
+      "undefined": false
+    },
+    {
+      "name": "__DefaultRuneLocale",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSGetExecutablePath",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__110error_code7messageEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__114error_category10equivalentERKNS_10error_codeEi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__114error_category10equivalentEiRKNS_15error_conditionE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__114error_category23default_error_conditionEi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__115basic_stringbufIcNS_11char_traitsIcEENS_9allocatorIcEEE3strEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__119__shared_weak_count13__get_deleterERKSt9type_info",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__16locale9use_facetERNS0_2idE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__18ios_base6getlocEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112__next_primeEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5eraseEmm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6insertEmPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6insertEmPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6resizeEmc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7replaceEmmPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7reserveEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9__grow_byEmmmmmm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9push_backEc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEaSERKS5_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEE6sentryC1ERS3_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEE6sentryD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__114basic_iostreamIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__114error_categoryD2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115__thread_structC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115__thread_structD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115basic_streambufIcNS_11char_traitsIcEEEC2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115basic_streambufIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutex4lockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutex6unlockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutexC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutexD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115system_categoryEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__116generic_categoryEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__117__assoc_sub_state4waitEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variable10notify_allEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variable10notify_oneEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variable4waitERNS_11unique_lockINS_5mutexEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variableD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__shared_weak_count14__release_weakEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__shared_weak_count4lockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__shared_weak_countD2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__thread_local_dataEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__120__throw_system_errorEiPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__122__libcpp_verbose_abortEPKcz",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15ctypeIcE2idE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15mutex4lockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15mutex6unlockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15mutexD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16chrono12system_clock11from_time_tEl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16futureIvED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16localeD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16thread20hardware_concurrencyEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16thread4joinEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16thread6detachEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16threadD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvE10get_futureEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvE9set_valueEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvEC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__18ios_base4initEPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__18ios_base5clearEj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19basic_iosIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEx",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__1plIcNS_11char_traitsIcEENS_9allocatorIcEEEENS_12basic_stringIT_T0_T1_EEPKS6_RKS9_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZSt15set_new_handlerPFvvE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZSt7nothrow",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZSt9terminatev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTTNSt3__118basic_stringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTTNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__115basic_stringbufIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__118basic_stringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdaPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdlPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdlPvSt11align_val_t",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Znam",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Znwm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZnwmRKSt9nothrow_t",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZnwmSt11align_val_tRKSt9nothrow_t",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___chkstk_darwin",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_atexit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_guard_acquire",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_guard_release",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_pure_virtual",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___error",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___maskrune",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___tolower",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___toupper",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__tlv_bootstrap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_abort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_atoi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_bzero",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_calloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_chdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_close",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_closedir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_exit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fcntl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_free",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fstat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getcwd",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getenv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpagesize",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpwnam_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpwuid_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getuid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_isatty",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_log10",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_lseek",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_lstat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_task_self_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_malloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memmove",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memset",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memset_pattern16",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_modf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_munmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_open",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_opendir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_posix_madvise",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pread",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_printf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_create",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_self",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_setspecific",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_sigmask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_putchar",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_qsort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_raise",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_read",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_readdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_realloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_realpath$DARWIN_EXTSN",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sigaction",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sigprocmask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_snprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_stat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_statfs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtod",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoll",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoull",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sysconf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sysctl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sysctlbyname",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_task_set_exception_ports",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_uname",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_uncompress",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_unlink",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_wmemchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_write",
+      "address": 0,
+      "undefined": true
+    }
+  ],
+  "entry_file_offset": 80172,
+  "dyld": {
+    "rebase": {
+      "offset": 0,
+      "size": 0
+    },
+    "bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "weak_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "lazy_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "export": {
+      "offset": 0,
+      "size": 0
+    }
+  },
+  "chained_fixups": {
+    "offset": 13615104,
+    "size": 5776
+  },
+  "unsupported": [
+    "execution requires x86_64",
+    "thread-local section: __thread_vars",
+    "thread-local section: __thread_data"
+  ],
+  "total_symbol_count": 29998,
+  "symbol_coverage": "All undefined symbols plus selected entry symbols; full symbol table in local target/artifacts/raw-inspection."
+}

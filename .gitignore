@@ -1,0 +1,4 @@
+/target/
+/tests/fixtures/generated/
+__pycache__/
+/req files/

@@ -1,0 +1,553 @@
+{
+  "inspection_status": "inspected (execution not established)",
+  "architecture": "x86_64",
+  "cpu_subtype": 3,
+  "filetype": 2,
+  "flags": 2097285,
+  "slices": [
+    {
+      "cpu": 16777223,
+      "offset": 16384,
+      "size": 36608
+    },
+    {
+      "cpu": 16777228,
+      "offset": 65536,
+      "size": 69632
+    }
+  ],
+  "selected_slice_offset": 16384,
+  "commands": [
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 32,
+      "size": 72
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 104,
+      "size": 632
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 736,
+      "size": 472
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1208,
+      "size": 552
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1760,
+      "size": 72
+    },
+    {
+      "code": 2147483700,
+      "name": "LC_DYLD_CHAINED_FIXUPS",
+      "offset": 1832,
+      "size": 16
+    },
+    {
+      "code": 2147483699,
+      "name": "LC_DYLD_EXPORTS_TRIE",
+      "offset": 1848,
+      "size": 16
+    },
+    {
+      "code": 2,
+      "name": "LC_SYMTAB",
+      "offset": 1864,
+      "size": 24
+    },
+    {
+      "code": 11,
+      "name": "LC_DYSYMTAB",
+      "offset": 1888,
+      "size": 80
+    },
+    {
+      "code": 14,
+      "name": "LC_LOAD_DYLINKER",
+      "offset": 1968,
+      "size": 32
+    },
+    {
+      "code": 27,
+      "name": "LC_UUID",
+      "offset": 2000,
+      "size": 24
+    },
+    {
+      "code": 50,
+      "name": "LC_BUILD_VERSION",
+      "offset": 2024,
+      "size": 32
+    },
+    {
+      "code": 42,
+      "name": "LC_SOURCE_VERSION",
+      "offset": 2056,
+      "size": 16
+    },
+    {
+      "code": 2147483688,
+      "name": "LC_MAIN",
+      "offset": 2072,
+      "size": 24
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2096,
+      "size": 96
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2192,
+      "size": 88
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2280,
+      "size": 88
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2368,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2424,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2480,
+      "size": 104
+    },
+    {
+      "code": 38,
+      "name": "LC_FUNCTION_STARTS",
+      "offset": 2584,
+      "size": 16
+    },
+    {
+      "code": 41,
+      "name": "LC_DATA_IN_CODE",
+      "offset": 2600,
+      "size": 16
+    },
+    {
+      "code": 29,
+      "name": "LC_CODE_SIGNATURE",
+      "offset": 2616,
+      "size": 16
+    }
+  ],
+  "segments": [
+    {
+      "name": "__PAGEZERO",
+      "vmaddr": 0,
+      "vmsize": 4294967296,
+      "fileoff": 0,
+      "filesize": 0,
+      "maxprot": 0,
+      "initprot": 0,
+      "flags": 0
+    },
+    {
+      "name": "__TEXT",
+      "vmaddr": 4294967296,
+      "vmsize": 8192,
+      "fileoff": 0,
+      "filesize": 8192,
+      "maxprot": 5,
+      "initprot": 5,
+      "flags": 0
+    },
+    {
+      "name": "__DATA_CONST",
+      "vmaddr": 4294975488,
+      "vmsize": 4096,
+      "fileoff": 8192,
+      "filesize": 4096,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 16
+    },
+    {
+      "name": "__DATA",
+      "vmaddr": 4294979584,
+      "vmsize": 4096,
+      "fileoff": 12288,
+      "filesize": 4096,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 0
+    },
+    {
+      "name": "__LINKEDIT",
+      "vmaddr": 4294983680,
+      "vmsize": 32768,
+      "fileoff": 16384,
+      "filesize": 20224,
+      "maxprot": 1,
+      "initprot": 1,
+      "flags": 0
+    }
+  ],
+  "sections": [
+    {
+      "segment": "__TEXT",
+      "name": "__text",
+      "address": 4294970000,
+      "size": 1118,
+      "offset": 2704,
+      "flags": 2147484672,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__stubs",
+      "address": 4294971118,
+      "size": 42,
+      "offset": 3822,
+      "flags": 2147484680,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_methname",
+      "address": 4294971160,
+      "size": 2232,
+      "offset": 3864,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__cstring",
+      "address": 4294973392,
+      "size": 180,
+      "offset": 6096,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_classname",
+      "address": 4294973572,
+      "size": 50,
+      "offset": 6276,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_methtype",
+      "address": 4294973622,
+      "size": 1098,
+      "offset": 6326,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__unwind_info",
+      "address": 4294974720,
+      "size": 104,
+      "offset": 7424,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__cfstring",
+      "address": 4294975488,
+      "size": 416,
+      "offset": 8192,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_classlist",
+      "address": 4294975904,
+      "size": 8,
+      "offset": 8608,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_protolist",
+      "address": 4294975912,
+      "size": 16,
+      "offset": 8616,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_imageinfo",
+      "address": 4294975928,
+      "size": 8,
+      "offset": 8632,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__got",
+      "address": 4294975936,
+      "size": 104,
+      "offset": 8640,
+      "flags": 6,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_const",
+      "address": 4294979584,
+      "size": 2752,
+      "offset": 12288,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_selrefs",
+      "address": 4294982336,
+      "size": 80,
+      "offset": 15040,
+      "flags": 268435461,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_classrefs",
+      "address": 4294982416,
+      "size": 16,
+      "offset": 15120,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_ivar",
+      "address": 4294982432,
+      "size": 32,
+      "offset": 15136,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_data",
+      "address": 4294982464,
+      "size": 80,
+      "offset": 15168,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__data",
+      "address": 4294982544,
+      "size": 192,
+      "offset": 15248,
+      "flags": 0,
+      "relocations": 0
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libobjc.A.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libSystem.B.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+      "weak": false,
+      "command": 12
+    }
+  ],
+  "rpaths": [],
+  "symbols": [
+    {
+      "name": "_CFPreferencesCopyValue",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CFPreferencesGetAppBooleanValue",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CFPreferencesSetValue",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CFPreferencesSynchronize",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSApplicationMain",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSShowSystemInfoPanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSApplication",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSDictionary",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSWindowController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSObject",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSWindowController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___CFConstantStringClassReference",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__objc_empty_cache",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kCFBooleanFalse",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kCFBooleanTrue",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kCFPreferencesAnyApplication",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kCFPreferencesAnyHost",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kCFPreferencesCurrentUser",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_autorelease",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_msgSend",
+      "address": 0,
+      "undefined": true
+    }
+  ],
+  "entry_file_offset": 3812,
+  "dyld": {
+    "rebase": {
+      "offset": 0,
+      "size": 0
+    },
+    "bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "weak_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "lazy_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "export": {
+      "offset": 0,
+      "size": 0
+    }
+  },
+  "chained_fixups": {
+    "offset": 16384,
+    "size": 688
+  },
+  "unsupported": [
+    "Objective-C metadata: __objc_methname",
+    "Objective-C metadata: __objc_classname",
+    "Objective-C metadata: __objc_methtype",
+    "Objective-C metadata: __objc_classlist",
+    "Objective-C metadata: __objc_protolist",
+    "Objective-C metadata: __objc_imageinfo",
+    "Objective-C metadata: __objc_const",
+    "Objective-C metadata: __objc_selrefs",
+    "Objective-C metadata: __objc_classrefs",
+    "Objective-C metadata: __objc_ivar",
+    "Objective-C metadata: __objc_data"
+  ],
+  "total_symbol_count": 21,
+  "symbol_coverage": "All undefined symbols plus selected entry symbols; full symbol table in local target/artifacts/raw-inspection."
+}

@@ -1,0 +1,104 @@
+{
+  "source": "E:\\Xcode\\req files\\Xcode_27.xip",
+  "source_size": 2014229334,
+  "source_sha256": "6a270c53a5a0c5e0ac78125342d44c3cfff2716ec390373cd5e30834d80a67c3",
+  "content_sha1_verified": true,
+  "apple_signature_verified": false,
+  "metadata": {
+    "FileSystemCompressionFormat": "10.10",
+    "UncompressedSize": 10237133510,
+    "Version": 1,
+    "xbs_sortcpio": true
+  },
+  "entries": 166799,
+  "file_data_bytes": 10237097552,
+  "decoded_bytes": 10275147776,
+  "pbzx_blocks": 613,
+  "seconds": 90.47,
+  "selected": [
+    {
+      "path": "Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework/Versions/A/DVTFoundation",
+      "size": 11178560,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "822938dbf07bad7a0e521825ba796a4aee857c9d256d1822f355be0ce18ad852"
+    },
+    {
+      "path": "Xcode.app/Contents/Info.plist",
+      "size": 34501,
+      "mode": "0o100644",
+      "kind": "file",
+      "extracted_sha256": "537783b4c639af6ee31208fe2ec12a40bacbb0fc8f5dd2820f54e03063c4dbe8"
+    },
+    {
+      "path": "Xcode.app/Contents/MacOS/Xcode",
+      "size": 79472,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "64c1588d262ca2dadddbbcf7603982e65343d8b8802162308f16410faeae2edd"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+      "size": 73520,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "d53f80ea3d161f8195051079618459cca9e6eed8981aa1d5b9c9d27853fe8183"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "size": 124676976,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "5922f5f7843fee699497c45cc98134b6686e0a5e2fa8a5866ab74c5482fa87a5"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil",
+      "size": 41931680,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "cb0361180dd38cca317f77d94f45213250551e2100d4cbd887194e31f60baace"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+      "size": 2749664,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "4a255704671030b367319b5bd4d3ed78f9571c8f3f0ef96bf86d183c29bb1138"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo",
+      "size": 222848,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "c52b611d5813f9a494cd09d691675ce0838e58bc36c5390576e470250dbd5d38"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strings",
+      "size": 178432,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "d6bc8d9692f4217d71d2de9a7dc3a79440869fc1ea2408bb80daee66f90a2d54"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip",
+      "size": 285696,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "22a1ec7f21f5a2bc073a1c406882dfa8ca59e593dc7af74e2a1ad0fd33295944"
+    },
+    {
+      "path": "Xcode.app/Contents/version.plist",
+      "size": 530,
+      "mode": "0o100644",
+      "kind": "file",
+      "extracted_sha256": "99aa0f4ffa738d03c9d86b273745d4a3945c7cdc7462221033fb807463d895e9"
+    },
+    {
+      "path": "Xcode.app/Contents/Developer/usr/bin/xcodebuild",
+      "size": 100736,
+      "mode": "0o100755",
+      "kind": "file",
+      "extracted_sha256": "252ff0f0d9fd7f48cd146d5c68fb8da9bfb6210c4e79b2d9eea9bb8a20247723"
+    }
+  ]
+}

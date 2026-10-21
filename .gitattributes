@@ -1,0 +1,3 @@
+* text=auto eol=lf
+# Captured console status lines can legitimately end in a space.
+docs/test-results/*.log -whitespace

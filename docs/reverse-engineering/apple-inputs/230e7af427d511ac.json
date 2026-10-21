@@ -1,0 +1,1334 @@
+{
+  "inspection_status": "inspected (execution not established)",
+  "architecture": "x86_64",
+  "cpu_subtype": 3,
+  "filetype": 2,
+  "flags": 2097285,
+  "slices": [
+    {
+      "cpu": 16777223,
+      "offset": 16384,
+      "size": 135360
+    },
+    {
+      "cpu": 16777228,
+      "offset": 163840,
+      "size": 143520
+    }
+  ],
+  "selected_slice_offset": 16384,
+  "commands": [
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 32,
+      "size": 72
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 104,
+      "size": 872
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 976,
+      "size": 792
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1768,
+      "size": 712
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 2480,
+      "size": 72
+    },
+    {
+      "code": 2147483700,
+      "name": "LC_DYLD_CHAINED_FIXUPS",
+      "offset": 2552,
+      "size": 16
+    },
+    {
+      "code": 2147483699,
+      "name": "LC_DYLD_EXPORTS_TRIE",
+      "offset": 2568,
+      "size": 16
+    },
+    {
+      "code": 2,
+      "name": "LC_SYMTAB",
+      "offset": 2584,
+      "size": 24
+    },
+    {
+      "code": 11,
+      "name": "LC_DYSYMTAB",
+      "offset": 2608,
+      "size": 80
+    },
+    {
+      "code": 14,
+      "name": "LC_LOAD_DYLINKER",
+      "offset": 2688,
+      "size": 32
+    },
+    {
+      "code": 27,
+      "name": "LC_UUID",
+      "offset": 2720,
+      "size": 24
+    },
+    {
+      "code": 50,
+      "name": "LC_BUILD_VERSION",
+      "offset": 2744,
+      "size": 32
+    },
+    {
+      "code": 42,
+      "name": "LC_SOURCE_VERSION",
+      "offset": 2776,
+      "size": 16
+    },
+    {
+      "code": 2147483688,
+      "name": "LC_MAIN",
+      "offset": 2792,
+      "size": 24
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2816,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2872,
+      "size": 80
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2952,
+      "size": 104
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3056,
+      "size": 112
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3168,
+      "size": 88
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3256,
+      "size": 112
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3368,
+      "size": 104
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3472,
+      "size": 96
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3568,
+      "size": 112
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3680,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3736,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3792,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3848,
+      "size": 48
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3896,
+      "size": 96
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3992,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 4048,
+      "size": 88
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 4136,
+      "size": 104
+    },
+    {
+      "code": 38,
+      "name": "LC_FUNCTION_STARTS",
+      "offset": 4240,
+      "size": 16
+    },
+    {
+      "code": 41,
+      "name": "LC_DATA_IN_CODE",
+      "offset": 4256,
+      "size": 16
+    },
+    {
+      "code": 29,
+      "name": "LC_CODE_SIGNATURE",
+      "offset": 4272,
+      "size": 16
+    }
+  ],
+  "segments": [
+    {
+      "name": "__PAGEZERO",
+      "vmaddr": 0,
+      "vmsize": 4294967296,
+      "fileoff": 0,
+      "filesize": 0,
+      "maxprot": 0,
+      "initprot": 0,
+      "flags": 0
+    },
+    {
+      "name": "__TEXT",
+      "vmaddr": 4294967296,
+      "vmsize": 73728,
+      "fileoff": 0,
+      "filesize": 73728,
+      "maxprot": 5,
+      "initprot": 5,
+      "flags": 0
+    },
+    {
+      "name": "__DATA_CONST",
+      "vmaddr": 4295041024,
+      "vmsize": 12288,
+      "fileoff": 73728,
+      "filesize": 12288,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 16
+    },
+    {
+      "name": "__DATA",
+      "vmaddr": 4295053312,
+      "vmsize": 20480,
+      "fileoff": 86016,
+      "filesize": 20480,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 0
+    },
+    {
+      "name": "__LINKEDIT",
+      "vmaddr": 4295073792,
+      "vmsize": 32768,
+      "fileoff": 106496,
+      "filesize": 28864,
+      "maxprot": 1,
+      "initprot": 1,
+      "flags": 0
+    }
+  ],
+  "sections": [
+    {
+      "segment": "__TEXT",
+      "name": "__text",
+      "address": 4294971696,
+      "size": 48051,
+      "offset": 4400,
+      "flags": 2147484672,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__stubs",
+      "address": 4295019748,
+      "size": 384,
+      "offset": 52452,
+      "flags": 2147484680,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__const",
+      "address": 4295020144,
+      "size": 232,
+      "offset": 52848,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__gcc_except_tab",
+      "address": 4295020376,
+      "size": 84,
+      "offset": 53080,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_methname",
+      "address": 4295020460,
+      "size": 12629,
+      "offset": 53164,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_classname",
+      "address": 4295033089,
+      "size": 209,
+      "offset": 65793,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_methtype",
+      "address": 4295033298,
+      "size": 1589,
+      "offset": 66002,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__cstring",
+      "address": 4295034887,
+      "size": 5376,
+      "offset": 67591,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__ustring",
+      "address": 4295040264,
+      "size": 70,
+      "offset": 72968,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__unwind_info",
+      "address": 4295040336,
+      "size": 464,
+      "offset": 73040,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__const",
+      "address": 4295041024,
+      "size": 424,
+      "offset": 73728,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__cfstring",
+      "address": 4295041448,
+      "size": 10080,
+      "offset": 74152,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_classlist",
+      "address": 4295051528,
+      "size": 64,
+      "offset": 84232,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_catlist",
+      "address": 4295051592,
+      "size": 8,
+      "offset": 84296,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_protolist",
+      "address": 4295051600,
+      "size": 16,
+      "offset": 84304,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_imageinfo",
+      "address": 4295051616,
+      "size": 8,
+      "offset": 84320,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_arraydata",
+      "address": 4295051624,
+      "size": 768,
+      "offset": 84328,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_arrayobj",
+      "address": 4295052392,
+      "size": 24,
+      "offset": 85096,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__got",
+      "address": 4295052416,
+      "size": 696,
+      "offset": 85120,
+      "flags": 6,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_const",
+      "address": 4295053312,
+      "size": 12544,
+      "offset": 86016,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_selrefs",
+      "address": 4295065856,
+      "size": 2752,
+      "offset": 98560,
+      "flags": 268435461,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_classrefs",
+      "address": 4295068608,
+      "size": 352,
+      "offset": 101312,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_superrefs",
+      "address": 4295068960,
+      "size": 64,
+      "offset": 101664,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_ivar",
+      "address": 4295069024,
+      "size": 720,
+      "offset": 101728,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_data",
+      "address": 4295069744,
+      "size": 640,
+      "offset": 102448,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__data",
+      "address": 4295070384,
+      "size": 200,
+      "offset": 103088,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__bss",
+      "address": 4295070584,
+      "size": 8,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "/usr/lib/libcups.2.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/GSS.framework/Versions/A/GSS",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/Security.framework/Versions/A/Security",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libiconv.2.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libSystem.B.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libresolv.9.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libz.1.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libobjc.A.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+      "weak": false,
+      "command": 12
+    }
+  ],
+  "rpaths": [],
+  "symbols": [
+    {
+      "name": "_AudioServicesCreateSystemSoundID",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_AudioServicesPlaySystemSound",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_AuthorizationExecuteWithPrivileges",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGShieldingWindowLevel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSApp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSApplicationMain",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSApplicationWillTerminateNotification",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSContentBinding",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSControlTextDidChangeNotification",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSEnabledBinding",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSFontAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSForegroundColorAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSHiddenBinding",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSLinkAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSLog",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSSearchPathForDirectoriesInDomains",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSSelectedIndexBinding",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSStringPboardType",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSTemporaryDirectory",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSUnderlineStyleAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSValueTransformerNameBindingOption",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSZeroPoint",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSZeroRect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSAlert",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSApplication",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSArray",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSArrayController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSAttributedString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSBundle",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSColor",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSConstantArray",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSDictionary",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSEvent",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSFileManager",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSFont",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSHelpManager",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSImage",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSImageView",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSIndexSet",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSMenuItem",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSMutableArray",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSMutableAttributedString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSMutableDictionary",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSMutableString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSNotificationCenter",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSNumber",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSObject",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSOpenPanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSPasteboard",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSPipe",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSPopUpButton",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSProcessInfo",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSSavePanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSScreen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSTask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSTextField",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSThread",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSURL",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSUserDefaults",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSViewController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSWindow",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSWindowController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSWorkspace",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_SFAuthorization",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_EHTYPE_$_NSException",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSArrayController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSObject",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSViewController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSWindowController",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_PMServerLaunchPrinterBrowser",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Block_object_assign",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Block_object_dispose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSConcreteStackBlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Unwind_Resume",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___CFConstantStringClassReference",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___objc_personality_v0",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_fail",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_guard",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__dispatch_main_q",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__objc_empty_cache",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_cupsDoRequest",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_cupsLastError",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dispatch_async",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dispatch_get_global_queue",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dispatch_sync",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fclose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fopen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_free",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_httpClose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_httpConnect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_httpConnect2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippAddInteger",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippAddOctetString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippAddString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippAddStrings",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippDelete",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippFindAttribute",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippFindNextAttribute",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippFirstAttribute",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetCollection",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetCount",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetGroupTag",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetInteger",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetRange",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippGetValueTag",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippNewRequest",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ippNextAttribute",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kill",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_malloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mkdtemp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_alloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_alloc_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_autorelease",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_begin_catch",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_end_catch",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_enumerationMutation",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_getProperty",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_msgSend",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_msgSendSuper2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_msgSend_stret",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_opt_class",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_opt_isKindOfClass",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_release",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_retain",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_setProperty_atomic",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pwgMediaForSize",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sleep",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sscanf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlen",
+      "address": 0,
+      "undefined": true
+    }
+  ],
+  "entry_file_offset": 4400,
+  "dyld": {
+    "rebase": {
+      "offset": 0,
+      "size": 0
+    },
+    "bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "weak_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "lazy_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "export": {
+      "offset": 0,
+      "size": 0
+    }
+  },
+  "chained_fixups": {
+    "offset": 106496,
+    "size": 3528
+  },
+  "unsupported": [
+    "Objective-C metadata: __objc_methname",
+    "Objective-C metadata: __objc_classname",
+    "Objective-C metadata: __objc_methtype",
+    "Objective-C metadata: __objc_classlist",
+    "Objective-C metadata: __objc_catlist",
+    "Objective-C metadata: __objc_protolist",
+    "Objective-C metadata: __objc_imageinfo",
+    "Objective-C metadata: __objc_arraydata",
+    "Objective-C metadata: __objc_arrayobj",
+    "Objective-C metadata: __objc_const",
+    "Objective-C metadata: __objc_selrefs",
+    "Objective-C metadata: __objc_classrefs",
+    "Objective-C metadata: __objc_superrefs",
+    "Objective-C metadata: __objc_ivar",
+    "Objective-C metadata: __objc_data"
+  ],
+  "total_symbol_count": 136,
+  "symbol_coverage": "All undefined symbols plus selected entry symbols; full symbol table in local target/artifacts/raw-inspection."
+}

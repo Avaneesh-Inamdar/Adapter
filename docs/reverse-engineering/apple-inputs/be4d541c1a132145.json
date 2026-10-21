@@ -1,0 +1,1227 @@
+{
+  "inspection_status": "inspected (execution not established)",
+  "architecture": "x86_64",
+  "cpu_subtype": 3,
+  "filetype": 2,
+  "flags": 2097285,
+  "slices": [
+    {
+      "cpu": 16777223,
+      "offset": 16384,
+      "size": 78336
+    },
+    {
+      "cpu": 16777228,
+      "offset": 98304,
+      "size": 111232
+    }
+  ],
+  "selected_slice_offset": 16384,
+  "commands": [
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 32,
+      "size": 72
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 104,
+      "size": 712
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 816,
+      "size": 632
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1448,
+      "size": 632
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 2080,
+      "size": 72
+    },
+    {
+      "code": 2147483700,
+      "name": "LC_DYLD_CHAINED_FIXUPS",
+      "offset": 2152,
+      "size": 16
+    },
+    {
+      "code": 2147483699,
+      "name": "LC_DYLD_EXPORTS_TRIE",
+      "offset": 2168,
+      "size": 16
+    },
+    {
+      "code": 2,
+      "name": "LC_SYMTAB",
+      "offset": 2184,
+      "size": 24
+    },
+    {
+      "code": 11,
+      "name": "LC_DYSYMTAB",
+      "offset": 2208,
+      "size": 80
+    },
+    {
+      "code": 14,
+      "name": "LC_LOAD_DYLINKER",
+      "offset": 2288,
+      "size": 32
+    },
+    {
+      "code": 27,
+      "name": "LC_UUID",
+      "offset": 2320,
+      "size": 24
+    },
+    {
+      "code": 50,
+      "name": "LC_BUILD_VERSION",
+      "offset": 2344,
+      "size": 32
+    },
+    {
+      "code": 42,
+      "name": "LC_SOURCE_VERSION",
+      "offset": 2376,
+      "size": 16
+    },
+    {
+      "code": 2147483688,
+      "name": "LC_MAIN",
+      "offset": 2392,
+      "size": 24
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2416,
+      "size": 96
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2512,
+      "size": 104
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2616,
+      "size": 136
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2752,
+      "size": 88
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2840,
+      "size": 96
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2936,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2992,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3048,
+      "size": 88
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3136,
+      "size": 104
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3240,
+      "size": 104
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3344,
+      "size": 104
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 3448,
+      "size": 88
+    },
+    {
+      "code": 38,
+      "name": "LC_FUNCTION_STARTS",
+      "offset": 3536,
+      "size": 16
+    },
+    {
+      "code": 41,
+      "name": "LC_DATA_IN_CODE",
+      "offset": 3552,
+      "size": 16
+    },
+    {
+      "code": 29,
+      "name": "LC_CODE_SIGNATURE",
+      "offset": 3568,
+      "size": 16
+    }
+  ],
+  "segments": [
+    {
+      "name": "__PAGEZERO",
+      "vmaddr": 0,
+      "vmsize": 4294967296,
+      "fileoff": 0,
+      "filesize": 0,
+      "maxprot": 0,
+      "initprot": 0,
+      "flags": 0
+    },
+    {
+      "name": "__TEXT",
+      "vmaddr": 4294967296,
+      "vmsize": 32768,
+      "fileoff": 0,
+      "filesize": 32768,
+      "maxprot": 5,
+      "initprot": 5,
+      "flags": 0
+    },
+    {
+      "name": "__DATA_CONST",
+      "vmaddr": 4295000064,
+      "vmsize": 4096,
+      "fileoff": 32768,
+      "filesize": 4096,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 16
+    },
+    {
+      "name": "__DATA",
+      "vmaddr": 4295004160,
+      "vmsize": 12288,
+      "fileoff": 36864,
+      "filesize": 12288,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 0
+    },
+    {
+      "name": "__LINKEDIT",
+      "vmaddr": 4295016448,
+      "vmsize": 32768,
+      "fileoff": 49152,
+      "filesize": 29184,
+      "maxprot": 1,
+      "initprot": 1,
+      "flags": 0
+    }
+  ],
+  "sections": [
+    {
+      "segment": "__TEXT",
+      "name": "__text",
+      "address": 4294970968,
+      "size": 20101,
+      "offset": 3672,
+      "flags": 2147484672,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__stubs",
+      "address": 4294991070,
+      "size": 426,
+      "offset": 23774,
+      "flags": 2147484680,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__const",
+      "address": 4294991504,
+      "size": 480,
+      "offset": 24208,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_methname",
+      "address": 4294991984,
+      "size": 5467,
+      "offset": 24688,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_classname",
+      "address": 4294997451,
+      "size": 75,
+      "offset": 30155,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__objc_methtype",
+      "address": 4294997526,
+      "size": 606,
+      "offset": 30230,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__cstring",
+      "address": 4294998132,
+      "size": 877,
+      "offset": 30836,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__unwind_info",
+      "address": 4294999012,
+      "size": 280,
+      "offset": 31716,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__const",
+      "address": 4295000064,
+      "size": 96,
+      "offset": 32768,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__cfstring",
+      "address": 4295000160,
+      "size": 1792,
+      "offset": 32864,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_classlist",
+      "address": 4295001952,
+      "size": 40,
+      "offset": 34656,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_imageinfo",
+      "address": 4295001992,
+      "size": 8,
+      "offset": 34696,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_arraydata",
+      "address": 4295002000,
+      "size": 16,
+      "offset": 34704,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__objc_dictobj",
+      "address": 4295002016,
+      "size": 40,
+      "offset": 34720,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__got",
+      "address": 4295002056,
+      "size": 768,
+      "offset": 34760,
+      "flags": 6,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_const",
+      "address": 4295004160,
+      "size": 5576,
+      "offset": 36864,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_selrefs",
+      "address": 4295009736,
+      "size": 1640,
+      "offset": 42440,
+      "flags": 268435461,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_classrefs",
+      "address": 4295011376,
+      "size": 224,
+      "offset": 44080,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_superrefs",
+      "address": 4295011600,
+      "size": 32,
+      "offset": 44304,
+      "flags": 268435456,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_ivar",
+      "address": 4295011632,
+      "size": 536,
+      "offset": 44336,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__objc_data",
+      "address": 4295012168,
+      "size": 400,
+      "offset": 44872,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__data",
+      "address": 4295012568,
+      "size": 4,
+      "offset": 45272,
+      "flags": 0,
+      "relocations": 0
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/Quartz.framework/Versions/A/Frameworks/ImageKit.framework/Versions/A/ImageKit",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libobjc.A.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libSystem.B.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO",
+      "weak": false,
+      "command": 12
+    }
+  ],
+  "rpaths": [],
+  "symbols": [
+    {
+      "name": "_CFAbsoluteTimeGetCurrent",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CFLogTest",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CFRelease",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGBitmapContextCreate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGColorSpaceGetName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextAddLineToPoint",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextAddRect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextBeginPath",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextDrawImage",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextFillRect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextGetClipBoundingBox",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextMoveToPoint",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextRelease",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextSetInterpolationQuality",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextSetLineWidth",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextSetRGBFillColor",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextSetRGBStrokeColor",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextStrokePath",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextStrokeRectWithWidth",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGContextTranslateCTM",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGDisplayBounds",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageDestinationAddImage",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageDestinationCreateWithURL",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageDestinationFinalize",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageGetBitsPerComponent",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageGetColorSpace",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageGetHeight",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageGetWidth",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGImageRelease",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGPointZero",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGRectGetHeight",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGRectGetMinX",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGRectGetMinY",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGRectGetWidth",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGRectInset",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGSCaptureWindowsContentsToRectWithOptions",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGSCurrentInputPointerPosition",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGSGetOnScreenWindowCount",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGSGetOnScreenWindowList",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGSMainConnectionID",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGSSetHotKey",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_CGShieldingWindowLevel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSApp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSApplicationMain",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSApplicationWillTerminateNotification",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSFontAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSForegroundColorAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSHomeDirectory",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSIsEmptyRect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSLog",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSMenuDidBeginTrackingNotification",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSOffsetRect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSPasteboardNameFont",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSPasteboardTypeColor",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSPasteboardTypeFont",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSPasteboardTypeString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSPasteboardTypeTIFF",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSPointInRect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSRectFill",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSShowSystemInfoPanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSStrokeColorAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSStrokeWidthAttributeName",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_NSWindowWillCloseNotification",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_CALayer",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_IKSaveOptions",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSApplication",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSArray",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSAttributedString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSAutoreleasePool",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSColor",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSColorPanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSColorSpace",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSConstantDictionary",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSDate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSDictionary",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSEvent",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSFont",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSGraphicsContext",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSImage",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSKeyedArchiver",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSKeyedUnarchiver",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSMutableAttributedString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSMutableString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSNotificationCenter",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSNumber",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSObject",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSPanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSPasteboard",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSSavePanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSScreen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSString",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSTimer",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSURL",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSUserDefaults",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_CLASS_$_NSView",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSApplication",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSObject",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSPanel",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_OBJC_METACLASS_$_NSView",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_SLSHWCaptureWindowListInRect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Block_object_assign",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Block_object_dispose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSConcreteStackBlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___CFConstantStringClassReference",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___NSDictionary0__struct",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "____chkstk_darwin",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___extendhfsf2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_fail",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_guard",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__objc_empty_cache",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_exp2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kCAFilterNearest",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kSLSCaptureDisablePrompting",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kSLSCaptureExtendedRange",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kSLSCaptureNoTCCs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kUTTypePNG",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_alloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_alloc_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_autorelease",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_destroyWeak",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_getProperty",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_loadWeak",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_msgSend",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_msgSendSuper2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_msgSend_stret",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_opt_class",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_opt_respondsToSelector",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_release",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_retain",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_setProperty_atomic",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_setProperty_atomic_copy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_objc_storeWeak",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_random",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_srandom",
+      "address": 0,
+      "undefined": true
+    }
+  ],
+  "entry_file_offset": 3672,
+  "dyld": {
+    "rebase": {
+      "offset": 0,
+      "size": 0
+    },
+    "bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "weak_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "lazy_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "export": {
+      "offset": 0,
+      "size": 0
+    }
+  },
+  "chained_fixups": {
+    "offset": 49152,
+    "size": 3664
+  },
+  "unsupported": [
+    "Objective-C metadata: __objc_methname",
+    "Objective-C metadata: __objc_classname",
+    "Objective-C metadata: __objc_methtype",
+    "Objective-C metadata: __objc_classlist",
+    "Objective-C metadata: __objc_imageinfo",
+    "Objective-C metadata: __objc_arraydata",
+    "Objective-C metadata: __objc_dictobj",
+    "Objective-C metadata: __objc_const",
+    "Objective-C metadata: __objc_selrefs",
+    "Objective-C metadata: __objc_classrefs",
+    "Objective-C metadata: __objc_superrefs",
+    "Objective-C metadata: __objc_ivar",
+    "Objective-C metadata: __objc_data"
+  ],
+  "total_symbol_count": 135,
+  "symbol_coverage": "All undefined symbols plus selected entry symbols; full symbol table in local target/artifacts/raw-inspection."
+}

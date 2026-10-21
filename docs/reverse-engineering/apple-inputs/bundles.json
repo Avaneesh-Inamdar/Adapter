@@ -1,0 +1,200 @@
+[
+  {
+    "source": "xcode27-inspection/selected/Xcode.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.dt.Xcode",
+    "CFBundleExecutable": "Xcode",
+    "CFBundleName": "Xcode",
+    "CFBundleShortVersionString": "27.0",
+    "CFBundleVersion": "25183.107.5",
+    "LSMinimumSystemVersion": "26.6",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A266"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Audio/AU Lab.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.audio.aulab",
+    "CFBundleExecutable": "AU Lab",
+    "CFBundleName": "AU Lab",
+    "CFBundleShortVersionString": "2.5",
+    "CFBundleVersion": "2.5",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Graphics/Pixie.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.Pixie",
+    "CFBundleExecutable": "Pixie",
+    "CFBundleName": "Pixie",
+    "CFBundleShortVersionString": "3.0",
+    "CFBundleVersion": "154",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Graphics/Pixie.app/Contents/Resources/Pixie.help/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.Pixie.help",
+    "CFBundleExecutable": null,
+    "CFBundleName": "PixieHelp",
+    "CFBundleShortVersionString": "2.4",
+    "CFBundleVersion": "",
+    "LSMinimumSystemVersion": null,
+    "DTXcode": null,
+    "DTXcodeBuild": null
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.QuartzDebug",
+    "CFBundleExecutable": "Quartz Debug",
+    "CFBundleName": "Quartz Debug",
+    "CFBundleShortVersionString": "4.2",
+    "CFBundleVersion": "190",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/CarPlay Simulator.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.CarPlaySimulator",
+    "CFBundleExecutable": "CarPlay Simulator",
+    "CFBundleName": "CarPlay Simulator",
+    "CFBundleShortVersionString": "xcode",
+    "CFBundleVersion": "4.0",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A259"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/HomeKit Accessory Simulator.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.HomeKit-Accessory-Simulator",
+    "CFBundleExecutable": "HomeKit Accessory Simulator",
+    "CFBundleName": "HomeKit Accessory Simulator",
+    "CFBundleShortVersionString": "4.1.6",
+    "CFBundleVersion": "135.4.9",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/IORegistryExplorer.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.IORegistryExplorer",
+    "CFBundleExecutable": "IORegistryExplorer",
+    "CFBundleName": "IORegistryExplorer",
+    "CFBundleShortVersionString": "3.0.2",
+    "CFBundleVersion": "14",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.Network-Link-Conditioner",
+    "CFBundleExecutable": "Network Link Conditioner",
+    "CFBundleName": "Network Link Conditioner",
+    "CFBundleShortVersionString": "2.0",
+    "CFBundleVersion": "2.0",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/PlugIns/NLCBackgroundApp.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.NLCBackgroundApp",
+    "CFBundleExecutable": "NLCBackgroundApp",
+    "CFBundleName": "NLCBackgroundApp",
+    "CFBundleShortVersionString": "2.0",
+    "CFBundleVersion": "2.0",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/XPCServices/com.apple.Network-Link-Conditioner.remoteservice.xpc/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.Network-Link-Conditioner.remoteservice",
+    "CFBundleExecutable": "com.apple.Network-Link-Conditioner.remoteservice",
+    "CFBundleName": "com.apple.Network-Link-Conditioner.remoteservice",
+    "CFBundleShortVersionString": "1.0",
+    "CFBundleVersion": "1",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/PacketLogger.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.PacketLogger",
+    "CFBundleExecutable": "PacketLogger",
+    "CFBundleName": "PacketLogger",
+    "CFBundleShortVersionString": "26.0.0",
+    "CFBundleVersion": "26.0",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.PrinterSimulator",
+    "CFBundleExecutable": "Printer Simulator",
+    "CFBundleName": "Printer Simulator",
+    "CFBundleShortVersionString": "96.3",
+    "CFBundleVersion": "96",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Utilities/Clipboard Viewer.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.examples.ClipboardViewer",
+    "CFBundleExecutable": "Clipboard Viewer",
+    "CFBundleName": null,
+    "CFBundleShortVersionString": "5.0",
+    "CFBundleVersion": null,
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "additional-tools27/Additional Tools/Utilities/CrashReporterPrefs.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.CrashReporterPrefs",
+    "CFBundleExecutable": "CrashReporterPrefs",
+    "CFBundleName": "Crash Reporter Preferences",
+    "CFBundleShortVersionString": "10.13",
+    "CFBundleVersion": "15012",
+    "LSMinimumSystemVersion": "14.0",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A252"
+  },
+  {
+    "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.IconComposer",
+    "CFBundleExecutable": "Icon Composer",
+    "CFBundleName": "Icon Composer",
+    "CFBundleShortVersionString": "27.0",
+    "CFBundleVersion": "129",
+    "LSMinimumSystemVersion": "26.6",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A262"
+  },
+  {
+    "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer QuickLook Preview.appex/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.IconComposerQuickLookPreviewAppExtension",
+    "CFBundleExecutable": null,
+    "CFBundleName": null,
+    "CFBundleShortVersionString": "27.0",
+    "CFBundleVersion": "129",
+    "LSMinimumSystemVersion": "26.6",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A262"
+  },
+  {
+    "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer Thumbnail.appex/Contents/Info.plist",
+    "CFBundleIdentifier": "com.apple.IconComposerThumbnailExtension",
+    "CFBundleExecutable": null,
+    "CFBundleName": null,
+    "CFBundleShortVersionString": "27.0",
+    "CFBundleVersion": "129",
+    "LSMinimumSystemVersion": "26.6",
+    "DTXcode": "2700",
+    "DTXcodeBuild": "27A262"
+  }
+]

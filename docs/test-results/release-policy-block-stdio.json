@@ -1,0 +1,10 @@
+{
+  "recorded_utc": "2026-10-21T14:42:21.647235+00:00",
+  "status": "blocked",
+  "error": "WinError 4551: Windows Application Control",
+  "artifact": "target\\release\\db-run.exe",
+  "sha256": "cd3be4ef47e8679259c311fa8e4a07a771612984ab36bae9787d70d2aa9a4034",
+  "log": "release-policy-block-stdio.log",
+  "policy_modified": false,
+  "source_note": "Before the final empty-fopen-mode validation fix; not a passing test run."
+}

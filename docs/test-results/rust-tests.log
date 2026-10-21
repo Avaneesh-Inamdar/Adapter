@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running unittests src\lib.rs (target\debug\deps\darwinbridge-a8d48d7613dc6258.exe)
+error: test failed, to rerun pass `--lib`
+
+Caused by:
+  could not execute process `E:\Xcode\target\debug\deps\darwinbridge-a8d48d7613dc6258.exe` (never executed)
+
+Caused by:
+  An Application Control policy has blocked this file. (os error 4551)

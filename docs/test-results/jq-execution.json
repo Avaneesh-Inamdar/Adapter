@@ -1,0 +1,16 @@
+{
+  "run_utc": "2026-10-21T14:45:56.829949+00:00",
+  "artifact_sha256": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0",
+  "reference_mac_run": false,
+  "profiles": {
+    "debug": {
+      "status": "blocked",
+      "db_run_sha256": "013211501f2af8b2f32e0656b833fb8a59b0c274dcea426e32950c5016b67656"
+    },
+    "release": {
+      "status": "blocked",
+      "db_run_sha256": "378ab2f8ce8498757cb8fc41be5e7a7b3c8618bc56bdb5d1d1d16e2c7408e110"
+    }
+  },
+  "executions": []
+}

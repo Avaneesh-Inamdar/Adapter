@@ -1,0 +1,752 @@
+{
+  "inspection_status": "inspected (execution not established)",
+  "architecture": "arm64",
+  "cpu_subtype": 0,
+  "filetype": 2,
+  "flags": 2162821,
+  "slices": [],
+  "selected_slice_offset": 0,
+  "commands": [
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 32,
+      "size": 72
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 104,
+      "size": 392
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 496,
+      "size": 232
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 728,
+      "size": 232
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 960,
+      "size": 72
+    },
+    {
+      "code": 2147483700,
+      "name": "LC_DYLD_CHAINED_FIXUPS",
+      "offset": 1032,
+      "size": 16
+    },
+    {
+      "code": 2147483699,
+      "name": "LC_DYLD_EXPORTS_TRIE",
+      "offset": 1048,
+      "size": 16
+    },
+    {
+      "code": 2,
+      "name": "LC_SYMTAB",
+      "offset": 1064,
+      "size": 24
+    },
+    {
+      "code": 11,
+      "name": "LC_DYSYMTAB",
+      "offset": 1088,
+      "size": 80
+    },
+    {
+      "code": 14,
+      "name": "LC_LOAD_DYLINKER",
+      "offset": 1168,
+      "size": 32
+    },
+    {
+      "code": 27,
+      "name": "LC_UUID",
+      "offset": 1200,
+      "size": 24
+    },
+    {
+      "code": 50,
+      "name": "LC_BUILD_VERSION",
+      "offset": 1224,
+      "size": 32
+    },
+    {
+      "code": 42,
+      "name": "LC_SOURCE_VERSION",
+      "offset": 1256,
+      "size": 16
+    },
+    {
+      "code": 2147483688,
+      "name": "LC_MAIN",
+      "offset": 1272,
+      "size": 24
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1296,
+      "size": 48
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1344,
+      "size": 48
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1392,
+      "size": 56
+    },
+    {
+      "code": 2147483676,
+      "name": "LC_RPATH",
+      "offset": 1448,
+      "size": 40
+    },
+    {
+      "code": 38,
+      "name": "LC_FUNCTION_STARTS",
+      "offset": 1488,
+      "size": 16
+    },
+    {
+      "code": 41,
+      "name": "LC_DATA_IN_CODE",
+      "offset": 1504,
+      "size": 16
+    },
+    {
+      "code": 29,
+      "name": "LC_CODE_SIGNATURE",
+      "offset": 1520,
+      "size": 16
+    }
+  ],
+  "segments": [
+    {
+      "name": "__PAGEZERO",
+      "vmaddr": 0,
+      "vmsize": 4294967296,
+      "fileoff": 0,
+      "filesize": 0,
+      "maxprot": 0,
+      "initprot": 0,
+      "flags": 0
+    },
+    {
+      "name": "__TEXT",
+      "vmaddr": 4294967296,
+      "vmsize": 114688,
+      "fileoff": 0,
+      "filesize": 114688,
+      "maxprot": 5,
+      "initprot": 5,
+      "flags": 0
+    },
+    {
+      "name": "__DATA_CONST",
+      "vmaddr": 4295081984,
+      "vmsize": 16384,
+      "fileoff": 114688,
+      "filesize": 16384,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 16
+    },
+    {
+      "name": "__DATA",
+      "vmaddr": 4295098368,
+      "vmsize": 16384,
+      "fileoff": 131072,
+      "filesize": 16384,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 0
+    },
+    {
+      "name": "__LINKEDIT",
+      "vmaddr": 4295114752,
+      "vmsize": 81920,
+      "fileoff": 147456,
+      "filesize": 75392,
+      "maxprot": 1,
+      "initprot": 1,
+      "flags": 0
+    }
+  ],
+  "sections": [
+    {
+      "segment": "__TEXT",
+      "name": "__text",
+      "address": 4294968856,
+      "size": 90408,
+      "offset": 1560,
+      "flags": 2147484672,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__stubs",
+      "address": 4295059264,
+      "size": 936,
+      "offset": 91968,
+      "flags": 2147484680,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__const",
+      "address": 4295060208,
+      "size": 788,
+      "offset": 92912,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__cstring",
+      "address": 4295060996,
+      "size": 17148,
+      "offset": 93700,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__const",
+      "address": 4295081984,
+      "size": 7568,
+      "offset": 114688,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__got",
+      "address": 4295089552,
+      "size": 688,
+      "offset": 122256,
+      "flags": 6,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__crash_info",
+      "address": 4295098368,
+      "size": 328,
+      "offset": 131072,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__bss",
+      "address": 4295098696,
+      "size": 8,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "@rpath/libLTO.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libc++.1.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libSystem.B.dylib",
+      "weak": false,
+      "command": 12
+    }
+  ],
+  "rpaths": [
+    "@executable_path/../lib/"
+  ],
+  "symbols": [
+    {
+      "name": "_main",
+      "address": 4294972428,
+      "undefined": false
+    },
+    {
+      "name": "__Block_object_assign",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Block_object_dispose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__DefaultRuneLocale",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSConcreteStackBlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSGetExecutablePath",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__110error_code7messageEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__14__fs10filesystem4path10__filenameEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112__next_primeEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9__grow_byEmmmmmm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9push_backEc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEC2ERKS5_mmRKS4_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115system_categoryEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__14__fs10filesystem11__canonicalERKNS1_4pathEPNS_10error_codeE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__14__fs10filesystem16__create_symlinkERKNS1_4pathES4_PNS_10error_codeE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdlPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Znwm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___assert_rtn",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___chkstk_darwin",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___error",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___progname",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_fail",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_guard",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stderrp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___toupper",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__dyld_get_image_name",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__dyld_get_shared_cache_range",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__dyld_image_count",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_abort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_asprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_bzero",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_close",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dyld_for_each_installed_shared_cache",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dyld_shared_cache_for_each_file",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_execvp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_exit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fchmod",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_free",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fstat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ftruncate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fwrite",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getenv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_lto_module_create_in_local_context",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_lto_module_dispose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_lto_module_get_target_triple",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_task_self_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_malloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memmove",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mkdtemp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mkstemp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_munmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_open",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pread",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_printf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_putchar",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_read",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_rename",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_rmdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setenv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_snprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_stat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strerror",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlcat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strstr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoul",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoull",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_umask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_unlink",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_uuid_unparse_upper",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vm_allocate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vm_deallocate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vm_page_size",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vsnprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_write",
+      "address": 0,
+      "undefined": true
+    }
+  ],
+  "entry_file_offset": 5132,
+  "dyld": {
+    "rebase": {
+      "offset": 0,
+      "size": 0
+    },
+    "bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "weak_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "lazy_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "export": {
+      "offset": 0,
+      "size": 0
+    }
+  },
+  "chained_fixups": {
+    "offset": 147456,
+    "size": 2024
+  },
+  "unsupported": [
+    "execution requires x86_64"
+  ],
+  "total_symbol_count": 698,
+  "symbol_coverage": "All undefined symbols plus selected entry symbols; full symbol table in local target/artifacts/raw-inspection."
+}

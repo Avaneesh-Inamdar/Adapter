@@ -1,0 +1,11 @@
+{
+  "rust_tests": 17,
+  "archive_tests": 9,
+  "integration_tests": {
+    "debug": 63,
+    "release": 63
+  },
+  "distinct_tests": 89,
+  "jq_test_methods": 13,
+  "reference_macos_verified": false
+}

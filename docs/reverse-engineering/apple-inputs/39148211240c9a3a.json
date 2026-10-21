@@ -1,0 +1,2886 @@
+{
+  "inspection_status": "inspected (execution not established)",
+  "architecture": "arm64",
+  "cpu_subtype": 0,
+  "filetype": 2,
+  "flags": 10551429,
+  "slices": [],
+  "selected_slice_offset": 0,
+  "commands": [
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 32,
+      "size": 72
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 104,
+      "size": 872
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 976,
+      "size": 232
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1208,
+      "size": 552
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1760,
+      "size": 72
+    },
+    {
+      "code": 2147483700,
+      "name": "LC_DYLD_CHAINED_FIXUPS",
+      "offset": 1832,
+      "size": 16
+    },
+    {
+      "code": 2147483699,
+      "name": "LC_DYLD_EXPORTS_TRIE",
+      "offset": 1848,
+      "size": 16
+    },
+    {
+      "code": 2,
+      "name": "LC_SYMTAB",
+      "offset": 1864,
+      "size": 24
+    },
+    {
+      "code": 11,
+      "name": "LC_DYSYMTAB",
+      "offset": 1888,
+      "size": 80
+    },
+    {
+      "code": 14,
+      "name": "LC_LOAD_DYLINKER",
+      "offset": 1968,
+      "size": 32
+    },
+    {
+      "code": 27,
+      "name": "LC_UUID",
+      "offset": 2000,
+      "size": 24
+    },
+    {
+      "code": 50,
+      "name": "LC_BUILD_VERSION",
+      "offset": 2024,
+      "size": 32
+    },
+    {
+      "code": 42,
+      "name": "LC_SOURCE_VERSION",
+      "offset": 2056,
+      "size": 16
+    },
+    {
+      "code": 2147483688,
+      "name": "LC_MAIN",
+      "offset": 2072,
+      "size": 24
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2096,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2152,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2208,
+      "size": 48
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 2256,
+      "size": 48
+    },
+    {
+      "code": 2147483676,
+      "name": "LC_RPATH",
+      "offset": 2304,
+      "size": 32
+    },
+    {
+      "code": 38,
+      "name": "LC_FUNCTION_STARTS",
+      "offset": 2336,
+      "size": 16
+    },
+    {
+      "code": 41,
+      "name": "LC_DATA_IN_CODE",
+      "offset": 2352,
+      "size": 16
+    },
+    {
+      "code": 29,
+      "name": "LC_CODE_SIGNATURE",
+      "offset": 2368,
+      "size": 16
+    }
+  ],
+  "segments": [
+    {
+      "name": "__PAGEZERO",
+      "vmaddr": 0,
+      "vmsize": 4294967296,
+      "fileoff": 0,
+      "filesize": 0,
+      "maxprot": 0,
+      "initprot": 0,
+      "flags": 0
+    },
+    {
+      "name": "__TEXT",
+      "vmaddr": 4294967296,
+      "vmsize": 76775424,
+      "fileoff": 0,
+      "filesize": 76775424,
+      "maxprot": 5,
+      "initprot": 5,
+      "flags": 0
+    },
+    {
+      "name": "__DATA_CONST",
+      "vmaddr": 4371742720,
+      "vmsize": 3522560,
+      "fileoff": 76775424,
+      "filesize": 3522560,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 16
+    },
+    {
+      "name": "__DATA",
+      "vmaddr": 4375265280,
+      "vmsize": 1392640,
+      "fileoff": 80297984,
+      "filesize": 835584,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 0
+    },
+    {
+      "name": "__LINKEDIT",
+      "vmaddr": 4376657920,
+      "vmsize": 43548672,
+      "fileoff": 81133568,
+      "filesize": 43543408,
+      "maxprot": 1,
+      "initprot": 1,
+      "flags": 0
+    }
+  ],
+  "sections": [
+    {
+      "segment": "__TEXT",
+      "name": "__text",
+      "address": 4294973792,
+      "size": 57555816,
+      "offset": 6496,
+      "flags": 2147484672,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__stubs",
+      "address": 4352529608,
+      "size": 5040,
+      "offset": 57562312,
+      "flags": 2147484680,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__init_offsets",
+      "address": 4352534648,
+      "size": 2324,
+      "offset": 57567352,
+      "flags": 22,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__const",
+      "address": 4352536976,
+      "size": 16069195,
+      "offset": 57569680,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__cstring",
+      "address": 4368606176,
+      "size": 2393728,
+      "offset": 73638880,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__ustring",
+      "address": 4370999904,
+      "size": 622,
+      "offset": 76032608,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__gcc_except_tab",
+      "address": 4371000528,
+      "size": 139436,
+      "offset": 76033232,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__info_plist",
+      "address": 4371139964,
+      "size": 601,
+      "offset": 76172668,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__unwind_info",
+      "address": 4371140568,
+      "size": 573088,
+      "offset": 76173272,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__eh_frame",
+      "address": 4371713656,
+      "size": 15392,
+      "offset": 76746360,
+      "flags": 1744830475,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__got",
+      "address": 4371742720,
+      "size": 3808,
+      "offset": 76775424,
+      "flags": 6,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__const",
+      "address": 4371746528,
+      "size": 3505440,
+      "offset": 76779232,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__data",
+      "address": 4375265280,
+      "size": 827560,
+      "offset": 80297984,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__thread_vars",
+      "address": 4376092840,
+      "size": 648,
+      "offset": 81125544,
+      "flags": 19,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__thread_data",
+      "address": 4376093504,
+      "size": 132,
+      "offset": 81126208,
+      "flags": 17,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__thread_bss",
+      "address": 4376093696,
+      "size": 184,
+      "offset": 0,
+      "flags": 18,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__bss",
+      "address": 4376093888,
+      "size": 523688,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__common",
+      "address": 4376617584,
+      "size": 35656,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "/usr/lib/libresolv.9.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libSystem.B.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libz.1.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libc++.1.dylib",
+      "weak": false,
+      "command": 12
+    }
+  ],
+  "rpaths": [
+    "@loader_path/../lib"
+  ],
+  "symbols": [
+    {
+      "name": "_main",
+      "address": 4295015124,
+      "undefined": false
+    },
+    {
+      "name": "__DefaultRuneLocale",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Exit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSGetEnviron",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSGetExecutablePath",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Unwind_Resume",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__110error_code7messageEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE2atEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE4findEcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5rfindEcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7compareEPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7compareEmmPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__114error_category10equivalentERKNS_10error_codeEi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__114error_category10equivalentEiRKNS_15error_conditionE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__114error_category23default_error_conditionEi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__115basic_stringbufIcNS_11char_traitsIcEENS_9allocatorIcEEE3strEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__119__shared_weak_count13__get_deleterERKSt9type_info",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__123__match_any_but_newlineIcE6__execERNS_7__stateIcEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__16locale4nameEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__16locale9use_facetERNS0_2idE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__18ios_base6getlocEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt3__18time_putIcNS_19ostreambuf_iteratorIcNS_11char_traitsIcEEEEE3putES4_RNS_8ios_baseEcPK2tmPKcSC_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNKSt9exception4whatEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt11logic_errorC2EPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt12length_errorD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt12out_of_rangeD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt13exception_ptrC1ERKS_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt13exception_ptrD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt19bad_optional_accessD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt20bad_array_new_lengthC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt20bad_array_new_lengthD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__111__call_onceERVmPvPFvS2_E",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__111this_thread9sleep_forERKNS_6chrono8durationIxNS_5ratioILl1ELl1000000000EEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112__next_primeEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112bad_weak_ptrD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE2atEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE5eraseEmm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendERKS5_mm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6appendEmc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6assignEPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6insertENS_11__wrap_iterIPKcEEc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6insertEmPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6insertEmPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6insertEmmc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE6resizeEmc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7replaceEmmPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7replaceEmmPKcm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE7reserveEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9__grow_byEmmmmmm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEE9push_backEc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEaSERKS5_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEaSEc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__112future_errorC1ENS_10error_codeE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_filebufIcNS_11char_traitsIcEEE4openEPKcj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_filebufIcNS_11char_traitsIcEEEC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_filebufIcNS_11char_traitsIcEEED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_istreamIcNS_11char_traitsIcEEE6sentryC1ERS3_b",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_istreamIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEE5writeEPKcl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEE6sentryC1ERS3_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEE6sentryD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEPKv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEd",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEt",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEx",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113basic_ostreamIcNS_11char_traitsIcEEElsEy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113random_deviceC1ERKNS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113random_deviceD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113random_deviceclEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__113shared_futureIvED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__114__shared_countD2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__114basic_iostreamIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__114error_categoryD2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115__get_classnameEPKcb",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115__thread_structC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115__thread_structD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115basic_streambufIcNS_11char_traitsIcEEEC2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115basic_streambufIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115future_categoryEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutex4lockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutex6unlockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutexC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115recursive_mutexD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__115system_categoryEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__116generic_categoryEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__117__assoc_sub_state10__sub_waitERNS_11unique_lockINS_5mutexEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__117__assoc_sub_state16__on_zero_sharedEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__117__assoc_sub_state4waitEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__117__assoc_sub_state9__executeEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__117__assoc_sub_state9set_valueEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variable10notify_allEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variable10notify_oneEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variable15__do_timed_waitERNS_11unique_lockINS_5mutexEEENS_6chrono10time_pointINS5_12system_clockENS5_8durationIxNS_5ratioILl1ELl1000000000EEEEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variable4waitERNS_11unique_lockINS_5mutexEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__118condition_variableD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__shared_weak_count14__release_weakEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__shared_weak_count4lockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__shared_weak_countD2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__119__thread_local_dataEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__120__get_collation_nameEPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__120__throw_system_errorEiPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__122__libcpp_verbose_abortEPKcz",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__14stodERKNS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEEPm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__14stoiERKNS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEEPmi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15ctypeIcE2idE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15mutex4lockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15mutex6unlockEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__15mutexD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16__sortIRNS_6__lessIccEEPcEEvT0_S5_T_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16__sortIRNS_6__lessIiiEEPiEEvT0_S5_T_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16__sortIRNS_6__lessIjjEEPjEEvT0_S5_T_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16__sortIRNS_6__lessIttEEPtEEvT0_S5_T_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16chrono12steady_clock3nowEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16chrono12system_clock11from_time_tEl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16chrono12system_clock3nowEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16chrono12system_clock9to_time_tERKNS0_10time_pointIS1_NS0_8durationIxNS_5ratioILl1ELl1000000EEEEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16futureIvEC1EPNS_17__assoc_sub_stateE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16futureIvED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16localeC1EPKc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16localeC1ERKS0_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16localeC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16localeD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16localeaSERKS0_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16thread20hardware_concurrencyEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16thread4joinEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16thread6detachEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__16threadD1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17collateIcE2idE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvE10get_futureEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvE9set_valueEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvEC1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__17promiseIvED1Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__18ios_base33__set_badbit_and_consider_rethrowEv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__18ios_base4initEPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__18ios_base5clearEj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__18ios_base5imbueERKNS_6localeE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__18time_putIcNS_19ostreambuf_iteratorIcNS_11char_traitsIcEEEEE2idE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19basic_iosIcNS_11char_traitsIcEEED2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEd",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEx",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__19to_stringEy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt3__1plIcNS_11char_traitsIcEENS_9allocatorIcEEEENS_12basic_stringIT_T0_T1_EEPKS6_RKS9_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZNSt9exceptionD2Ev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZSt15set_new_handlerPFvvE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZSt17rethrow_exceptionSt13exception_ptr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZSt7nothrow",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZSt9terminatev",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTINSt3__112bad_weak_ptrE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTINSt3__119__shared_weak_countE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTISt12length_error",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTISt12out_of_range",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTISt18bad_variant_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTISt19bad_optional_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTISt20bad_array_new_length",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTISt9exception",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIb",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTId",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIh",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIj",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIx",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTIy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTTNSt3__114basic_ifstreamIcNS_11char_traitsIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTTNSt3__118basic_stringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTTNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVN10__cxxabiv117__class_type_infoE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVN10__cxxabiv119__pointer_type_infoE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVN10__cxxabiv120__function_type_infoE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVN10__cxxabiv120__si_class_type_infoE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVN10__cxxabiv121__vmi_class_type_infoE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__112bad_weak_ptrE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__114basic_ifstreamIcNS_11char_traitsIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__115basic_stringbufIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__117__assoc_sub_stateE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__118basic_stringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVNSt3__119basic_ostringstreamIcNS_11char_traitsIcEENS_9allocatorIcEEEE",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVSt12length_error",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVSt12out_of_range",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVSt18bad_variant_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZTVSt19bad_optional_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdaPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdlPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdlPvSt11align_val_t",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Znam",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Znwm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZnwmRKSt9nothrow_t",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZnwmSt11align_val_tRKSt9nothrow_t",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___chkstk_darwin",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_allocate_exception",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_atexit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_begin_catch",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_end_catch",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_free_exception",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_guard_abort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_guard_acquire",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_guard_release",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_pure_virtual",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_rethrow",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_throw",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___darwin_check_fd_set_overflow",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___error",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___gxx_personality_v0",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___maskrune",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___memcpy_chk",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___memset_chk",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stderrp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___tolower",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___toupper",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___udivti3",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__exit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__longjmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__setjmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__tlv_atexit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__tlv_bootstrap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_abort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_accept",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_acos",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_alarm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_arc4random",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_asin",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_atan",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_atan2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_atoi",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_backtrace",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_bind",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_bsearch",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_bzero",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_calloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_chdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_clock_gettime",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_clonefile",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_close",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_closedir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_confstr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_connect",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_copyfile",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_cos",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_cosh",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dlclose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dlerror",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dlopen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dlsym",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dup2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_environ",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_erf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_execv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_execve",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_exit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_exp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_exp2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fclose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fcntl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_feclearexcept",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_feof",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ferror",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fetestexcept",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fflush",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fgets",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_flock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fopen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fopen$DARWIN_EXTSN",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fork",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fputc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fread",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_free",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_freeaddrinfo",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_freeifaddrs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_frexp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fsctl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fseek",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fstat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ftell",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ftruncate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fwrite",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_gai_strerror",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getaddrinfo",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getcwd",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getentropy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getenv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_gethostname",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_gethostuuid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getifaddrs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpagesize",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpeername",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getppid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpriority",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpwnam_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpwuid_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getrlimit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getrusage",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getsid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getsockname",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getsockopt",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_gettimeofday",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getuid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_gmtime",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_gmtime_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_if_nametoindex",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_imaxabs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_inet_ntop",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_inet_pton",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ioctl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_isatty",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kdebug_trace",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kdebug_trace_string",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_kill",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_ldexp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_link",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_listen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_localtime",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_localtime_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_log",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_log10",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_log1p",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_log2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_log2f",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_logb",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_longjmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_lseek",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_lstat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_absolute_time",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_port_deallocate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_task_self_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_thread_self",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_timebase_info",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_malloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_malloc_default_zone",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_malloc_zone_statistics",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memmove",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memset",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memset_pattern16",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mkdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mktime",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_modf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_msync",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_munmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_nanosleep",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_open",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_opendir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_perror",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pipe",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_poll",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_posix_madvise",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_posix_spawn",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_posix_spawn_file_actions_adddup2",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_posix_spawn_file_actions_addopen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_posix_spawn_file_actions_destroy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_posix_spawn_file_actions_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pow",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pread",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_printf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_proc_pid_rusage",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_attr_destroy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_attr_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_attr_setdetachstate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_attr_setstacksize",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_cond_broadcast",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_cond_destroy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_cond_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_cond_signal",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_cond_timedwait",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_cond_wait",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_condattr_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_create",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_getname_np",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_getschedparam",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_getspecific",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_join",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_key_create",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_mutex_destroy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_mutex_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_mutex_lock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_mutex_unlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_once",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_rwlock_destroy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_rwlock_init",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_rwlock_rdlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_rwlock_unlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_rwlock_wrlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_self",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_setname_np",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_setspecific",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_pthread_sigmask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_putchar",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_puts",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_qsort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_raise",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_rand",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_read",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_readdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_readlink",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_realloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_realpath$DARWIN_EXTSN",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_recv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_recvfrom",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_recvmsg",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_remove",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_rename",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_res_9_getservers",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_res_9_ndestroy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_res_9_ninit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sched_yield",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_send",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sendmsg",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setenv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setjmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setpriority",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setrlimit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setsid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setsockopt",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setvbuf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_setxattr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_shutdown",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sigaction",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_signal",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sigprocmask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sin",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sinh",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sleep",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_snprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_socket",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sqrt",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sscanf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_stat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_statfs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcasecmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcspn",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strdup",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strerror",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strerror_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strftime",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncasecmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strnlen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strpbrk",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strptime",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strrchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strsignal",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strspn",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strstr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtod",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtof",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtol",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoll",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoul",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoull",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_symlink",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sysconf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sysctl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sysctlbyname",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_tan",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_tanh",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_task_set_exception_ports",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_time",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_uname",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_unlink",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_usleep",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_uuid_unparse",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vsnprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_wait",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_wait4",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_wmemchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_write",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_writev",
+      "address": 0,
+      "undefined": true
+    }
+  ],
+  "entry_file_offset": 47828,
+  "dyld": {
+    "rebase": {
+      "offset": 0,
+      "size": 0
+    },
+    "bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "weak_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "lazy_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "export": {
+      "offset": 0,
+      "size": 0
+    }
+  },
+  "chained_fixups": {
+    "offset": 81133568,
+    "size": 14832
+  },
+  "unsupported": [
+    "execution requires x86_64",
+    "thread-local section: __thread_vars",
+    "thread-local section: __thread_data",
+    "thread-local section: __thread_bss"
+  ],
+  "total_symbol_count": 394411,
+  "symbol_coverage": "All undefined symbols plus selected entry symbols; full symbol table in local target/artifacts/raw-inspection."
+}

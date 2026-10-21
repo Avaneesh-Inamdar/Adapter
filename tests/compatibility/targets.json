@@ -1,0 +1,12 @@
+[
+  {"target":"Intel dylib call","fixture":"local","test":"test_local_dylib_execution","exit_code":7,"source":"LLVM-cross-linked probe","reference_macos_verified":false},
+  {"target":"Transitive dylibs/shared data/lifecycle","fixture":"dylibs/chained/multi","test":"test_dylib_constructors_destructors_and_shared_data","exit_code":0,"source":"LLVM-cross-linked probe","reference_macos_verified":false},
+  {"target":"Dylib reexport facade","fixture":"dylibs/chained/facade","test":"test_reexported_dylib","exit_code":17,"source":"LLVM-cross-linked probe","reference_macos_verified":false},
+  {"target":"Two-level duplicate imports","fixture":"dylibs/namespace/namespace","test":"test_two_level_duplicate_symbols","exit_code":0,"source":"LLVM-cross-linked five-image probe","reference_macos_verified":false},
+  {"target":"Per-thread/per-image TLV storage","fixture":"dylibs/chained/tls-threads","test":"test_tls_across_threads_and_images","exit_code":0,"source":"LLVM-cross-linked eight-thread probe","reference_macos_verified":false},
+  {"target":"TLV register preservation","fixture":"tls-abi/chained","test":"test_tls_preserves_live_integer_sse_avx_registers","exit_code":0,"source":"LLVM-cross-linked assembly probe; AVX gated by CPUID/XGETBV","reference_macos_verified":false},
+  {"target":"Once/TSD destructors/errno","fixture":"thread_state-chained","test":"test_thread_once_keys_destructors_and_errno","exit_code":0,"source":"LLVM-cross-linked eight-thread probe","reference_macos_verified":false},
+  {"target":"Darwin locale/stdio/varargs ABI","fixture":"libc-chained","test":"test_locale_streams_varargs_and_extended_precision","exit_code":0,"source":"LLVM-cross-linked classic/chained ABI probe","reference_macos_verified":false},
+  {"target":"UTF-8 files/stat64/UTC time","fixture":"file_time","test":"test_utf8_file_stat_errors_and_utc_time","exit_code":0,"source":"LLVM-cross-linked guarded ABI probe","reference_macos_verified":false},
+  {"target":"jq 1.8.2 macOS amd64","fixture":"reference/jq-macos-amd64","test":"test_version_and_help","preflight_exit_code":0,"execution_status":"13 expected-behavior integration tests pass","executed":true,"source":"Published unmodified jqlang macOS amd64 release","reference_macos_verified":false}
+]

@@ -1,0 +1,963 @@
+{
+  "inspection_status": "inspected (execution not established)",
+  "architecture": "arm64",
+  "cpu_subtype": 0,
+  "filetype": 2,
+  "flags": 2162821,
+  "slices": [],
+  "selected_slice_offset": 0,
+  "commands": [
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 32,
+      "size": 72
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 104,
+      "size": 552
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 656,
+      "size": 232
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 888,
+      "size": 392
+    },
+    {
+      "code": 25,
+      "name": "LC_SEGMENT_64",
+      "offset": 1280,
+      "size": 72
+    },
+    {
+      "code": 2147483700,
+      "name": "LC_DYLD_CHAINED_FIXUPS",
+      "offset": 1352,
+      "size": 16
+    },
+    {
+      "code": 2147483699,
+      "name": "LC_DYLD_EXPORTS_TRIE",
+      "offset": 1368,
+      "size": 16
+    },
+    {
+      "code": 2,
+      "name": "LC_SYMTAB",
+      "offset": 1384,
+      "size": 24
+    },
+    {
+      "code": 11,
+      "name": "LC_DYSYMTAB",
+      "offset": 1408,
+      "size": 80
+    },
+    {
+      "code": 14,
+      "name": "LC_LOAD_DYLINKER",
+      "offset": 1488,
+      "size": 32
+    },
+    {
+      "code": 27,
+      "name": "LC_UUID",
+      "offset": 1520,
+      "size": 24
+    },
+    {
+      "code": 50,
+      "name": "LC_BUILD_VERSION",
+      "offset": 1544,
+      "size": 32
+    },
+    {
+      "code": 42,
+      "name": "LC_SOURCE_VERSION",
+      "offset": 1576,
+      "size": 16
+    },
+    {
+      "code": 2147483688,
+      "name": "LC_MAIN",
+      "offset": 1592,
+      "size": 24
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1616,
+      "size": 48
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1664,
+      "size": 56
+    },
+    {
+      "code": 12,
+      "name": "LC_LOAD_DYLIB",
+      "offset": 1720,
+      "size": 56
+    },
+    {
+      "code": 2147483676,
+      "name": "LC_RPATH",
+      "offset": 1776,
+      "size": 40
+    },
+    {
+      "code": 38,
+      "name": "LC_FUNCTION_STARTS",
+      "offset": 1816,
+      "size": 16
+    },
+    {
+      "code": 41,
+      "name": "LC_DATA_IN_CODE",
+      "offset": 1832,
+      "size": 16
+    },
+    {
+      "code": 29,
+      "name": "LC_CODE_SIGNATURE",
+      "offset": 1848,
+      "size": 16
+    }
+  ],
+  "segments": [
+    {
+      "name": "__PAGEZERO",
+      "vmaddr": 0,
+      "vmsize": 4294967296,
+      "fileoff": 0,
+      "filesize": 0,
+      "maxprot": 0,
+      "initprot": 0,
+      "flags": 0
+    },
+    {
+      "name": "__TEXT",
+      "vmaddr": 4294967296,
+      "vmsize": 196608,
+      "fileoff": 0,
+      "filesize": 196608,
+      "maxprot": 5,
+      "initprot": 5,
+      "flags": 0
+    },
+    {
+      "name": "__DATA_CONST",
+      "vmaddr": 4295163904,
+      "vmsize": 16384,
+      "fileoff": 196608,
+      "filesize": 16384,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 16
+    },
+    {
+      "name": "__DATA",
+      "vmaddr": 4295180288,
+      "vmsize": 16384,
+      "fileoff": 212992,
+      "filesize": 16384,
+      "maxprot": 3,
+      "initprot": 3,
+      "flags": 0
+    },
+    {
+      "name": "__LINKEDIT",
+      "vmaddr": 4295196672,
+      "vmsize": 65536,
+      "fileoff": 229376,
+      "filesize": 56320,
+      "maxprot": 1,
+      "initprot": 1,
+      "flags": 0
+    }
+  ],
+  "sections": [
+    {
+      "segment": "__TEXT",
+      "name": "__text",
+      "address": 4294969192,
+      "size": 126780,
+      "offset": 1896,
+      "flags": 2147484672,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__stubs",
+      "address": 4295095972,
+      "size": 1356,
+      "offset": 128676,
+      "flags": 2147484680,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__init_offsets",
+      "address": 4295097328,
+      "size": 4,
+      "offset": 130032,
+      "flags": 22,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__const",
+      "address": 4295097344,
+      "size": 2032,
+      "offset": 130048,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__cstring",
+      "address": 4295099376,
+      "size": 52151,
+      "offset": 132080,
+      "flags": 2,
+      "relocations": 0
+    },
+    {
+      "segment": "__TEXT",
+      "name": "__unwind_info",
+      "address": 4295151528,
+      "size": 1088,
+      "offset": 184232,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__const",
+      "address": 4295163904,
+      "size": 880,
+      "offset": 196608,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA_CONST",
+      "name": "__got",
+      "address": 4295164784,
+      "size": 968,
+      "offset": 197488,
+      "flags": 6,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__data",
+      "address": 4295180288,
+      "size": 1028,
+      "offset": 212992,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__crash_info",
+      "address": 4295181320,
+      "size": 328,
+      "offset": 214024,
+      "flags": 0,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__common",
+      "address": 4295181648,
+      "size": 16,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    },
+    {
+      "segment": "__DATA",
+      "name": "__bss",
+      "address": 4295181664,
+      "size": 720,
+      "offset": 0,
+      "flags": 1,
+      "relocations": 0
+    }
+  ],
+  "dependencies": [
+    {
+      "name": "/usr/lib/libc++.1.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "@rpath/libcodedirectory.dylib",
+      "weak": false,
+      "command": 12
+    },
+    {
+      "name": "/usr/lib/libSystem.B.dylib",
+      "weak": false,
+      "command": 12
+    }
+  ],
+  "rpaths": [
+    "@executable_path/../lib"
+  ],
+  "symbols": [
+    {
+      "name": "_main",
+      "address": 4294969192,
+      "undefined": false
+    },
+    {
+      "name": "_CC_SHA256",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Block_object_assign",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Block_object_dispose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__DefaultRuneLocale",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSConcreteStackBlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__NSGetExecutablePath",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdaPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__ZdlPv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Znam",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "__Znwm",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___assert_rtn",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___chkstk_darwin",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___cxa_atexit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___error",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___maskrune",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___sprintf_chk",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_fail",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stack_chk_guard",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stderrp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___stdoutp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___strlcat_chk",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "___strlcpy_chk",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_abort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_access",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_asprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_atexit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_bsearch",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_bzero",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_calloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_chdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_clock_gettime",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_close",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dirname_r",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dispatch_apply",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dlclose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dlopen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_dlsym",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_execvp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_exit",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fchdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fclose",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fcntl",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fileno",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fopen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fork",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fputc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fputs",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_free",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fstat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_fwrite",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getenv",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getgid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getpid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getppid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_gettimeofday",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_getuid",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_host_info",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_index",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_create",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_free",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_is_blob_a_linker_signature",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_serialize",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_set_exec_seg",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_set_flags",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_set_hash_types_for_platform_version",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_set_input_mem",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_set_output_mem",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_set_signing_id",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_libcd_superblob_size",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_error_string",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_host_self",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_port_deallocate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mach_task_self_",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_malloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memmove",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_memset",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mkdir",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mktemp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_mmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_munmap",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_open",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_open_memstream",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_os_unfair_lock_lock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_os_unfair_lock_unlock",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_qsort",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_read",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_realloc",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_reallocf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_realpath$DARWIN_EXTSN",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_rename",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_rindex",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_snprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_sprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_stat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcasecmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strdup",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strerror",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlcpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strlen",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncmp",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strncpy",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strrchr",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_strtoul",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_time",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_umask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_unlink",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_usleep",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_utimensat",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vfprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vm_allocate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vm_deallocate",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vm_page_mask",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_vsnprintf",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_wait",
+      "address": 0,
+      "undefined": true
+    },
+    {
+      "name": "_write",
+      "address": 0,
+      "undefined": true
+    }
+  ],
+  "entry_file_offset": 1896,
+  "dyld": {
+    "rebase": {
+      "offset": 0,
+      "size": 0
+    },
+    "bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "weak_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "lazy_bind": {
+      "offset": 0,
+      "size": 0
+    },
+    "export": {
+      "offset": 0,
+      "size": 0
+    }
+  },
+  "chained_fixups": {
+    "offset": 229376,
+    "size": 2000
+  },
+  "unsupported": [
+    "execution requires x86_64"
+  ],
+  "total_symbol_count": 610,
+  "symbol_coverage": "All undefined symbols plus selected entry symbols; full symbol table in local target/artifacts/raw-inspection."
+}

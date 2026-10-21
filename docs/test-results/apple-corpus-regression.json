@@ -1,0 +1,439 @@
+{
+  "command": [
+    "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "tools/check_apple_corpus.py"
+  ],
+  "all_passed": true,
+  "artifacts": [
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+      "sha256": "d53f80ea3d161f8195051079618459cca9e6eed8981aa1d5b9c9d27853fe8183",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 7,
+      "dependencies": 1,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "sha256": "5922f5f7843fee699497c45cc98134b6686e0a5e2fa8a5866ab74c5482fa87a5",
+      "exit_code": 0,
+      "seconds": 2.109,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 4,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil",
+      "sha256": "cb0361180dd38cca317f77d94f45213250551e2100d4cbd887194e31f60baace",
+      "exit_code": 0,
+      "seconds": 0.609,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 4,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+      "sha256": "4a255704671030b367319b5bd4d3ed78f9571c8f3f0ef96bf86d183c29bb1138",
+      "exit_code": 0,
+      "seconds": 0.047,
+      "architecture": "arm64",
+      "exports": 0,
+      "dependencies": 10,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo",
+      "sha256": "c52b611d5813f9a494cd09d691675ce0838e58bc36c5390576e470250dbd5d38",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 3,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strings",
+      "sha256": "d6bc8d9692f4217d71d2de9a7dc3a79440869fc1ea2408bb80daee66f90a2d54",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "arm64",
+      "exports": 12,
+      "dependencies": 1,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip",
+      "sha256": "22a1ec7f21f5a2bc073a1c406882dfa8ca59e593dc7af74e2a1ad0fd33295944",
+      "exit_code": 0,
+      "seconds": 0.0,
+      "architecture": "arm64",
+      "exports": 19,
+      "dependencies": 3,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/Developer/usr/bin/xcodebuild",
+      "sha256": "252ff0f0d9fd7f48cd146d5c68fb8da9bfb6210c4e79b2d9eea9bb8a20247723",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 5,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/MacOS/Xcode",
+      "sha256": "64c1588d262ca2dadddbbcf7603982e65343d8b8802162308f16410faeae2edd",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 5,
+      "executed": false
+    },
+    {
+      "source": "xcode27-inspection/selected/Xcode.app/Contents/SharedFrameworks/DVTFoundation.framework/Versions/A/DVTFoundation",
+      "sha256": "822938dbf07bad7a0e521825ba796a4aee857c9d256d1822f355be0ce18ad852",
+      "exit_code": 0,
+      "seconds": 0.312,
+      "architecture": "arm64",
+      "exports": 9904,
+      "dependencies": 54,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Audio/AU Lab.app/Contents/MacOS/AU Lab",
+      "sha256": "6b04e361965e2ff23a717d71d8f2c24bf4b02138ad06e09a9d2761f1322f77cf",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 9,
+      "dependencies": 18,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Graphics/Pixie.app/Contents/MacOS/Pixie",
+      "sha256": "b53927c07a96489110c4985837f8dfe410027ed8e57edc0c428b478cf5976951",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 12,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/LogTool",
+      "sha256": "d79c6d3283eb3c4e4df6659a0c99aeaa8c0b8549868157f343ff142400e341ce",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 6,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Quartz Debug",
+      "sha256": "efc44dd7adf3db75a246952e6c626c0284ca9dfd981c72e0908a1e7825d1fabc",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 16,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Server",
+      "sha256": "bb655c463178450b3889013a99ca449c6b06ca840b0a25b11a2b8c24fa410543",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 13,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/CarPlay Simulator.app/Contents/MacOS/CarPlay Simulator",
+      "sha256": "504fb26afc6c35d3bc60f482867260f798b2a9194217ab5faa7bb366476d70d0",
+      "exit_code": 0,
+      "seconds": 0.328,
+      "architecture": "arm64",
+      "exports": 5347,
+      "dependencies": 59,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/HomeKit Accessory Simulator.app/Contents/MacOS/HomeKit Accessory Simulator",
+      "sha256": "1301a2bcf9f46d5b9ddcb4c09c1f0c4bf26f85abc434a357671a4d28a4f06a80",
+      "exit_code": 0,
+      "seconds": 0.032,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 11,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/IORegistryExplorer.app/Contents/MacOS/IORegistryExplorer",
+      "sha256": "e6c9f274f7da68055d5ef6a27315c25d25c34d03559d1485ed25ab9cf5243bd0",
+      "exit_code": 0,
+      "seconds": 0.0,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 8,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/MacOS/Network Link Conditioner",
+      "sha256": "57f582aed1291c6e97f89a99b023405ee5706978757d2a3e18cee7b9a66980d6",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "x86_64",
+      "exports": 115,
+      "dependencies": 11,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/PlugIns/NLCBackgroundApp.app/Contents/MacOS/NLCBackgroundApp",
+      "sha256": "39017746b84001b0795b4a3e951d9b40c32ed50efcd17a2ee45ca4e6b5aed87d",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 5,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/XPCServices/com.apple.Network-Link-Conditioner.remoteservice.xpc/Contents/MacOS/com.apple.Network-Link-Conditioner.remoteservice",
+      "sha256": "237e16328c50390df2d84a5fe9a04397a1b426e210e8949d35e7c31e8397d579",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "x86_64",
+      "exports": 4,
+      "dependencies": 5,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/PacketLogger.app/Contents/MacOS/PacketLogger",
+      "sha256": "10f290584470a84ca205fd7d27302b98d975b464381922fb0c318b4305fdc4f1",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 16,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/Printer Simulator",
+      "sha256": "83f7b928a9cedf70c72b42740bf54c503285dabb9d5090f60747b3181e0d28b7",
+      "exit_code": 0,
+      "seconds": 0.0,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 17,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/PrinterSimulatorServer",
+      "sha256": "ee0e716d8b4bcf9ca07a3500731e6465ace72504d44b4ffbafd5953e4b39da1a",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 15,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Utilities/Clipboard Viewer.app/Contents/MacOS/Clipboard Viewer",
+      "sha256": "bd2de66f1344b28376dfc6b68f0df1fc4885337da32efd872da82ef1ff8b97b9",
+      "exit_code": 0,
+      "seconds": 0.031,
+      "architecture": "x86_64",
+      "exports": 32,
+      "dependencies": 5,
+      "executed": false
+    },
+    {
+      "source": "additional-tools27/Additional Tools/Utilities/CrashReporterPrefs.app/Contents/MacOS/CrashReporterPrefs",
+      "sha256": "6d84387b0f696a24bd9e80cc312670b4eeac0557d6c5a60d45485f0226f407f4",
+      "exit_code": 0,
+      "seconds": 0.0,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 6,
+      "executed": false
+    },
+    {
+      "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/MacOS/Icon Composer",
+      "sha256": "342aa8f9f7463b87b073a59b0518c9b5e09d86985d3417a6c3521073bb8dacb3",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 1,
+      "dependencies": 26,
+      "executed": false
+    },
+    {
+      "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer QuickLook Preview.appex/Contents/MacOS/Icon Composer QuickLook Preview",
+      "sha256": "933340aaa46d146a8f8f4a9e370f6ef8dce2bfcf614b69ab1cdc25037416130a",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "x86_64",
+      "exports": 14,
+      "dependencies": 30,
+      "executed": false
+    },
+    {
+      "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer Thumbnail.appex/Contents/MacOS/Icon Composer Thumbnail",
+      "sha256": "2d9bb888d6e2760e22ca7039c3e31fd0f779af81b91e3755db2ce02b2193ebc0",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "x86_64",
+      "exports": 14,
+      "dependencies": 30,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/ar",
+      "sha256": "85d15bd3999895f659e8a483b17ea9ab44b924c8e0b3026abfe359f2de02cbd7",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "arm64",
+      "exports": 7,
+      "dependencies": 1,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/clang",
+      "sha256": "1590ac950a3d627817d09ade5cb60b2115f17a72182a3141e010b4bcc482a0c9",
+      "exit_code": 0,
+      "seconds": 2.172,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 4,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/codesign_allocate",
+      "sha256": "34c5ce1e16c595e90b1f131f9411b63fdc09a040b3393676ed3c83a794e9b286",
+      "exit_code": 0,
+      "seconds": 0.031,
+      "architecture": "arm64",
+      "exports": 16,
+      "dependencies": 1,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/ctags",
+      "sha256": "1dd7681b7e733a2b0eb92702e61651474869868ea24616abf8e9f84d82d348df",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 1,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/dsymutil",
+      "sha256": "726aed01ee2a1127591836c58a021a4647da424bf082529e56512fc19a93ca5b",
+      "exit_code": 0,
+      "seconds": 0.641,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 4,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/install_name_tool",
+      "sha256": "ce7c944f855250c5df6b4de8ab024e94b5577f2385a122bd8993a531d466c0de",
+      "exit_code": 0,
+      "seconds": 0.031,
+      "architecture": "arm64",
+      "exports": 22,
+      "dependencies": 2,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/ld",
+      "sha256": "374d9f0713bce2c8a9e1e82bde51615d5433516a10d99b63107eb6ee70542e4c",
+      "exit_code": 0,
+      "seconds": 0.031,
+      "architecture": "arm64",
+      "exports": 0,
+      "dependencies": 10,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/lipo",
+      "sha256": "f9fefcc95e50e31a65e72f7c186d9da5938a6ec267f3c3fa4bf5074b6a20f020",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 3,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/llvm-nm",
+      "sha256": "82e9189ec1a359699d4b680601c0a2930a9cbea7376c7320947dff5e9862cfa8",
+      "exit_code": 0,
+      "seconds": 0.156,
+      "architecture": "arm64",
+      "exports": 1,
+      "dependencies": 3,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/llvm-otool",
+      "sha256": "8353ad3c42743a93e9ca7d0d4e9d3df22305252d169c42c543ee22eeb8c33809",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 5,
+      "dependencies": 2,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/size-classic",
+      "sha256": "af1aa9b92974f00a83e0725fbfc2e70e3f20b992874b5c60e3ca73c4a423d47c",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "arm64",
+      "exports": 12,
+      "dependencies": 1,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/strings",
+      "sha256": "42c0efda27cdf7e5da9c6e28f2de9f3c6940f186b4853b299dc5c46e1283892e",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 12,
+      "dependencies": 1,
+      "executed": false
+    },
+    {
+      "source": "clt27-inspection/selected/Library/Developer/CommandLineTools/usr/bin/strip",
+      "sha256": "e0d9859a299233c4b2bd48a21f55bb00e575e175eef9193616d3af8660fc846d",
+      "exit_code": 0,
+      "seconds": 0.015,
+      "architecture": "arm64",
+      "exports": 19,
+      "dependencies": 3,
+      "executed": false
+    },
+    {
+      "source": "xcode27-followup/libIDEApplicationLoader.dylib",
+      "sha256": "abccaadafbcd409ce74e9284b1bd3ef34327c21c834a2d1876425483274cec23",
+      "exit_code": 0,
+      "seconds": 0.016,
+      "architecture": "arm64",
+      "exports": 6,
+      "dependencies": 8,
+      "executed": false
+    }
+  ]
+}

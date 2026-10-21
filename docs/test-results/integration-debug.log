@@ -1,0 +1,1420 @@
+test_environment_and_cli_variables (test_jq.JqTests.test_environment_and_cli_variables) ... ERROR
+test_filter_file_and_module_search (test_jq.JqTests.test_filter_file_and_module_search) ... ERROR
+test_large_stream_and_reduction (test_jq.JqTests.test_large_stream_and_reduction) ... ERROR
+test_math_and_extended_precision_argument (test_jq.JqTests.test_math_and_extended_precision_argument) ... ERROR
+test_missing_file_and_directory_errors (test_jq.JqTests.test_missing_file_and_directory_errors) ... ERROR
+test_parse_compile_and_exit_statuses (test_jq.JqTests.test_parse_compile_and_exit_statuses) ... ERROR
+test_piped_json_transform (test_jq.JqTests.test_piped_json_transform) ... ERROR
+test_raw_binary_input_preserves_crlf_and_nul (test_jq.JqTests.test_raw_binary_input_preserves_crlf_and_nul) ... ERROR
+test_seeded_sort_group_and_arithmetic (test_jq.JqTests.test_seeded_sort_group_and_arithmetic) ... ERROR
+test_unicode_regex_and_escaping (test_jq.JqTests.test_unicode_regex_and_escaping) ... ERROR
+test_utc_time_parse_format_and_negative_epoch (test_jq.JqTests.test_utc_time_parse_format_and_negative_epoch) ... ERROR
+test_utf8_file_slurp_and_rawfile (test_jq.JqTests.test_utf8_file_slurp_and_rawfile) ... ERROR
+test_version_and_help (test_jq.JqTests.test_version_and_help) ... ERROR
+test_explicit_exit_finalizes_and_flushes (test_libc.LibcTests.test_explicit_exit_finalizes_and_flushes) ... ERROR
+test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) ... 
+  test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) (name='libc') ... ERROR
+  test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) (name='libc-chained') ... ERROR
+test_utf8_file_stat_errors_and_utc_time (test_libc.LibcTests.test_utf8_file_stat_errors_and_utc_time) ... ERROR
+test_abi_internal_float_and_stack_arguments (test_runtime.RuntimeTests.test_abi_internal_float_and_stack_arguments) ... ERROR
+test_bad_chained_version (test_runtime.RuntimeTests.test_bad_chained_version) ... ERROR
+test_bad_fixup (test_runtime.RuntimeTests.test_bad_fixup) ... ERROR
+test_bad_load_command (test_runtime.RuntimeTests.test_bad_load_command) ... ERROR
+test_bad_tlv_offset_rejected_before_execution (test_runtime.RuntimeTests.test_bad_tlv_offset_rejected_before_execution) ... ERROR
+test_bundle (test_runtime.RuntimeTests.test_bundle) ... ERROR
+test_bundle_traversal_rejected (test_runtime.RuntimeTests.test_bundle_traversal_rejected) ... ERROR
+test_chained_corefoundation (test_runtime.RuntimeTests.test_chained_corefoundation) ... ERROR
+test_chained_hello (test_runtime.RuntimeTests.test_chained_hello) ... ERROR
+test_corefoundation (test_runtime.RuntimeTests.test_corefoundation) ... ERROR
+test_crash_is_in_worker (test_runtime.RuntimeTests.test_crash_is_in_worker) ... ERROR
+test_dependency_bad_callback_prevents_all_initializers (test_runtime.RuntimeTests.test_dependency_bad_callback_prevents_all_initializers) ... ERROR
+test_dependency_cycle_fails_before_constructors (test_runtime.RuntimeTests.test_dependency_cycle_fails_before_constructors) ... ERROR
+test_dependency_graph (test_runtime.RuntimeTests.test_dependency_graph) ... ERROR
+test_dependency_missing_import_prevents_all_initializers (test_runtime.RuntimeTests.test_dependency_missing_import_prevents_all_initializers) ... ERROR
+test_dylib_constructors_destructors_and_shared_data (test_runtime.RuntimeTests.test_dylib_constructors_destructors_and_shared_data) ... 
+  test_dylib_constructors_destructors_and_shared_data (test_runtime.RuntimeTests.test_dylib_constructors_destructors_and_shared_data) (variant='classic') ... ERROR
+  test_dylib_constructors_destructors_and_shared_data (test_runtime.RuntimeTests.test_dylib_constructors_destructors_and_shared_data) (variant='chained') ... ERROR
+test_entry_must_be_executable (test_runtime.RuntimeTests.test_entry_must_be_executable) ... ERROR
+test_execute_arm64_rejected (test_runtime.RuntimeTests.test_execute_arm64_rejected) ... ERROR
+test_exit_callback_filter_order_and_once (test_runtime.RuntimeTests.test_exit_callback_filter_order_and_once) ... ERROR
+test_exports_work_without_nlist (test_runtime.RuntimeTests.test_exports_work_without_nlist) ... ERROR
+test_hello (test_runtime.RuntimeTests.test_hello) ... ERROR
+test_hidden_nlist_symbol_is_not_an_export (test_runtime.RuntimeTests.test_hidden_nlist_symbol_is_not_an_export) ... ERROR
+test_inspect_arm64 (test_runtime.RuntimeTests.test_inspect_arm64) ... ERROR
+test_inspect_thin (test_runtime.RuntimeTests.test_inspect_thin) ... ERROR
+test_inspect_universal (test_runtime.RuntimeTests.test_inspect_universal) ... ERROR
+test_local_dylib_execution (test_runtime.RuntimeTests.test_local_dylib_execution) ... ERROR
+test_missing_library (test_runtime.RuntimeTests.test_missing_library) ... ERROR
+test_objc_evidence_and_rejection (test_runtime.RuntimeTests.test_objc_evidence_and_rejection) ... ERROR
+test_overlapping_universal_slices (test_runtime.RuntimeTests.test_overlapping_universal_slices) ... ERROR
+test_preflight_does_not_execute (test_runtime.RuntimeTests.test_preflight_does_not_execute) ... ERROR
+test_published_macos_binary_if_fetched (test_runtime.RuntimeTests.test_published_macos_binary_if_fetched) ... ERROR
+test_reexported_dylib (test_runtime.RuntimeTests.test_reexported_dylib) ... ERROR
+test_repeated_execution (test_runtime.RuntimeTests.test_repeated_execution) ... ERROR
+test_return_value (test_runtime.RuntimeTests.test_return_value) ... ERROR
+test_rpath_resolution (test_runtime.RuntimeTests.test_rpath_resolution) ... ERROR
+test_thread_local_storage_main_thread (test_runtime.RuntimeTests.test_thread_local_storage_main_thread) ... ERROR
+test_thread_once_keys_destructors_and_errno (test_runtime.RuntimeTests.test_thread_once_keys_destructors_and_errno) ... ERROR
+test_timeout (test_runtime.RuntimeTests.test_timeout) ... ERROR
+test_tls_across_threads_and_images (test_runtime.RuntimeTests.test_tls_across_threads_and_images) ... ERROR
+test_tls_preserves_live_integer_sse_avx_registers (test_runtime.RuntimeTests.test_tls_preserves_live_integer_sse_avx_registers) ... ERROR
+test_truncated (test_runtime.RuntimeTests.test_truncated) ... ERROR
+test_two_level_duplicate_symbols (test_runtime.RuntimeTests.test_two_level_duplicate_symbols) ... ERROR
+test_universal_executes (test_runtime.RuntimeTests.test_universal_executes) ... ERROR
+test_unknown_config_key (test_runtime.RuntimeTests.test_unknown_config_key) ... ERROR
+test_unknown_symbol (test_runtime.RuntimeTests.test_unknown_symbol) ... ERROR
+test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_architecture_dependency) ... ERROR
+test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ERROR
+
+======================================================================
+ERROR: test_environment_and_cli_variables (test_jq.JqTests.test_environment_and_cli_variables)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 111, in test_environment_and_cli_variables
+    p = self.jq('-nc', '[env.DB_JQ_UNICODE, $name, $value]', '--arg', 'name', '\u4e16\u754c', '--argjson', 'value', '{"a":3}', env={'DB_JQ_UNICODE':'caf�'})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_filter_file_and_module_search (test_jq.JqTests.test_filter_file_and_module_search)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 83, in test_filter_file_and_module_search
+    p = self.jq('-nc', '-L', guest_folder, '-f', str(script)); self.assertEqual(p.returncode, 0, p.stderr)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_large_stream_and_reduction (test_jq.JqTests.test_large_stream_and_reduction)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 52, in test_large_stream_and_reduction
+    self.assertEqual(self.value('map(select(.keep)|.v) | add', data, '-s'),
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 37, in value
+    p = self.jq(*args, '-c', expression, data=data)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_math_and_extended_precision_argument (test_jq.JqTests.test_math_and_extended_precision_argument)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 106, in test_math_and_extended_precision_argument
+    values = self.value('[(0|sin), pow(2;10), nexttoward(1;2), (1|lgamma)]', '', '-n')[0]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 37, in value
+    p = self.jq(*args, '-c', expression, data=data)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_missing_file_and_directory_errors (test_jq.JqTests.test_missing_file_and_directory_errors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 88, in test_missing_file_and_directory_errors
+    p = self.jq('.', str(Path(temp)/'missing.json')); self.assertEqual(p.returncode, 2); self.assertIn('No such file', p.stderr)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_parse_compile_and_exit_statuses (test_jq.JqTests.test_parse_compile_and_exit_statuses)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 92, in test_parse_compile_and_exit_statuses
+    p = self.jq('.', data='{"bad":'); self.assertEqual(p.returncode, 5); self.assertIn('parse error', p.stderr)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_piped_json_transform (test_jq.JqTests.test_piped_json_transform)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 47, in test_piped_json_transform
+    self.assertEqual(self.value('{x:.a|map(. * 2)}', '{"a":[1,2,3]}\n'), [{'x': [2,4,6]}])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 37, in value
+    p = self.jq(*args, '-c', expression, data=data)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_raw_binary_input_preserves_crlf_and_nul (test_jq.JqTests.test_raw_binary_input_preserves_crlf_and_nul)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 68, in test_raw_binary_input_preserves_crlf_and_nul
+    self.assertEqual(self.value('.', 'A\r\nB\0C\n', '-Rs'), ['A\r\nB\0C\n'])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 37, in value
+    p = self.jq(*args, '-c', expression, data=data)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_seeded_sort_group_and_arithmetic (test_jq.JqTests.test_seeded_sort_group_and_arithmetic)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 57, in test_seeded_sort_group_and_arithmetic
+    self.assertEqual(self.value('{sorted:sort, sum:add, groups:group_by(.%7)|map(length)}', json.dumps(values)),
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 37, in value
+    p = self.jq(*args, '-c', expression, data=data)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_unicode_regex_and_escaping (test_jq.JqTests.test_unicode_regex_and_escaping)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 62, in test_unicode_regex_and_escaping
+    self.assertEqual(self.value('capture("(?<word>[a-z]+)(?<digits>[0-9]+)")', '"abc123"'),
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 37, in value
+    p = self.jq(*args, '-c', expression, data=data)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_utc_time_parse_format_and_negative_epoch (test_jq.JqTests.test_utc_time_parse_format_and_negative_epoch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 100, in test_utc_time_parse_format_and_negative_epoch
+    self.assertEqual(self.value('fromdateiso8601 | todateiso8601', '"2024-02-29T12:34:56Z"'), ['2024-02-29T12:34:56Z'])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 37, in value
+    p = self.jq(*args, '-c', expression, data=data)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_utf8_file_slurp_and_rawfile (test_jq.JqTests.test_utf8_file_slurp_and_rawfile)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 73, in test_utf8_file_slurp_and_rawfile
+    p = self.jq('-sc', 'map(.name)', str(path)); self.assertEqual(p.returncode, 0, p.stderr)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_version_and_help (test_jq.JqTests.test_version_and_help)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_jq.py", line 43, in test_version_and_help
+    p = self.jq('--version'); self.assertEqual((p.returncode, p.stdout, p.stderr), (0, 'jq-1.8.2\n', ''))
+        ^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_jq.py", line 30, in jq
+    result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_explicit_exit_finalizes_and_flushes (test_libc.LibcTests.test_explicit_exit_finalizes_and_flushes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_libc.py", line 30, in test_explicit_exit_finalizes_and_flushes
+    p = subprocess.run([str(BIN/'db-run.exe'), str(FIX/'libc-chained'), '--', 'exit'],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) (name='libc')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_libc.py", line 23, in test_locale_streams_varargs_and_extended_precision
+    p = subprocess.run([str(BIN/'db-run.exe'), str(FIX/name)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) (name='libc-chained')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_libc.py", line 23, in test_locale_streams_varargs_and_extended_precision
+    p = subprocess.run([str(BIN/'db-run.exe'), str(FIX/name)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_utf8_file_stat_errors_and_utc_time (test_libc.LibcTests.test_utf8_file_stat_errors_and_utc_time)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_libc.py", line 14, in test_utf8_file_stat_errors_and_utc_time
+    p = subprocess.run([str(BIN/'db-run.exe'), str(FIX/'file_time'), '--', guest],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_abi_internal_float_and_stack_arguments (test_runtime.RuntimeTests.test_abi_internal_float_and_stack_arguments)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 51, in test_abi_internal_float_and_stack_arguments
+    p=call("db-run",FIX/"abi");self.assertEqual(p.returncode,0,p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_bad_chained_version (test_runtime.RuntimeTests.test_bad_chained_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 49, in test_bad_chained_version
+    d=self.inspect("hello-chained");offset=d["chained_fixups"]["offset"];path=self.mutate("hello-chained",lambda data:struct.pack_into("<I",data,offset,1));p=call("db-run","--check",path);self.assertEqual(p.returncode,125);self.assertIn("chained fixups version",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_bad_fixup (test_runtime.RuntimeTests.test_bad_fixup)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 147, in test_bad_fixup
+    d=self.inspect("hello");off=d["dyld"]["rebase"]["offset"];path=self.mutate("hello",lambda data:data.__setitem__(off,0xff));p=call("db-run","--check",path);self.assertEqual(p.returncode,125);self.assertIn("unsupported rebase opcode",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_bad_load_command (test_runtime.RuntimeTests.test_bad_load_command)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 139, in test_bad_load_command
+    path=self.mutate("hello",lambda d:struct.pack_into("<I",d,36,0));p=call("db-inspect",path);self.assertNotEqual(p.returncode,0);self.assertIn("invalid load command",p.stderr)
+                                                                       ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_bad_tlv_offset_rejected_before_execution (test_runtime.RuntimeTests.test_bad_tlv_offset_rejected_before_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 120, in test_bad_tlv_offset_rejected_before_execution
+    d=self.inspect('tls');section=next(s for s in d['sections'] if s['flags']&255==0x13);path=self.mutate('tls',lambda data:struct.pack_into('<Q',data,section['offset']+16,0xffffffffffffffff))
+      ^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_bundle (test_runtime.RuntimeTests.test_bundle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 53, in test_bundle
+    p=call("db-run",FIX/"Hello.app","--","hello");self.assertEqual(p.returncode,0,p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_bundle_traversal_rejected (test_runtime.RuntimeTests.test_bundle_traversal_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 58, in test_bundle_traversal_rejected
+    p=call("db-inspect",contents.parent);self.assertNotEqual(p.returncode,0);self.assertIn("invalid CFBundleExecutable",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_chained_corefoundation (test_runtime.RuntimeTests.test_chained_corefoundation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 47, in test_chained_corefoundation
+    p=call("db-run",FIX/"corefoundation-chained");self.assertEqual(p.returncode,0,p.stderr);self.assertIn("UTF-8 / UTF-16 checks passed",p.stdout)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_chained_hello (test_runtime.RuntimeTests.test_chained_hello)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 45, in test_chained_hello
+    d=self.inspect("hello-chained");self.assertIsNotNone(d["chained_fixups"]);p=call("db-run",FIX/"hello-chained","--","hello");self.assertEqual(p.returncode,0,p.stderr);self.assertIn("code executed",p.stdout)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_corefoundation (test_runtime.RuntimeTests.test_corefoundation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 43, in test_corefoundation
+    p=call("db-run",FIX/"corefoundation");self.assertEqual(p.returncode,0,p.stderr);self.assertIn("UTF-8 / UTF-16 checks passed",p.stdout)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_crash_is_in_worker (test_runtime.RuntimeTests.test_crash_is_in_worker)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 130, in test_crash_is_in_worker
+    p=call("db-run",FIX/"crash");self.assertNotEqual(p.returncode,0)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_dependency_bad_callback_prevents_all_initializers (test_runtime.RuntimeTests.test_dependency_bad_callback_prevents_all_initializers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 113, in test_dependency_bad_callback_prevents_all_initializers
+    dest=Path(temp)/'images';shutil.copytree(FIX/'dylibs/classic',dest);d=self.inspect('dylibs/classic/libleaf.dylib');section=next(s for s in d['sections'] if s['flags']&255==9);data_segment=next(s for s in d['segments'] if s['name']=='__DATA');path=dest/'libleaf.dylib';data=bytearray(path.read_bytes());struct.pack_into('<Q',data,section['offset'],data_segment['vmaddr']);path.write_bytes(data)
+                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_dependency_cycle_fails_before_constructors (test_runtime.RuntimeTests.test_dependency_cycle_fails_before_constructors)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 93, in test_dependency_cycle_fails_before_constructors
+    p=call('db-run',FIX/'dylibs/cycle/cycle');self.assertEqual(p.returncode,125);self.assertIn('dependency cycle',p.stderr);self.assertEqual(p.stdout,'')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_dependency_graph (test_runtime.RuntimeTests.test_dependency_graph)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 64, in test_dependency_graph
+    p=call("db-inspect","--deps",FIX/"hello");g=json.loads(p.stdout);self.assertEqual(g["unresolved_required"],0);self.assertTrue(g["executable_by_current_runtime"])
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_dependency_missing_import_prevents_all_initializers (test_runtime.RuntimeTests.test_dependency_missing_import_prevents_all_initializers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 110, in test_dependency_missing_import_prevents_all_initializers
+    p=call('db-run',dest/'multi');self.assertEqual(p.returncode,125);self.assertIn('_pats',p.stderr);self.assertEqual(p.stdout,'')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_dylib_constructors_destructors_and_shared_data (test_runtime.RuntimeTests.test_dylib_constructors_destructors_and_shared_data) (variant='classic')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 74, in test_dylib_constructors_destructors_and_shared_data
+    p=call('db-run','--trace',FIX/'dylibs'/variant/'multi');self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,expected);self.assertIn('releasing mapped images: 3',p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_dylib_constructors_destructors_and_shared_data (test_runtime.RuntimeTests.test_dylib_constructors_destructors_and_shared_data) (variant='chained')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 74, in test_dylib_constructors_destructors_and_shared_data
+    p=call('db-run','--trace',FIX/'dylibs'/variant/'multi');self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,expected);self.assertIn('releasing mapped images: 3',p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_entry_must_be_executable (test_runtime.RuntimeTests.test_entry_must_be_executable)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 145, in test_entry_must_be_executable
+    d=self.inspect("hello");cmd=next(c for c in d["commands"] if c["name"]=="LC_MAIN");path=self.mutate("hello",lambda data:struct.pack_into("<Q",data,cmd["offset"]+8,2**63));p=call("db-run",path);self.assertEqual(p.returncode,125);self.assertIn("entry is not",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_execute_arm64_rejected (test_runtime.RuntimeTests.test_execute_arm64_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 36, in test_execute_arm64_rejected
+    p=call("db-run","--check",FIX/"arm64.o");self.assertEqual(p.returncode,125)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_exit_callback_filter_order_and_once (test_runtime.RuntimeTests.test_exit_callback_filter_order_and_once)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 95, in test_exit_callback_filter_order_and_once
+    p=call('db-run',FIX/'exit_callbacks');self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,'callback:a\ncallback:a\ncallback:main\ncallback:last\ncallback:b\n')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_exports_work_without_nlist (test_runtime.RuntimeTests.test_exports_work_without_nlist)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 99, in test_exports_work_without_nlist
+    d=self.inspect('libhelper.dylib');cmd=next(c for c in d['commands'] if c['code']==2)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_hello (test_runtime.RuntimeTests.test_hello)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 40, in test_hello
+    p=call("db-run","--trace",FIX/"hello","--","hello");self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,"DarwinBridge: Mach-O code executed on Windows\n");self.assertIn("[initialize]",p.stderr);self.assertIn("releasing mapped image",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_hidden_nlist_symbol_is_not_an_export (test_runtime.RuntimeTests.test_hidden_nlist_symbol_is_not_an_export)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 105, in test_hidden_nlist_symbol_is_not_an_export
+    d=self.inspect('libhelper.dylib');stream=d.get('export_trie') or d['dyld']['export'];path=temp/'libhelper.dylib';data=bytearray(path.read_bytes());start,size=stream['offset'],stream['size'];blob=bytes(data[start:start+size]);self.assertIn(b'_helper',blob);data[start:start+size]=blob.replace(b'_helper',b'_hidden');path.write_bytes(data)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_inspect_arm64 (test_runtime.RuntimeTests.test_inspect_arm64)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 34, in test_inspect_arm64
+    d=self.inspect("arm64.o");self.assertEqual(d["architecture"],"arm64");self.assertIn("execution requires x86_64",d["unsupported"])
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_inspect_thin (test_runtime.RuntimeTests.test_inspect_thin)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 30, in test_inspect_thin
+    d=self.inspect("hello");self.assertEqual(d["architecture"],"x86_64");self.assertTrue(d["entry_file_offset"]);self.assertIn("_puts",[s["name"] for s in d["symbols"]]);self.assertEqual(d["dependencies"][0]["name"],"/usr/lib/libSystem.B.dylib")
+      ^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_inspect_universal (test_runtime.RuntimeTests.test_inspect_universal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 32, in test_inspect_universal
+    d=self.inspect("universal");self.assertEqual(len(d["slices"]),2);self.assertEqual(d["selected_slice_offset"],4096)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_local_dylib_execution (test_runtime.RuntimeTests.test_local_dylib_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 68, in test_local_dylib_execution
+    p=call("db-run","--check",FIX/"local");self.assertEqual(p.returncode,0,p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_missing_library (test_runtime.RuntimeTests.test_missing_library)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 124, in test_missing_library
+    p=call("db-run","--check",path);self.assertEqual(p.returncode,125);self.assertIn("required dependencies unresolved",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_objc_evidence_and_rejection (test_runtime.RuntimeTests.test_objc_evidence_and_rejection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 126, in test_objc_evidence_and_rejection
+    d=self.inspect("objc");self.assertTrue(any("Objective-C metadata" in x for x in d["unsupported"]));p=call("db-run","--check",FIX/"objc");self.assertEqual(p.returncode,125)
+      ^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_overlapping_universal_slices (test_runtime.RuntimeTests.test_overlapping_universal_slices)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 143, in test_overlapping_universal_slices
+    path=self.mutate("universal",lambda d:struct.pack_into(">I",d,36,4096));p=call("db-inspect",path);self.assertNotEqual(p.returncode,0)
+                                                                              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_preflight_does_not_execute (test_runtime.RuntimeTests.test_preflight_does_not_execute)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 60, in test_preflight_does_not_execute
+    p=call("db-run","--check",FIX/"hello");self.assertEqual(p.returncode,0,p.stderr);self.assertIn("execution not attempted",p.stdout);self.assertNotIn("code executed",p.stdout)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_published_macos_binary_if_fetched (test_runtime.RuntimeTests.test_published_macos_binary_if_fetched)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 150, in test_published_macos_binary_if_fetched
+    d=self.inspect("reference/jq-macos-amd64");self.assertEqual(d["architecture"],"x86_64");self.assertTrue(any(s['flags']&255==0x13 for s in d['sections']));p=call("db-run","--check",FIX/"reference/jq-macos-amd64");self.assertEqual(p.returncode,0,p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 21, in inspect
+    p=call("db-inspect","--json",FIX/name)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_reexported_dylib (test_runtime.RuntimeTests.test_reexported_dylib)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 77, in test_reexported_dylib
+    p=call('db-run',FIX/'dylibs'/variant/'facade');self.assertEqual(p.returncode,17,p.stderr);self.assertEqual(p.stdout,'leaf:init\nleaf:fini\n')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_repeated_execution (test_runtime.RuntimeTests.test_repeated_execution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 133, in test_repeated_execution
+    p=call("db-run",FIX/"hello","--","hello");self.assertEqual(p.returncode,0,p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_return_value (test_runtime.RuntimeTests.test_return_value)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 37, in test_return_value
+    def test_return_value(self):self.assertEqual(call("db-run",FIX/"return37").returncode,37)
+                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_rpath_resolution (test_runtime.RuntimeTests.test_rpath_resolution)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 66, in test_rpath_resolution
+    p=call("db-inspect","--deps",FIX/"local");self.assertEqual(p.returncode,0,p.stderr);g=json.loads(p.stdout);self.assertEqual(len(g["nodes"]),2);self.assertEqual(g["unresolved_required"],0);self.assertTrue(g["executable_by_current_runtime"])
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_thread_local_storage_main_thread (test_runtime.RuntimeTests.test_thread_local_storage_main_thread)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 82, in test_thread_local_storage_main_thread
+    p=call('db-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,'tls:passed\n')
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_thread_once_keys_destructors_and_errno (test_runtime.RuntimeTests.test_thread_once_keys_destructors_and_errno)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 91, in test_thread_once_keys_destructors_and_errno
+    p=call('db-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,'threads:once, keys, destructors and errno passed\n')
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_timeout (test_runtime.RuntimeTests.test_timeout)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 128, in test_timeout
+    p=call("db-run","--timeout","1",FIX/"loop",timeout=5);self.assertEqual(p.returncode,125);self.assertIn("timed out",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_tls_across_threads_and_images (test_runtime.RuntimeTests.test_tls_across_threads_and_images)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 85, in test_tls_across_threads_and_images
+    p=call('db-run',FIX/'dylibs'/variant/'tls-threads');self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,'tls:8 threads and 2 images passed\n')
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_tls_preserves_live_integer_sse_avx_registers (test_runtime.RuntimeTests.test_tls_preserves_live_integer_sse_avx_registers)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 88, in test_tls_preserves_live_integer_sse_avx_registers
+    p=call('db-run',FIX/'tls-abi'/variant);self.assertEqual(p.returncode,0,p.stderr);self.assertIn(p.stdout,['tls:register preservation passed\n','tls:register preservation passed (AVX unavailable)\n'])
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_truncated (test_runtime.RuntimeTests.test_truncated)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 141, in test_truncated
+    path=self.mutate("hello",lambda d:d.__delitem__(slice(40,None)));self.assertNotEqual(call("db-inspect",path).returncode,0)
+                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_two_level_duplicate_symbols (test_runtime.RuntimeTests.test_two_level_duplicate_symbols)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 79, in test_two_level_duplicate_symbols
+    p=call('db-run','--trace',FIX/'dylibs/namespace/namespace');self.assertEqual(p.returncode,0,p.stderr);self.assertIn('releasing mapped images: 5',p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_universal_executes (test_runtime.RuntimeTests.test_universal_executes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 38, in test_universal_executes
+    def test_universal_executes(self):self.assertEqual(call("db-run",FIX/"universal").returncode,37)
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_unknown_config_key (test_runtime.RuntimeTests.test_unknown_config_key)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 137, in test_unknown_config_key
+    p=call("db-run","--config",cfg,"--check",FIX/"hello");self.assertEqual(p.returncode,125);self.assertIn("unknown field",p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_unknown_symbol (test_runtime.RuntimeTests.test_unknown_symbol)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 62, in test_unknown_symbol
+    p=call("db-run",FIX/"unknown");self.assertEqual(p.returncode,125);self.assertIn("unimplemented symbol _deliberately_missing",p.stderr);self.assertEqual(p.stdout,"")
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_architecture_dependency)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 118, in test_wrong_architecture_dependency
+    p=call('db-run',temp/'local');self.assertEqual(p.returncode,125);self.assertIn('unsupported architecture',p.stderr)
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+======================================================================
+ERROR: test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "E:\Xcode\tests\integration\test_runtime.py", line 41, in test_wrong_argv
+    def test_wrong_argv(self):self.assertEqual(call("db-run",FIX/"hello","--","wrong").returncode,93)
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\Xcode\tests\integration\test_runtime.py", line 17, in call
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "C:\Users\avane\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 1538, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [WinError 4551] An Application Control policy has blocked this file
+
+----------------------------------------------------------------------
+Ran 63 tests in 26.500s
+
+FAILED (errors=65)
