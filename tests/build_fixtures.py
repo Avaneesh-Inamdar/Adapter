@@ -30,7 +30,7 @@ def build():
         "objc": ["objc_msgSend", "_objc_empty_cache"],
     }
     versions = ["-arch", "x86_64", "-platform_version", "macos", "10.13", "10.13"]
-    exports["System"] += ["fopen$DARWIN_EXTSN", "fdopen$DARWIN_EXTSN", "stat$INODE64", "fstat$INODE64", "realpath$DARWIN_EXTSN", "open", "close", "pathconf", "dirname", "fgets", "timegm", "time", "gmtime_r", "gettimeofday", "strftime", "strptime", "memset"]
+    exports["System"] += ["fopen$DARWIN_EXTSN", "fdopen$DARWIN_EXTSN", "stat$INODE64", "fstat$INODE64", "realpath$DARWIN_EXTSN", "open", "close", "pathconf", "dirname", "fgets", "timegm", "time", "gmtime_r", "gettimeofday", "strftime", "strptime", "memset", "write", "_tlv_atexit", "pthread_mutex_init", "pthread_mutex_lock", "pthread_mutex_trylock", "pthread_mutex_unlock", "pthread_mutex_destroy", "pthread_cond_init", "pthread_cond_destroy", "pthread_cond_wait", "pthread_cond_timedwait", "pthread_cond_signal", "pthread_cond_broadcast", "pthread_condattr_init", "pthread_condattr_destroy", "pthread_condattr_getpshared", "pthread_condattr_setpshared"]
     for library, symbols in exports.items():
         asm = OUT / (library + ".s")
         # dyld's binder name is already undecorated in the Mach-O ABI.
@@ -39,14 +39,16 @@ def build():
         run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-c", asm, "-o", OUT / (library + ".o"))
         install = {"System":"/usr/lib/libSystem.B.dylib","CoreFoundation":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation","objc":"/usr/lib/libobjc.A.dylib"}[library]
         run(tool("ld64.lld"), *versions, "-dylib", "-install_name", install, "-o", OUT / ("lib" + library + ".dylib"), OUT / (library + ".o"))
-    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "tls", "exit_callbacks", "thread_state", "libc", "file_time"]:
-        extension=".m" if name=="objc" else ".c"
-        run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-ffreestanding", "-fno-stack-protector", "-fno-asynchronous-unwind-tables", "-c", ROOT / ("tests/fixtures/" + name + extension), "-o", OUT / (name + ".o"))
+    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls"]:
+        extension=".m" if name=="objc" else ".cpp" if name=="cxx_tls" else ".c"
+        flags=["-O0","-fno-stack-protector","-fno-asynchronous-unwind-tables"]
+        flags+= ["-fno-exceptions","-fno-rtti"] if extension==".cpp" else ["-ffreestanding"]
+        run(tool("clang"), "-target", "x86_64-apple-macos10.13", *flags, "-c", ROOT / ("tests/fixtures/" + name + extension), "-o", OUT / (name + ".o"))
         libraries = [] if name == "return37" else ["-L", OUT, "-lSystem"]
         if name == "corefoundation": libraries += ["-lCoreFoundation"]
         if name == "objc": libraries += ["-lobjc"]
         run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main", "-o", OUT / name, OUT / (name + ".o"), *libraries)
-        if name in ["hello","corefoundation","tls","thread_state","libc"]:
+        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls"]:
             run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
     # A local transitive dylib graph, resolved without ever executing it.
     helper=OUT / "helper.s"

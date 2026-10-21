@@ -89,6 +89,15 @@ class RuntimeTests(unittest.TestCase):
     def test_thread_once_keys_destructors_and_errno(self):
         for name in ['thread_state','thread_state-chained']:
             p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,'threads:once, keys, destructors and errno passed\n')
+    def test_condition_variables(self):
+        for name in ['condvars','condvars-chained']:
+            p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,'conds:wait, signal, broadcast and timedwait passed\n')
+    def test_cxx_thread_local_destructors(self):
+        for name in ['cxx_tls','cxx_tls-chained']:
+            p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)
+            workers,separator,main=p.stdout.partition('Mcxx:done\n')
+            self.assertEqual(separator,'Mcxx:done\n',p.stdout);self.assertEqual(main,'T')
+            self.assertEqual(len(workers),6);self.assertEqual(workers.count('C'),3);self.assertEqual(workers.count('T'),3)
     def test_dependency_cycle_fails_before_constructors(self):
         p=call('adapter-run',FIX/'dylibs/cycle/cycle');self.assertEqual(p.returncode,125);self.assertIn('dependency cycle',p.stderr);self.assertEqual(p.stdout,'')
     def test_exit_callback_filter_order_and_once(self):

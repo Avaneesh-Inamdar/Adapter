@@ -70,8 +70,11 @@ impl Drop for Guard {
     }
 }
 pub fn clear_thread() {
-    let entries = ATEXIT.with(|v| std::mem::take(&mut *v.borrow_mut()));
-    for (function, object) in entries.into_iter().rev() {
+    loop {
+        let entry = ATEXIT.with(|v| v.borrow_mut().pop());
+        let Some((function, object)) = entry else {
+            break;
+        };
         let function: unsafe extern "sysv64" fn(*mut u8) = unsafe { std::mem::transmute(function) };
         unsafe { function(object as *mut u8) };
     }
@@ -81,6 +84,7 @@ pub fn clear_thread() {
 unsafe extern "sysv64" fn tlv_atexit(
     function: Option<unsafe extern "sysv64" fn(*mut u8)>,
     object: *mut u8,
+    _dso_handle: *mut u8,
 ) {
     if let Some(function) = function {
         ATEXIT.with(|v| v.borrow_mut().push((function as usize, object as usize)));
@@ -231,11 +235,15 @@ pub fn thunk() -> u64 {
         0
     }
 }
+static DSO_HANDLE: u64 = 0;
+
 pub fn symbol(name: &str) -> Option<u64> {
     if name == "__tlv_bootstrap" {
         Some(thunk())
     } else if name == "__tlv_atexit" || name == "_tlv_atexit" {
         Some(tlv_atexit as *const () as u64)
+    } else if name == "___dso_handle" {
+        Some(&DSO_HANDLE as *const u64 as u64)
     } else {
         None
     }
@@ -244,6 +252,21 @@ pub fn symbol(name: &str) -> Option<u64> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::sync::atomic::{AtomicU32, Ordering};
+    #[test]
+    fn destructors_registered_during_cleanup_run_in_the_same_pass() {
+        static ORDER: AtomicU32 = AtomicU32::new(0);
+        unsafe extern "sysv64" fn second(_: *mut u8) {
+            ORDER.fetch_add(2, Ordering::SeqCst);
+        }
+        unsafe extern "sysv64" fn first(_: *mut u8) {
+            ORDER.fetch_add(1, Ordering::SeqCst);
+            unsafe { tlv_atexit(Some(second), std::ptr::null_mut(), std::ptr::null_mut()) };
+        }
+        unsafe { tlv_atexit(Some(first), std::ptr::null_mut(), std::ptr::null_mut()) };
+        clear_thread();
+        assert_eq!(ORDER.load(Ordering::SeqCst), 3);
+    }
     #[test]
     fn template_copy_alignment_thread_isolation_and_session_reset() {
         let template = Template {
