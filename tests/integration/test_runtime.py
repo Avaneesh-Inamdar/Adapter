@@ -183,6 +183,12 @@ class RuntimeTests(unittest.TestCase):
             if Path(path).exists():return
             time.sleep(0.05)
         self.fail(f"timed out waiting for {path}")
+    def wait_text(self,path,needle,timeout=10):
+        deadline=time.time()+timeout
+        while time.time()<deadline:
+            if Path(path).exists() and needle in Path(path).read_text():return
+            time.sleep(0.05)
+        self.fail(f"timed out waiting for {needle!r} in {path}")
     def local_env(self):
         return {k:v for k,v in os.environ.items() if k!="ADAPTER_MACH_BROKER"}
     def start_broker(self,temp,jobs=()):
@@ -332,6 +338,64 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(p.returncode,125)
             self.assertIn("unsupported launchd key KeepAlive",p.stderr)
             self.assertFalse((temp/"broker.json").exists())
+    def assert_xpc_client(self,p):
+        self.assertEqual(p.returncode,0,p.stdout+"\n"+p.stderr)
+        self.assertIn("client:reply_type=dictionary\n",p.stdout)
+        self.assertIn("client:echo=ping\n",p.stdout)
+        self.assertIn("client:pong=42 ok=1 ratio=2.5 count=6\n",p.stdout)
+        self.assertIn("client:list=2 first=alpha second=7\n",p.stdout)
+        self.assertIn("client:nested=fixture\n",p.stdout)
+        self.assertIn("client:valid=1\n",p.stdout)
+        self.assertIn("client:invalid=1\n",p.stdout)
+        self.assertIn("xpc:client reply passed\n",p.stdout)
+    def test_xpc_dictionary_roundtrip(self):
+        with tempfile.TemporaryDirectory() as raw:
+            temp=Path(raw);broker,env=self.start_broker(temp)
+            try:
+                service=f"com.adapter.test.xpc.{os.getpid()}.{uuid.uuid4().hex[:8]}"
+                ready,log=temp/"xpc-ready",temp/"xpc-server.log"
+                server=subprocess.Popen([str(BIN/"adapter-run.exe"),str(FIX/"xpc_server"),"--",service,str(ready)],
+                                        text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env)
+                try:
+                    self.wait_file(ready)
+                    p=call("adapter-run",FIX/"xpc_client","--",service,timeout=30,env=env);self.assert_xpc_client(p)
+                    server_out,server_err=server.communicate(timeout=20)
+                finally:
+                    if server.poll() is None:server.kill();server.communicate()
+                self.assertEqual(server.returncode,0,server_err)
+                self.assertIn("server:listener=1 name="+service+"\n",server_out)
+                self.assertIn("server:accept="+service+"\n",server_out)
+                self.assertIn("server:message=ping value=41 count=4\n",server_out)
+                self.assertIn("server:reply=1\n",server_out)
+                self.assertIn("server:peer_invalid=1\n",server_out)
+                self.assertIn("server:done=1 invalid=1\n",server_out)
+            finally:self.stop_broker(broker)
+    def test_broker_spawns_xpc_listener_on_demand(self):
+        with tempfile.TemporaryDirectory() as raw:
+            temp=Path(raw);service=f"com.adapter.test.xpc.job.{os.getpid()}.{uuid.uuid4().hex[:8]}"
+            ready,log=temp/"xpc-ready",temp/"xpc-server.log"
+            job=self.write_job(temp,service,FIX/"xpc_server",["xpc_server",service,str(ready)],[service],stdout=log)
+            broker,env=self.start_broker(temp,[job])
+            try:
+                p=call("adapter-run",FIX/"xpc_client","--",service,timeout=30,env=env);self.assert_xpc_client(p)
+                self.wait_text(log,"server:done=1 invalid=1\n")
+                log_text=log.read_text()
+                self.assertIn("server:listener=1 name="+service+"\n",log_text)
+                self.assertIn("server:accept="+service+"\n",log_text)
+                self.assertIn("server:message=ping value=41 count=4\n",log_text)
+                self.assertIn("server:reply=1\n",log_text)
+                self.assertIn("server:done=1 invalid=1\n",log_text)
+            finally:self.stop_broker(broker)
+    def test_xpc_missing_service_is_invalid(self):
+        with tempfile.TemporaryDirectory() as raw:
+            temp=Path(raw);broker,env=self.start_broker(temp)
+            try:
+                service=f"com.adapter.test.xpc.absent.{os.getpid()}.{uuid.uuid4().hex[:8]}"
+                p=call("adapter-run",FIX/"xpc_missing","--",service,timeout=30,env=env)
+                self.assertEqual(p.returncode,0,p.stderr)
+                self.assertIn("missing:invalid=1\n",p.stdout)
+                self.assertIn("xpc:missing service passed\n",p.stdout)
+            finally:self.stop_broker(broker)
     def test_published_macos_binary_if_fetched(self):
         if not (FIX/"reference/jq-macos-amd64").exists():self.skipTest("optional published artifact not fetched")
         d=self.inspect("reference/jq-macos-amd64");self.assertEqual(d["architecture"],"x86_64");self.assertTrue(any(s['flags']&255==0x13 for s in d['sections']));p=call("adapter-run","--check",FIX/"reference/jq-macos-amd64");self.assertEqual(p.returncode,0,p.stderr)
