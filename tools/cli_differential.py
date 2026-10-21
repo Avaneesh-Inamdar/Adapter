@@ -110,7 +110,11 @@ def capture(corpus_path, output, adapter=None, timeout=30):
     for name, path in BINARIES.items():
         if not path.is_file():
             raise ValueError(f'{name} reference binary is missing; run the fetch stage first')
-        binaries[name] = {'file': path.name, 'bytes': path.stat().st_size, 'sha256': sha256(path.read_bytes())}
+        digest, size = sha256(path.read_bytes()), path.stat().st_size
+        if not os.access(path, os.X_OK):
+            # Fetching writes the verified bytes; executing them needs the mode bit.
+            path.chmod(path.stat().st_mode | 0o111)
+        binaries[name] = {'file': path.name, 'bytes': size, 'sha256': digest}
     records, failures = [], []
     for case in corpus['cases']:
         record = run_case(case, BINARIES[case['binary']], adapter_info and adapter, timeout)

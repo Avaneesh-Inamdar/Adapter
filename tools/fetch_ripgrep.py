@@ -42,6 +42,9 @@ def fetch():
     DEST.parent.mkdir(parents=True, exist_ok=True)
     if not DEST.exists():
         DEST.write_bytes(data)
+    # The artifact is executed by the CLI differential on Darwin; a plain write
+    # leaves it non-executable under a fresh checkout.
+    DEST.chmod(DEST.stat().st_mode | 0o111)
     (DEST.parent/'provenance-ripgrep.json').write_text(json.dumps({
         'repository':'https://github.com/BurntSushi/ripgrep', 'release':'15.2.0',
         'release_url':'https://github.com/BurntSushi/ripgrep/releases/tag/15.2.0',
