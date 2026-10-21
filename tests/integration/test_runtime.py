@@ -179,11 +179,31 @@ class RuntimeTests(unittest.TestCase):
         self.fail(f"timed out waiting for {path}")
     def local_env(self):
         return {k:v for k,v in os.environ.items() if k!="ADAPTER_MACH_BROKER"}
-    def start_broker(self,temp):
+    def start_broker(self,temp,jobs=()):
         endpoint=Path(temp)/"broker.json"
-        broker=subprocess.Popen([str(BIN/"adapter-broker.exe"),"--endpoint",str(endpoint)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        command=[str(BIN/"adapter-broker.exe"),"--endpoint",str(endpoint)]
+        for job in jobs:
+            command+=["--job",str(job)]
+        broker=subprocess.Popen(command,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
         self.wait_file(endpoint)
         return broker,dict(self.local_env(),ADAPTER_MACH_BROKER=str(endpoint))
+    def write_job(self,temp,label,program,arguments,services,stdout=None,run_at_load=False):
+        job={"Label":label,"Program":str(program),"ProgramArguments":arguments,"MachServices":{name:True for name in services}}
+        if stdout:job["StandardOutPath"]=str(stdout)
+        if run_at_load:job["RunAtLoad"]=True
+        path=Path(temp)/"job.plist"
+        path.write_bytes(plistlib.dumps(job))
+        return path
+    def assert_mach_client(self,p):
+        self.assertEqual(p.returncode,0,p.stderr)
+        self.assertIn("client:lookup=0x0\n",p.stdout)
+        self.assertIn("client:send=0x0\n",p.stdout)
+        self.assertIn("client:recv=0x0\n",p.stdout)
+        self.assertIn("client:bits=0x1200\n",p.stdout)
+        self.assertIn("client:payload=pong:ping\n",p.stdout)
+        self.assertIn("client:retired_seen=1\n",p.stdout)
+        self.assertIn("client:dead_send=0x10000003\n",p.stdout)
+        self.assertIn("mach:cross-process echo passed\n",p.stdout)
     def stop_broker(self,broker):
         if broker.poll() is None:
             broker.terminate()
@@ -257,6 +277,55 @@ class RuntimeTests(unittest.TestCase):
             self.assertEqual(p.returncode,125)
             self.assertIn("mach broker endpoint",p.stderr)
             self.assertEqual(p.stdout,"")
+    def test_broker_spawns_registered_job_on_demand(self):
+        with tempfile.TemporaryDirectory() as raw:
+            temp=Path(raw);service=f"com.adapter.test.job.{os.getpid()}.{uuid.uuid4().hex[:8]}"
+            ready,retired,log=temp/"ready",temp/"retired",temp/"server.log"
+            job=self.write_job(temp,service,FIX/"mach_server",
+                               ["mach_server","echo",service,str(ready),str(retired)],[service],stdout=log)
+            broker,env=self.start_broker(temp,[job])
+            try:
+                p=call("adapter-run",FIX/"mach_client","--",service,retired,timeout=30,env=env);self.assert_mach_client(p)
+                self.wait_file(log)
+                first=log.read_text();self.assertIn("server:checkin=0x0\n",first)
+                self.assertIn("server:bits=0x1112\n",first);self.assertIn("mach:server echo passed\n",first)
+                ready.unlink(missing_ok=True);retired.unlink(missing_ok=True)
+                p=call("adapter-run",FIX/"mach_client","--",service,retired,timeout=30,env=env);self.assert_mach_client(p)
+                self.assertEqual(log.read_text().count("mach:server echo passed\n"),2)
+            finally:self.stop_broker(broker)
+    def test_broker_runs_job_at_load(self):
+        with tempfile.TemporaryDirectory() as raw:
+            temp=Path(raw);service=f"com.adapter.test.load.{os.getpid()}.{uuid.uuid4().hex[:8]}"
+            ready,retired,log=temp/"ready",temp/"retired",temp/"server.log"
+            job=self.write_job(temp,service,FIX/"mach_server",
+                               ["mach_server","echo",service,str(ready),str(retired)],[service],
+                               stdout=log,run_at_load=True)
+            broker,env=self.start_broker(temp,[job])
+            try:
+                self.wait_file(ready)
+                p=call("adapter-run",FIX/"mach_client","--",service,retired,timeout=30,env=env);self.assert_mach_client(p)
+                self.assertIn("server:checkin=0x0\n",log.read_text())
+            finally:self.stop_broker(broker)
+    def test_broker_job_spawn_failure_returns_unknown_service(self):
+        with tempfile.TemporaryDirectory() as raw:
+            temp=Path(raw);service=f"com.adapter.test.missing.{os.getpid()}.{uuid.uuid4().hex[:8]}"
+            job=self.write_job(temp,service,temp/"does-not-exist",[],[service])
+            broker,env=self.start_broker(temp,[job])
+            try:
+                p=call("adapter-run",FIX/"mach_client","--",service,str(temp/"retired"),timeout=30,env=env)
+                self.assertEqual(p.returncode,10,p.stderr)
+                self.assertIn("client:lookup=0x44e\n",p.stdout)
+            finally:self.stop_broker(broker)
+    def test_broker_rejects_unsupported_launchd_key(self):
+        with tempfile.TemporaryDirectory() as raw:
+            temp=Path(raw);job={"Label":"com.adapter.test.unsupported","Program":str(FIX/"mach_server"),
+                                "ProgramArguments":["mach_server"],"MachServices":{},"KeepAlive":True}
+            path=temp/"job.plist";path.write_bytes(plistlib.dumps(job))
+            p=subprocess.run([str(BIN/"adapter-broker.exe"),"--endpoint",str(temp/"broker.json"),"--job",str(path)],
+                             text=True,capture_output=True,timeout=15)
+            self.assertEqual(p.returncode,125)
+            self.assertIn("unsupported launchd key KeepAlive",p.stderr)
+            self.assertFalse((temp/"broker.json").exists())
     def test_published_macos_binary_if_fetched(self):
         if not (FIX/"reference/jq-macos-amd64").exists():self.skipTest("optional published artifact not fetched")
         d=self.inspect("reference/jq-macos-amd64");self.assertEqual(d["architecture"],"x86_64");self.assertTrue(any(s['flags']&255==0x13 for s in d['sections']));p=call("adapter-run","--check",FIX/"reference/jq-macos-amd64");self.assertEqual(p.returncode,0,p.stderr)
