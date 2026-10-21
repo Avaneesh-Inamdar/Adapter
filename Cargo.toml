@@ -1,5 +1,5 @@
 [package]
-name = "darwinbridge"
+name = "adapter"
 version = "0.1.0"
 edition = "2024"
 description = "Experimental Windows-native Mach-O compatibility runtime"
@@ -9,11 +9,11 @@ license = "MIT"
 path = "src/lib.rs"
 
 [[bin]]
-name = "db-inspect"
+name = "adapter-inspect"
 path = "src/inspect/main.rs"
 
 [[bin]]
-name = "db-run"
+name = "adapter-run"
 path = "src/runtime/main.rs"
 
 [dependencies]

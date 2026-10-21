@@ -29,7 +29,7 @@ general macOS application compatibility is established.
 
 The C/Objective-C probe executables are real Mach-O files cross-compiled for
 macOS by Clang and linked by ld64.lld on Windows, then executed unchanged by
-db-run. They are neither PE recompilations nor mocked interpreters. They have
+adapter-run. They are neither PE recompilations nor mocked interpreters. They have
 not been run on a reference Mac. Successful probe execution demonstrates only
 their tested machine-code/API behavior.
 

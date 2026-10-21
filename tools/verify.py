@@ -10,7 +10,7 @@ ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/'docs/test-results'
 def verify():
     OUT.mkdir(parents=True,exist_ok=True)
-    llvm=Path(os.environ.get('DARWINBRIDGE_LLVM',r'C:\Program Files\LLVM\bin'))
+    llvm=Path(os.environ.get('ADAPTER_LLVM',r'C:\Program Files\LLVM\bin'))
     native=[str(p.relative_to(ROOT)) for p in (ROOT/'src/darwin/host').iterdir() if p.suffix in ['.c','.h']]
     native+=['tests/fixtures/libc.c','tests/fixtures/file_time.c']
     stages=[
@@ -24,7 +24,7 @@ def verify():
         ('archive-tests',[sys.executable,'-m','unittest','discover','-s','tests/unit','-v'],None),
         ('integration-debug',[sys.executable,'-m','unittest','discover','-s','tests/integration','-v'],None),
         ('release-build',['cargo','build','--release','--locked'],None),
-        ('integration-release',[sys.executable,'-m','unittest','discover','-s','tests/integration','-v'],{'DARWINBRIDGE_BIN':str(ROOT/'target/release')}),
+        ('integration-release',[sys.executable,'-m','unittest','discover','-s','tests/integration','-v'],{'ADAPTER_BIN':str(ROOT/'target/release')}),
         ('compatibility-report',[sys.executable,'tools/report_results.py'],None),
     ]
     results=[]

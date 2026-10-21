@@ -27,7 +27,7 @@ class JqTests(unittest.TestCase):
             raise AssertionError('jq reference artifact hash mismatch')
 
     def jq(self, *args, data='', env=None):
-        result = subprocess.run([str(BIN/'db-run.exe'), '--timeout', '10', str(JQ), '--', *args],
+        result = subprocess.run([str(BIN/'adapter-run.exe'), '--timeout', '10', str(JQ), '--', *args],
                                 input=data.encode('utf-8'), capture_output=True,
                                 env={**os.environ, **(env or {})}, timeout=15)
         result.stdout = result.stdout.decode('utf-8'); result.stderr = result.stderr.decode('utf-8')

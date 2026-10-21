@@ -4,9 +4,6 @@ Runs selected Intel macOS binaries on Windows x64. Adapter loads the original
 Mach-O code and supplies Darwin API adapters. Intel instructions run directly
 on the CPU. ARM64 translation is not implemented.
 
-The Cargo package is still named `darwinbridge`. Its tools are `db-inspect`
-and `db-run`.
-
 [Build](#build-and-run) · [API coverage](#api-coverage) ·
 [Working features](#what-works) · [Work to do](#work-to-do) ·
 [Architecture](docs/architecture.md) · [Contributing](CONTRIBUTING.md)
@@ -91,7 +88,7 @@ adding more unrelated libc wrappers alone will not make those apps run.
 Requires Windows x64, Rust's MSVC toolchain, Visual C++/Windows SDK build tools,
 Python 3.12+, and LLVM with `clang`, `ld64.lld`, `llvm-ar` and `clang-format`.
 The recorded environment used Rust 1.99.0 and LLVM 23.1.3. LLVM defaults to
-`C:\Program Files\LLVM\bin`; override it with `DARWINBRIDGE_LLVM`.
+`C:\Program Files\LLVM\bin`; override it with `ADAPTER_LLVM`.
 
 ```powershell
 git clone https://github.com/Avaneesh-Inamdar/Adapter.git
@@ -106,11 +103,11 @@ The jq fetch is pinned by SHA-256. No Mac or Apple SDK is needed for the test
 fixtures. Downloaded binaries and supplied Apple archives stay out of Git.
 
 ```powershell
-target/debug/db-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -- --version
-'{"a":[1,2,3]}' | target/debug/db-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -- -c '.a | map(. * 2)'
+target/debug/adapter-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -- --version
+'{"a":[1,2,3]}' | target/debug/adapter-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -- -c '.a | map(. * 2)'
 
-target/debug/db-inspect.exe --json tests/fixtures/generated/reference/jq-macos-amd64
-target/debug/db-run.exe --check tests/fixtures/generated/reference/jq-macos-amd64
+target/debug/adapter-inspect.exe --json tests/fixtures/generated/reference/jq-macos-amd64
+target/debug/adapter-run.exe --check tests/fixtures/generated/reference/jq-macos-amd64
 ```
 
 `--check` performs static preflight; it does not execute or certify the program.

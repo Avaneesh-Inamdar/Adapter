@@ -48,7 +48,7 @@ extern "C" fn db_get_errno() -> i32 {
 #[unsafe(no_mangle)]
 extern "sysv64" fn db_guest_exit(code: i32) -> ! {
     if let Err(error) = super::callbacks::finalize(0) {
-        eprintln!("db-run [exit]: {error}");
+        eprintln!("adapter-run [exit]: {error}");
         std::process::exit(125);
     }
     flush();

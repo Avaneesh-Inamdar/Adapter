@@ -37,7 +37,7 @@ def report():
     for profile in ['debug','release']:
         if blocked[profile]:
             continue
-        base = [f'target/{profile}/db-run.exe', 'tests/fixtures/generated/reference/jq-macos-amd64']
+        base = [f'target/{profile}/adapter-run.exe', 'tests/fixtures/generated/reference/jq-macos-amd64']
         for args, data, expected in [(['--version'], '', 'jq-1.8.2\n'),
                                      (['-c', '{x:.a|map(. * 2)}'], '{"a":[1,2,3]}\n', '{"x":[2,4,6]}\n')]:
             command = base+['--']+args
@@ -47,7 +47,7 @@ def report():
                 raise RuntimeError(f'live jq sample failed: {profile}/{args}')
             executions.append({'profile':profile,'command':command,'stdin':data,
                                'exit_code':p.returncode,'stdout':output,'stderr':error})
-    preflight = ['target/debug/db-run.exe','--check','tests/fixtures/generated/reference/jq-macos-amd64']
+    preflight = ['target/debug/adapter-run.exe','--check','tests/fixtures/generated/reference/jq-macos-amd64']
     if not blocked['debug']:
         p = subprocess.run(preflight,cwd=ROOT,capture_output=True,text=True,timeout=15)
         if p.returncode:
@@ -57,11 +57,11 @@ def report():
         (OUT/'jq-preflight.log').write_text(p.stdout+p.stderr)
     else:
         preflight_result={'command':preflight,'executed':False,'status':'blocked',
-                          'reason':'Debug db-run execution denied in integration log; not retried here.'}
+                          'reason':'Debug adapter-run execution denied in integration log; not retried here.'}
         (OUT/'jq-preflight.log').write_text(preflight_result['reason']+'\n')
     (OUT/'jq-preflight.json').write_text(json.dumps(preflight_result,indent=2)+'\n')
     profiles={k:{'status':'passed' if passed[k] else 'blocked',
-                 'db_run_sha256':hashlib.sha256((ROOT/f'target/{k}/db-run.exe').read_bytes()).hexdigest()}
+                 'adapter_run_sha256':hashlib.sha256((ROOT/f'target/{k}/adapter-run.exe').read_bytes()).hexdigest()}
               for k in logs}
     (OUT/'jq-execution.json').write_text(json.dumps({'run_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
         'artifact_sha256':rows[-1]['sha256'],'reference_mac_run':False,'profiles':profiles,'executions':executions},indent=2)+'\n')

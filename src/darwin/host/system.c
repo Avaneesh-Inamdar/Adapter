@@ -393,7 +393,7 @@ static G int db_raise(int signal) {
     if (signal == 0)
         return 0;
     if (signal == 6) {
-        fprintf(stderr, "db-run [signal]: guest raised SIGABRT\n");
+        fprintf(stderr, "adapter-run [signal]: guest raised SIGABRT\n");
         ExitProcess(134);
     }
     db_set_errno(45);

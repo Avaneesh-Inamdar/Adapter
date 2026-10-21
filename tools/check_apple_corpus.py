@@ -14,7 +14,7 @@ def check():
         with path.open('rb') as f:
             for block in iter(lambda:f.read(8*1024*1024),b''):digest.update(block)
         if digest.hexdigest()!=item['sha256']:raise ValueError('Apple artifact changed: '+str(path))
-        p=subprocess.run([str(ROOT/'target/debug/db-inspect.exe'),'--json',str(path)],capture_output=True,text=True,timeout=45)
+        p=subprocess.run([str(ROOT/'target/debug/adapter-inspect.exe'),'--json',str(path)],capture_output=True,text=True,timeout=45)
         record={'source':item['source'],'sha256':item['sha256'],'exit_code':p.returncode,'seconds':round(time.monotonic()-start,3)}
         if p.returncode:record['error']=p.stderr.strip()
         else:

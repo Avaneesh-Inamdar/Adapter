@@ -12,7 +12,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "tests/fixtures/generated"
-LLVM = Path(os.environ.get("DARWINBRIDGE_LLVM", r"C:\Program Files\LLVM\bin"))
+LLVM = Path(os.environ.get("ADAPTER_LLVM", r"C:\Program Files\LLVM\bin"))
 
 def tool(name):
     p = LLVM / (name + ".exe")
@@ -67,7 +67,7 @@ def build():
     (bundle / "MacOS").mkdir(parents=True,exist_ok=True)
     (bundle / "Resources").mkdir(exist_ok=True)
     (bundle / "Resources/marker.txt").write_text("bundle resource fixture\n")
-    (bundle / "Info.plist").write_bytes(plistlib.dumps({"CFBundleExecutable":"hello","CFBundleIdentifier":"test.darwinbridge.hello"}))
+    (bundle / "Info.plist").write_bytes(plistlib.dumps({"CFBundleExecutable":"hello","CFBundleIdentifier":"test.adapter.hello"}))
     shutil.copyfile(OUT / "hello",bundle / "MacOS/hello")
     from build_dylib_fixtures import build as build_dylibs
     build_dylibs()

@@ -108,7 +108,7 @@ unsafe extern "sysv64" fn db_tlv_lookup(descriptor: usize) -> *mut u8 {
     match lookup(descriptor) {
         Ok(p) => p,
         Err(e) => {
-            eprintln!("db-run [TLS]: {e}");
+            eprintln!("adapter-run [TLS]: {e}");
             std::process::exit(125);
         }
     }

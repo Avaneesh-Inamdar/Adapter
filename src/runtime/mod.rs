@@ -34,7 +34,7 @@ mod native {
             for image in &plan.images {
                 if trace {
                     eprintln!(
-                        "db-run [map]: {} ({} segments; {} fixups)",
+                        "adapter-run [map]: {} ({} segments; {} fixups)",
                         image.path.display(),
                         image.image.segments.len(),
                         image.fixups.len()
@@ -237,7 +237,7 @@ mod native {
                 for &pointer in &self.initializers[index] {
                     if trace {
                         eprintln!(
-                            "db-run [initialize]: {} {pointer:#x}",
+                            "adapter-run [initialize]: {} {pointer:#x}",
                             self.plan.images[index].path.display()
                         );
                     }
@@ -249,7 +249,10 @@ mod native {
             }
             let entry = link::entry(&self.plan.images[0].image)?;
             if trace {
-                eprintln!("db-run [execute]: entry={entry:#x} argc={}", argv.len());
+                eprintln!(
+                    "adapter-run [execute]: entry={entry:#x} argc={}",
+                    argv.len()
+                );
             }
             let main: Entry =
                 unsafe { std::mem::transmute(self.mappings[0].relocated(entry)? as usize) };
@@ -261,7 +264,7 @@ mod native {
                 for &pointer in self.finalizers[index].iter().rev() {
                     if trace {
                         eprintln!(
-                            "db-run [finalize]: {}",
+                            "adapter-run [finalize]: {}",
                             self.plan.images[index].path.display()
                         );
                     }
@@ -275,7 +278,7 @@ mod native {
             crate::darwin::libc::flush();
             if trace {
                 eprintln!(
-                    "db-run [complete]: guest returned {result}; releasing mapped images: {}",
+                    "adapter-run [complete]: guest returned {result}; releasing mapped images: {}",
                     self.mappings.len()
                 );
             }

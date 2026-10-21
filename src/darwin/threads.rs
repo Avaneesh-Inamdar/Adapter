@@ -115,14 +115,14 @@ unsafe extern "sysv64" fn create(
     let argument = argument as usize;
     s.running += 1;
     let handle = std::thread::Builder::new()
-        .name(format!("DarwinBridge-{id}"))
+        .name(format!("Adapter-{id}"))
         .spawn(move || {
             let _completion = Completion;
             ID.with(|v| v.set(id));
             super::thread_state::reset_thread();
             let result = unsafe { start(argument as *mut c_void) } as usize;
             if let Err(e) = super::thread_state::finish_thread() {
-                eprintln!("db-run [thread cleanup]: {e}");
+                eprintln!("adapter-run [thread cleanup]: {e}");
                 std::process::exit(125);
             }
             super::tlv::clear_thread();

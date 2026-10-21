@@ -1,12 +1,12 @@
 use std::{env, path::PathBuf, process::Command};
 
 fn main() {
-    println!("cargo:rerun-if-env-changed=DARWINBRIDGE_LLVM");
+    println!("cargo:rerun-if-env-changed=ADAPTER_LLVM");
     if env::var("CARGO_CFG_TARGET_OS").as_deref() != Ok("windows") {
         return;
     }
     let llvm = PathBuf::from(
-        env::var_os("DARWINBRIDGE_LLVM").unwrap_or_else(|| r"C:\Program Files\LLVM\bin".into()),
+        env::var_os("ADAPTER_LLVM").unwrap_or_else(|| r"C:\Program Files\LLVM\bin".into()),
     );
     let out = PathBuf::from(env::var_os("OUT_DIR").unwrap());
     let mut objects = Vec::new();
@@ -27,10 +27,12 @@ fn main() {
                 "-D_CRT_SECURE_NO_WARNINGS",
             ]);
         }
-        let status =
-            command.arg(&input).arg("-o").arg(&object).status().expect(
-                "LLVM clang is required for the Darwin libc ABI bridge; set DARWINBRIDGE_LLVM",
-            );
+        let status = command
+            .arg(&input)
+            .arg("-o")
+            .arg(&object)
+            .status()
+            .expect("LLVM clang is required for the Darwin libc ABI bridge; set ADAPTER_LLVM");
         assert!(
             status.success(),
             "native ABI bridge compilation failed: {source}"

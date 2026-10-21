@@ -5,7 +5,7 @@ extern void *malloc(size_t);
 extern void free(void *);
 extern void *memcpy(void *, const void *, size_t);
 extern int memcmp(const void *, const void *, size_t);
-static const char *message = "DarwinBridge: Mach-O code executed on Windows";
+static const char *message = "Adapter: Mach-O code executed on Windows";
 static int initialized;
 __attribute__((constructor)) static void initialize(void) { initialized=73; }
 int main(int argc, char **argv) {

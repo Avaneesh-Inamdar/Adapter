@@ -434,15 +434,15 @@ static G void db_perror(const char *s) {
     fprintf(stderr, "%s\n", db_strerror(db_get_errno()));
 }
 static G void db_abort(void) {
-    fprintf(stderr, "db-run [abort]: guest aborted\n");
+    fprintf(stderr, "adapter-run [abort]: guest aborted\n");
     ExitProcess(134);
 }
 static G void db_assert(const char *fn, const char *file, int line, const char *expr) {
-    fprintf(stderr, "db-run [assert]: %s, %s:%d (%s)\n", expr, file, line, fn);
+    fprintf(stderr, "adapter-run [assert]: %s, %s:%d (%s)\n", expr, file, line, fn);
     ExitProcess(134);
 }
 static G void db_stack_fail(void) {
-    fprintf(stderr, "db-run [stack]: guest stack check failed\n");
+    fprintf(stderr, "adapter-run [stack]: guest stack check failed\n");
     ExitProcess(134);
 }
 static G void *db_calloc(size_t n, size_t s) {

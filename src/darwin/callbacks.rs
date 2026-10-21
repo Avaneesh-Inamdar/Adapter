@@ -104,7 +104,7 @@ pub fn finalize(dso: usize) -> Result<()> {
 }
 unsafe extern "sysv64" fn cxa_finalize(dso: *mut c_void) {
     if let Err(e) = finalize(dso as usize) {
-        eprintln!("db-run [finalize]: {e}");
+        eprintln!("adapter-run [finalize]: {e}");
         std::process::exit(125);
     }
 }

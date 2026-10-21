@@ -1,4 +1,4 @@
-use darwinbridge::{
+use adapter::{
     Result,
     loader::{self, Config},
     runtime,
@@ -36,7 +36,7 @@ fn run() -> Result<i32> {
             }
             "--help" | "-h" => {
                 println!(
-                    "db-run [--check] [--trace] [--timeout SECONDS] [--config FILE] MACH-O|APP [-- GUEST_ARGS...]"
+                    "adapter-run [--check] [--trace] [--timeout SECONDS] [--config FILE] MACH-O|APP [-- GUEST_ARGS...]"
                 );
                 return Ok(0);
             }
@@ -52,7 +52,7 @@ fn run() -> Result<i32> {
             }
         }
     }
-    let path = path.ok_or("usage: db-run [--check] MACH-O|APP [-- ARGS...]")?;
+    let path = path.ok_or("usage: adapter-run [--check] MACH-O|APP [-- ARGS...]")?;
     if check {
         let plan = runtime::preflight(&path, &cfg)?;
         println!(
@@ -91,7 +91,7 @@ fn main() {
     match run() {
         Ok(code) => std::process::exit(code),
         Err(e) => {
-            eprintln!("db-run: {e}");
+            eprintln!("adapter-run: {e}");
             std::process::exit(125);
         }
     }

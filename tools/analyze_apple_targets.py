@@ -27,7 +27,7 @@ def analyze():
             with p.open('rb') as f:magic=f.read(4)
             if magic not in MAGIC:continue
             ident=hashlib.sha256(relative.encode()).hexdigest()[:16]
-            proc=subprocess.run([str(ROOT/'target/debug/db-inspect.exe'),'--json',str(p)],capture_output=True,text=True,timeout=30)
+            proc=subprocess.run([str(ROOT/'target/debug/adapter-inspect.exe'),'--json',str(p)],capture_output=True,text=True,timeout=30)
             if proc.returncode:
                 summary.append({'source':relative,'error':proc.stderr.strip()});continue
             image=json.loads(proc.stdout)

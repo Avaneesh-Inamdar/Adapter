@@ -6,7 +6,7 @@ import urllib.request
 ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT/"tests/fixtures/generated/reference"
 def get(url):
-    with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"DarwinBridge-compatibility-research"}),timeout=60) as r:
+    with urllib.request.urlopen(urllib.request.Request(url,headers={"User-Agent":"Adapter-compatibility-research"}),timeout=60) as r:
         return r.read(32*1024*1024)
 def fetch():
     OUT.mkdir(parents=True,exist_ok=True)

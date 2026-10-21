@@ -17,6 +17,6 @@ int main(void) {
     if (!CFStringGetCString(s,out,8,utf8) || memcmp(out,"A\xc3\xa9\xf0\x9f\x98\x80",8)) return 84;
     if (CFStringCreateWithCString((void*)0,"\xff",utf8)) return 85;
     CFRelease(s);
-    puts("DarwinBridge: CoreFoundation UTF-8 / UTF-16 checks passed");
+    puts("Adapter: CoreFoundation UTF-8 / UTF-16 checks passed");
     return 0;
 }

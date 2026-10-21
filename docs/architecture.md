@@ -39,7 +39,7 @@ Execution stages: discover -> inspect graph -> reject unsupported requirements
 initializer pointers -> install final protections -> initialize -> invoke
 LC_MAIN -> join owned threads -> finalize -> unmap. Errors include their failing stage/symbol.
 The graph's `executable_by_current_runtime` flag is only structural eligibility;
-`db-run --check` additionally validates opcode decoding and bound symbols. A
+`adapter-run --check` additionally validates opcode decoding and bound symbols. A
 passed preflight is not an execution or application compatibility claim.
 
 Windows x64 uses a different calling convention from Darwin x64. All guest

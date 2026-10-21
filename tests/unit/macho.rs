@@ -1,4 +1,4 @@
-use darwinbridge::{
+use adapter::{
     inspect,
     loader::fixups::{sleb, uleb},
 };
@@ -160,10 +160,10 @@ fn chained_image(pointer_format: u16, import_format: u32, raw: u64) -> inspect::
 fn chained_absolute_and_offset_rebases() {
     for (format, raw) in [(2, 0x100000010u64), (6, 16)] {
         let i = chained_image(format, 1, raw);
-        let p = darwinbridge::loader::fixups::plan(&i).unwrap();
+        let p = adapter::loader::fixups::plan(&i).unwrap();
         assert_eq!(
             p[0].kind,
-            darwinbridge::loader::fixups::Kind::RebaseTo {
+            adapter::loader::fixups::Kind::RebaseTo {
                 target: 0x100000010
             }
         );
@@ -176,10 +176,10 @@ fn chained_import_and_addend_table() {
         if format == 2 {
             i.data[64..68].copy_from_slice(&(-7i32).to_le_bytes());
         }
-        let p = darwinbridge::loader::fixups::plan(&i).unwrap();
+        let p = adapter::loader::fixups::plan(&i).unwrap();
         assert_eq!(
             p[0].kind,
-            darwinbridge::loader::fixups::Kind::Bind {
+            adapter::loader::fixups::Kind::Bind {
                 symbol: "_puts".into(),
                 ordinal: 1,
                 addend: if format == 2 { -7 } else { 0 }
@@ -191,7 +191,7 @@ fn chained_import_and_addend_table() {
 fn chained_bounds_and_reserved_bits() {
     for raw in [(1u64 << 63) | 1, 1u64 << 44, (1u64 << 51) | 16] {
         let i = chained_image(2, 1, raw);
-        assert!(darwinbridge::loader::fixups::plan(&i).is_err());
+        assert!(adapter::loader::fixups::plan(&i).is_err());
     }
 }
 #[cfg(windows)]
@@ -203,7 +203,7 @@ fn windows_final_protection_and_release() {
     i.segments[0].filesize = 4096;
     i.segments[0].fileoff = 0;
     i.segments[0].flags = 0x10;
-    let mapping = darwinbridge::platform::windows::Mapping::new(&i).unwrap();
+    let mapping = adapter::platform::windows::Mapping::new(&i).unwrap();
     let p = mapping.pointer(0x100000000, 1).unwrap();
     mapping.protect(&i).unwrap();
     let mut info: MEMORY_BASIC_INFORMATION = unsafe { std::mem::zeroed() };

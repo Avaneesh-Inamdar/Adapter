@@ -1,4 +1,4 @@
-use darwinbridge::{Result, inspect, loader};
+use adapter::{Result, inspect, loader};
 use std::path::PathBuf;
 fn run() -> Result<()> {
     let mut json = false;
@@ -16,7 +16,7 @@ fn run() -> Result<()> {
                 ))?
             }
             "--help" | "-h" => {
-                println!("db-inspect [--json] [--deps] [--config FILE] MACH-O|APP");
+                println!("adapter-inspect [--json] [--deps] [--config FILE] MACH-O|APP");
                 return Ok(());
             }
             _ if a.starts_with('-') => return Err(format!("unknown option {a}")),
@@ -27,7 +27,8 @@ fn run() -> Result<()> {
             }
         }
     }
-    let path = loader::discover(&path.ok_or("usage: db-inspect [--json] [--deps] MACH-O|APP")?)?;
+    let path =
+        loader::discover(&path.ok_or("usage: adapter-inspect [--json] [--deps] MACH-O|APP")?)?;
     if deps {
         println!(
             "{}",
@@ -48,7 +49,7 @@ fn run() -> Result<()> {
 }
 fn main() {
     if let Err(e) = run() {
-        eprintln!("db-inspect: {e}");
+        eprintln!("adapter-inspect: {e}");
         std::process::exit(2);
     }
 }

@@ -84,6 +84,6 @@ pub fn symbol(name: &str) -> Option<u64> {
     })
 }
 extern "sysv64" fn unexpected_lazy_bind() -> ! {
-    eprintln!("db-run [bind]: unexpected lazy binder call after eager binding");
+    eprintln!("adapter-run [bind]: unexpected lazy binder call after eager binding");
     std::process::exit(125)
 }

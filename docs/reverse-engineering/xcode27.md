@@ -56,7 +56,7 @@ REA inventory Evidence describes the selected tree at capture time, not the full
 Xcode archive. Extraction continued afterwards, so its directory root hash is a
 historical snapshot. Original member identities are retained separately in the
 XIP summary. These portable inventories do not establish Mach-O call behavior.
-The following binary facts come from db-inspect and independent LLVM inspection,
+The following binary facts come from adapter-inspect and independent LLVM inspection,
 not from a REA decompiler.
 
 ## Findings ledger
