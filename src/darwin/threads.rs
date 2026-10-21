@@ -369,7 +369,7 @@ mod tests {
             assert_eq!(attr_destroy(a), 0);
             assert_eq!(attr_destroy(a), EINVAL);
             assert_eq!(attribute_stack_size(std::ptr::null()), Some(0));
-            assert_eq!(attribute_stack_size(1 as *const c_void), None);
+            assert_eq!(attribute_stack_size(std::ptr::dangling::<c_void>()), None);
         }
     }
 }
