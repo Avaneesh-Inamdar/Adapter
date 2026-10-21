@@ -52,6 +52,15 @@ db_guest_snprintf:
     call db_snprintf_entry
     add rsp, 280
     ret
+.globl db_guest_sscanf
+db_guest_sscanf:
+    SAVE_ARGS 16
+    mov rcx, [rsp+64]
+    mov rdx, [rsp+72]
+    lea r8, [rsp+32]
+    call db_sscanf_entry
+    add rsp, 280
+    ret
 .globl db_chkstk
 db_chkstk:
     push rcx

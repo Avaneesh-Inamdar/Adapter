@@ -1,6 +1,6 @@
 {
-  "run_utc": "2026-10-21T14:44:18.962010+00:00",
-  "all_passed": false,
+  "run_utc": "2026-10-21T16:29:09.141310+00:00",
+  "all_passed": true,
   "stages": [
     {
       "stage": "format",
@@ -12,7 +12,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.157,
+      "seconds": 0.156,
       "log": "format.log"
     },
     {
@@ -29,7 +29,7 @@
         "tests/fixtures/file_time.c"
       ],
       "exit_code": 0,
-      "seconds": 0.046,
+      "seconds": 0.047,
       "log": "native-format.log"
     },
     {
@@ -44,7 +44,7 @@
         "warnings"
       ],
       "exit_code": 0,
-      "seconds": 0.172,
+      "seconds": 1.359,
       "log": "clippy.log"
     },
     {
@@ -54,11 +54,9 @@
         "test",
         "--locked"
       ],
-      "exit_code": 101,
-      "seconds": 0.485,
-      "log": "rust-tests.log",
-      "status": "blocked",
-      "reason": "Windows Application Control prevented executable launch (WinError 4551); see CodeIntegrity events 3033/3077."
+      "exit_code": 0,
+      "seconds": 2.125,
+      "log": "rust-tests.log"
     },
     {
       "stage": "debug-build",
@@ -78,7 +76,7 @@
         "tools/fetch_jq.py"
       ],
       "exit_code": 0,
-      "seconds": 0.14,
+      "seconds": 0.094,
       "log": "reference-artifact.log"
     },
     {
@@ -88,7 +86,7 @@
         "tests/build_fixtures.py"
       ],
       "exit_code": 0,
-      "seconds": 2.329,
+      "seconds": 1.984,
       "log": "fixtures.log"
     },
     {
@@ -103,7 +101,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 0.218,
+      "seconds": 0.282,
       "log": "archive-tests.log"
     },
     {
@@ -117,11 +115,9 @@
         "tests/integration",
         "-v"
       ],
-      "exit_code": 1,
-      "seconds": 26.61,
-      "log": "integration-debug.log",
-      "status": "blocked",
-      "reason": "Windows Application Control prevented executable launch (WinError 4551); see CodeIntegrity events 3033/3077."
+      "exit_code": 0,
+      "seconds": 4.875,
+      "log": "integration-debug.log"
     },
     {
       "stage": "release-build",
@@ -132,7 +128,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 3.859,
+      "seconds": 4.453,
       "log": "release-build.log"
     },
     {
@@ -146,11 +142,9 @@
         "tests/integration",
         "-v"
       ],
-      "exit_code": 1,
-      "seconds": 12.063,
-      "log": "integration-release.log",
-      "status": "blocked",
-      "reason": "Windows Application Control prevented executable launch (WinError 4551); see CodeIntegrity events 3033/3077."
+      "exit_code": 0,
+      "seconds": 5.625,
+      "log": "integration-release.log"
     },
     {
       "stage": "compatibility-report",
@@ -159,9 +153,8 @@
         "tools/report_results.py"
       ],
       "exit_code": 0,
-      "seconds": 0.093,
+      "seconds": 0.234,
       "log": "compatibility-report.log"
     }
-  ],
-  "verification_status": "blocked"
+  ]
 }

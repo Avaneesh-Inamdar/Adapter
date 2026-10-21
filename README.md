@@ -14,7 +14,7 @@ on the CPU. ARM64 translation is not implemented.
 
 [![API adapter coverage](docs/progress/api-coverage.svg)](docs/progress/README.md)
 
-**144 / 1,778 known Intel imports have adapters: 8.10%.**
+**180 / 1,778 known Intel imports have adapters: 10.12%.**
 
 This counts unique **(library install name, imported symbol)** pairs from
 18 inspected Apple Intel images and jq 1.8.2. It includes imported data.
@@ -25,7 +25,7 @@ ARM64 and transitive dependencies are outside this count.
 | Program | Direct imports with adapters | API coverage | Execution status |
 | --- | ---: | ---: | --- |
 | jq 1.8.2 | 136 / 136 | 100.00% | 13 recorded CLI tests passed |
-| LogTool | 9 / 34 | 26.47% | Inspected; not run |
+| LogTool | 17 / 34 | 50.00% | Inspected; not run |
 | Clipboard Viewer | 1 / 55 | 1.82% | Inspected; Objective-C/AppKit missing |
 | Xcode 27 launcher | — | — | ARM64; no translator |
 <!-- API-COVERAGE:END -->

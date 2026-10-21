@@ -45,6 +45,7 @@ extern DbFile *db_stdin, *db_stdout, *db_stderr;
 void db_set_errno(int value);
 int db_get_errno(void);
 void db_host_error(void);
+G void db_stack_fail(void);
 void db_file_status(DbFile *f);
 wchar_t *db_path(const char *s);
 G void db_guest_exit(int code);
@@ -61,5 +62,6 @@ G int db_unsetenv(const char *name);
 G int db_guest_printf(const char *fmt, ...);
 G int db_guest_fprintf(DbFile *file, const char *fmt, ...);
 G int db_guest_snprintf(char *out, size_t size, const char *fmt, ...);
+G int db_guest_sscanf(const char *str, const char *fmt, ...);
 G void db_chkstk(void);
 #endif

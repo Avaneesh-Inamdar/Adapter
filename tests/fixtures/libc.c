@@ -22,6 +22,7 @@ extern int __maskrune(int, unsigned long);
 extern int puts(const char *), printf(const char *, ...), fprintf(File *, const char *, ...);
 extern int snprintf(char *, size_t, const char *, ...),
     vsnprintf(char *, size_t, const char *, __builtin_va_list);
+extern int sscanf(const char *, const char *, ...);
 extern int strcmp(const char *, const char *), memcmp(const void *, const void *, size_t);
 extern size_t strlen(const char *), fread(void *, size_t, size_t, File *),
     fwrite(const void *, size_t, size_t, File *);
@@ -117,6 +118,11 @@ int main(int argc, char **argv) {
     CHECK(fputs("libc:slow", __stdoutp) >= 0);
     __stdoutp->w--;
     CHECK(__swbuf('\n', __stdoutp) == '\n');
+    int parsed_i = 0;
+    char parsed_s[16] = {0};
+    double parsed_d = 0.0;
+    int scanned = sscanf("99 apple 4.5", "%d %15s %lf", &parsed_i, parsed_s, &parsed_d);
+    CHECK(scanned == 3 && parsed_i == 99 && !strcmp(parsed_s, "apple") && parsed_d == 4.5);
     CHECK(puts("libc:locale, stdio, varargs and long double passed") >= 0);
     return 0;
 }

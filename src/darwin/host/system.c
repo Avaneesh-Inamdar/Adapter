@@ -587,14 +587,10 @@ static G int db_usleep(uint32_t useconds) {
 #define TYPE_3 3
 #define NSHUFF 50
 static uint32_t randtbl[DEG_3 + 1] = {
-    TYPE_3,
-    0x991539b1, 0x16a5bce3, 0x6774a4cd, 0x3e01511e, 0x4e508aaa, 0x61048c05,
-    0xf5500617, 0x846b7115, 0x6a19892c, 0x896a97af, 0xdb48f936, 0x14898454,
-    0x37ffd106, 0xb58bff9c, 0x59e17104, 0xcf918a49, 0x09378c83, 0x52c7a471,
-    0x8d293ea9, 0x1f4fc301, 0xc3db71be, 0x39b44e1c, 0xf8a44ef9, 0x4c8b80b1,
-    0x19edc328, 0x87bf4bdd, 0xc9b240e5, 0xe9ee4b1b, 0x4382aee7, 0x535b6b41,
-    0xf3bec5da
-};
+    TYPE_3,     0x991539b1, 0x16a5bce3, 0x6774a4cd, 0x3e01511e, 0x4e508aaa, 0x61048c05, 0xf5500617,
+    0x846b7115, 0x6a19892c, 0x896a97af, 0xdb48f936, 0x14898454, 0x37ffd106, 0xb58bff9c, 0x59e17104,
+    0xcf918a49, 0x09378c83, 0x52c7a471, 0x8d293ea9, 0x1f4fc301, 0xc3db71be, 0x39b44e1c, 0xf8a44ef9,
+    0x4c8b80b1, 0x19edc328, 0x87bf4bdd, 0xc9b240e5, 0xe9ee4b1b, 0x4382aee7, 0x535b6b41, 0xf3bec5da};
 static uint32_t *rand_front = &randtbl[SEP_3 + 1];
 static uint32_t *rand_rear = &randtbl[1];
 static uint32_t *rand_state = &randtbl[1];
@@ -689,7 +685,8 @@ static G uint32_t db_arc4random_uniform(uint32_t bound) {
     uint32_t floor = (uint32_t)(0u - bound) % bound;
     for (;;) {
         uint32_t value;
-        if (BCryptGenRandom(NULL, (unsigned char *)&value, 4, BCRYPT_USE_SYSTEM_PREFERRED_RNG) < 0) {
+        if (BCryptGenRandom(NULL, (unsigned char *)&value, 4, BCRYPT_USE_SYSTEM_PREFERRED_RNG) <
+            0) {
             fprintf(stderr, "adapter-run [random]: entropy source unavailable\n");
             ExitProcess(134);
         }

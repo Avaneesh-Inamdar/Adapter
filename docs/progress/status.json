@@ -29,9 +29,11 @@
       "___swbuf",
       "__tlv_bootstrap",
       "_abort",
+      "_access",
       "_acos",
       "_acosh",
       "_arc4random",
+      "_arc4random_uniform",
       "_asin",
       "_asinh",
       "_atan",
@@ -39,8 +41,11 @@
       "_atanh",
       "_atexit",
       "_atoi",
+      "_bsearch",
       "_calloc",
       "_cbrt",
+      "_chmod",
+      "_chown",
       "_clearerr",
       "_close",
       "_cos",
@@ -73,25 +78,33 @@
       "_free",
       "_frexp",
       "_fstat$INODE64",
+      "_ftell",
       "_fwrite",
       "_getc",
       "_getenv",
+      "_geteuid",
+      "_gethostname",
+      "_getpid",
       "_gettimeofday",
+      "_getuid",
       "_gmtime_r",
       "_hypot",
       "_isatty",
       "_j0",
       "_j1",
       "_jn",
+      "_lchown",
       "_ldexp",
       "_lgamma",
       "_lgamma_r",
+      "_localtime",
       "_localtime_r",
       "_log",
       "_log10",
       "_log1p",
       "_log2",
       "_logb",
+      "_lstat$INODE64",
       "_malloc",
       "_memchr",
       "_memcmp",
@@ -100,6 +113,8 @@
       "_memmove",
       "_memset",
       "_memset_pattern16",
+      "_mkdir",
+      "_mkdtemp",
       "_mktime",
       "_modf",
       "_nextafter",
@@ -110,11 +125,17 @@
       "_pow",
       "_printf",
       "_pthread_create",
+      "_pthread_detach",
       "_pthread_equal",
       "_pthread_getspecific",
       "_pthread_join",
       "_pthread_key_create",
       "_pthread_key_delete",
+      "_pthread_mutex_destroy",
+      "_pthread_mutex_init",
+      "_pthread_mutex_lock",
+      "_pthread_mutex_trylock",
+      "_pthread_mutex_unlock",
       "_pthread_once",
       "_pthread_self",
       "_pthread_setspecific",
@@ -122,16 +143,27 @@
       "_puts",
       "_qsort",
       "_raise",
+      "_random",
       "_realloc",
       "_realpath$DARWIN_EXTSN",
       "_remainder",
+      "_rename",
+      "_rmdir",
       "_scalb",
       "_scalbln",
+      "_setegid",
       "_setenv",
+      "_seteuid",
+      "_setgid",
       "_setlocale",
+      "_setuid",
       "_sin",
       "_sinh",
+      "_sleep",
       "_snprintf",
+      "_srandom",
+      "_srandomdev",
+      "_sscanf",
       "_stat$INODE64",
       "_strchr",
       "_strcmp",
@@ -150,8 +182,14 @@
       "_tgamma",
       "_time",
       "_timegm",
+      "_umask",
+      "_unlink",
       "_unsetenv",
+      "_usleep",
+      "_utimes",
       "_vsnprintf",
+      "_vsscanf",
+      "_write",
       "_y0",
       "_y1",
       "_yn"
@@ -167,9 +205,9 @@
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 144,
+      "available": 180,
       "total": 1778,
-      "percent": 8.1
+      "percent": 10.12
     },
     {
       "name": "Other libraries",
@@ -179,9 +217,9 @@
     },
     {
       "name": "libSystem",
-      "available": 139,
+      "available": 175,
       "total": 300,
-      "percent": 46.33
+      "percent": 58.33
     },
     {
       "name": "CoreGraphics",
@@ -405,9 +443,9 @@
       "name": "AU Lab",
       "source": "additional-tools27/Additional Tools/Audio/AU Lab.app/Contents/MacOS/AU Lab",
       "sha256": "6b04e361965e2ff23a717d71d8f2c24bf4b02138ad06e09a9d2761f1322f77cf",
-      "available": 46,
+      "available": 57,
       "total": 603,
-      "percent": 7.63,
+      "percent": 9.45,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio",
@@ -2183,10 +2221,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_access"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_check_in"
         },
         {
@@ -2243,19 +2277,11 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_getpid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_getpwuid"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_getrlimit"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_getuid"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -2307,39 +2333,11 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_destroy"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_init"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_lock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_trylock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_unlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_setrlimit"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sleep"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_sprintf"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sscanf"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -2352,10 +2350,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_task_get_special_port"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_usleep"
         },
         {
           "library": "/usr/lib/libc++.1.dylib",
@@ -2643,9 +2637,9 @@
       "name": "Pixie",
       "source": "additional-tools27/Additional Tools/Graphics/Pixie.app/Contents/MacOS/Pixie",
       "sha256": "b53927c07a96489110c4985837f8dfe410027ed8e57edc0c428b478cf5976951",
-      "available": 5,
+      "available": 7,
       "total": 134,
-      "percent": 3.73,
+      "percent": 5.22,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -3080,14 +3074,6 @@
           "symbol": "___extendhfsf2"
         },
         {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_random"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_srandom"
-        },
-        {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_OBJC_CLASS_$_NSObject"
         },
@@ -3169,9 +3155,9 @@
       "name": "LogTool",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/LogTool",
       "sha256": "d79c6d3283eb3c4e4df6659a0c99aeaa8c0b8549868157f343ff142400e341ce",
-      "available": 9,
+      "available": 17,
       "total": 34,
-      "percent": 26.47,
+      "percent": 50.0,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -3200,38 +3186,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "__NSGetExecutablePath"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_chmod"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_chown"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_getuid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_lstat$INODE64"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_seteuid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_setgid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_setuid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_usleep"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -3279,9 +3233,9 @@
       "name": "Quartz Debug",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Quartz Debug",
       "sha256": "efc44dd7adf3db75a246952e6c626c0284ca9dfd981c72e0908a1e7825d1fabc",
-      "available": 23,
+      "available": 33,
       "total": 420,
-      "percent": 5.48,
+      "percent": 7.86,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -4589,10 +4543,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_chmod"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dlsym"
         },
         {
@@ -4601,15 +4551,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_getpid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_host_processor_info"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_lstat$INODE64"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -4641,26 +4583,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_destroy"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_init"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_lock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_unlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_random"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_regcomp"
         },
         {
@@ -4678,14 +4600,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_sinf"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_srandomdev"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_usleep"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -4877,9 +4791,9 @@
       "name": "Server",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Server",
       "sha256": "bb655c463178450b3889013a99ca449c6b06ca840b0a25b11a2b8c24fa410543",
-      "available": 19,
+      "available": 25,
       "total": 232,
-      "percent": 8.19,
+      "percent": 10.78,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -5511,10 +5425,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_chmod"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dlsym"
         },
         {
@@ -5523,19 +5433,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_getpid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_getuid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_host_processor_info"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_lstat$INODE64"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -5567,10 +5465,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_random"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_regcomp"
         },
         {
@@ -5588,10 +5482,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_sinf"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_srandomdev"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -5739,9 +5629,9 @@
       "name": "HomeKit Accessory Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/HomeKit Accessory Simulator.app/Contents/MacOS/HomeKit Accessory Simulator",
       "sha256": "1301a2bcf9f46d5b9ddcb4c09c1f0c4bf26f85abc434a357671a4d28a4f06a80",
-      "available": 5,
+      "available": 7,
       "total": 319,
-      "percent": 1.57,
+      "percent": 2.19,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -6421,10 +6311,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_arc4random_uniform"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dispatch_async"
         },
         {
@@ -6458,10 +6344,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_os_log_type_enabled"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sleep"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -8337,9 +8219,9 @@
       "name": "PacketLogger",
       "source": "additional-tools27/Additional Tools/Hardware/PacketLogger.app/Contents/MacOS/PacketLogger",
       "sha256": "10f290584470a84ca205fd7d27302b98d975b464381922fb0c318b4305fdc4f1",
-      "available": 17,
+      "available": 24,
       "total": 219,
-      "percent": 7.76,
+      "percent": 10.96,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -8863,22 +8745,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_ftell"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_geteuid"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_lchown"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mkdir"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_os_log_type_enabled"
         },
         {
@@ -8888,18 +8754,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_symlink"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_unlink"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_utimes"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_write"
         },
         {
           "library": "/usr/lib/libarchive.2.dylib",
@@ -9155,9 +9009,9 @@
       "name": "Printer Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/Printer Simulator",
       "sha256": "83f7b928a9cedf70c72b42740bf54c503285dabb9d5090f60747b3181e0d28b7",
-      "available": 10,
+      "available": 13,
       "total": 135,
-      "percent": 7.41,
+      "percent": 9.63,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -9476,18 +9330,6 @@
           "symbol": "_kill"
         },
         {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mkdtemp"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sleep"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sscanf"
-        },
-        {
           "library": "/usr/lib/libcups.2.dylib",
           "symbol": "_cupsDoRequest"
         },
@@ -9665,9 +9507,9 @@
       "name": "PrinterSimulatorServer",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/PrinterSimulatorServer",
       "sha256": "ee0e716d8b4bcf9ca07a3500731e6465ace72504d44b4ffbafd5953e4b39da1a",
-      "available": 53,
+      "available": 71,
       "total": 463,
-      "percent": 11.45,
+      "percent": 15.33,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -10495,10 +10337,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_access"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_asprintf"
         },
         {
@@ -10507,19 +10345,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_bsearch"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_gethostname"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_getsockname"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_getuid"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -10535,31 +10361,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_localtime"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_lstat$INODE64"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mkdir"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_posix_spawn"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_detach"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_lock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_pthread_mutex_unlock"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -10583,14 +10385,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_rename"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_rmdir"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_select$1050"
         },
         {
@@ -10603,15 +10397,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sleep"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_socket"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sscanf"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -10632,22 +10418,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_strstr"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_umask"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_unlink"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_usleep"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_write"
         },
         {
           "library": "/usr/lib/libcups.2.dylib",
@@ -13314,26 +13084,6 @@
       "target_count": 4
     },
     {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_getuid",
-      "target_count": 4
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_lstat$INODE64",
-      "target_count": 4
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_sleep",
-      "target_count": 4
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_usleep",
-      "target_count": 4
-    },
-    {
       "library": "/usr/lib/libobjc.A.dylib",
       "symbol": "_objc_setProperty_nonatomic",
       "target_count": 4
@@ -13795,22 +13545,12 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_chmod",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_dispatch_get_global_queue",
       "target_count": 3
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_dispatch_sync",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_getpid",
       "target_count": 3
     },
     {
@@ -13841,26 +13581,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_os_log_type_enabled",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_pthread_mutex_lock",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_pthread_mutex_unlock",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_random",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_sscanf",
       "target_count": 3
     },
     {
@@ -15125,11 +14845,6 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_access",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_backtrace",
       "target_count": 2
     },
@@ -15200,22 +14915,7 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mkdir",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_mktemp",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_pthread_mutex_destroy",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_pthread_mutex_init",
       "target_count": 2
     },
     {
@@ -15245,27 +14945,12 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_srandomdev",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_unlink",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_vm_deallocate",
       "target_count": 2
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_voucher_mach_msg_set",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_write",
       "target_count": 2
     },
     {
@@ -18595,27 +18280,12 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_arc4random_uniform",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_asprintf",
       "target_count": 1
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_bind",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_bsearch",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_chown",
       "target_count": 1
     },
     {
@@ -18695,22 +18365,7 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_ftell",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_funopen",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_geteuid",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_gethostname",
       "target_count": 1
     },
     {
@@ -18755,17 +18410,7 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_lchown",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_listen",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_localtime",
       "target_count": 1
     },
     {
@@ -18800,22 +18445,7 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mkdtemp",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_posix_spawn",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_pthread_detach",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_pthread_mutex_trylock",
       "target_count": 1
     },
     {
@@ -18845,27 +18475,7 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_rename",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_rmdir",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_select$1050",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_seteuid",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_setgid",
       "target_count": 1
     },
     {
@@ -18876,11 +18486,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_setsockopt",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_setuid",
       "target_count": 1
     },
     {
@@ -18896,11 +18501,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_sprintf",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_srandom",
       "target_count": 1
     },
     {
@@ -18951,16 +18551,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_task_get_special_port",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_umask",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_utimes",
       "target_count": 1
     },
     {

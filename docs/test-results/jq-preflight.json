@@ -1,10 +1,11 @@
 {
   "command": [
-    "target/debug/db-run.exe",
+    "target/debug/adapter-run.exe",
     "--check",
     "tests/fixtures/generated/reference/jq-macos-amd64"
   ],
+  "exit_code": 0,
   "executed": false,
-  "status": "blocked",
-  "reason": "Debug db-run execution denied in integration log; not retried here."
+  "stdout": "preflight passed: 1357 fixups, 1 images; execution not attempted\n",
+  "stderr": ""
 }

@@ -453,7 +453,7 @@ static G void db_assert(const char *fn, const char *file, int line, const char *
     fprintf(stderr, "adapter-run [assert]: %s, %s:%d (%s)\n", expr, file, line, fn);
     ExitProcess(134);
 }
-static G void db_stack_fail(void) {
+G void db_stack_fail(void) {
     fprintf(stderr, "adapter-run [stack]: guest stack check failed\n");
     ExitProcess(134);
 }

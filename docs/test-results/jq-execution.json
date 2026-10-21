@@ -1,16 +1,71 @@
 {
-  "run_utc": "2026-10-21T14:45:56.829949+00:00",
+  "run_utc": "2026-10-21T16:29:09.112850+00:00",
   "artifact_sha256": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0",
   "reference_mac_run": false,
   "profiles": {
     "debug": {
-      "status": "blocked",
-      "db_run_sha256": "013211501f2af8b2f32e0656b833fb8a59b0c274dcea426e32950c5016b67656"
+      "status": "passed",
+      "adapter_run_sha256": "890666961e3b0443bc6525355966955375ae1a596b0a9929387292d98bba0ec8"
     },
     "release": {
-      "status": "blocked",
-      "db_run_sha256": "378ab2f8ce8498757cb8fc41be5e7a7b3c8618bc56bdb5d1d1d16e2c7408e110"
+      "status": "passed",
+      "adapter_run_sha256": "4827cf63537f954b0a5b56c4915c59abdb9747721694992d511dc3ce66ea6b62"
     }
   },
-  "executions": []
+  "executions": [
+    {
+      "profile": "debug",
+      "command": [
+        "target/debug/adapter-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "--version"
+      ],
+      "stdin": "",
+      "exit_code": 0,
+      "stdout": "jq-1.8.2\n",
+      "stderr": ""
+    },
+    {
+      "profile": "debug",
+      "command": [
+        "target/debug/adapter-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "-c",
+        "{x:.a|map(. * 2)}"
+      ],
+      "stdin": "{\"a\":[1,2,3]}\n",
+      "exit_code": 0,
+      "stdout": "{\"x\":[2,4,6]}\n",
+      "stderr": ""
+    },
+    {
+      "profile": "release",
+      "command": [
+        "target/release/adapter-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "--version"
+      ],
+      "stdin": "",
+      "exit_code": 0,
+      "stdout": "jq-1.8.2\n",
+      "stderr": ""
+    },
+    {
+      "profile": "release",
+      "command": [
+        "target/release/adapter-run.exe",
+        "tests/fixtures/generated/reference/jq-macos-amd64",
+        "--",
+        "-c",
+        "{x:.a|map(. * 2)}"
+      ],
+      "stdin": "{\"a\":[1,2,3]}\n",
+      "exit_code": 0,
+      "stdout": "{\"x\":[2,4,6]}\n",
+      "stderr": ""
+    }
+  ]
 }
