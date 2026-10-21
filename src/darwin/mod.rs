@@ -2,6 +2,7 @@
 //! calling convention, including when compiled for the Windows MSVC target.
 pub mod callbacks;
 pub mod libc;
+pub mod sync;
 pub mod thread_state;
 pub mod threads;
 pub mod tlv;
@@ -64,6 +65,9 @@ pub fn symbol(name: &str) -> Option<u64> {
         return Some(value);
     }
     if let Some(value) = threads::symbol(name) {
+        return Some(value);
+    }
+    if let Some(value) = sync::symbol(name) {
         return Some(value);
     }
     if let Some(value) = tlv::symbol(name) {
