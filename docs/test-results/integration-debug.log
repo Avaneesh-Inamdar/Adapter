@@ -32,10 +32,12 @@ test_bad_chained_version (test_runtime.RuntimeTests.test_bad_chained_version) ..
 test_bad_fixup (test_runtime.RuntimeTests.test_bad_fixup) ... ok
 test_bad_load_command (test_runtime.RuntimeTests.test_bad_load_command) ... ok
 test_bad_tlv_offset_rejected_before_execution (test_runtime.RuntimeTests.test_bad_tlv_offset_rejected_before_execution) ... ok
+test_blocks_copy_and_release (test_runtime.RuntimeTests.test_blocks_copy_and_release) ... ok
 test_broker_job_spawn_failure_returns_unknown_service (test_runtime.RuntimeTests.test_broker_job_spawn_failure_returns_unknown_service) ... ok
 test_broker_rejects_unsupported_launchd_key (test_runtime.RuntimeTests.test_broker_rejects_unsupported_launchd_key) ... ok
 test_broker_runs_job_at_load (test_runtime.RuntimeTests.test_broker_runs_job_at_load) ... ok
 test_broker_spawns_registered_job_on_demand (test_runtime.RuntimeTests.test_broker_spawns_registered_job_on_demand) ... ok
+test_broker_spawns_xpc_listener_on_demand (test_runtime.RuntimeTests.test_broker_spawns_xpc_listener_on_demand) ... ok
 test_bundle (test_runtime.RuntimeTests.test_bundle) ... ok
 test_bundle_traversal_rejected (test_runtime.RuntimeTests.test_bundle_traversal_rejected) ... ok
 test_chained_corefoundation (test_runtime.RuntimeTests.test_chained_corefoundation) ... ok
@@ -87,8 +89,10 @@ test_unknown_config_key (test_runtime.RuntimeTests.test_unknown_config_key) ... 
 test_unknown_symbol (test_runtime.RuntimeTests.test_unknown_symbol) ... ok
 test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_architecture_dependency) ... ok
 test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ok
+test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_roundtrip) ... ok
+test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 88 tests in 7.544s
+Ran 92 tests in 10.167s
 
 OK
