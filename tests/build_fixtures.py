@@ -25,7 +25,7 @@ def run(*args):
 def build():
     OUT.mkdir(parents=True, exist_ok=True)
     exports = {
-        "System": ["puts", "strlen", "malloc", "free", "memcpy", "memcmp", "__cxa_atexit", "__cxa_finalize", "atexit", "_tlv_bootstrap", "pthread_create", "pthread_join", "pthread_self", "pthread_equal", "pthread_key_create", "pthread_key_delete", "pthread_getspecific", "pthread_setspecific", "pthread_once", "__error", "deliberately_missing", "_DefaultRuneLocale", "__stdinp", "__stdoutp", "__stderrp", "environ", "setlocale", "getenv", "setenv", "unsetenv", "__maskrune", "printf", "fprintf", "snprintf", "vsnprintf", "sscanf", "vsscanf", "strcmp", "fread", "fwrite", "getc", "fputc", "fputs", "feof", "ferror", "fflush", "fileno", "fclose", "clearerr", "__srget", "__swbuf", "nexttoward", "exit", "_NSGetExecutablePath"],
+        "System": ["puts", "strlen", "malloc", "free", "memcpy", "memcmp", "__cxa_atexit", "__cxa_finalize", "atexit", "_tlv_bootstrap", "pthread_create", "pthread_join", "pthread_self", "pthread_equal", "pthread_key_create", "pthread_key_delete", "pthread_getspecific", "pthread_setspecific", "pthread_once", "__error", "deliberately_missing", "_DefaultRuneLocale", "__stdinp", "__stdoutp", "__stderrp", "environ", "setlocale", "getenv", "setenv", "unsetenv", "__maskrune", "printf", "fprintf", "snprintf", "vsnprintf", "sscanf", "vsscanf", "strcmp", "fread", "fwrite", "getc", "fputc", "fputs", "feof", "ferror", "fflush", "fileno", "fclose", "clearerr", "__srget", "__swbuf", "nexttoward", "exit", "_NSGetExecutablePath", "dlopen", "dlsym", "dlclose", "dlerror", "_dyld_image_count"],
         "CoreFoundation": ["CFStringCreateWithCString", "CFStringGetLength", "CFStringGetCString", "CFRetain", "CFRelease"],
         "objc": ["objc_msgSend", "_objc_empty_cache"],
     }
@@ -50,6 +50,28 @@ def build():
         run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main", "-o", OUT / name, OUT / (name + ".o"), *libraries)
         if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls"]:
             run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
+    # A `dlopen` plugin and its host exercise the runtime image registry.
+    run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables", "-ffreestanding", "-c",
+        ROOT / "tests/fixtures/plugin.c", "-o", OUT / "plugin.o")
+    for name, extra in (("libplugin.dylib", []), ("libplugin-chained.dylib", ["-fixup_chains"])):
+        run(tool("ld64.lld"), *versions, *extra, "-no_uuid", "-dylib",
+            "-install_name", "@rpath/libplugin.dylib", "-o", OUT / name,
+            OUT / "plugin.o", "-L", OUT, "-lSystem")
+    run(tool("ld64.lld"), *versions, "-no_uuid", "-bundle",
+        "-o", OUT / "libplugin.bundle", OUT / "plugin.o", "-L", OUT, "-lSystem")
+    run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables", "-ffreestanding", "-c",
+        ROOT / "tests/fixtures/plugin_tls.c", "-o", OUT / "plugin_tls.o")
+    run(tool("ld64.lld"), *versions, "-no_uuid", "-dylib",
+        "-install_name", "@rpath/libplugin-tls.dylib", "-o", OUT / "libplugin-tls.dylib",
+        OUT / "plugin_tls.o", "-L", OUT, "-lSystem")
+    run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",
+        "-fno-asynchronous-unwind-tables", "-ffreestanding", "-c",
+        ROOT / "tests/fixtures/dlopen.c", "-o", OUT / "dlopen.o")
+    run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main",
+        "-o", OUT / "dlopen", OUT / "dlopen.o", "-L", OUT, "-lSystem")
+
     # A local transitive dylib graph, resolved without ever executing it.
     helper=OUT / "helper.s"
     helper.write_text(".text\n.globl _helper\n_helper:\nmovl $7, %eax\nret\n")

@@ -75,6 +75,21 @@ class RuntimeTests(unittest.TestCase):
     def test_reexported_dylib(self):
         for variant in ['classic','chained']:
             p=call('adapter-run',FIX/'dylibs'/variant/'facade');self.assertEqual(p.returncode,17,p.stderr);self.assertEqual(p.stdout,'leaf:init\nleaf:fini\n')
+    def test_dlopen_plugin_lifecycle_lookup_and_errors(self):
+        expected='plugin:init\nplugin:5:41:adapter-plugin\nplugin:fini\nplugin:init\nplugin:fini\ndl:passed\n'
+        for variant in ['libplugin.dylib','libplugin-chained.dylib','libplugin.bundle']:
+            with self.subTest(variant=variant):
+                p=call('adapter-run','--trace',FIX/'dlopen','--',FIX/variant)
+                self.assertEqual(p.returncode,0,p.stderr)
+                self.assertEqual(p.stdout,expected)
+                self.assertIn('releasing mapped images: 1',p.stderr)
+    def test_dynamic_library_is_not_an_executable(self):
+        p=call('adapter-run','--check',FIX/'libplugin.dylib');self.assertEqual(p.returncode,125);self.assertIn('PIE executable',p.stderr)
+    def test_dynamic_tls_plugin_rejected_before_constructors(self):
+        p=call('adapter-run',FIX/'dlopen','--',FIX/'libplugin-tls.dylib')
+        self.assertEqual(p.returncode,91,p.stderr)
+        self.assertIn('dynamic TLS is unsupported',p.stdout)
+        self.assertNotIn('plugin:tls-init',p.stdout)
     def test_two_level_duplicate_symbols(self):
         p=call('adapter-run','--trace',FIX/'dylibs/namespace/namespace');self.assertEqual(p.returncode,0,p.stderr);self.assertIn('releasing mapped images: 5',p.stderr)
     def test_thread_local_storage_main_thread(self):
