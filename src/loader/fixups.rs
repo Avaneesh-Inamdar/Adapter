@@ -57,7 +57,10 @@ pub fn sleb(data: &[u8], p: &mut usize) -> Result<i64> {
     Err("SLEB128 overflow".into())
 }
 fn add(a: u64, b: u64) -> Result<u64> {
-    a.checked_add(b).ok_or("dyld offset overflow".into())
+    /* dyld evaluates address deltas modulo 2^64: ld64 encodes a backwards
+     * ADD_ADDR_ULEB as a wrapped negative value. segment bounds still reject
+     * any wrapped result that leaves the segment. */
+    Ok(a.wrapping_add(b))
 }
 fn push(out: &mut Vec<Fixup>, i: &Image, segment: usize, offset: u64, kind: Kind) -> Result<()> {
     let s = i
@@ -230,4 +233,13 @@ pub fn plan(i: &Image) -> Result<Vec<Fixup>> {
     bind(i, i.dyld.bind, false, &mut out)?;
     bind(i, i.dyld.lazy_bind, true, &mut out)?;
     Ok(out)
+}
+#[cfg(test)]
+mod tests {
+    use super::add;
+    #[test]
+    fn dyld_add_is_modular() {
+        assert_eq!(add(0x350a8, u64::MAX - 8207).unwrap(), 0x33098);
+        assert_eq!(add(1, 2).unwrap(), 3);
+    }
 }

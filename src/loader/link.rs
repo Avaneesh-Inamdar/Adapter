@@ -37,6 +37,9 @@ pub struct Program {
 pub fn adapter_symbol(library: &str, symbol: &str) -> Option<u64> {
     match library {
         "/usr/lib/libSystem.B.dylib" | "/usr/lib/libSystem.dylib" => crate::darwin::symbol(symbol),
+        /* libiconv is a dependency of many Rust programs; their imports resolve
+         * through libSystem, so this adapter currently exposes no symbols. */
+        "/usr/lib/libiconv.2.dylib" => None,
         "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
         | "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" => {
             crate::frameworks::corefoundation::symbol(symbol)
