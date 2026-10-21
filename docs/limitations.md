@@ -8,7 +8,7 @@
 | Darwin system calls / Mach services | No syscall interception, kernel personality, Mach port namespace or bootstrap server | Controlled syscall and Mach message probes with send/receive rights |
 | Service management and XPC | `launchd` jobs, on-demand activation and XPC are absent; `fork`/`exec` fail | A broker/service consumer and a real libxpc client/server pair |
 | TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming, normal/recursive mutexes, condition variables and C++ thread-exit destructors verified | Cancellation, process-shared condition variables and reference-Mac ordering |
-| Dynamic libraries | Local Intel graph execution and reexports verified; cycles rejected; no runtime `dlopen`/`dlclose`; `dlsym` covers adapter symbols only | Load/unload, symbol-scope and constructor/destructor consumers; cyclic initialization, weak/interposed exports, resolver functions |
+| Dynamic libraries | Local Intel graph execution, reexports and runtime `dlopen`/`dlclose` of classic/chained/bundle plugins verified; cycles rejected; close runs finalizers but never unmaps; no dynamic TLS, cross-group sharing, `RTLD_NEXT` or interposition | True unload, TLS-bearing and cyclic plugins, symbol interposition and a real plugin consumer |
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
 | Modern dyld variants | Chained formats restricted; no weak/flat binding | Real target-specific encodings + negative regression corpus |
 | ABI differences | SysV calls plus measured printf-family varargs and x87 argument adapters | General aggregates/vectors, wide/positional/long-double formatting, exception/unwind interaction |
@@ -40,8 +40,8 @@ unsupported. Direct environment-array mutation is unverified.
 
 Condition variables exist in-process, but a condattr marked process-shared does
 not enable cross-process waiting because the host object is process-local.
-Networking, resource lookup APIs, fork/exec, security services, Metal, AppKit
-event loops, and runtime dlopen are absent. Mach ports and send/receive rights,
+Networking, resource lookup APIs, fork/exec, security services, Metal and AppKit
+event loops are absent. Mach ports and send/receive rights,
 the bootstrap namespace, `launchd` job management and XPC are also absent; they
 are not substitutes for POSIX sockets or CRT process APIs. A broker daemon that
 maps ports to Windows named pipes is a recorded design hypothesis, not an
@@ -65,6 +65,18 @@ in the same pass. The `__cxa_thread_atexit` spelling, exception-driven
 unwinding, pthread cancellation cleanup and Darwin's exact ordering between
 key destructors and TLS destructors are not established. XSAVE state over 16 KiB
 causes a controlled rejection for programs using TLV templates.
+
+Runtime `dlopen` maps classic, chained and MH_BUNDLE Intel images and runs their
+constructors. `dlclose` drains that group's `__cxa_atexit` callbacks and image
+finalizers but deliberately never unmaps memory, because retained guest pointers
+are not tracked; `RTLD_NODELETE` therefore has no distinct effect. Images with
+dynamic TLS are rejected before constructors, `@rpath`/`@loader_path`/
+`@executable_path` arguments are not expanded, and loading a dylib that is
+already a dependency of another active group is rejected rather than shared.
+`RTLD_NEXT`, `RTLD_SELF`, `dladdr`, symbol interposition, cyclic initialization
+and ObjC class registration are absent. Handles are adapter-defined process-local
+values, not Darwin dyld pointers. `RTLD_LAZY` and `RTLD_NOW` produce the same
+eager binding because no lazy resolver exists.
 
 The archive tools create fresh output directories, copy only chosen regular
 files, record symlink targets without creating links, bound chunk sizes, and

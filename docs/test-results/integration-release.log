@@ -44,7 +44,10 @@ test_dependency_bad_callback_prevents_all_initializers (test_runtime.RuntimeTest
 test_dependency_cycle_fails_before_constructors (test_runtime.RuntimeTests.test_dependency_cycle_fails_before_constructors) ... ok
 test_dependency_graph (test_runtime.RuntimeTests.test_dependency_graph) ... ok
 test_dependency_missing_import_prevents_all_initializers (test_runtime.RuntimeTests.test_dependency_missing_import_prevents_all_initializers) ... ok
+test_dlopen_plugin_lifecycle_lookup_and_errors (test_runtime.RuntimeTests.test_dlopen_plugin_lifecycle_lookup_and_errors) ... ok
 test_dylib_constructors_destructors_and_shared_data (test_runtime.RuntimeTests.test_dylib_constructors_destructors_and_shared_data) ... ok
+test_dynamic_library_is_not_an_executable (test_runtime.RuntimeTests.test_dynamic_library_is_not_an_executable) ... ok
+test_dynamic_tls_plugin_rejected_before_constructors (test_runtime.RuntimeTests.test_dynamic_tls_plugin_rejected_before_constructors) ... ok
 test_entry_must_be_executable (test_runtime.RuntimeTests.test_entry_must_be_executable) ... ok
 test_execute_arm64_rejected (test_runtime.RuntimeTests.test_execute_arm64_rejected) ... ok
 test_exit_callback_filter_order_and_once (test_runtime.RuntimeTests.test_exit_callback_filter_order_and_once) ... ok
@@ -78,6 +81,6 @@ test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_archite
 test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ok
 
 ----------------------------------------------------------------------
-Ran 77 tests in 6.476s
+Ran 80 tests in 5.978s
 
 OK

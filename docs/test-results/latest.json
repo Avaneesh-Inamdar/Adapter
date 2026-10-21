@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-21T17:31:35.912323+00:00",
+  "run_utc": "2026-10-21T17:49:13.093507+00:00",
   "all_passed": true,
   "stages": [
     {
@@ -12,7 +12,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.187,
+      "seconds": 0.203,
       "log": "format.log"
     },
     {
@@ -28,7 +28,10 @@
         "tests/fixtures/libc.c",
         "tests/fixtures/file_time.c",
         "tests/fixtures/condvars.c",
-        "tests/fixtures/cxx_tls.cpp"
+        "tests/fixtures/cxx_tls.cpp",
+        "tests/fixtures/plugin.c",
+        "tests/fixtures/plugin_tls.c",
+        "tests/fixtures/dlopen.c"
       ],
       "exit_code": 0,
       "seconds": 0.078,
@@ -46,7 +49,7 @@
         "warnings"
       ],
       "exit_code": 0,
-      "seconds": 0.235,
+      "seconds": 0.219,
       "log": "clippy.log"
     },
     {
@@ -57,7 +60,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.265,
+      "seconds": 0.375,
       "log": "rust-tests.log"
     },
     {
@@ -68,7 +71,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.079,
+      "seconds": 0.078,
       "log": "debug-build.log"
     },
     {
@@ -78,7 +81,7 @@
         "tools/fetch_jq.py"
       ],
       "exit_code": 0,
-      "seconds": 0.093,
+      "seconds": 0.109,
       "log": "reference-artifact.log"
     },
     {
@@ -88,7 +91,7 @@
         "tools/fetch_ripgrep.py"
       ],
       "exit_code": 0,
-      "seconds": 0.11,
+      "seconds": 0.094,
       "log": "reference-ripgrep.log"
     },
     {
@@ -98,7 +101,7 @@
         "tools/fetch_jq_tests.py"
       ],
       "exit_code": 0,
-      "seconds": 0.156,
+      "seconds": 0.141,
       "log": "reference-test-data.log"
     },
     {
@@ -108,7 +111,7 @@
         "tests/build_fixtures.py"
       ],
       "exit_code": 0,
-      "seconds": 3.422,
+      "seconds": 2.953,
       "log": "fixtures.log"
     },
     {
@@ -123,7 +126,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 0.25,
+      "seconds": 0.312,
       "log": "archive-tests.log"
     },
     {
@@ -138,7 +141,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 6.625,
+      "seconds": 6.469,
       "log": "integration-debug.log"
     },
     {
@@ -150,7 +153,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 3.703,
+      "seconds": 0.063,
       "log": "release-build.log"
     },
     {
@@ -165,7 +168,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 6.594,
+      "seconds": 6.093,
       "log": "integration-release.log"
     },
     {
@@ -175,7 +178,7 @@
         "tools/report_results.py"
       ],
       "exit_code": 0,
-      "seconds": 0.343,
+      "seconds": 0.375,
       "log": "compatibility-report.log"
     }
   ]

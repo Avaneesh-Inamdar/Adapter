@@ -55,8 +55,8 @@ and three `T` before `Mcxx:done\n`, and one `T` after it.
 
 ## Verification
 
-The current run passed **110 distinct tests: 24 Rust, nine archive and 77
-integration.** All 77 integration tests also pass against the release build.
+The milestone run passed **110 distinct tests: 24 Rust, nine archive and 77
+integration.** All 77 integration tests also passed against the release build.
 The two new fixtures run in both classic and chained forms; the existing jq and
 ripgrep suites remain in the same run. `cargo fmt`, Clippy with `-D warnings`,
 and the native `clang-format` check are clean.

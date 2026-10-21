@@ -11,7 +11,7 @@ general macOS application compatibility is established.
 | FAT64 selection | Yes | Synthetic selection unit test | No universal FAT64 application execution fixture yet |
 | Malformed/truncated inputs | Bounded checks | Rust tests, mutation probe, integration negatives | No security-hardening certification |
 | Dependency graph / install names / rpaths | Yes | Local/transitive graphs, missing library, adapter graph | Cycles rejected |
-| Intel dylib execution / exports / reexports | Yes | Classic/chained three-image consumers, facade and duplicate-name probes | No weak coalescing, resolver exports or runtime dlopen |
+| Intel dylib execution / exports / reexports | Yes | Classic/chained three-image consumers, facade and duplicate-name probes, runtime plugins | No weak coalescing, resolver exports, interposition or cross-group dependency sharing |
 | Windows mapping / SysV entry / imports | Yes | return37, hello, ABI and libc fixtures, original jq | Supported Intel PIE/load-command subset |
 | Classic dyld rebases and pointer binds | Yes | hello, CF probes | No weak/interposed/flat namespaces |
 | Chained fixups / offset initializers | Partial | hello-chained, CF-chained | Only emitted subset tested |
@@ -21,7 +21,7 @@ general macOS application compatibility is established.
 | pthread lifecycle / thread state | Partial | Create/join/self/equal, once, keys/destructors, errno isolation, stack-size attributes, naming and thread IDs, normal/recursive mutexes, condition variables and condattrs | No cancellation, errorcheck/adaptive mutexes or process-shared condition variables |
 | CF immutable UTF-8 strings | Five functions | Guest UTF-8/UTF-16 and ownership fixture | Runtime-created opaque strings only |
 | Bundle executable discovery | Yes | Hello.app, traversal rejection | Resource APIs/GUI absent |
-| Runtime dyld loading | Absent | — | No `dlopen`/`dlclose`; `dlsym` searches adapter symbols only |
+| Runtime dyld loading | Partial | A Mach-O consumer loads classic, chained and MH_BUNDLE plugins after startup, resolves function/data/string exports through handles, observes constructors/destructors, duplicate and `RTLD_NOLOAD` handles, `RTLD_LOCAL`/`FIRST` scope and per-thread one-shot errors | Images are never unmapped; dynamic TLS and `@rpath` arguments rejected before constructors; no `RTLD_NEXT`/`RTLD_SELF`, `dladdr`, dependency sharing across groups, interposition or ObjC registration |
 | Mach IPC / bootstrap / launchd / XPC | Absent | — | Separate dependency-ordered tracks; no POSIX substitute is claimed |
 | Objective-C | Detection only | Cross-linked metadata probe + Apple apps | Not executable |
 | jq macOS amd64 1.8.2 | Demonstrated tested workflows | 13 CLI methods plus the pinned upstream `jq.test` suite: 550/550 with module fixtures, debug and release | No reference-Mac comparison; suite excludes upstream shell/`man.test` harnesses |
@@ -52,6 +52,8 @@ CFIndex and size_t are 64-bit even though Windows C long is 32-bit.
 | CFStringGetLength | Counts UTF-16 code units | Runtime-owned handles only; no NSString bridging | BMP + surrogate-pair check |
 | CFStringGetCString | Copies UTF-8 plus NUL if buffer fits | Returns false for small buffer/unsupported encoding | Exact fit and one-byte-short buffer |
 | CFRetain / CFRelease | Count ownership of runtime-created strings | No Apple constant strings, custom allocator, other CF types, or toll-free bridging | Retain/release/use/release |
+| dlopen / dlclose | Maps an Intel dylib or bundle after startup, validates every import, runs constructors in dependency order and finalizers at close; duplicate canonical paths return the same refcounted handle; `RTLD_LOCAL`, `GLOBAL`, `NOLOAD` and `FIRST` are honored; `RTLD_NODELETE` is accepted because images always remain mapped | `@rpath`/`@loader_path`/`@executable_path` arguments are rejected; dynamic TLS, dependency overlap with another active group and handle aliasing of a startup dependency are rejected before constructors; close never unmaps code | Host consumer over classic, chained and bundle plugins; TLS rejection and non-executable input negatives |
+| dlsym / dlerror | Prepends `_` to C names; a handle searches its root, then dependencies unless `RTLD_FIRST`, then its adapter libraries; `RTLD_DEFAULT` searches active global groups in load order; `RTLD_MAIN_ONLY` searches main-image public exports; errors are per-thread and returned once | No `RTLD_NEXT`/`RTLD_SELF`, `dladdr`, symbol interposition or search of inactive groups; adapter groups expose only registered adapter symbols | Plugin lookup of function, data and string exports; scope, stale-handle, missing-file and one-shot error checks |
 | __cxa_atexit / __cxa_finalize / atexit / exit | Executable callbacks, DSO filter, reverse registration order; exit flushes host streams | Explicit exit terminates worker after callbacks; full signals/termination semantics absent | Cross-image order, finalize-twice and explicit exit/flush consumers |
 | pthread_create / pthread_join | Own host threads and bridge guest start/return pointers | Darwin attributes accepted for stack size (16 KiB to 512 MiB); 128 running threads / 4096 total starts; Darwin error numbers | Eight threads, error returns and return values; ripgrep's worker pool |
 | pthread_attr_init/destroy/setstacksize | Validated opaque Darwin-attribute prefix and host stack reservation | Only stack size is honored; guard-size and scheduling attributes are not modelled | Attribute unit tests; ripgrep thread creation |
@@ -122,6 +124,8 @@ an explicit terminating diagnostic; it is not a lazy linker. All supported lazy
 slots are bound eagerly before guest execution.
 
 Latest commands/results are recorded in [test-results/latest.json](test-results/latest.json).
-The current run passed all 14 verification stages, including 75 integration
+The current run passed all 14 verification stages, including 80 integration
 tests in both profiles. The latest iteration and remaining limits are described
-in [jq-libc-results](jq-libc-results.md) and [ripgrep-results](ripgrep-results.md).
+in [jq-libc-results](jq-libc-results.md),
+[ripgrep-results](ripgrep-results.md) and
+[dynamic-loading-results](dynamic-loading-results.md).

@@ -1,6 +1,6 @@
 Selected: Xcode.app/Contents/MacOS/Xcode (10 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmprho2ilvs\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmptzq0jqbq\\test.xip",
   "source_size": 674,
   "source_sha256": "12672b5c294034b1d92a7a20dd7ead3fa7c6d14acc72a283c7f6a0d9aa4d8801",
   "content_sha1_verified": true,
@@ -12,11 +12,11 @@ Selected: Xcode.app/Contents/MacOS/Xcode (10 bytes)
   "file_data_bytes": 10,
   "decoded_bytes": 206,
   "pbzx_blocks": 1,
-  "seconds": 0.0
+  "seconds": 0.01
 }
 Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmplmy9txdt\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpp16n9cug\\test.xip",
   "source_size": 706,
   "source_sha256": "ebf62e7ec1099deaf668ee286cb9db82d68049c1096807cb902910ddb488488d",
   "content_sha1_verified": true,
@@ -28,7 +28,7 @@ Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
   "file_data_bytes": 24,
   "decoded_bytes": 382,
   "pbzx_blocks": 1,
-  "seconds": 0.02
+  "seconds": 0.03
 }
 {
   "source_sha256": "ebf62e7ec1099deaf668ee286cb9db82d68049c1096807cb902910ddb488488d",
@@ -42,7 +42,7 @@ Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
 }
 Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpi9ayjo9e\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpu7_03hg8\\test.xip",
   "source_size": 696,
   "source_sha256": "383439cf39de8e9a37a09c97c36d627f36b40ac96631ebb54cdc07f7a3445696",
   "content_sha1_verified": true,
@@ -54,11 +54,11 @@ Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
   "file_data_bytes": 24,
   "decoded_bytes": 304,
   "pbzx_blocks": 1,
-  "seconds": 0.01
+  "seconds": 0.0
 }
 Selected: Xcode.app/Contents/MacOS/Xcode (42 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpv9ijic19\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpl5tkxxn5\\test.xip",
   "source_size": 678,
   "source_sha256": "4a93d4affff6dc8d0e1a0d007c19a760863dcc12242d0818a50db746c600a408",
   "content_sha1_verified": true,
@@ -70,7 +70,7 @@ Selected: Xcode.app/Contents/MacOS/Xcode (42 bytes)
   "file_data_bytes": 42,
   "decoded_bytes": 238,
   "pbzx_blocks": 1,
-  "seconds": 0.0
+  "seconds": 0.02
 }
 {
   "source_sha256": "4a93d4affff6dc8d0e1a0d007c19a760863dcc12242d0818a50db746c600a408",
@@ -93,6 +93,6 @@ test_traversal_rejected (test_archives.ArchiveTests.test_traversal_rejected) ...
 test_truncated_xar (test_archives.ArchiveTests.test_truncated_xar) ... ok
 
 ----------------------------------------------------------------------
-Ran 9 tests in 0.141s
+Ran 9 tests in 0.197s
 
 OK

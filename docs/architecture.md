@@ -31,14 +31,17 @@ Module boundaries:
 | `src/loader/tls.rs` | TLV descriptor/template bounds and alignment validation |
 | `src/platform/windows.rs` | VirtualAlloc/VirtualProtect, copying, SG_READ_ONLY final protections, instruction-cache flush, RAII release |
 | `src/runtime` | Preflight, import availability, relocation, initialization, entry invocation, worker timeout |
-| `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, TLV ABI bridge, Darwin stack probe and exit callbacks |
+| `src/runtime/dynamic.rs` | Post-startup `dlopen` groups, reference-counted handles, export snapshots, `dlsym` scope, per-image close finalization |
+| `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, `dlfcn` and TLV ABI bridges, Darwin stack probe and exit callbacks |
 | `src/darwin/host` | C adapters for libSystem stdio/files/stat/time/locale, signals, process stubs, dispatch, mmap and directory iteration |
 | `src/frameworks/corefoundation.rs` | Five opaque immutable-string/ownership adapters |
 
 Execution stages: discover -> inspect graph -> reject unsupported requirements
 -> decode/resolve fixups -> reserve/commit/copy -> apply fixups -> validate
 initializer pointers -> install final protections -> initialize -> invoke
-LC_MAIN -> join owned threads -> finalize -> unmap. Errors include their failing stage/symbol.
+LC_MAIN -> join owned threads -> finalize -> unmap. A guest `dlopen` repeats
+preflight, mapping, relocation and initialization for a new image group without
+releasing the startup graph. Errors include their failing stage/symbol.
 The graph's `executable_by_current_runtime` flag is only structural eligibility;
 `adapter-run --check` additionally validates opcode decoding and bound symbols. A
 passed preflight is not an execution or application compatibility claim.
@@ -90,6 +93,42 @@ All imports resolve before mapping; every image is relocated and every callback
 validated before any constructor runs. Constructors follow dependency order,
 and process exit registrations run in reverse registration order before image
 finalizers. There is no fallback to loading macOS imports as Windows DLLs.
+
+## Runtime dynamic loading
+
+`dlfcn` adapters forward to a per-worker registry initialized with snapshots of
+the startup graph. `dlopen` either selects an adapter-only group by exact
+install name, or resolves a path (absolute, `/C/...`-style, relative, leaf name
+in the working directory, sysroot `usr/lib`, or configured search directories)
+and runs the same library preparation, mapping, relocation and import checks as
+startup. A canonical path that is already open returns the existing handle with
+an incremented reference count; `RTLD_NOLOAD` succeeds only in that case. A
+requested image that is already a dependency of another active group, or a
+dependency that overlaps one, is rejected instead of being shared or aliased.
+
+Each open group records the root image, its root-first dependency order, its
+adapter libraries, `RTLD_GLOBAL`/`RTLD_LOCAL` and `RTLD_FIRST` flags, and a
+mapped-program pointer. Public exports are snapshotted as absolute relocated
+addresses, so `dlsym` never borrows the loaded program after publication.
+Executable ranges are added to the exit-callback validator before the handle is
+published; constructors run after publication and use the ordinary guest
+initializer path. `dlsym(handle, name)` prefixes `_` and searches the root, then
+dependencies unless `RTLD_FIRST`, then that group's adapter libraries.
+`RTLD_DEFAULT` searches active global groups in load order, and
+`RTLD_MAIN_ONLY` searches only the main executable's public exports.
+`dlerror` stores a per-thread message that is returned once; a subsequent call
+returns null until another failure.
+
+`dlclose` decrements the reference count. At zero it marks the group inactive
+and, outside the registry lock, drains the group's `__cxa_atexit` registrations
+per image (their DSO argument is the image header) and then runs image
+finalizers in reverse order. Mapping is deliberately retained: guests may have
+copied function or data pointers, and the first slice does not track them.
+Groups still open at process teardown run their finalizers in reverse creation
+order. Dynamic TLS, `@rpath` expansion, `RTLD_NEXT`/`RTLD_SELF`, `dladdr`,
+interposition and ObjC registration remain unsupported. See
+[the evidence](reverse-engineering/dynamic-loading-evidence.md) and
+[the results](dynamic-loading-results.md).
 
 ## Darwin thread support
 
