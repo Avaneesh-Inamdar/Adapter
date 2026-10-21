@@ -3,7 +3,12 @@
 The guest ABI is a shared interface between subsystems. A host implementation
 with the same function name is not sufficient. The contracts in
 [contracts.json](contracts.json) define the currently implemented slices;
-[objc-abi.md](objc-abi.md) specifies the Objective-C slice in detail (contract v2 adds relative method lists and startup categories).
+[objc-abi.md](objc-abi.md) specifies the Objective-C slice in detail (contract v2
+adds relative method lists and startup categories). The threads contract is at
+version 2: it now declares the public `pthread_mutex_t`, `pthread_cond_t`,
+`pthread_attr_t` and `pthread_once_t` sizes that the same-binary threading
+suite exercises, and its unsupported list is narrowed to what remains
+unverified.
 
 Before extending a subsystem:
 

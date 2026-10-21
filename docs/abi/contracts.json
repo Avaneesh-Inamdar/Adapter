@@ -172,8 +172,8 @@
     },
     {
       "id": "threads",
-      "version": 1,
-      "scope": "TLV, pthread lifecycle, keys, once and synchronization subset",
+      "version": 2,
+      "scope": "TLV, pthread lifecycle, keys, once, synchronization subset and the public static-initializer layouts",
       "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
       "implementation": [
         "src/darwin/threads.rs",
@@ -183,7 +183,8 @@
       "tests": [
         "tests/fixtures/thread_state.c",
         "tests/fixtures/condvars.c",
-        "tests/fixtures/cxx_tls.cpp"
+        "tests/fixtures/cxx_tls.cpp",
+        "tests/differential/thread_cases.c"
       ],
       "layouts": [
         {
@@ -207,16 +208,85 @@
               "size": 8
             }
           ]
+        },
+        {
+          "name": "pthread_mutex_t",
+          "size": 64,
+          "align": 8,
+          "fields": [
+            {
+              "name": "__sig",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "opaque",
+              "offset": 8,
+              "size": 56
+            }
+          ]
+        },
+        {
+          "name": "pthread_cond_t",
+          "size": 48,
+          "align": 8,
+          "fields": [
+            {
+              "name": "__sig",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "opaque",
+              "offset": 8,
+              "size": 40
+            }
+          ]
+        },
+        {
+          "name": "pthread_attr_t",
+          "size": 64,
+          "align": 8,
+          "fields": [
+            {
+              "name": "__sig",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "opaque",
+              "offset": 8,
+              "size": 56
+            }
+          ]
+        },
+        {
+          "name": "pthread_once_t",
+          "size": 16,
+          "align": 8,
+          "fields": [
+            {
+              "name": "__sig",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "opaque",
+              "offset": 8,
+              "size": 8
+            }
+          ]
         }
       ],
       "ownership": "Runtime owns thread tokens and per-thread storage; mutex/condition host objects are process-local.",
       "callbacks": "Start routines, key destructors and TLV destructors are SysV64; teardown permits bounded destructor re-registration.",
       "errors": "pthread APIs return Darwin error numbers; condition timedwait uses absolute guest deadlines.",
       "lifecycle": "Join owned threads before mapping teardown; run thread-local destruction and main-session cleanup.",
-      "unsupported": "No cancellation, process-shared waiting, shared-cache TLV or complete Darwin ordering proof.",
+      "unsupported": "No cancellation, process-shared waiting, shared-cache TLV, robustness or scheduling-policy attributes, and no complete Darwin ordering proof; the same-binary suite covers the synchronized families only.",
       "sources": [
         "docs/thread-lifecycle-results.md",
-        "https://github.com/apple-oss-distributions/libpthread"
+        "https://github.com/apple-oss-distributions/libpthread",
+        "docs/differential-testing.md"
       ]
     },
     {
