@@ -102,6 +102,11 @@ state buffers aligned. This preserves a stricter ABI than ordinary sysv64;
 linked assembly probes retain GPR, SSE and AVX values across TLV access. Shared
 cache/preinitialized thunks and TLV initialization functions remain unsupported.
 
+The worker links with an 8 MiB main-thread stack reserve (`/STACK:8388608`) to
+match Darwin's default. Windows MSVC otherwise reserves 1 MiB; jq's upstream
+recursion tests exhausted that smaller stack. This is a measured environment
+match, not proof that every guest stack workload is equivalent.
+
 Owned Windows-hosted threads invoke guest start functions using SysV. Join
 returns their pointer-width results. A running-thread count prevents mappings
 being released even if another guest thread has consumed the corresponding
@@ -139,12 +144,16 @@ See [the ABI evidence](reverse-engineering/jq-libc-abi.md),
 
 ## Evidence and platform choices
 
-REA CLI 6.4.0 is installed. The current client has no REA MCP registration and
-no configured Ghidra/Hopper/IDA engine. Actual REA attempts returned a Windows
-host limitation for inspect_macho, a root-only DMG inventory, and unsupported
+REA CLI 6.4.0 is installed. The current client has no REA MCP registration.
+Ghidra 12.1.4 was installed from its SHA-256-verified GitHub release and is
+reported healthy by `rea doctor` (Java 21), but the Windows provider rejects
+Mach-O targets with `target_format_unsupported` ("Windows Ghidra P0 accepts PE
+targets only"). Hopper is unavailable on win32 and no IDA registration exists.
+Consequently Adapter's Mach-O evidence remains its own bounded inspector plus
+LLVM header/disassembly output; no REA decompilation of the target is claimed.
+Earlier REA attempts also returned a root-only DMG inventory and unsupported
 XIP. Portable REA directory inventories succeeded on selected extracted trees.
-LLVM supplied independent header/disassembly evidence; this is not REA
-decompilation. See the retained evidence in `docs/reverse-engineering/`.
+See the retained evidence in `docs/reverse-engineering/`.
 
 The supplied Xcode 27 launcher, compiler and sampled command tools are ARM64
 only, while selected Additional Tools contain x86-64 slices. Keep ARM translation

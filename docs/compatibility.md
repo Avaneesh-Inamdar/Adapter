@@ -22,7 +22,7 @@ general macOS application compatibility is established.
 | CF immutable UTF-8 strings | Five functions | Guest UTF-8/UTF-16 and ownership fixture | Runtime-created opaque strings only |
 | Bundle executable discovery | Yes | Hello.app, traversal rejection | Resource APIs/GUI absent |
 | Objective-C | Detection only | Cross-linked metadata probe + Apple apps | Not executable |
-| jq macOS amd64 1.8.2 | Demonstrated tested workflows | Earlier 13-test debug/release run, original pinned artifact; final launches blocked by host policy | No reference-Mac comparison or full jq-suite claim |
+| jq macOS amd64 1.8.2 | Demonstrated tested workflows | 13 CLI methods plus the pinned upstream `jq.test` suite: 550/550 with module fixtures, debug and release | No reference-Mac comparison; suite excludes upstream shell/`man.test` harnesses |
 | Xcode 27.0 build 27A266 | Inspection only | XAR Content checksum, ARM64 header, startup disassembly | Not executable / not compatible |
 | Sampled CLT 27 executables | Inspection only | 13 ARM64-only images | Not executable / not compatible |
 | Additional Tools / Icon Composer | Inspection only | Intel/ARM slices and actual dependencies | Not executable / not compatible |

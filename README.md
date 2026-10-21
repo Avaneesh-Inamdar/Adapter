@@ -54,21 +54,21 @@ When adding a new target, see the inventory refresh command in
 | TLS and threads | Per-image/per-thread TLV storage, create/join, keys/destructor passes, once and errno | [Darwin modules](src/darwin), [thread probes](tests/fixtures/thread_state.c) |
 | libc | C/POSIX rune data, separate Darwin FILE objects, binary I/O, printf-family varargs, UTF-8 paths/stat64, environment, selected time/string/math APIs | [Native adapters](src/darwin/host), [libc tests](tests/integration/test_libc.py) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
-| Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
+| Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 
-**Test state:** an earlier run passed 89 distinct tests: 17 Rust, nine archive
-and 63 integration tests. The 63 integration tests also passed in release.
-The final rerun was blocked by Windows Application Control, error 4551, after
-the last locale/FILE argument checks. Builds and lint passed; those blocked
-runtime checks have not been verified on the final revision.
+**Test state:** the current run passed 90 distinct tests: 17 Rust, nine archive
+and 64 integration tests. All 64 integration tests also passed in release. The
+integration run includes the unmodified jq binary executing jq's pinned upstream
+`tests/jq.test` suite with its module fixtures (550/550). This is Windows-side
+evidence; no reference-Mac run exists.
 [Current run](docs/test-results/latest.json) ·
-[Previous passing summary](docs/test-results/summary-previous-pass.json).
+[Summary](docs/test-results/summary.json).
 
 ## Work to do
 
 | Work | Current gap | Start here | Needed evidence |
 | --- | --- | --- | --- |
-| Test execution | Local policy blocks the built runtime and Rust test executables | [Verifier](tools/verify.py), [current logs](docs/test-results/latest.json) | Run the final revision on a host whose policy permits the artifacts; preserve blocked/failing results |
+| Reference-Mac comparison | All runtime evidence is Windows-side; generated probes and jq outputs have not been compared with macOS | [Verifier](tools/verify.py), [current logs](docs/test-results/latest.json) | Same-artifact output and error comparisons on a real Mac |
 | TLS lifecycle | No C++ TLV initialization/destruction or shared-cache TLVs | [TLS planning](src/loader/tls.rs), [TLV runtime](src/darwin/tlv.rs) | Multi-image/thread initialization and destructor-order consumer |
 | Synchronization | No general pthread mutex/condition APIs, cancellation or nondefault attributes | [Thread state](src/darwin/thread_state.rs), [threads](src/darwin/threads.rs) | Darwin layout evidence, contention and lifetime tests |
 | Dynamic loading | No runtime dlopen/dlsym/dlclose, cyclic initialization, weak coalescing or resolver exports | [Linker](src/loader/link.rs), [loader](src/loader/mod.rs) | Load/unload and symbol-scope consumers before expanding support |

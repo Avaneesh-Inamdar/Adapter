@@ -1,3 +1,4 @@
+Verified jq-1.8.2 test data: 20 files, 188d03d029e8242a366d2286f07638924afe997120f6057e606f3c7a33984312
 test_environment_and_cli_variables (test_jq.JqTests.test_environment_and_cli_variables) ... ok
 test_filter_file_and_module_search (test_jq.JqTests.test_filter_file_and_module_search) ... ok
 test_large_stream_and_reduction (test_jq.JqTests.test_large_stream_and_reduction) ... ok
@@ -8,6 +9,7 @@ test_piped_json_transform (test_jq.JqTests.test_piped_json_transform) ... ok
 test_raw_binary_input_preserves_crlf_and_nul (test_jq.JqTests.test_raw_binary_input_preserves_crlf_and_nul) ... ok
 test_seeded_sort_group_and_arithmetic (test_jq.JqTests.test_seeded_sort_group_and_arithmetic) ... ok
 test_unicode_regex_and_escaping (test_jq.JqTests.test_unicode_regex_and_escaping) ... ok
+test_upstream_test_suite (test_jq.JqTests.test_upstream_test_suite) ... ok
 test_utc_time_parse_format_and_negative_epoch (test_jq.JqTests.test_utc_time_parse_format_and_negative_epoch) ... ok
 test_utf8_file_slurp_and_rawfile (test_jq.JqTests.test_utf8_file_slurp_and_rawfile) ... ok
 test_version_and_help (test_jq.JqTests.test_version_and_help) ... ok
@@ -63,6 +65,6 @@ test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_archite
 test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ok
 
 ----------------------------------------------------------------------
-Ran 63 tests in 4.372s
+Ran 64 tests in 5.494s
 
 OK

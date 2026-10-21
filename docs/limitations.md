@@ -14,8 +14,9 @@
 | Runtime semantic equivalence | Probes and original jq workflows; no reference Mac | Same-artifact reference output and API error comparisons |
 | Untrusted code / parsing | Bounds/resource caps; worker timeout; not a security sandbox | Dedicated fuzzing and hardened execution isolation |
 | Apple authentication | Embedded content checksums verified where reported; signer trust unverified | Independent trusted Apple signature/certificate validation |
-| REA limitations | Portable inventories work; native tools require macOS or unconfigured engines | A supported engine/host; no invented decompiler findings |
-| Local execution policy | Final Rust-test/runtime launches denied by Windows Application Control (4551); earlier milestone passed | Execution on a host where policy permits the built artifacts; no policy bypass performed |
+| REA limitations | Portable inventories work; Ghidra is installed but the win32 provider accepts PE only; Hopper needs macOS and IDA is unconfigured | A supported engine/host; no invented decompiler findings |
+| Guest stack reserve | Worker now reserves 8 MiB like Darwin's main thread; MSVC default 1 MiB overflowed jq recursion | Deep-recursion consumers beyond jq's suite; secondary-thread stack equivalence |
+| Local execution policy | An earlier milestone's launches were denied by Windows Application Control (4551); the current full run passed without policy changes | Record any future policy blocks; no bypass performed |
 
 Unsupported executable formats include Mach-O32, swapped-endian thin files,
 ARM execution, non-PIE files, LC_UNIXTHREAD entry, encrypted/protected images,

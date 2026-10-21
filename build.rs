@@ -50,4 +50,7 @@ fn main() {
     println!("cargo:rustc-link-search=native={}", out.display());
     println!("cargo:rustc-link-lib=static=db_libc");
     println!("cargo:rustc-link-lib=bcrypt");
+    // Darwin's main thread reserves 8 MiB. MSVC's 1 MiB default overflows
+    // deep guest recursion (measured with jq's upstream test suite).
+    println!("cargo:rustc-link-arg=/STACK:8388608");
 }

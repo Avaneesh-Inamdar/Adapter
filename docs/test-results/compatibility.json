@@ -120,5 +120,16 @@
     "verified_debug": true,
     "verified_release": true,
     "compatibility_status": "listed Windows behavior verified; reference macOS unverified"
+  },
+  {
+    "target": "jq 1.8.2 upstream test suite",
+    "fixture": "reference/jq-macos-amd64",
+    "test": "test_upstream_test_suite",
+    "source": "Pinned jqlang jq-1.8.2 tests/jq.test and tests/modules, SHA-256 188d03d0...",
+    "reference_macos_verified": false,
+    "sha256": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0",
+    "verified_debug": true,
+    "verified_release": true,
+    "compatibility_status": "listed Windows behavior verified; reference macOS unverified"
   }
 ]

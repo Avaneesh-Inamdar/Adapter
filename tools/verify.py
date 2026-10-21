@@ -20,6 +20,7 @@ def verify():
         ('rust-tests',['cargo','test','--locked'],None),
         ('debug-build',['cargo','build','--locked'],None),
         ('reference-artifact',[sys.executable,'tools/fetch_jq.py'],None),
+        ('reference-test-data',[sys.executable,'tools/fetch_jq_tests.py'],None),
         ('fixtures',[sys.executable,'tests/build_fixtures.py'],None),
         ('archive-tests',[sys.executable,'-m','unittest','discover','-s','tests/unit','-v'],None),
         ('integration-debug',[sys.executable,'-m','unittest','discover','-s','tests/integration','-v'],None),

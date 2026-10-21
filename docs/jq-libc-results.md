@@ -28,26 +28,25 @@ other. Unsupported locale names and formatting families fail explicitly.
 
 ## Verification
 
-An earlier `python tools/verify.py` run passed formatting, Clippy (`-D warnings`), Rust tests,
-debug build, pinned artifact validation, Mach-O fixture generation, archive
-tests, debug integration, release build and release integration. Its passing
-summary and sample outputs are retained in
+`python tools/verify.py` passes formatting, Clippy (`-D warnings`), Rust tests,
+debug build, pinned artifact and test-data validation, Mach-O fixture
+generation, archive tests, debug integration, release build and release
+integration.
+
+The current run passed **90 distinct tests:** 17 Rust, nine archive and 64
+integration. All 64 integration tests also passed against the release build.
+The upstream jq suite is one of those 64 methods and expands to 550 assertions.
+Earlier passing summaries remain in
 [summary-previous-pass.json](test-results/summary-previous-pass.json) and
 [jq-execution-previous-pass.json](test-results/jq-execution-previous-pass.json).
 
-**89 distinct tests:** 17 Rust, nine archive and 63 integration. All 63
-integration tests passed again against the release build in that earlier run.
-
-**The final verification run is blocked by Windows Application Control.** After
-final locale selection/FILE argument validation and native formatting changes,
-the host denied executable launches with WinError/os error 4551. This also
-prevented Rust unit-test execution. The verifier records blocked stages as
-non-passing, continues independent checks, and reports per-profile evidence.
-No signing/security policy was modified. See
-[the final run](test-results/latest.json), [current summary](test-results/summary.json)
-and [the initial release block](test-results/release-policy-block-stdio.json).
-The added empty-fopen-mode assertion has compiled but could not execute in the
-final run. This host limitation is not reported as a compatibility pass.
+An intermediate revision was blocked by Windows Application Control
+(WinError/os error 4551), which also prevented Rust unit-test execution. The
+current revision completed every verification stage, including both integration
+profiles; no signing or security policy was modified. See
+[the current run](test-results/latest.json) and
+[current summary](test-results/summary.json). The historical blocked run is
+retained in [release-policy-block-stdio.json](test-results/release-policy-block-stdio.json).
 
 The 13 jq methods cover version/help, piped JSON transforms, a 6,000-record
 stream, seeded sorting/grouping, Unicode/regex/escaping, CRLF/NUL preservation,
@@ -68,6 +67,33 @@ asset `jq-macos-amd64`, 871,768 bytes, SHA-256
 `e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0`.
 Static preflight resolves 1,357 fixups in one image. Fetch/provenance is
 reproducible through `tools/fetch_jq.py`; generated/downloaded files stay ignored.
+
+## Upstream suite
+
+The published jq 1.8.2 source archive is pinned by SHA-256
+(`188d03d029e8242a366d2286f07638924afe997120f6057e606f3c7a33984312`,
+1,440,150 bytes) and `tools/fetch_jq_tests.py` extracts only `tests/jq.test` and
+`tests/modules`. Running the unchanged macOS binary with
+`-L <modules> --run-tests <jq.test>` reports:
+
+```
+550 of 550 tests passed (0 malformed, 0 skipped)
+```
+
+Both debug and release workers pass; the run is part of
+`test_upstream_test_suite`. No jq source is rebuilt and no reference-Mac output
+is compared. The suite exercises module loading, error handling, regex,
+Unicode, recursion and jq's own built-in C tests.
+
+The first run exhausted the worker stack after test 491. Windows MSVC reserves
+1 MiB for the main thread while Darwin reserves 8 MiB. `build.rs` now links
+`/STACK:8388608`; the suite then completed. This is a host-environment fix, not
+evidence that every deep-recursion workload is equivalent to macOS.
+
+REA CLI 6.4.0 with a locally installed Ghidra 12.1.4 still rejects this Mach-O
+target (`target_format_unsupported`: "Windows Ghidra P0 accepts PE targets
+only"), so the suite result is runtime evidence from Adapter itself, cross-checked
+with the pinned jq source and LLVM inspection, not REA decompilation.
 
 ## Remaining boundaries
 

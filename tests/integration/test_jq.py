@@ -9,10 +9,12 @@ import math
 import os
 from pathlib import Path
 import random
+import re
 import subprocess
+import sys
 import tempfile
 import unittest
-from test_runtime import BIN, FIX
+from test_runtime import BIN, FIX, ROOT
 
 JQ = FIX/'reference/jq-macos-amd64'
 SHA256 = 'e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0'
@@ -25,6 +27,21 @@ class JqTests(unittest.TestCase):
             raise unittest.SkipTest('run python tools/fetch_jq.py to fetch the published target')
         if hashlib.sha256(JQ.read_bytes()).hexdigest() != SHA256:
             raise AssertionError('jq reference artifact hash mismatch')
+
+    def test_upstream_test_suite(self):
+        sys.path.insert(0, str(ROOT/'tools'))
+        from fetch_jq_tests import DEST, fetch
+        fetch()
+        result = subprocess.run(
+            [str(BIN/'adapter-run.exe'), '--timeout', '120', str(JQ), '--',
+             '-L', str(DEST/'modules'), '--run-tests', str(DEST/'jq.test')],
+            capture_output=True, text=True, timeout=130)
+        self.assertEqual(result.returncode, 0, result.stderr[-4000:])
+        summary = re.search(r'(\d+) of (\d+) tests passed \(0 malformed, 0 skipped\)',
+                            result.stdout)
+        self.assertIsNotNone(summary, result.stdout[-4000:])
+        self.assertGreaterEqual(int(summary.group(2)), 500)
+        self.assertEqual(summary.group(1), summary.group(2))
 
     def jq(self, *args, data='', env=None):
         result = subprocess.run([str(BIN/'adapter-run.exe'), '--timeout', '10', str(JQ), '--', *args],

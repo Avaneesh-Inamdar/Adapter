@@ -18,6 +18,8 @@ or general macOS/Xcode compatibility is established.
   UTC/time conversions, memory/string/math adapters and explicit exit flushing.
 - [x] Execute unchanged jq 1.8.2 macOS amd64: 13 real-binary tests, plus focused
   libc consumers, passing debug and release. See [results](jq-libc-results.md).
+- [x] Pass the pinned upstream jq 1.8.2 `tests/jq.test` suite (550 tests) with its
+  module fixtures through the unchanged binary on both build profiles.
 
 ## Next acceptance gates
 

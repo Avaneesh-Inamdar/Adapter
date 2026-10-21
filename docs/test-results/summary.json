@@ -3,14 +3,14 @@
   "rust_test_status": "passed",
   "archive_tests_passed": 9,
   "integration_tests_attempted": {
-    "debug": 63,
-    "release": 63
+    "debug": 64,
+    "release": 64
   },
   "integration_status": {
     "debug": "passed",
     "release": "passed"
   },
-  "distinct_tests_passed_final": 89,
-  "jq_test_methods": 13,
+  "distinct_tests_passed_final": 90,
+  "jq_test_methods": 14,
   "reference_macos_verified": false
 }
