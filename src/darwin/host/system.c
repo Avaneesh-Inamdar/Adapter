@@ -611,8 +611,7 @@ static G int db_spawn_attr_setsigdefault(void **attributes, const uint32_t *set)
     return 0;
 }
 static G int db_posix_spawnp(int *pid, const char *file, const void **actions,
-                             const void **attributes, char *const argv[],
-                             char *const envp[]) {
+                             const void **attributes, char *const argv[], char *const envp[]) {
     (void)file;
     (void)actions;
     (void)attributes;
@@ -1439,8 +1438,8 @@ static G int db_clock_gettime(int clock_id, DbTimespec *out) {
         *out = filetime(now);
         return 0;
     }
-    case 4: /* CLOCK_MONOTONIC_RAW */
-    case 6: /* CLOCK_MONOTONIC */
+    case 4:   /* CLOCK_MONOTONIC_RAW */
+    case 6:   /* CLOCK_MONOTONIC */
     case 8: { /* CLOCK_UPTIME_RAW */
         LARGE_INTEGER counter, frequency;
         if (!QueryPerformanceCounter(&counter) || !QueryPerformanceFrequency(&frequency)) {
@@ -1448,17 +1447,16 @@ static G int db_clock_gettime(int clock_id, DbTimespec *out) {
             return -1;
         }
         out->sec = counter.QuadPart / frequency.QuadPart;
-        out->nsec = (int64_t)((counter.QuadPart % frequency.QuadPart) * 1000000000 /
-                              frequency.QuadPart);
+        out->nsec =
+            (int64_t)((counter.QuadPart % frequency.QuadPart) * 1000000000 / frequency.QuadPart);
         return 0;
     }
-    case 12: /* CLOCK_PROCESS_CPUTIME_ID */
+    case 12:   /* CLOCK_PROCESS_CPUTIME_ID */
     case 16: { /* CLOCK_THREAD_CPUTIME_ID */
         FILETIME created, exited, kernel, user;
-        BOOL ok = clock_id == 12 ? GetProcessTimes(GetCurrentProcess(), &created, &exited, &kernel,
-                                                   &user)
-                                 : GetThreadTimes(GetCurrentThread(), &created, &exited, &kernel,
-                                                  &user);
+        BOOL ok = clock_id == 12
+                      ? GetProcessTimes(GetCurrentProcess(), &created, &exited, &kernel, &user)
+                      : GetThreadTimes(GetCurrentThread(), &created, &exited, &kernel, &user);
         if (!ok) {
             win_error();
             return -1;
@@ -1792,7 +1790,7 @@ static int get_descriptor_flags(int fd) {
  * O_NONBLOCK is bookkeeping; opening modes and O_APPEND remain meaningful. */
 static G int db_fcntl(int fd, int command, int value) {
     switch (command) {
-    case 0: /* F_DUPFD */
+    case 0:  /* F_DUPFD */
     case 67: /* F_DUPFD_CLOEXEC; children are unsupported, so close-on-exec is moot */
         return db_dup(fd);
     case 1: /* F_GETFD */
@@ -1970,10 +1968,9 @@ static G DbDir *db_opendir(const char *path) {
     wchar_t *p = db_path(path);
     if (!p)
         return NULL;
-    HANDLE handle =
-        CreateFileW(p, FILE_LIST_DIRECTORY | FILE_READ_ATTRIBUTES,
-                    FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING,
-                    FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    HANDLE handle = CreateFileW(p, FILE_LIST_DIRECTORY | FILE_READ_ATTRIBUTES,
+                                FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL,
+                                OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
     if (handle == INVALID_HANDLE_VALUE) {
         win_error();
         free(p);
@@ -2185,8 +2182,7 @@ static G void *db_mmap(void *address, size_t length, int prot, int flags, int fd
         access |= (flags & 1) ? FILE_MAP_WRITE : FILE_MAP_COPY;
     if (!access)
         access = FILE_MAP_READ;
-    void *view =
-        MapViewOfFile(section, access, (DWORD)(aligned >> 32), (DWORD)aligned, map_length);
+    void *view = MapViewOfFile(section, access, (DWORD)(aligned >> 32), (DWORD)aligned, map_length);
     CloseHandle(section);
     if (!view) {
         win_error();
