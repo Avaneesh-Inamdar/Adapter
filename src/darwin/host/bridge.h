@@ -52,6 +52,7 @@ G void db_guest_exit(int code);
 uintptr_t db_format_symbol(const char *name);
 uintptr_t db_system_symbol(const char *name);
 void db_system_begin(void);
+void db_set_executable_path(const char *path);
 void db_libc_flush(void);
 G int db_fputc(int c, DbFile *f);
 G size_t db_fwrite(const void *p, size_t s, size_t n, DbFile *f);

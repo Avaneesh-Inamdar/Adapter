@@ -10,7 +10,9 @@
   ],
   "adapter_symbols": {
     "libSystem": [
+      "_NSGetExecutablePath",
       "__DefaultRuneLocale",
+      "__NSGetExecutablePath",
       "____chkstk_darwin",
       "___assert_rtn",
       "___bzero",
@@ -205,9 +207,9 @@
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 180,
+      "available": 181,
       "total": 1778,
-      "percent": 10.12
+      "percent": 10.18
     },
     {
       "name": "Other libraries",
@@ -217,9 +219,9 @@
     },
     {
       "name": "libSystem",
-      "available": 175,
+      "available": 176,
       "total": 300,
-      "percent": 58.33
+      "percent": 58.67
     },
     {
       "name": "CoreGraphics",
@@ -3155,9 +3157,9 @@
       "name": "LogTool",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/LogTool",
       "sha256": "d79c6d3283eb3c4e4df6659a0c99aeaa8c0b8549868157f343ff142400e341ce",
-      "available": 17,
+      "available": 18,
       "total": 34,
-      "percent": 50.0,
+      "percent": 52.94,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -3182,10 +3184,6 @@
         {
           "library": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
           "symbol": "_OBJC_CLASS_$_NSString"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSGetExecutablePath"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -18236,11 +18234,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_TXTRecordSetValue",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__NSGetExecutablePath",
       "target_count": 1
     },
     {

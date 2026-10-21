@@ -25,7 +25,7 @@ def run(*args):
 def build():
     OUT.mkdir(parents=True, exist_ok=True)
     exports = {
-        "System": ["puts", "strlen", "malloc", "free", "memcpy", "memcmp", "__cxa_atexit", "__cxa_finalize", "atexit", "_tlv_bootstrap", "pthread_create", "pthread_join", "pthread_self", "pthread_equal", "pthread_key_create", "pthread_key_delete", "pthread_getspecific", "pthread_setspecific", "pthread_once", "__error", "deliberately_missing", "_DefaultRuneLocale", "__stdinp", "__stdoutp", "__stderrp", "environ", "setlocale", "getenv", "setenv", "unsetenv", "__maskrune", "printf", "fprintf", "snprintf", "vsnprintf", "sscanf", "vsscanf", "strcmp", "fread", "fwrite", "getc", "fputc", "fputs", "feof", "ferror", "fflush", "fileno", "fclose", "clearerr", "__srget", "__swbuf", "nexttoward", "exit"],
+        "System": ["puts", "strlen", "malloc", "free", "memcpy", "memcmp", "__cxa_atexit", "__cxa_finalize", "atexit", "_tlv_bootstrap", "pthread_create", "pthread_join", "pthread_self", "pthread_equal", "pthread_key_create", "pthread_key_delete", "pthread_getspecific", "pthread_setspecific", "pthread_once", "__error", "deliberately_missing", "_DefaultRuneLocale", "__stdinp", "__stdoutp", "__stderrp", "environ", "setlocale", "getenv", "setenv", "unsetenv", "__maskrune", "printf", "fprintf", "snprintf", "vsnprintf", "sscanf", "vsscanf", "strcmp", "fread", "fwrite", "getc", "fputc", "fputs", "feof", "ferror", "fflush", "fileno", "fclose", "clearerr", "__srget", "__swbuf", "nexttoward", "exit", "_NSGetExecutablePath"],
         "CoreFoundation": ["CFStringCreateWithCString", "CFStringGetLength", "CFStringGetCString", "CFRetain", "CFRelease"],
         "objc": ["objc_msgSend", "_objc_empty_cache"],
     }

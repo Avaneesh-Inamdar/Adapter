@@ -221,6 +221,7 @@ mod native {
             let _thread_state = crate::darwin::thread_state::begin()?;
             let _threads = crate::darwin::threads::begin()?;
             crate::darwin::libc::begin();
+            crate::darwin::libc::set_executable_path(&argv[0]);
             type Init = unsafe extern "sysv64" fn(
                 i32,
                 *const *const c_char,

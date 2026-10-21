@@ -1144,6 +1144,7 @@ static G char *db_strptime(const char *s, const char *fmt, DbTm *t) {
     }
     return (char *)end;
 }
+G double db_nexttoward(double x, ...);
 double db_nexttoward_entry(double x, double y, int direction) {
     if (isnan(x) || isnan(y))
         return x + y;
@@ -1151,8 +1152,55 @@ double db_nexttoward_entry(double x, double y, int direction) {
         return y;
     return nextafter(x, direction > 0 ? INFINITY : -INFINITY);
 }
-G double db_nexttoward(double x, ...);
+static char *guest_executable_path;
+
+/* Called once by the worker before constructors run; the guest name is the
+ * same path it sees in argv[0]. The string is intentionally unbounded by
+ * MAX_PATH because Darwin returns whatever execve received. */
+void db_set_executable_path(const char *path) {
+    char *copy = path ? _strdup(path) : NULL;
+    if (!copy)
+        return;
+    free(guest_executable_path);
+    guest_executable_path = copy;
+}
+
+static G int db_NSGetExecutablePath(char *buf, uint32_t *bufsize) {
+    if (!bufsize) {
+        db_set_errno(22);
+        return -1;
+    }
+    char fallback[4096];
+    const char *p = guest_executable_path;
+    if (!p) {
+        wchar_t wpath[MAX_PATH];
+        DWORD len = GetModuleFileNameW(NULL, wpath, MAX_PATH);
+        int u8len = len ? WideCharToMultiByte(CP_UTF8, 0, wpath, (int)len, fallback,
+                                              sizeof(fallback) - 1, NULL, NULL)
+                        : 0;
+        if (u8len > 0) {
+            fallback[u8len] = 0;
+            p = fallback;
+        } else {
+            p = "";
+        }
+    }
+    size_t needed = strlen(p) + 1;
+    if (needed > UINT32_MAX) {
+        db_set_errno(63);
+        return -1;
+    }
+    if (!buf || *bufsize < (uint32_t)needed) {
+        *bufsize = (uint32_t)needed;
+        return -1;
+    }
+    memcpy(buf, p, needed);
+    return 0;
+}
+
 uintptr_t db_system_symbol(const char *name) {
+    LOOKUP("_NSGetExecutablePath", db_NSGetExecutablePath);
+    LOOKUP("__NSGetExecutablePath", db_NSGetExecutablePath);
     LOOKUP("_environ", &environment);
     LOOKUP("_getenv", db_getenv);
     LOOKUP("_setenv", db_setenv);

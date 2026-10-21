@@ -55,6 +55,7 @@ CFIndex and size_t are 64-bit even though Windows C long is 32-bit.
 | pthread_key_create/delete/getspecific/setspecific | Per-thread key values and up to four destructor passes | 512 live keys; keys not reused; no reserved/private keys | Reentrant destructor rearming, thread isolation and deleted-key errors |
 | pthread_once | Per-control initialization and waiting callers | Static controls with Darwin initializer signature; no cancellation/fork support | Eight concurrent callers, repeated calls, visibility of initialized data |
 | __error | Stable pointer to a per-thread 32-bit errno | Common CRT/Windows errors translated; full mapping absent | Thread isolation, missing files and API argument errors |
+| _NSGetExecutablePath | Returns the guest path supplied in argv[0]; on a short buffer, reports the required byte count without writing | Windows path spelling, not a `/C/...` guest path; no symlink canonicalization | libc fixture size-query and exact argv[0] match |
 
 ## jq-oriented libc slice
 

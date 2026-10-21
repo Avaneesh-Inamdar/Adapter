@@ -12,7 +12,7 @@ unobserved APIs, implementation completeness or runtime test results. ARM64 imag
 | --- | ---: | ---: | ---: |
 | AU Lab | 57 / 603 | 546 | 9.45% |
 | Pixie | 7 / 134 | 127 | 5.22% |
-| LogTool | 17 / 34 | 17 | 50.00% |
+| LogTool | 18 / 34 | 16 | 52.94% |
 | Quartz Debug | 33 / 420 | 387 | 7.86% |
 | Server | 25 / 232 | 207 | 10.78% |
 | HomeKit Accessory Simulator | 7 / 319 | 312 | 2.19% |

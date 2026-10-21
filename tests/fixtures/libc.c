@@ -23,6 +23,7 @@ extern int puts(const char *), printf(const char *, ...), fprintf(File *, const 
 extern int snprintf(char *, size_t, const char *, ...),
     vsnprintf(char *, size_t, const char *, __builtin_va_list);
 extern int sscanf(const char *, const char *, ...);
+extern int _NSGetExecutablePath(char *, unsigned *);
 extern int strcmp(const char *, const char *), memcmp(const void *, const void *, size_t);
 extern size_t strlen(const char *), fread(void *, size_t, size_t, File *),
     fwrite(const void *, size_t, size_t, File *);
@@ -123,6 +124,11 @@ int main(int argc, char **argv) {
     double parsed_d = 0.0;
     int scanned = sscanf("99 apple 4.5", "%d %15s %lf", &parsed_i, parsed_s, &parsed_d);
     CHECK(scanned == 3 && parsed_i == 99 && !strcmp(parsed_s, "apple") && parsed_d == 4.5);
+    char self[1024];
+    unsigned self_size = 4;
+    CHECK(_NSGetExecutablePath(self, &self_size) == -1 && self_size > 4);
+    self_size = sizeof(self);
+    CHECK(_NSGetExecutablePath(self, &self_size) == 0 && !strcmp(self, argv[0]));
     CHECK(puts("libc:locale, stdio, varargs and long double passed") >= 0);
     return 0;
 }

@@ -5,6 +5,14 @@ unsafe extern "C" {
     fn db_libc_symbol(name: *const std::ffi::c_char) -> u64;
     fn db_libc_begin();
     fn db_libc_flush();
+    fn db_set_executable_path(path: *const std::ffi::c_char);
+}
+
+pub fn set_executable_path(path: &std::ffi::CStr) {
+    #[cfg(windows)]
+    unsafe {
+        db_set_executable_path(path.as_ptr());
+    }
 }
 
 pub fn symbol(name: &str) -> Option<u64> {
