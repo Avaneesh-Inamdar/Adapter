@@ -7,14 +7,16 @@ import struct
 import subprocess
 import tempfile
 import shutil
+import time
 import unittest
+import uuid
 
 ROOT=Path(__file__).resolve().parents[2]
 FIX=ROOT/"tests/fixtures/generated"
 BIN=Path(os.environ.get("ADAPTER_BIN",ROOT/"target/debug"))
 
-def call(tool,*args,timeout=15):
-    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout)
+def call(tool,*args,timeout=15,env=None):
+    return subprocess.run([str(BIN/(tool+".exe")),*map(str,args)],text=True,capture_output=True,timeout=timeout,env=env)
 
 class RuntimeTests(unittest.TestCase):
     def inspect(self,name):
@@ -169,6 +171,92 @@ class RuntimeTests(unittest.TestCase):
         d=self.inspect("hello");cmd=next(c for c in d["commands"] if c["name"]=="LC_MAIN");path=self.mutate("hello",lambda data:struct.pack_into("<Q",data,cmd["offset"]+8,2**63));p=call("adapter-run",path);self.assertEqual(p.returncode,125);self.assertIn("entry is not",p.stderr)
     def test_bad_fixup(self):
         d=self.inspect("hello");off=d["dyld"]["rebase"]["offset"];path=self.mutate("hello",lambda data:data.__setitem__(off,0xff));p=call("adapter-run","--check",path);self.assertEqual(p.returncode,125);self.assertIn("unsupported rebase opcode",p.stderr)
+    def wait_file(self,path,timeout=10):
+        deadline=time.time()+timeout
+        while time.time()<deadline:
+            if Path(path).exists():return
+            time.sleep(0.05)
+        self.fail(f"timed out waiting for {path}")
+    def local_env(self):
+        return {k:v for k,v in os.environ.items() if k!="ADAPTER_MACH_BROKER"}
+    def start_broker(self,temp):
+        endpoint=Path(temp)/"broker.json"
+        broker=subprocess.Popen([str(BIN/"adapter-broker.exe"),"--endpoint",str(endpoint)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        self.wait_file(endpoint)
+        return broker,dict(self.local_env(),ADAPTER_MACH_BROKER=str(endpoint))
+    def stop_broker(self,broker):
+        if broker.poll() is None:
+            broker.terminate()
+            try:broker.wait(timeout=10)
+            except subprocess.TimeoutExpired:broker.kill();broker.wait()
+        broker.communicate()
+    def assert_mach_semantics(self,p):
+        self.assertEqual(p.returncode,0,p.stderr)
+        self.assertIn("errors:header_size=24\n",p.stdout)
+        self.assertIn("errors:self_bits=0x1112\n",p.stdout)
+        self.assertIn("errors:reply_bits=0x1200\n",p.stdout)
+        self.assertIn("errors:stale_once=0x10000003\n",p.stdout)
+        self.assertIn("errors:large_small=0x10004004\n",p.stdout)
+        self.assertIn("errors:large_retry=0x0\n",p.stdout)
+        self.assertIn("errors:no_large_small=0x10004004\n",p.stdout)
+        self.assertIn("errors:dropped=0x10004003\n",p.stdout)
+        self.assertIn("errors:checkin_duplicate=0x44f\n",p.stdout)
+        self.assertIn("errors:lookup_absent=0x44e\n",p.stdout)
+        self.assertIn("errors:service_bits=0x1100\n",p.stdout)
+        self.assertIn("errors:failures=0\n",p.stdout)
+        self.assertIn("mach:failure semantics passed\n",p.stdout)
+    def test_mach_failure_semantics_local(self):
+        p=call("adapter-run",FIX/"mach_errors",timeout=30,env=self.local_env());self.assert_mach_semantics(p)
+    def test_mach_failure_semantics_with_broker(self):
+        with tempfile.TemporaryDirectory() as temp:
+            broker,env=self.start_broker(temp)
+            try:
+                p=call("adapter-run",FIX/"mach_errors",timeout=30,env=env);self.assert_mach_semantics(p)
+            finally:self.stop_broker(broker)
+    def test_mach_cross_process_echo_and_retire(self):
+        with tempfile.TemporaryDirectory() as temp:
+            temp=Path(temp);broker,env=self.start_broker(temp)
+            try:
+                service=f"com.adapter.test.mach.{os.getpid()}.{uuid.uuid4().hex[:8]}"
+                ready,retired=temp/"ready",temp/"retired"
+                server=subprocess.Popen([str(BIN/"adapter-run.exe"),str(FIX/"mach_server"),"--","echo",service,str(ready),str(retired)],text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env)
+                try:
+                    self.wait_file(ready)
+                    duplicate=call("adapter-run",FIX/"mach_server","--","duplicate",service,timeout=20,env=env)
+                    self.assertEqual(duplicate.returncode,0,duplicate.stderr)
+                    self.assertIn("server:duplicate_checkin=0x44f\n",duplicate.stdout)
+                    client=call("adapter-run",FIX/"mach_client","--",service,retired,timeout=30,env=env)
+                    self.assertEqual(client.returncode,0,client.stderr)
+                    self.assertIn("client:lookup=0x0\n",client.stdout)
+                    self.assertIn("client:send=0x0\n",client.stdout)
+                    self.assertIn("client:recv=0x0\n",client.stdout)
+                    self.assertIn("client:bits=0x1200\n",client.stdout)
+                    self.assertIn("client:payload=pong:ping\n",client.stdout)
+                    self.assertIn("client:retired_seen=1\n",client.stdout)
+                    self.assertIn("client:dead_send=0x10000003\n",client.stdout)
+                    self.assertIn("mach:cross-process echo passed\n",client.stdout)
+                    server_out,server_err=server.communicate(timeout=20)
+                finally:
+                    if server.poll() is None:
+                        server.kill();server.communicate()
+                self.assertEqual(server.returncode,0,server_err)
+                self.assertIn("server:checkin=0x0\n",server_out)
+                self.assertIn("server:recv=0x0\n",server_out)
+                self.assertIn("server:size=29\n",server_out)
+                self.assertIn("server:bits=0x1112\n",server_out)
+                self.assertIn("server:body_hex=70696e6700\n",server_out)
+                self.assertIn("server:payload=ping\n",server_out)
+                self.assertIn("server:reply=0x0\n",server_out)
+                self.assertIn("server:destroy=0x0\n",server_out)
+                self.assertIn("mach:server echo passed\n",server_out)
+            finally:self.stop_broker(broker)
+    def test_mach_missing_broker_endpoint_fails_before_entry(self):
+        with tempfile.TemporaryDirectory() as temp:
+            env=dict(self.local_env(),ADAPTER_MACH_BROKER=str(Path(temp)/"absent.json"))
+            p=call("adapter-run",FIX/"hello","--","hello",env=env)
+            self.assertEqual(p.returncode,125)
+            self.assertIn("mach broker endpoint",p.stderr)
+            self.assertEqual(p.stdout,"")
     def test_published_macos_binary_if_fetched(self):
         if not (FIX/"reference/jq-macos-amd64").exists():self.skipTest("optional published artifact not fetched")
         d=self.inspect("reference/jq-macos-amd64");self.assertEqual(d["architecture"],"x86_64");self.assertTrue(any(s['flags']&255==0x13 for s in d['sections']));p=call("adapter-run","--check",FIX/"reference/jq-macos-amd64");self.assertEqual(p.returncode,0,p.stderr)

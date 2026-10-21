@@ -25,7 +25,7 @@ def run(*args):
 def build():
     OUT.mkdir(parents=True, exist_ok=True)
     exports = {
-        "System": ["puts", "strlen", "malloc", "free", "memcpy", "memcmp", "__cxa_atexit", "__cxa_finalize", "atexit", "_tlv_bootstrap", "pthread_create", "pthread_join", "pthread_self", "pthread_equal", "pthread_key_create", "pthread_key_delete", "pthread_getspecific", "pthread_setspecific", "pthread_once", "__error", "deliberately_missing", "_DefaultRuneLocale", "__stdinp", "__stdoutp", "__stderrp", "environ", "setlocale", "getenv", "setenv", "unsetenv", "__maskrune", "printf", "fprintf", "snprintf", "vsnprintf", "sscanf", "vsscanf", "strcmp", "fread", "fwrite", "getc", "fputc", "fputs", "feof", "ferror", "fflush", "fileno", "fclose", "clearerr", "__srget", "__swbuf", "nexttoward", "exit", "_NSGetExecutablePath", "dlopen", "dlsym", "dlclose", "dlerror", "_dyld_image_count"],
+        "System": ["puts", "strlen", "malloc", "free", "memcpy", "memcmp", "__cxa_atexit", "__cxa_finalize", "atexit", "_tlv_bootstrap", "pthread_create", "pthread_join", "pthread_self", "pthread_equal", "pthread_key_create", "pthread_key_delete", "pthread_getspecific", "pthread_setspecific", "pthread_once", "__error", "deliberately_missing", "_DefaultRuneLocale", "__stdinp", "__stdoutp", "__stderrp", "environ", "setlocale", "getenv", "setenv", "unsetenv", "__maskrune", "printf", "fprintf", "snprintf", "vsnprintf", "sscanf", "vsscanf", "strcmp", "fread", "fwrite", "getc", "fputc", "fputs", "feof", "ferror", "fflush", "fileno", "fclose", "clearerr", "__srget", "__swbuf", "nexttoward", "exit", "_NSGetExecutablePath", "dlopen", "dlsym", "dlclose", "dlerror", "_dyld_image_count", "mach_port_allocate", "mach_port_deallocate", "mach_port_mod_refs", "mach_port_destroy", "mach_port_insert_right", "mach_msg", "bootstrap_check_in", "bootstrap_look_up"],
         "CoreFoundation": ["CFStringCreateWithCString", "CFStringGetLength", "CFStringGetCString", "CFRetain", "CFRelease"],
         "objc": ["objc_msgSend", "_objc_empty_cache"],
     }
@@ -34,12 +34,16 @@ def build():
     for library, symbols in exports.items():
         asm = OUT / (library + ".s")
         # dyld's binder name is already undecorated in the Mach-O ABI.
-        names = ["_" + s for s in symbols] + (["dyld_stub_binder"] if library == "System" else [])
-        asm.write_text(".text\n" + "\n".join(f".globl {s}\n{s}:\nret" for s in names) + "\n")
+        data = {"System": {"mach_task_self_": 0x103, "bootstrap_port": 0x203}}.get(library, {})
+        names = ["_" + s for s in symbols if s not in data] + (["dyld_stub_binder"] if library == "System" else [])
+        text = ".text\n" + "\n".join(f".globl {s}\n{s}:\nret" for s in names) + "\n"
+        if data:
+            text += ".data\n" + "\n".join(f".globl _{s}\n_{s}:\n.long {v:#x}" for s, v in data.items()) + "\n"
+        asm.write_text(text)
         run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-c", asm, "-o", OUT / (library + ".o"))
         install = {"System":"/usr/lib/libSystem.B.dylib","CoreFoundation":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation","objc":"/usr/lib/libobjc.A.dylib"}[library]
         run(tool("ld64.lld"), *versions, "-dylib", "-install_name", install, "-o", OUT / ("lib" + library + ".dylib"), OUT / (library + ".o"))
-    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls"]:
+    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_server", "mach_client", "mach_errors"]:
         extension=".m" if name=="objc" else ".cpp" if name=="cxx_tls" else ".c"
         flags=["-O0","-fno-stack-protector","-fno-asynchronous-unwind-tables"]
         flags+= ["-fno-exceptions","-fno-rtti"] if extension==".cpp" else ["-ffreestanding"]
