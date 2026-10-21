@@ -169,6 +169,12 @@ class RuntimeTests(unittest.TestCase):
         path=self.mutate("universal",lambda d:struct.pack_into(">I",d,36,4096));p=call("adapter-inspect",path);self.assertNotEqual(p.returncode,0)
     def test_entry_must_be_executable(self):
         d=self.inspect("hello");cmd=next(c for c in d["commands"] if c["name"]=="LC_MAIN");path=self.mutate("hello",lambda data:struct.pack_into("<Q",data,cmd["offset"]+8,2**63));p=call("adapter-run",path);self.assertEqual(p.returncode,125);self.assertIn("entry is not",p.stderr)
+    def test_blocks_copy_and_release(self):
+        p=call("adapter-run",FIX/"blocks")
+        self.assertEqual(p.returncode,0,p.stderr)
+        self.assertIn("blocks:distinct=1\n",p.stdout)
+        self.assertIn("blocks:value=42\n",p.stdout)
+        self.assertIn("blocks:passed\n",p.stdout)
     def test_bad_fixup(self):
         d=self.inspect("hello");off=d["dyld"]["rebase"]["offset"];path=self.mutate("hello",lambda data:data.__setitem__(off,0xff));p=call("adapter-run","--check",path);self.assertEqual(p.returncode,125);self.assertIn("unsupported rebase opcode",p.stderr)
     def wait_file(self,path,timeout=10):

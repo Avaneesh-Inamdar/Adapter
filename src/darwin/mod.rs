@@ -1,5 +1,6 @@
 //! Narrow libSystem adapters. All guest interfaces use Darwin's x86-64 SysV
 //! calling convention, including when compiled for the Windows MSVC target.
+pub mod blocks;
 pub mod callbacks;
 pub mod dl;
 pub mod dyld;
@@ -63,6 +64,9 @@ unsafe extern "sysv64" fn memcmp(a: *const u8, b: *const u8, n: usize) -> i32 {
 }
 pub fn symbol(name: &str) -> Option<u64> {
     if let Some(value) = libc::symbol(name) {
+        return Some(value);
+    }
+    if let Some(value) = blocks::symbol(name) {
         return Some(value);
     }
     if let Some(value) = thread_state::symbol(name) {
