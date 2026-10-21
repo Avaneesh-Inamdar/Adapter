@@ -3,10 +3,13 @@
 #include <string.h>
 #include <errno.h>
 #include <io.h>
+#include <process.h>
+#include <direct.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <windows.h>
+#include <bcrypt.h>
 #include <math.h>
 
 static char **environment;
@@ -400,6 +403,414 @@ static G int db_raise(int signal) {
     return -1;
 }
 
+/* Single-user identity: guests see process id and the root (0) uid/gid, and
+ * identity changes succeed without persisting, matching root privileges. */
+static G int db_getpid(void) { return _getpid(); }
+static G uint32_t db_getuid(void) { return 0; }
+static G uint32_t db_geteuid(void) { return 0; }
+static G int db_setuid(uint32_t uid) {
+    (void)uid;
+    return 0;
+}
+static G int db_setgid(uint32_t gid) {
+    (void)gid;
+    return 0;
+}
+static G int db_seteuid(uint32_t uid) {
+    (void)uid;
+    return 0;
+}
+static G int db_setegid(uint32_t gid) {
+    (void)gid;
+    return 0;
+}
+/* Aggregation only plausibly changes NTFS ownership, so reject it like a
+ * filesystem without chattr rights rather than silently pretending. */
+static int ownership_ok(const char *path, uint32_t uid, uint32_t gid) {
+    DbStat s;
+    if (db_stat(path, &s))
+        return 0;
+    if ((uid == (uint32_t)-1 || uid == 0) && (gid == (uint32_t)-1 || gid == 0))
+        return 1;
+    db_set_errno(1); /* EPERM */
+    return 0;
+}
+static G int db_chown(const char *path, uint32_t uid, uint32_t gid) {
+    return ownership_ok(path, uid, gid) ? 0 : -1;
+}
+static G int db_lchown(const char *path, uint32_t uid, uint32_t gid) {
+    return ownership_ok(path, uid, gid) ? 0 : -1;
+}
+
+/* File checks: macOS test bits (F_OK 0, X_OK 1, W_OK 2, R_OK 4). X_OK is
+ * answered as R_OK because guest executable rights are not kept on NTFS. */
+static G int db_access(const char *path, int mode) {
+    if (mode & ~7) {
+        db_set_errno(22);
+        return -1;
+    }
+    wchar_t *p = db_path(path);
+    if (!p)
+        return -1;
+    DWORD attributes = GetFileAttributesW(p);
+    free(p);
+    if (attributes == INVALID_FILE_ATTRIBUTES) {
+        win_error();
+        return -1;
+    }
+    if ((mode & 2) && (attributes & FILE_ATTRIBUTE_READONLY)) {
+        db_set_errno(13);
+        return -1;
+    }
+    return 0;
+}
+/* 0200 in the guest mode does not clear, but NTFS only knows a readonly bit. */
+static G int db_chmod(const char *path, unsigned mode) {
+    wchar_t *p = db_path(path);
+    if (!p)
+        return -1;
+    DWORD attributes = GetFileAttributesW(p);
+    if (attributes == INVALID_FILE_ATTRIBUTES) {
+        free(p);
+        win_error();
+        return -1;
+    }
+    DWORD target = attributes & ~FILE_ATTRIBUTE_READONLY;
+    if (!(mode & 0200))
+        target |= FILE_ATTRIBUTE_READONLY;
+    if (!SetFileAttributesW(p, target)) {
+        free(p);
+        win_error();
+        return -1;
+    }
+    free(p);
+    return 0;
+}
+static G int db_mkdir(const char *path, unsigned mode) {
+    (void)mode; /* POSIX mode bits are not representable beyond readonly. */
+    wchar_t *p = db_path(path);
+    if (!p)
+        return -1;
+    int result = _wmkdir(p);
+    if (result)
+        win_error();
+    free(p);
+    return result;
+}
+static G int db_unlink(const char *path) {
+    wchar_t *p = db_path(path);
+    if (!p)
+        return -1;
+    DWORD attributes = GetFileAttributesW(p);
+    if (attributes != INVALID_FILE_ATTRIBUTES && (attributes & FILE_ATTRIBUTE_DIRECTORY)) {
+        free(p);
+        db_set_errno(1); /* POSIX unlink(2) cannot remove directories. */
+        return -1;
+    }
+    int result = _wunlink(p) ? -1 : 0;
+    if (result)
+        win_error();
+    free(p);
+    return result;
+}
+static G int db_rmdir(const char *path) {
+    wchar_t *p = db_path(path);
+    if (!p)
+        return -1;
+    DWORD attributes = GetFileAttributesW(p);
+    if (attributes != INVALID_FILE_ATTRIBUTES && !(attributes & FILE_ATTRIBUTE_DIRECTORY)) {
+        free(p);
+        db_set_errno(20); /* ENOTDIR */
+        return -1;
+    }
+    int result = _wrmdir(p) ? -1 : 0;
+    if (result)
+        win_error();
+    free(p);
+    return result;
+}
+static G int db_rename(const char *old_path, const char *new_path) {
+    wchar_t *from = db_path(old_path), *to = db_path(new_path);
+    if (!from || !to) {
+        free(from);
+        free(to);
+        return -1;
+    }
+    DWORD source = GetFileAttributesW(from), target = GetFileAttributesW(to);
+    if (target != INVALID_FILE_ATTRIBUTES && (target & FILE_ATTRIBUTE_DIRECTORY) &&
+        (source == INVALID_FILE_ATTRIBUTES || !(source & FILE_ATTRIBUTE_DIRECTORY))) {
+        free(from);
+        free(to);
+        db_set_errno(21); /* EISDIR: a file cannot replace a directory. */
+        return -1;
+    }
+    if (target != INVALID_FILE_ATTRIBUTES && (target & FILE_ATTRIBUTE_READONLY))
+        SetFileAttributesW(to, target & ~FILE_ATTRIBUTE_READONLY);
+    int result = _wrename(from, to) ? -1 : 0;
+    if (result) {
+        if (errno == EXDEV)
+            db_set_errno(18); /* Darwin EXDEV value, not the CRT one. */
+        else if (target != INVALID_FILE_ATTRIBUTES && (target & FILE_ATTRIBUTE_DIRECTORY))
+            db_set_errno(66); /* ENOTEMPTY: directory replacement is unsupported. */
+        else
+            db_host_error();
+    }
+    free(from);
+    free(to);
+    return result;
+}
+static G int64_t db_write(int fd, const void *buffer, size_t count) {
+    if (count > INT_MAX) {
+        db_set_errno(84);
+        return -1;
+    }
+    int n = _write(fd, buffer, (unsigned)count);
+    if (n < 0) {
+        db_host_error();
+        return -1;
+    }
+    return n;
+}
+static G unsigned db_sleep(unsigned seconds) {
+    Sleep(seconds > 4294967u ? 4294967295u : seconds * 1000u);
+    return 0; /* No guest signals can interrupt a sleep. */
+}
+static G int db_usleep(uint32_t useconds) {
+    Sleep(useconds / 1000 + (useconds % 1000 ? 1 : 0));
+    return 0;
+}
+
+/* BSD random(3), transcribed from Apple Libc stdlib/FreeBSD/random.c so guest
+ * sequences keep their deterministic VALUES, not merely plausible noise. */
+#define DEG_3 31
+#define SEP_3 3
+#define TYPE_3 3
+#define NSHUFF 50
+static uint32_t randtbl[DEG_3 + 1] = {
+    TYPE_3,
+    0x991539b1, 0x16a5bce3, 0x6774a4cd, 0x3e01511e, 0x4e508aaa, 0x61048c05,
+    0xf5500617, 0x846b7115, 0x6a19892c, 0x896a97af, 0xdb48f936, 0x14898454,
+    0x37ffd106, 0xb58bff9c, 0x59e17104, 0xcf918a49, 0x09378c83, 0x52c7a471,
+    0x8d293ea9, 0x1f4fc301, 0xc3db71be, 0x39b44e1c, 0xf8a44ef9, 0x4c8b80b1,
+    0x19edc328, 0x87bf4bdd, 0xc9b240e5, 0xe9ee4b1b, 0x4382aee7, 0x535b6b41,
+    0xf3bec5da
+};
+static uint32_t *rand_front = &randtbl[SEP_3 + 1];
+static uint32_t *rand_rear = &randtbl[1];
+static uint32_t *rand_state = &randtbl[1];
+static int rand_deg = DEG_3;
+static int rand_sep = SEP_3;
+static uint32_t *rand_end = &randtbl[DEG_3 + 1];
+static uint32_t good_rand(int32_t x) {
+    /* x = (7^5 * x) mod (2^31 - 1), Park and Miller (CACM 31.10.1988). */
+    int32_t hi, lo;
+    if (x == 0)
+        x = 123459876;
+    hi = x / 127773;
+    lo = x % 127773;
+    x = 16807 * lo - 2836 * hi;
+    if (x < 0)
+        x += 0x7fffffff;
+    return (uint32_t)x;
+}
+static uint32_t advance_random(void) {
+    uint32_t i;
+    uint32_t *f = rand_front, *r = rand_rear;
+    *f += *r;
+    i = (*f >> 1) & 0x7fffffff; /* Discard the least random bit. */
+    if (++f >= rand_end) {
+        f = rand_state;
+        ++r;
+    } else if (++r >= rand_end) {
+        r = rand_state;
+    }
+    rand_front = f;
+    rand_rear = r;
+    return i;
+}
+static void seed_random(uint32_t x) {
+    int i, lim;
+    rand_state[0] = x;
+    for (i = 1; i < rand_deg; i++)
+        rand_state[i] = good_rand((int32_t)rand_state[i - 1]);
+    rand_front = &rand_state[rand_sep];
+    rand_rear = &rand_state[0];
+    lim = 10 * rand_deg; /* NSHUFF applies only to the trivial TYPE_0 path. */
+    for (i = 0; i < lim; i++)
+        (void)advance_random();
+}
+static G void db_srandom(uint32_t x) { seed_random(x); }
+static G void db_srandomdev(void) {
+    size_t len = (size_t)rand_deg * sizeof(uint32_t);
+    if (BCryptGenRandom(NULL, (unsigned char *)rand_state, (unsigned long)len,
+                        BCRYPT_USE_SYSTEM_PREFERRED_RNG) >= 0) {
+        rand_front = &rand_state[rand_sep];
+        rand_rear = &rand_state[0];
+        return;
+    }
+    FILETIME now;
+    GetSystemTimePreciseAsFileTime(&now);
+    DbTimespec tv = filetime(now);
+    seed_random((uint32_t)(((uint32_t)_getpid() << 16) ^ (uint32_t)tv.sec ^ (uint32_t)tv.nsec));
+}
+static G int64_t db_random(void) { return (int64_t)advance_random(); }
+
+typedef G int (*DbCompare)(const void *, const void *);
+static G void *db_bsearch(const void *key, const void *base, size_t count, size_t size,
+                          DbCompare compare) {
+    while (count > 0) {
+        const void *probe = (const char *)base + (count / 2) * size;
+        int order = compare(key, probe);
+        if (order == 0)
+            return (void *)probe;
+        if (order < 0)
+            count /= 2;
+        else {
+            base = (const char *)probe + size;
+            count -= count / 2 + 1;
+        }
+    }
+    return NULL;
+}
+static G int64_t db_ftell(DbFile *f) {
+    if (!f || !f->host) {
+        db_set_errno(9);
+        return -1;
+    }
+    int64_t v = _ftelli64(f->host);
+    if (v < 0)
+        db_host_error();
+    return v;
+}
+static G uint32_t db_arc4random_uniform(uint32_t bound) {
+    /* OpenBSD arc4random_uniform: rejection sampling avoids modulo bias. */
+    if (bound < 2)
+        return 0;
+    uint32_t floor = (uint32_t)(0u - bound) % bound;
+    for (;;) {
+        uint32_t value;
+        if (BCryptGenRandom(NULL, (unsigned char *)&value, 4, BCRYPT_USE_SYSTEM_PREFERRED_RNG) < 0) {
+            fprintf(stderr, "adapter-run [random]: entropy source unavailable\n");
+            ExitProcess(134);
+        }
+        if (value >= floor)
+            return value % bound;
+    }
+}
+static const char mkdtemp_alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                                       "abcdefghijklmnopqrstuvwxyz"
+                                       "0123456789";
+static G char *db_mkdtemp(char *tmpl) {
+    size_t n = strlen(tmpl);
+    if (n < 6) {
+        db_set_errno(22);
+        return NULL;
+    }
+    size_t xs = 0;
+    while (xs < n && tmpl[n - 1 - xs] == 'X')
+        xs++;
+    if (xs < 6) {
+        db_set_errno(22); /* POSIX requires at least six trailing X placeholders. */
+        return NULL;
+    }
+    for (int attempt = 0; attempt < 1000; attempt++) {
+        for (size_t i = 0; i < 6; i++) {
+            unsigned char pick;
+            if (BCryptGenRandom(NULL, &pick, 1, BCRYPT_USE_SYSTEM_PREFERRED_RNG) < 0)
+                return NULL;
+            tmpl[n - 6 + i] = mkdtemp_alphabet[pick % 62];
+        }
+        wchar_t *p = db_path(tmpl);
+        if (!p)
+            return NULL;
+        if (_wmkdir(p) == 0) {
+            free(p);
+            return tmpl;
+        }
+        free(p);
+        if (errno != EEXIST) {
+            db_host_error();
+            return NULL;
+        }
+    }
+    db_set_errno(17); /* EEXIST after the POSIX retry budget is exhausted. */
+    return NULL;
+}
+static G int db_gethostname(char *name, int length) {
+    if (!name || length <= 0) {
+        db_set_errno(22);
+        return -1;
+    }
+    wchar_t value[256];
+    DWORD size = 256;
+    if (!GetComputerNameExW(ComputerNameDnsHostname, value, &size)) {
+        win_error();
+        return -1;
+    }
+    char *utf8_name = utf8(value);
+    if (!utf8_name)
+        return -1;
+    size_t n = strlen(utf8_name);
+    if ((int)n + 1 > length) {
+        free(utf8_name);
+        db_set_errno(22); /* FreeBSD gethostname(3): EINVAL when too short. */
+        return -1;
+    }
+    memcpy(name, utf8_name, n + 1);
+    free(utf8_name);
+    return 0;
+}
+static G unsigned db_umask(unsigned mode) {
+    /* The CRT umask only distinguishes read/write, but the caller-visible guest
+     * value keeps all POSIX bits. */
+    static unsigned previous = 022;
+    int crt = 0;
+    if (mode & 0400)
+        crt |= _S_IREAD;
+    if (mode & 0200)
+        crt |= _S_IWRITE;
+    (void)_umask(crt);
+    unsigned old = previous;
+    previous = mode & 0777;
+    return old;
+}
+typedef struct {
+    int64_t sec;
+    int32_t usec;
+} DbTimeval;
+_Static_assert(sizeof(DbTimeval) == 16, "Darwin timeval LP64");
+static void filetime_of(const DbTimeval *t, FILETIME *out) {
+    uint64_t ticks = (uint64_t)((*t).sec + 11644473600) * 10000000 + (uint64_t)t->usec * 10;
+    out->dwLowDateTime = (DWORD)ticks;
+    out->dwHighDateTime = (DWORD)(ticks >> 32);
+}
+static G int db_utimes(const char *path, const DbTimeval *times) {
+    wchar_t *p = db_path(path);
+    if (!p)
+        return -1;
+    HANDLE h = CreateFileW(p, FILE_WRITE_ATTRIBUTES,
+                           FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL,
+                           OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    free(p);
+    if (h == INVALID_HANDLE_VALUE) {
+        win_error();
+        return -1;
+    }
+    FILETIME now, access, modified;
+    GetSystemTimePreciseAsFileTime(&now);
+    access = now;
+    modified = now;
+    if (times) {
+        filetime_of(&times[0], &access);
+        filetime_of(&times[1], &modified);
+    }
+    int result = SetFileTime(h, NULL, &access, &modified) ? 0 : -1;
+    if (result)
+        win_error();
+    CloseHandle(h);
+    return result;
+}
+
 typedef struct {
     int sec, min, hour, mday, mon, year, wday, yday, isdst;
     int64_t gmtoff;
@@ -499,6 +910,10 @@ static G DbTm *db_localtime(const int64_t *t, DbTm *out) {
     out->gmtoff = db_timegm(&copy) - *t;
     out->zone = out->gmtoff == 0 ? "UTC" : "";
     return out;
+}
+static G DbTm *db_localtime1(const int64_t *t) {
+    static DbTm out;
+    return db_localtime(t, &out);
 }
 static G int64_t db_mktime(DbTm *t) {
     _tzset();
@@ -763,5 +1178,35 @@ uintptr_t db_system_symbol(const char *name) {
     LOOKUP("_strftime", db_strftime);
     LOOKUP("_strptime", db_strptime);
     LOOKUP("_nexttoward", db_nexttoward);
+    LOOKUP("_getpid", db_getpid);
+    LOOKUP("_getuid", db_getuid);
+    LOOKUP("_geteuid", db_geteuid);
+    LOOKUP("_setuid", db_setuid);
+    LOOKUP("_setgid", db_setgid);
+    LOOKUP("_seteuid", db_seteuid);
+    LOOKUP("_setegid", db_setegid);
+    LOOKUP("_chown", db_chown);
+    LOOKUP("_lchown", db_lchown);
+    LOOKUP("_access", db_access);
+    LOOKUP("_chmod", db_chmod);
+    LOOKUP("_mkdir", db_mkdir);
+    LOOKUP("_unlink", db_unlink);
+    LOOKUP("_lstat$INODE64", db_stat);
+    LOOKUP("_rmdir", db_rmdir);
+    LOOKUP("_rename", db_rename);
+    LOOKUP("_write", db_write);
+    LOOKUP("_sleep", db_sleep);
+    LOOKUP("_usleep", db_usleep);
+    LOOKUP("_srandom", db_srandom);
+    LOOKUP("_srandomdev", db_srandomdev);
+    LOOKUP("_random", db_random);
+    LOOKUP("_bsearch", db_bsearch);
+    LOOKUP("_ftell", db_ftell);
+    LOOKUP("_arc4random_uniform", db_arc4random_uniform);
+    LOOKUP("_mkdtemp", db_mkdtemp);
+    LOOKUP("_gethostname", db_gethostname);
+    LOOKUP("_umask", db_umask);
+    LOOKUP("_utimes", db_utimes);
+    LOOKUP("_localtime", db_localtime1);
     return 0;
 }

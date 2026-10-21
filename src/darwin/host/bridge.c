@@ -75,6 +75,18 @@ void db_host_error(void) {
     case EISDIR:
         e = 21;
         break;
+    case EXDEV:
+        e = 18;
+        break;
+    case ENOTEMPTY:
+        e = 66;
+        break;
+    case EPERM:
+        e = 1;
+        break;
+    case EROFS:
+        e = 30;
+        break;
     default:
         e = 5;
         break;
