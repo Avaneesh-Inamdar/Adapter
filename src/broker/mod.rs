@@ -26,6 +26,12 @@ pub const UNKNOWN_SERVICE: u32 = 1102;
 pub const SERVICE_ACTIVE: u32 = 1103;
 pub const INVALID_DEST: u32 = 0x1000_0003;
 
+pub const XPC_MESSAGE: u32 = 0;
+pub const XPC_REPLY: u32 = 1;
+pub const XPC_ACCEPT: u32 = 2;
+pub const XPC_INVALID: u32 = 3;
+pub const XPC_INTERRUPTED: u32 = 4;
+
 #[derive(Clone, Debug)]
 pub enum Frame {
     Hello {
@@ -83,6 +89,33 @@ pub enum Frame {
     RetireReply {
         request: u64,
     },
+    XpcConnect {
+        request: u64,
+        name: String,
+    },
+    XpcConnectReply {
+        request: u64,
+        status: u32,
+        id: u64,
+        peer: u64,
+    },
+    XpcSend {
+        from: u64,
+        dest: u64,
+        kind: u32,
+        token: u64,
+        body: Vec<u8>,
+    },
+    XpcDeliver {
+        dest: u64,
+        kind: u32,
+        reply: u64,
+        token: u64,
+        body: Vec<u8>,
+    },
+    XpcClose {
+        id: u64,
+    },
 }
 
 impl Frame {
@@ -100,6 +133,11 @@ impl Frame {
             Self::Deliver { .. } => 10,
             Self::Retire { .. } => 11,
             Self::RetireReply { .. } => 12,
+            Self::XpcConnect { .. } => 13,
+            Self::XpcConnectReply { .. } => 14,
+            Self::XpcSend { .. } => 15,
+            Self::XpcDeliver { .. } => 16,
+            Self::XpcClose { .. } => 17,
         }
     }
 
@@ -108,7 +146,8 @@ impl Frame {
             Self::CheckInReply { request, .. }
             | Self::LookUpReply { request, .. }
             | Self::SendReply { request, .. }
-            | Self::RetireReply { request } => Some(*request),
+            | Self::RetireReply { request }
+            | Self::XpcConnectReply { request, .. } => Some(*request),
             _ => None,
         }
     }
@@ -190,6 +229,48 @@ impl Frame {
                 put_u64(&mut out, *port);
             }
             Self::RetireReply { request } => put_u64(&mut out, *request),
+            Self::XpcConnect { request, name } => {
+                put_u64(&mut out, *request);
+                put_string(&mut out, name);
+            }
+            Self::XpcConnectReply {
+                request,
+                status,
+                id,
+                peer,
+            } => {
+                put_u64(&mut out, *request);
+                put_u32(&mut out, *status);
+                put_u64(&mut out, *id);
+                put_u64(&mut out, *peer);
+            }
+            Self::XpcSend {
+                from,
+                dest,
+                kind,
+                token,
+                body,
+            } => {
+                put_u64(&mut out, *from);
+                put_u64(&mut out, *dest);
+                put_u32(&mut out, *kind);
+                put_u64(&mut out, *token);
+                put_bytes(&mut out, body);
+            }
+            Self::XpcDeliver {
+                dest,
+                kind,
+                reply,
+                token,
+                body,
+            } => {
+                put_u64(&mut out, *dest);
+                put_u32(&mut out, *kind);
+                put_u64(&mut out, *reply);
+                put_u64(&mut out, *token);
+                put_bytes(&mut out, body);
+            }
+            Self::XpcClose { id } => put_u64(&mut out, *id),
         }
         out
     }
@@ -253,6 +334,31 @@ impl Frame {
                 port: r.u64()?,
             },
             12 => Self::RetireReply { request: r.u64()? },
+            13 => Self::XpcConnect {
+                request: r.u64()?,
+                name: r.string()?,
+            },
+            14 => Self::XpcConnectReply {
+                request: r.u64()?,
+                status: r.u32()?,
+                id: r.u64()?,
+                peer: r.u64()?,
+            },
+            15 => Self::XpcSend {
+                from: r.u64()?,
+                dest: r.u64()?,
+                kind: r.u32()?,
+                token: r.u64()?,
+                body: r.body()?,
+            },
+            16 => Self::XpcDeliver {
+                dest: r.u64()?,
+                kind: r.u32()?,
+                reply: r.u64()?,
+                token: r.u64()?,
+                body: r.body()?,
+            },
+            17 => Self::XpcClose { id: r.u64()? },
             _ => return Err(format!("unknown frame tag {tag}")),
         };
         if r.pos != data.len() {
@@ -271,8 +377,63 @@ pub struct Incoming {
     pub body: Vec<u8>,
 }
 
+#[derive(Clone, Debug)]
+pub struct XpcIncoming {
+    pub dest: u64,
+    pub kind: u32,
+    pub reply: u64,
+    pub token: u64,
+    pub body: Vec<u8>,
+}
+
 type Reply = std::result::Result<Frame, ()>;
 type Pending = Arc<Mutex<BTreeMap<u64, mpsc::Sender<Reply>>>>;
+type MachSink = Arc<dyn Fn(Incoming) + Send + Sync>;
+type XpcSink = Arc<dyn Fn(XpcIncoming) + Send + Sync>;
+
+struct Router {
+    mach: MachSink,
+    xpc: Mutex<Option<XpcSink>>,
+}
+
+impl Router {
+    fn deliver(&self, frame: Frame) {
+        match frame {
+            Frame::Deliver {
+                dest,
+                id,
+                bits,
+                local,
+                body,
+            } => (self.mach)(Incoming {
+                dest,
+                id,
+                bits,
+                local,
+                body,
+            }),
+            Frame::XpcDeliver {
+                dest,
+                kind,
+                reply,
+                token,
+                body,
+            } => {
+                let sink = self.xpc.lock().ok().and_then(|sink| sink.as_ref().cloned());
+                if let Some(sink) = sink {
+                    sink(XpcIncoming {
+                        dest,
+                        kind,
+                        reply,
+                        token,
+                        body,
+                    });
+                }
+            }
+            _ => {}
+        }
+    }
+}
 
 pub struct Client {
     stream: Mutex<TcpStream>,
@@ -280,12 +441,13 @@ pub struct Client {
     next_request: AtomicU64,
     reader: Mutex<Option<JoinHandle<()>>>,
     lost: Arc<AtomicBool>,
+    router: Arc<Router>,
 }
 
 impl Client {
     pub fn connect(
         endpoint: &Path,
-        delivery: Arc<dyn Fn(Incoming) + Send + Sync>,
+        delivery: MachSink,
         lost: Arc<dyn Fn() + Send + Sync>,
     ) -> Result<(Arc<Self>, u64), String> {
         let endpoint_text = fs::read_to_string(endpoint)
@@ -344,16 +506,21 @@ impl Client {
 
         let pending: Pending = Arc::new(Mutex::new(BTreeMap::new()));
         let lost_flag = Arc::new(AtomicBool::new(false));
+        let router = Arc::new(Router {
+            mach: delivery,
+            xpc: Mutex::new(None),
+        });
         let client = Arc::new(Self {
             stream: Mutex::new(stream),
             pending: pending.clone(),
             next_request: AtomicU64::new(1),
             reader: Mutex::new(None),
             lost: lost_flag.clone(),
+            router: router.clone(),
         });
         let thread_pending = pending;
         let handle = thread::spawn(move || {
-            reader_loop(read_stream, thread_pending, delivery);
+            reader_loop(read_stream, thread_pending, router);
             lost_flag.store(true, Ordering::SeqCst);
             lost();
         });
@@ -400,6 +567,56 @@ impl Client {
                 Err("mach broker request timed out".into())
             }
         }
+    }
+
+    pub fn set_xpc_delivery(&self, delivery: XpcSink) {
+        if let Ok(mut sink) = self.router.xpc.lock() {
+            *sink = Some(delivery);
+        }
+    }
+
+    fn write_only(&self, frame: Frame) -> Result<(), String> {
+        if self.lost.load(Ordering::SeqCst) {
+            return Err("mach broker disconnected".into());
+        }
+        match self.stream.lock() {
+            Ok(mut stream) => write_frame(&mut stream, &frame)
+                .map_err(|error| format!("mach broker write: {error}")),
+            Err(_) => Err("mach broker stream poisoned".into()),
+        }
+    }
+
+    pub fn xpc_connect(&self, name: &str) -> Result<(u32, u64, u64), String> {
+        match self.request(|request| Frame::XpcConnect {
+            request,
+            name: name.to_string(),
+        })? {
+            Frame::XpcConnectReply {
+                status, id, peer, ..
+            } => Ok((status, id, peer)),
+            _ => Err("mach broker returned the wrong XPC connect reply".into()),
+        }
+    }
+
+    pub fn xpc_send(
+        &self,
+        from: u64,
+        dest: u64,
+        kind: u32,
+        token: u64,
+        body: &[u8],
+    ) -> Result<(), String> {
+        self.write_only(Frame::XpcSend {
+            from,
+            dest,
+            kind,
+            token,
+            body: body.to_vec(),
+        })
+    }
+
+    pub fn xpc_close(&self, id: u64) -> Result<(), String> {
+        self.write_only(Frame::XpcClose { id })
     }
 
     pub fn check_in(&self, name: &str, port: u64) -> Result<u32, String> {
@@ -463,26 +680,12 @@ impl Client {
     }
 }
 
-fn reader_loop(
-    mut stream: TcpStream,
-    pending: Pending,
-    delivery: Arc<dyn Fn(Incoming) + Send + Sync>,
-) {
+fn reader_loop(mut stream: TcpStream, pending: Pending, router: Arc<Router>) {
     loop {
         match read_frame(&mut stream) {
-            Ok(Some(Frame::Deliver {
-                dest,
-                id,
-                bits,
-                local,
-                body,
-            })) => delivery(Incoming {
-                dest,
-                id,
-                bits,
-                local,
-                body,
-            }),
+            Ok(Some(frame @ (Frame::Deliver { .. } | Frame::XpcDeliver { .. }))) => {
+                router.deliver(frame);
+            }
             Ok(Some(frame)) => {
                 if let Some(request) = frame.request()
                     && let Ok(mut pending) = pending.lock()

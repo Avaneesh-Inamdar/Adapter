@@ -83,9 +83,8 @@ unsafe extern "sysv64" fn block_copy(block: *const c_void) -> *mut c_void {
             return std::ptr::null_mut();
         }
         std::ptr::copy_nonoverlapping(source as *const u8, heap as *mut u8, size);
-        let flags = ((*heap).flags & !(BLOCK_REFCOUNT_MASK | BLOCK_DEALLOCATING))
-            | BLOCK_NEEDS_FREE
-            | 2;
+        let flags =
+            ((*heap).flags & !(BLOCK_REFCOUNT_MASK | BLOCK_DEALLOCATING)) | BLOCK_NEEDS_FREE | 2;
         (*heap).flags = flags;
         (*heap).isa = malloc_isa();
         if flags & BLOCK_HAS_COPY_DISPOSE != 0 {
@@ -125,7 +124,8 @@ unsafe extern "sysv64" fn block_release(block: *const c_void) {
         if next & BLOCK_HAS_COPY_DISPOSE != 0 {
             let dispose = *((*header).descriptor as *const usize).add(3);
             if dispose != 0 {
-                let dispose: unsafe extern "sysv64" fn(*const c_void) = std::mem::transmute(dispose);
+                let dispose: unsafe extern "sysv64" fn(*const c_void) =
+                    std::mem::transmute(dispose);
                 dispose(block);
             }
         }
@@ -136,6 +136,33 @@ unsafe extern "sysv64" fn block_release(block: *const c_void) {
             block.cast_mut().cast(),
             Layout::from_size_align_unchecked(size, align),
         );
+    }
+}
+
+/// Copies a stack or heap block and returns an owned reference.
+///
+/// # Safety
+/// `block` must be null or a valid block pointer.
+pub unsafe fn copy(block: *const c_void) -> *mut c_void {
+    unsafe { block_copy(block) }
+}
+
+/// Invokes a copied block with two arguments and returns its Boolean result.
+///
+/// # Safety
+/// `block` must be a live block whose invoke function accepts these arguments.
+pub unsafe fn invoke_two(block: *mut c_void, first: usize, second: *mut c_void) -> bool {
+    if block.is_null() {
+        return false;
+    }
+    unsafe {
+        let invoke = (*(block as *const Block)).invoke;
+        if invoke == 0 {
+            return false;
+        }
+        let invoke: unsafe extern "sysv64" fn(*mut c_void, usize, *mut c_void) -> bool =
+            std::mem::transmute(invoke);
+        invoke(block, first, second)
     }
 }
 

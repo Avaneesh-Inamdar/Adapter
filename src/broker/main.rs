@@ -1,7 +1,8 @@
 //! `adapter-broker` owns the Mach bootstrap namespace shared by guest processes
 //! and starts registered launchd-style jobs on demand.
 use adapter::broker::{
-    Frame, INVALID_DEST, MAGIC, SERVICE_ACTIVE, UNKNOWN_SERVICE, VERSION,
+    Frame, INVALID_DEST, MAGIC, SERVICE_ACTIVE, UNKNOWN_SERVICE, VERSION, XPC_ACCEPT,
+    XPC_INTERRUPTED, XPC_INVALID, XPC_MESSAGE, XPC_REPLY,
     job::{Job, host_path},
     read_frame, write_frame,
 };
@@ -33,6 +34,20 @@ struct State {
     retired: HashSet<u64>,
     jobs: Vec<RuntimeJob>,
     job_services: HashMap<String, usize>,
+    next_xpc_route: u64,
+    next_xpc_link: u64,
+    xpc_routes: HashMap<u64, XpcRoute>,
+    xpc_links: HashMap<u64, XpcLink>,
+}
+
+struct XpcRoute {
+    conn: u64,
+    peer: u64,
+    link: u64,
+}
+
+struct XpcLink {
+    routes: [u64; 2],
 }
 
 struct RuntimeJob {
@@ -111,6 +126,10 @@ fn run() -> Result<(), String> {
             retired: HashSet::new(),
             jobs,
             job_services,
+            next_xpc_route: 1,
+            next_xpc_link: 1,
+            xpc_routes: HashMap::new(),
+            xpc_links: HashMap::new(),
         }),
         changed: Condvar::new(),
         endpoint,
@@ -297,6 +316,94 @@ fn open_log(path: Option<&str>) -> Result<Option<fs::File>, String> {
         .map_err(|e| format!("open log {path}: {e}"))
 }
 
+fn xpc_notice(state: &mut State, conn: u64, dest: u64, kind: u32) {
+    if let Some(sender) = state.conns.get(&conn) {
+        let _ = sender.send(Frame::XpcDeliver {
+            dest,
+            kind,
+            reply: 0,
+            token: 0,
+            body: Vec::new(),
+        });
+    }
+}
+
+fn close_xpc_link(state: &mut State, link: u64, closing: u64) {
+    let Some(entry) = state.xpc_links.remove(&link) else {
+        return;
+    };
+    for route_id in entry.routes {
+        if let Some(route) = state.xpc_routes.remove(&route_id)
+            && route.conn != closing
+        {
+            xpc_notice(state, route.conn, route_id, XPC_INTERRUPTED);
+        }
+    }
+}
+
+fn drop_xpc_conn(state: &mut State, conn: u64) {
+    let links: Vec<u64> = state
+        .xpc_routes
+        .values()
+        .filter(|route| route.conn == conn)
+        .map(|route| route.link)
+        .collect();
+    for link in links {
+        close_xpc_link(state, link, conn);
+    }
+}
+
+fn connection_for(shared: &Arc<Shared>, conn: u64, name: &str) -> (u32, u64, u64) {
+    let (status, port) = look_up(shared, name);
+    if status != 0 || port == 0 {
+        return (if status == 0 { UNKNOWN_SERVICE } else { status }, 0, 0);
+    }
+    let Ok(mut state) = shared.state.lock() else {
+        return (1, 0, 0);
+    };
+    let owner = state.services.iter().find_map(|(_, (owner, service))| {
+        (*service == port && state.conns.contains_key(owner) && !state.retired.contains(&port))
+            .then_some(*owner)
+    });
+    let Some(owner) = owner else {
+        return (UNKNOWN_SERVICE, 0, 0);
+    };
+    let link = state.next_xpc_link;
+    state.next_xpc_link = state.next_xpc_link.wrapping_add(1).max(1);
+    let id = state.next_xpc_route;
+    state.next_xpc_route = state.next_xpc_route.wrapping_add(1).max(1);
+    let peer = state.next_xpc_route;
+    state.next_xpc_route = state.next_xpc_route.wrapping_add(1).max(1);
+    state.xpc_links.insert(link, XpcLink { routes: [id, peer] });
+    state.xpc_routes.insert(id, XpcRoute { conn, peer, link });
+    state.xpc_routes.insert(
+        peer,
+        XpcRoute {
+            conn: owner,
+            peer: id,
+            link,
+        },
+    );
+    let delivered = state.conns.get(&owner).is_some_and(|sender| {
+        sender
+            .send(Frame::XpcDeliver {
+                dest: peer,
+                kind: XPC_ACCEPT,
+                reply: id,
+                token: 0,
+                body: name.as_bytes().to_vec(),
+            })
+            .is_ok()
+    });
+    if !delivered {
+        state.xpc_links.remove(&link);
+        state.xpc_routes.remove(&id);
+        state.xpc_routes.remove(&peer);
+        return (UNKNOWN_SERVICE, 0, 0);
+    }
+    (0, id, peer)
+}
+
 fn look_up(shared: &Arc<Shared>, name: &str) -> (u32, u64) {
     let deadline = Instant::now() + ACTIVATION_TIMEOUT;
     let Ok(mut state) = shared.state.lock() else {
@@ -424,6 +531,7 @@ fn handle_connection(
         for port in dead {
             state.retired.insert(port);
         }
+        drop_xpc_conn(&mut state, conn);
     }
     shared.changed.notify_all();
     drop(sender);
@@ -521,6 +629,68 @@ fn dispatch(frame: Frame, conn: u64, shared: &Arc<Shared>, sender: &mpsc::Sender
             shared.changed.notify_all();
             reply(sender, Frame::RetireReply { request })
         }
+        Frame::XpcConnect { request, name } => {
+            let (status, id, peer) = if name.is_empty() || name.len() >= 128 {
+                (1, 0, 0)
+            } else {
+                connection_for(shared, conn, &name)
+            };
+            reply(
+                sender,
+                Frame::XpcConnectReply {
+                    request,
+                    status,
+                    id,
+                    peer,
+                },
+            )
+        }
+        Frame::XpcSend {
+            from,
+            dest,
+            kind,
+            token,
+            body,
+        } => {
+            if (kind == XPC_MESSAGE || kind == XPC_REPLY)
+                && let Ok(mut state) = shared.state.lock()
+            {
+                let valid = match (state.xpc_routes.get(&from), state.xpc_routes.get(&dest)) {
+                    (Some(source), Some(target)) => {
+                        source.conn == conn && source.link == target.link && source.peer == dest
+                    }
+                    _ => false,
+                };
+                if valid {
+                    if let Some(target) = state.xpc_routes.get(&dest)
+                        && let Some(sender) = state.conns.get(&target.conn)
+                    {
+                        let _ = sender.send(Frame::XpcDeliver {
+                            dest,
+                            kind,
+                            reply: from,
+                            token,
+                            body,
+                        });
+                    }
+                } else {
+                    xpc_notice(&mut state, conn, from, XPC_INVALID);
+                }
+            }
+            true
+        }
+        Frame::XpcClose { id } => {
+            if let Ok(mut state) = shared.state.lock() {
+                let link = state
+                    .xpc_routes
+                    .get(&id)
+                    .and_then(|route| (route.conn == conn).then_some(route.link));
+                if let Some(link) = link {
+                    close_xpc_link(&mut state, link, conn);
+                }
+            }
+            true
+        }
         Frame::Welcome { .. }
         | Frame::Denied { .. }
         | Frame::CheckInReply { .. }
@@ -528,6 +698,8 @@ fn dispatch(frame: Frame, conn: u64, shared: &Arc<Shared>, sender: &mpsc::Sender
         | Frame::SendReply { .. }
         | Frame::Deliver { .. }
         | Frame::RetireReply { .. }
+        | Frame::XpcConnectReply { .. }
+        | Frame::XpcDeliver { .. }
         | Frame::Hello { .. } => false,
     }
 }

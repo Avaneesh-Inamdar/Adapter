@@ -7,7 +7,7 @@
 use crate::broker::{self, Client, Incoming};
 use std::{
     collections::{BTreeMap, VecDeque},
-    ffi::{CStr, c_char},
+    ffi::{CStr, CString, c_char},
     path::Path,
     sync::{
         Arc, Condvar, Mutex, MutexGuard,
@@ -769,6 +769,26 @@ extern "sysv64" fn mach_msg(
         return MACH_MSG_SUCCESS;
     }
     receive_locked(guard, msg, option, rcv_size, rcv_name, timeout)
+}
+
+pub fn broker_client() -> Option<Arc<Client>> {
+    STATE
+        .lock()
+        .ok()
+        .and_then(|guard| guard.as_ref().and_then(|state| state.broker.clone()))
+}
+
+pub fn release_port(name: u32) {
+    let _ = mach_port_destroy(MACH_TASK_SELF_NAME, name);
+}
+
+pub fn register_service(name: &str) -> Result<u32, i32> {
+    let name = CString::new(name).map_err(|_| BOOTSTRAP_NOT_PRIVILEGED)?;
+    let mut port = 0u32;
+    match bootstrap_check_in(BOOTSTRAP_PORT_NAME, name.as_ptr(), &mut port) {
+        0 if port != 0 => Ok(port),
+        status => Err(status),
+    }
 }
 
 extern "sysv64" fn bootstrap_check_in(

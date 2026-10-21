@@ -11,6 +11,7 @@ pub mod sync;
 pub mod thread_state;
 pub mod threads;
 pub mod tlv;
+pub mod xpc;
 use std::{
     ffi::{CStr, c_char, c_void},
     io::Write,
@@ -47,6 +48,11 @@ unsafe extern "sysv64" fn malloc(n: usize) -> *mut c_void {
 unsafe extern "sysv64" fn free(p: *mut c_void) {
     unsafe { host_free(p) }
 }
+
+pub fn guest_alloc(n: usize) -> *mut u8 {
+    unsafe { host_malloc(n).cast() }
+}
+
 unsafe extern "sysv64" fn memcpy(dst: *mut u8, src: *const u8, n: usize) -> *mut u8 {
     if n != 0 {
         unsafe { std::ptr::copy_nonoverlapping(src, dst, n) }
@@ -67,6 +73,9 @@ pub fn symbol(name: &str) -> Option<u64> {
         return Some(value);
     }
     if let Some(value) = blocks::symbol(name) {
+        return Some(value);
+    }
+    if let Some(value) = xpc::symbol(name) {
         return Some(value);
     }
     if let Some(value) = thread_state::symbol(name) {
