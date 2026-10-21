@@ -73,7 +73,9 @@ impl Session {
         }) {
             Ok(())
         } else {
-            Err("Objective-C metadata pointer outside permitted mapped segment".into())
+            Err(format!(
+                "Objective-C metadata pointer outside permitted mapped segment: {address:#x}+{size}"
+            ))
         }
     }
     fn u64(&self, address: u64) -> Result<u64> {
@@ -93,15 +95,21 @@ impl Session {
             return Ok(key.clone());
         }
         // Bound every byte before dereferencing. C strings may end at a page edge.
+        // Names passed to the public entry points may live in a guest stack frame
+        // rather than a mapped metadata segment, so the calling thread's stack is
+        // admitted for these bounded one-byte reads.
         let mut bytes = Vec::new();
         for offset in 0..4096 {
-            self.range(
-                address
-                    .checked_add(offset)
-                    .ok_or("Objective-C string overflow")?,
-                1,
-                false,
-            )?;
+            let byte_address = address
+                .checked_add(offset)
+                .ok_or("Objective-C string overflow")?;
+            if self.range(byte_address, 1, false).is_err()
+                && !crate::platform::stack_contains(byte_address)
+            {
+                return Err(format!(
+                    "Objective-C metadata pointer outside permitted mapped segment: {byte_address:#x}+1"
+                ));
+            }
             let byte = unsafe { ((address + offset) as *const u8).read() };
             if byte == 0 {
                 return Ok(bytes);
@@ -144,7 +152,10 @@ impl Session {
                 "Objective-C class flags {flags:#x} unsupported (ARC/C++/weak/Swift)"
             ));
         }
-        let size = self.u32(ro + 8)? as usize;
+        // ro.instanceSize omits nothing for a subclass but is 0 for a root class
+        // with no ivars; a realized class always carries the isa word, which is
+        // what class_getInstanceSize answers on Darwin.
+        let size = (self.u32(ro + 8)? as usize).max(8).next_multiple_of(8);
         let start = self.u32(ro + 4)? as usize;
         if size > 1024 * 1024 || start > size {
             return Err("Objective-C instance layout invalid".into());

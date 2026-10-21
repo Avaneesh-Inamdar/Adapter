@@ -19,13 +19,39 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "tests/differential/libc_cases.c"
 SCHEMA = 1
-SUITE = "adapter-libc-v1"
 SEED = "0x6d2b79f5"
-PROGRAM = "libc-differential"
-FAMILIES = ("strlen", "strcmp", "memcmp", "memmove", "strtol", "snprintf", "gmtime_r", "timegm")
-RESULT_LENGTHS = dict(zip(FAMILIES, (1, 1, 1, 1, 3, 2, 11, 11)))
 CHILD_ENV = {"LC_ALL": "C", "LANG": "C", "TZ": "UTC0"}
 SHA = re.compile(r"[0-9a-f]{64}\Z")
+
+
+class Suite:
+    """One same-artifact suite: identity, record contract and build recipe."""
+
+    def __init__(self, identifier, families, result_lengths, program, source, flags):
+        self.id = identifier
+        self.families = families
+        self.result_lengths = result_lengths
+        self.program = program
+        self.source = source
+        self.flags = flags
+
+
+LIBC = Suite("adapter-libc-v1",
+             ("strlen", "strcmp", "memcmp", "memmove", "strtol", "snprintf", "gmtime_r", "timegm"),
+             dict(zip(("strlen", "strcmp", "memcmp", "memmove", "strtol", "snprintf", "gmtime_r", "timegm"),
+                      (1, 1, 1, 1, 3, 2, 11, 11))),
+             "libc-differential", "tests/differential/libc_cases.c",
+             ["-std=c11", "-O1", "-fno-builtin", "-fno-stack-protector", "-fno-asynchronous-unwind-tables"])
+OBJC = Suite("adapter-objc-v1",
+             ("selector", "dispatch", "super", "category", "nil", "classinfo", "ownership", "loadorder"),
+             dict(zip(("selector", "dispatch", "super", "category", "nil", "classinfo", "ownership", "loadorder"),
+                      (4, 1, 1, 1, 2, 4, 2, 2))),
+             "objc-differential", "tests/differential/objc_cases.m",
+             ["-std=c11", "-O1", "-fno-objc-arc", "-fno-stack-protector", "-fno-asynchronous-unwind-tables",
+              "-lobjc"])
+SUITES = {suite.id: suite for suite in (LIBC, OBJC)}
+# Backwards-compatible aliases for the primary libc suite.
+SUITE, FAMILIES, RESULT_LENGTHS, PROGRAM, SOURCE = LIBC.id, LIBC.families, LIBC.result_lengths, LIBC.program, LIBC.source
 
 
 def sha256(path):
@@ -102,21 +128,25 @@ def manifest_errors(manifest):
     errors = []
     if not isinstance(manifest, dict):
         return ["manifest is not an object"]
-    if type(manifest.get("schema")) is not int or manifest.get("schema") != SCHEMA or manifest.get("suite") != SUITE:
+    identifier = manifest.get("suite")
+    suite = SUITES.get(identifier) if isinstance(identifier, str) else None
+    if type(manifest.get("schema")) is not int or manifest.get("schema") != SCHEMA or suite is None:
         errors.append("manifest schema/suite mismatch")
+        if suite is None:
+            return errors
     try:
         count = manifest["count"]
         if type(count) is not int or case_count(count) != count:
             errors.append("invalid manifest count")
     except (KeyError, TypeError, ValueError):
         errors.append("invalid manifest count")
-    if manifest.get("families") != list(FAMILIES) or manifest.get("seed") != SEED:
+    if manifest.get("families") != list(suite.families) or manifest.get("seed") != SEED:
         errors.append("manifest generator/families mismatch")
     program = manifest.get("program", {})
-    if not isinstance(program, dict) or program.get("file") != PROGRAM or not SHA.fullmatch(str(program.get("sha256", ""))):
+    if not isinstance(program, dict) or program.get("file") != suite.program or not SHA.fullmatch(str(program.get("sha256", ""))):
         errors.append("invalid manifest program identity")
     source = manifest.get("source", {})
-    if not isinstance(source, dict) or source.get("file") != "libc_cases.c" or not SHA.fullmatch(str(source.get("sha256", ""))):
+    if not isinstance(source, dict) or source.get("file") != Path(suite.source).name or not SHA.fullmatch(str(source.get("sha256", ""))):
         errors.append("invalid manifest source identity")
     compiler = manifest.get("build", {}).get("compiler", {}) if isinstance(manifest.get("build"), dict) else {}
     if not isinstance(compiler, dict) or not SHA.fullmatch(str(compiler.get("sha256", ""))):
@@ -124,12 +154,12 @@ def manifest_errors(manifest):
     return errors
 
 
-def build_bundle(output, count=4096):
+def build_bundle(output, count=4096, suite=LIBC):
     count = case_count(count)
     if platform.system() != "Darwin":
         raise ValueError("build requires macOS and its host libSystem linker; no guest is executed")
     output = Path(output).resolve()
-    if (output / "manifest.json").exists() or (output / PROGRAM).exists():
+    if (output / "manifest.json").exists() or (output / suite.program).exists():
         raise ValueError("bundle already contains a program/manifest; choose a fresh output directory")
     compiler = shutil.which("clang")
     if not compiler:
@@ -137,18 +167,17 @@ def build_bundle(output, count=4096):
     compiler = str(Path(compiler).resolve())
     version = subprocess.run([compiler, "--version"], capture_output=True, text=True, timeout=15, check=True).stdout
     output.mkdir(parents=True, exist_ok=True)
-    copied_source = output / "libc_cases.c"
-    shutil.copyfile(SOURCE, copied_source)
-    command = [compiler, "-target", "x86_64-apple-macos10.13", "-std=c11", "-O1",
-               "-fno-builtin", "-fno-stack-protector", "-fno-asynchronous-unwind-tables",
-               "-Wl,-no_uuid", f"-DDIFF_CASE_COUNT={count}", str(copied_source), "-o", str(output / PROGRAM)]
+    copied_source = output / Path(suite.source).name
+    shutil.copyfile(ROOT / suite.source, copied_source)
+    command = [compiler, "-target", "x86_64-apple-macos10.13", *suite.flags,
+               "-Wl,-no_uuid", f"-DDIFF_CASE_COUNT={count}", str(copied_source), "-o", str(output / suite.program)]
     process = subprocess.run(command, capture_output=True, text=True, timeout=60)
     if process.returncode:
         raise ValueError(f"compile/link failed ({process.returncode}):\n{process.stdout}\n{process.stderr}")
-    macho_x64(output / PROGRAM)
-    manifest = {"schema": SCHEMA, "suite": SUITE, "seed": SEED, "count": count,
-                "families": list(FAMILIES),
-                "program": {"file": PROGRAM, "sha256": sha256(output / PROGRAM)},
+    macho_x64(output / suite.program)
+    manifest = {"schema": SCHEMA, "suite": suite.id, "seed": SEED, "count": count,
+                "families": list(suite.families),
+                "program": {"file": suite.program, "sha256": sha256(output / suite.program)},
                 "source": {"file": copied_source.name, "sha256": sha256(copied_source)},
                 "build": {"command": command, "compiler": {"path": compiler, "sha256": sha256(compiler), "version": version},
                           "host": host_metadata(), "stdout": process.stdout, "stderr": process.stderr}}
@@ -156,7 +185,7 @@ def build_bundle(output, count=4096):
     return manifest
 
 
-def parse_records(stdout, count):
+def parse_records(stdout, count, suite=LIBC):
     """Reject duplicates, wrong schema/types, missing IDs, and reordered lines."""
     records, errors, seen = [], [], set()
     lines = stdout.splitlines()
@@ -175,7 +204,7 @@ def parse_records(stdout, count):
         if type(index) is not int or index < 0 or index >= count:
             errors.append(f"line {line_number}: invalid case index")
             continue
-        expected_family = FAMILIES[index % len(FAMILIES)]
+        expected_family = suite.families[index % len(suite.families)]
         expected_id = f"{expected_family}:{index}"
         if family != expected_family or identifier != expected_id:
             errors.append(f"line {line_number}: family/id mismatch for index {index}")
@@ -185,12 +214,12 @@ def parse_records(stdout, count):
         seen.add(identifier)
         if index != line_number - 1:
             errors.append(f"line {line_number}: unexpected case order/index {index}")
-        if (not isinstance(result, list) or len(result) != RESULT_LENGTHS[family]
+        if (not isinstance(result, list) or len(result) != suite.result_lengths[family]
                 or any(type(value) is not int or not -(1 << 63) <= value < (1 << 63) for value in result)):
             errors.append(f"line {line_number}: invalid {family} result vector")
             continue
         records.append(item)
-    expected = {f"{FAMILIES[i % 8]}:{i}" for i in range(count)}
+    expected = {f"{suite.families[i % len(suite.families)]}:{i}" for i in range(count)}
     missing = sorted(expected - seen)
     if missing:
         errors.append(f"missing {len(missing)} case IDs: {', '.join(missing[:8])}")
@@ -203,7 +232,8 @@ def capture_bundle(bundle, output, adapter=None, timeout=60):
     errors = manifest_errors(manifest)
     if errors:
         raise ValueError("; ".join(errors))
-    program = bundle / PROGRAM
+    suite = SUITES[manifest["suite"]]
+    program = bundle / suite.program
     macho_x64(program)
     digest = sha256(program)
     if digest != manifest["program"]["sha256"]:
@@ -221,7 +251,7 @@ def capture_bundle(bundle, output, adapter=None, timeout=60):
         if host["system"] != "Darwin":
             raise ValueError("native reference capture requires Darwin; Windows requires --adapter")
         command = [str(program)]
-    payload = {"schema": SCHEMA, "suite": SUITE, "mode": "adapter" if adapter else "native",
+    payload = {"schema": SCHEMA, "suite": suite.id, "mode": "adapter" if adapter else "native",
                "program_sha256": digest, "manifest": manifest, "host": host,
                "adapter": adapter_info, "command": command, "environment": CHILD_ENV.copy(),
                "returncode": None, "timed_out": False, "stdout": "", "stderr": "", "records": [], "errors": []}
@@ -243,7 +273,7 @@ def capture_bundle(bundle, output, adapter=None, timeout=60):
         except UnicodeDecodeError:
             payload[name] = raw.decode("utf-8", errors="replace")
             payload["errors"].append(f"{name} is not UTF-8")
-    payload["records"], validation = parse_records(payload["stdout"], manifest["count"])
+    payload["records"], validation = parse_records(payload["stdout"], manifest["count"], suite)
     payload["errors"].extend(validation)
     if payload["returncode"] != 0:
         payload["errors"].append(f"program exit status is {payload['returncode']}, expected 0")
@@ -256,8 +286,12 @@ def capture_errors(capture, reference=False):
     errors = []
     if not isinstance(capture, dict):
         return ["capture is not an object"]
-    if type(capture.get("schema")) is not int or capture.get("schema") != SCHEMA or capture.get("suite") != SUITE:
+    identifier = capture.get("suite")
+    suite = SUITES.get(identifier) if isinstance(identifier, str) else None
+    if type(capture.get("schema")) is not int or capture.get("schema") != SCHEMA or suite is None:
         errors.append("capture schema/suite mismatch")
+        if suite is None:
+            return errors
     manifest = capture.get("manifest")
     validation = manifest_errors(manifest)
     errors.extend(validation)
@@ -289,7 +323,7 @@ def capture_errors(capture, reference=False):
         if not isinstance(stdout, str):
             errors.append("missing stdout evidence")
         else:
-            records, record_errors = parse_records(stdout, manifest["count"])
+            records, record_errors = parse_records(stdout, manifest["count"], SUITES[manifest["suite"]])
             errors.extend(record_errors)
             if capture.get("records") != records:
                 errors.append("stored records do not match stdout evidence")
@@ -299,7 +333,7 @@ def capture_errors(capture, reference=False):
 
 
 def compare_captures(reference_path, candidate_path, output):
-    report = {"schema": SCHEMA, "suite": SUITE, "status": "invalid", "errors": [],
+    report = {"schema": SCHEMA, "suite": None, "status": "invalid", "errors": [],
               "reference": str(reference_path), "candidate": str(candidate_path),
               "case_count": 0, "matched": 0, "mismatched": 0, "differences": []}
     captures = []
@@ -313,6 +347,11 @@ def compare_captures(reference_path, candidate_path, output):
             report["errors"].append(f"{label}: {exc}")
     if not report["errors"]:
         reference, candidate = captures
+        if reference["suite"] != candidate["suite"]:
+            report["errors"].append("reference and candidate suites differ")
+    if not report["errors"]:
+        report["suite"] = reference["suite"]
+        suite = SUITES[reference["suite"]]
         if reference["program_sha256"] != candidate["program_sha256"]:
             report["errors"].append("reference and candidate program SHA-256 differ")
         if reference["manifest"]["count"] != candidate["manifest"]["count"]:
@@ -322,7 +361,7 @@ def compare_captures(reference_path, candidate_path, output):
     if not report["errors"]:
         report["program_sha256"] = reference["program_sha256"]
         report["case_count"] = reference["manifest"]["count"]
-        report["families"] = {name: {"matched": 0, "mismatched": 0} for name in FAMILIES}
+        report["families"] = {name: {"matched": 0, "mismatched": 0} for name in suite.families}
         for expected, actual in zip(reference["records"], candidate["records"]):
             key = "matched" if expected == actual else "mismatched"
             report[key] += 1
@@ -341,6 +380,7 @@ def main(argv=None):
     build = sub.add_parser("build", help="compile on macOS without executing the program")
     build.add_argument("--output", required=True, type=Path)
     build.add_argument("--count", default=4096, type=int)
+    build.add_argument("--suite", default=LIBC.id, choices=sorted(SUITES))
     capture = sub.add_parser("capture", help="explicitly execute a bundle and validate all JSONL cases")
     capture.add_argument("--bundle", required=True, type=Path)
     capture.add_argument("--output", required=True, type=Path)
@@ -353,8 +393,9 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         if args.command == "build":
-            result = build_bundle(args.output, args.count)
-            print(f"built {result['count']} cases; program SHA-256 {result['program']['sha256']}; execution not attempted")
+            result = build_bundle(args.output, args.count, SUITES[args.suite])
+            print(f"built {result['suite']} {result['count']} cases; program SHA-256 "
+                  f"{result['program']['sha256']}; execution not attempted")
             return 0
         if args.command == "capture":
             if not 1 <= args.timeout <= 3600:

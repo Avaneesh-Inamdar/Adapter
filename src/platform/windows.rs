@@ -3,7 +3,17 @@ use crate::{Result, inspect::Image};
 use std::{ffi::c_void, ptr};
 use windows_sys::Win32::System::{
     Diagnostics::Debug::FlushInstructionCache, Memory::*, Threading::GetCurrentProcess,
+    Threading::GetCurrentThreadStackLimits,
 };
+
+/// True when the address lies inside the calling thread's stack, excluding guard
+/// pages. Guest Objective-C names may be built in a stack frame, so the runtime
+/// admits this window for its bounded one-byte string reads.
+pub fn stack_contains(address: u64) -> bool {
+    let (mut low, mut high) = (0usize, 0usize);
+    unsafe { GetCurrentThreadStackLimits(&mut low, &mut high) };
+    low != 0 && address >= low as u64 && address < high as u64
+}
 
 pub struct Mapping {
     base: *mut u8,
