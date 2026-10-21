@@ -1,6 +1,8 @@
 //! Loopback broker for Mach ports that span guest processes.
 //! The broker owns the bootstrap namespace and forwards message payloads; it is
 //! not a Mach kernel and performs no memory protection.
+pub mod job;
+
 use serde_json::Value;
 use std::{
     collections::BTreeMap,
