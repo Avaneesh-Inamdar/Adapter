@@ -1,0 +1,286 @@
+{
+  "schema": 1,
+  "suite": "adapter-cli-v1",
+  "cases": [
+    {
+      "id": "jq-version",
+      "binary": "jq",
+      "argv": [
+        "--version"
+      ],
+      "stdin": ""
+    },
+    {
+      "id": "jq-identity",
+      "binary": "jq",
+      "argv": [
+        "."
+      ],
+      "stdin": "{\"a\":1}\n"
+    },
+    {
+      "id": "jq-compact",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "."
+      ],
+      "stdin": "{\"a\":[1,2,3]}\n"
+    },
+    {
+      "id": "jq-map",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "map(. * 2)"
+      ],
+      "stdin": "[1,2,3]\n"
+    },
+    {
+      "id": "jq-sort",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "sort"
+      ],
+      "stdin": "[3,1,2]\n"
+    },
+    {
+      "id": "jq-object",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "{x:.a, y:.b}"
+      ],
+      "stdin": "{\"a\":1,\"b\":2}\n"
+    },
+    {
+      "id": "jq-unicode",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "."
+      ],
+      "stdin": "{\"u\":\"héllo ☃\"}\n"
+    },
+    {
+      "id": "jq-regex",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "[match(\"a+\")]"
+      ],
+      "stdin": "\"baaad\"\n"
+    },
+    {
+      "id": "jq-slurp",
+      "binary": "jq",
+      "argv": [
+        "-cs",
+        "add"
+      ],
+      "stdin": "1\n2\n3\n"
+    },
+    {
+      "id": "jq-keys",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "keys"
+      ],
+      "stdin": "{\"b\":1,\"a\":2}\n"
+    },
+    {
+      "id": "jq-tostring",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "tostring"
+      ],
+      "stdin": "12.5\n"
+    },
+    {
+      "id": "jq-math",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "[.[] | pow(.; 2)]"
+      ],
+      "stdin": "[2,3]\n"
+    },
+    {
+      "id": "jq-todate",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "todate"
+      ],
+      "stdin": "0\n"
+    },
+    {
+      "id": "jq-empty-status",
+      "binary": "jq",
+      "argv": [
+        "-e",
+        "empty"
+      ],
+      "stdin": "null\n"
+    },
+    {
+      "id": "jq-error-status",
+      "binary": "jq",
+      "argv": [
+        "-e",
+        "error(\"boom\")"
+      ],
+      "stdin": "null\n"
+    },
+    {
+      "id": "jq-parse-error",
+      "binary": "jq",
+      "argv": [
+        "-c",
+        "."
+      ],
+      "stdin": "{bad json}\n"
+    },
+    {
+      "id": "jq-null-input",
+      "binary": "jq",
+      "argv": [
+        "-nc",
+        "1+1"
+      ],
+      "stdin": ""
+    },
+    {
+      "id": "jq-arg",
+      "binary": "jq",
+      "argv": [
+        "-cn",
+        "--arg",
+        "k",
+        "v",
+        "$k"
+      ],
+      "stdin": ""
+    },
+    {
+      "id": "jq-bad-flag",
+      "binary": "jq",
+      "argv": [
+        "--definitely-not-a-flag"
+      ],
+      "stdin": ""
+    },
+    {
+      "id": "rg-stdin-word",
+      "binary": "rg",
+      "argv": [
+        "-w",
+        "o",
+        "-"
+      ],
+      "stdin": "o fo oo\n"
+    },
+    {
+      "id": "rg-stdin-hit",
+      "binary": "rg",
+      "argv": [
+        "-n",
+        "foo",
+        "-"
+      ],
+      "stdin": "foo\nbar\n"
+    },
+    {
+      "id": "rg-stdin-miss",
+      "binary": "rg",
+      "argv": [
+        "-c",
+        "zzz",
+        "-"
+      ],
+      "stdin": "foo\n"
+    },
+    {
+      "id": "rg-stdin-multiline",
+      "binary": "rg",
+      "argv": [
+        "-n",
+        "o",
+        "-"
+      ],
+      "stdin": "foo\nboo\n"
+    },
+    {
+      "id": "rg-stdin-count",
+      "binary": "rg",
+      "argv": [
+        "-c",
+        "o",
+        "-"
+      ],
+      "stdin": "foo\nboo\n"
+    },
+    {
+      "id": "rg-stdin-invert",
+      "binary": "rg",
+      "argv": [
+        "-v",
+        "o",
+        "-"
+      ],
+      "stdin": "foo\nbar\n"
+    },
+    {
+      "id": "rg-stdin-only",
+      "binary": "rg",
+      "argv": [
+        "-o",
+        "o+",
+        "-"
+      ],
+      "stdin": "foo\n"
+    },
+    {
+      "id": "rg-stdin-ignore-case",
+      "binary": "rg",
+      "argv": [
+        "-i",
+        "FOO",
+        "-"
+      ],
+      "stdin": "foo\n"
+    },
+    {
+      "id": "rg-stdin-max-count",
+      "binary": "rg",
+      "argv": [
+        "-m",
+        "1",
+        "o",
+        "-"
+      ],
+      "stdin": "foo\nboo\n"
+    },
+    {
+      "id": "rg-stdin-fixed",
+      "binary": "rg",
+      "argv": [
+        "-F",
+        "f.o",
+        "-"
+      ],
+      "stdin": "f.o\nfoo\n"
+    },
+    {
+      "id": "rg-bad-flag",
+      "binary": "rg",
+      "argv": [
+        "--definitely-not-a-flag"
+      ],
+      "stdin": ""
+    }
+  ]
+}
