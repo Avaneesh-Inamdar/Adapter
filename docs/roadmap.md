@@ -41,7 +41,7 @@ or general macOS/Xcode compatibility is established.
   and lookup, XNU receive-header inversion, right consumption and documented
   failure codes. See [results](mach-ipc-results.md) and
   [ABI evidence](reverse-engineering/mach-ipc-evidence.md). Complex messages,
-  port sets, notifications and XPC remain absent.
+  port sets and notifications remain absent; XPC has its own D4 slice.
 - [x] D3 launchd-style bootstrap slice: the broker loads job plists, reserves
   `MachServices` names, starts jobs on first lookup or `RunAtLoad`, applies
   environment/log redirection, waits for check-in, respawns after exit and
@@ -49,13 +49,21 @@ or general macOS/Xcode compatibility is established.
   and [evidence](reverse-engineering/launchd-bootstrap-evidence.md). This is an
   Adapter control plane: no launchd PID 1, `launchctl`, `launch_msg`, KeepAlive,
   socket activation or per-user domains.
+- [x] D4 XPC slice: unchanged libxpc client/server processes exchange a typed
+  dictionary request and reply through the broker, with listener check-in,
+  demand spawn, event-handler blocks, containers, synchronous replies, remote
+  reply connections, cancellation/interruption and missing-service errors. See
+  [results](xpc-results.md) and [evidence](reverse-engineering/xpc-evidence.md).
+  The serialization is adapter-defined: there is no real-macOS peer
+  interoperability, `xpc_main`/GCD execution, peer validation or sandbox and
+  entitlement enforcement.
 
 ## OS services and dynamic loading track
 
 macOS applications depend on services below and above the BSD/libc layer.
 These are separate implementation tracks, ordered by dependency; no layer is
-satisfied by adapters for another. D1-D3 now have implemented slices with
-measured consumers; D4-D5 remain planning plus the measured gaps in the import
+satisfied by adapters for another. D1-D4 now have implemented slices with
+measured consumers; D5 remains planning plus the measured gaps in the import
 inventory, not compatibility evidence.
 
 | Stage | Component | Current state | Required for | Acceptance gate |
@@ -63,7 +71,7 @@ inventory, not compatibility evidence.
 | D1 | Runtime dyld loading: `dlopen`/`dlsym`/`dlclose` of Intel dylibs and bundles | Implemented slice: per-image groups, refcounted handles, `RTLD_GLOBAL`/`LOCAL`/`NOLOAD`/`FIRST`, constructors and per-image finalizers, adapter-only install-name groups. Images are never unmapped; dynamic TLS, `@rpath` arguments, `RTLD_NEXT`/`RTLD_SELF`, `dladdr`, interposition and cross-group sharing are unsupported | Plugin architectures, Xcode's `libIDEApplicationLoader.dylib` path, many complex CLIs | Startup consumer met in-process over classic, chained and bundle plugins. Remaining: a pinned real Intel plugin consumer, true unload, dynamic TLS and cyclic initialization |
 | D2 | Mach IPC: ports, send/receive rights, messages, bootstrap namespace | Implemented slice: per-worker name spaces, broker-routed simple messages, send/send-once consumption, receive-header inversion, timeouts and LARGE retry, bootstrap check-in/lookup and lifecycle errors. No complex messages, port sets, notifications, introspection or launchd-managed check-in | `launchd`, XPC, parts of CF/Foundation and crash reporting | Met by two unchanged Mach-O processes over a loopback broker plus failure-semantics probes. Remaining: complex messages, port descriptors and a pinned real Intel Mach client |
 | D3 | `launchd`/bootstrap: job registration, spawn, on-demand activation, service namespace | Implemented slice: broker-loadable job plists with the documented subset of keys, reserved `MachServices`, lookup- and `RunAtLoad`-triggered spawn through `adapter-run`, environment/log redirection, 15-second check-in wait, one respawn and unknown-service on failure. No launchd process, `launchctl`/`launch_msg`, KeepAlive, throttling, supervision, socket/event activation, per-user domains or pre-created receive rights | XPC services, background tools, Xcode workers | Met by a broker-started, unchanged Mach-O job reached by the unchanged client, including respawn, RunAtLoad, spawn failure and plist rejection. Remaining: KeepAlive/supervision, socket activation, privileged/per-user namespaces and a pinned real launchd consumer |
-| D4 | XPC: connections, serialization, peer validation | Absent; depends on D2 and D3 | Xcode subsystems and modern app services | Real libxpc client/server consumer or measured app service; sandbox and entitlement limits explicit |
+| D4 | XPC: connections, serialization, peer validation | Implemented slice: typed object registry (null/bool/int64/uint64/double/string/data/array/dictionary), connections over broker links, listener check-in through bootstrap, event-handler blocks on one dispatcher thread, async/sync sends, reply dictionaries, cancel/interruption and demand-spawned listeners. Adapter-defined wire format; no Apple interoperability, `xpc_main`/GCD scheduling, date/UUID/fd/shmem/endpoint/rich-error objects, peer code-signing requirements, entitlements or sandbox | Xcode subsystems and modern app services | Met by unchanged libxpc client/server processes over the broker plus failure probes; sandbox and entitlement limits are explicit. Remaining: a real macOS XPC peer or measured app service, richer object types, peer validation and reference-Mac ordering |
 | D5 | Xcode service consumers: SourceKit, CoreSimulator, `xcodebuild`, plugins | Xcode is ARM64; Objective-C and GUI prerequisites are also missing | Xcode | Measured service call from a real Intel target after D1-D4 and Objective-C/Foundation |
 
 The broker daemon (mapping Mach ports to loopback TCP with a token) is an
@@ -77,9 +85,12 @@ application-loader bundles. Its in-process consumer now exists; a real pinned
 plugin target and the unsupported load semantics remain before that Xcode path
 can be attempted. D2 followed because launchd and XPC are expressed in Mach
 messages; the cross-process consumer and the D3 job path now exist, but complex
-messages and a pinned real Mach client remain open. The broker is deliberately
-a routing and job-control service for trusted local workers, not a kernel
-personality or security boundary.
+messages and a pinned real Mach client remain open. D4 then implemented libxpc's
+public object and connection model over broker links; an unchanged client/server
+pair exercises typed dictionaries, but Apple's wire format, richer object types,
+peer validation and sandbox/entitlement enforcement remain open. The broker is
+deliberately a routing and job-control service for trusted local workers, not a
+kernel personality or security boundary.
 
 ## Next acceptance gates
 
@@ -97,15 +108,19 @@ personality or security boundary.
    consumers for each; cancellation and load/unload lifetime tests, not just
    create/destroy. Current cycles and unsupported exports remain explicit
    pre-constructor failures.
-3. **Mach IPC depth and launchd bootstrap.** The two-process message path is
-   verified for simple messages, and the broker starts registered jobs on demand
-   or at load. Remaining D2 work: complex messages and port descriptors,
+3. **Mach IPC depth, launchd bootstrap and XPC interoperability.** The
+   two-process message path is verified for simple messages, the broker starts
+   registered jobs on demand or at load, and an unchanged libxpc pair exchanges
+   typed dictionaries. Remaining D2 work: complex messages and port descriptors,
    out-of-line memory, port sets and notifications, introspection calls, and a
    pinned real Intel Mach client. Remaining D3 work: launchd `KeepAlive` and
    supervision, socket/event activation, pre-created receive rights and
-   privileged/per-user domains. Gate: a pinned real launchd consumer plus
-   queue fairness, right-transfer and broker-loss behavior compared with a
-   reference Mac.
+   privileged/per-user domains. Remaining D4 work: Apple-compatible
+   serialization or a measured app service, date/UUID/fd/shmem/endpoint and
+   rich-error objects, GCD queue semantics, peer requirements, and explicit
+   sandbox/entitlement behavior. Gate: a pinned real launchd consumer and a real
+   macOS XPC peer, plus queue fairness, right-transfer, failure-order and
+   broker-loss behavior compared with a reference Mac.
 4. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
    real Intel target. Register classes/metaclasses/selectors and implement
    dispatch, ownership and initialization from measured layouts. Gate: execute
@@ -125,8 +140,8 @@ personality or security boundary.
 8. **Xcode and wider OS services.** Continue DVTFoundation/DVTUserInterfaceKit/
    IDEKit analysis and dynamic dependency discovery. Gate: a measured service/
    framework consumer before claiming launcher or IDE support. Track D1-D5
-   above; Mach services, `launchd`, XPC, security, networking, developer tools
-   and GUI integration remain major work.
+   above; Mach services, `launchd` supervision, XPC interoperability, security,
+   networking, developer tools and GUI integration remain major work.
 
 Keep all existing dylib, TLS, parser, archive, libc and jq tests as regression
 requirements. README percentages count source-registered adapters against the

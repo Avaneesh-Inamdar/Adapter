@@ -10,11 +10,15 @@
   ],
   "adapter_symbols": {
     "libSystem": [
+      "_Block_copy",
+      "_Block_release",
       "_CCRandomGenerateBytes",
       "_NSGetArgc",
       "_NSGetArgv",
       "_NSGetEnviron",
       "_NSGetExecutablePath",
+      "__Block_copy",
+      "__Block_release",
       "__DefaultRuneLocale",
       "__NSGetArgc",
       "__NSGetArgv",
@@ -329,20 +333,121 @@
       "_CFStringCreateWithCString",
       "_CFStringGetCString",
       "_CFStringGetLength"
+    ],
+    "libxpc": [
+      "__xpc_bool_false",
+      "__xpc_bool_true",
+      "__xpc_error_connection_interrupted",
+      "__xpc_error_connection_invalid",
+      "__xpc_error_key_description",
+      "__xpc_type_array",
+      "__xpc_type_bool",
+      "__xpc_type_connection",
+      "__xpc_type_data",
+      "__xpc_type_date",
+      "__xpc_type_dictionary",
+      "__xpc_type_double",
+      "__xpc_type_endpoint",
+      "__xpc_type_error",
+      "__xpc_type_fd",
+      "__xpc_type_int64",
+      "__xpc_type_null",
+      "__xpc_type_rich_error",
+      "__xpc_type_shmem",
+      "__xpc_type_string",
+      "__xpc_type_uint64",
+      "__xpc_type_uuid",
+      "_xpc_array_append_value",
+      "_xpc_array_apply",
+      "_xpc_array_create",
+      "_xpc_array_create_empty",
+      "_xpc_array_get_array",
+      "_xpc_array_get_bool",
+      "_xpc_array_get_count",
+      "_xpc_array_get_data",
+      "_xpc_array_get_dictionary",
+      "_xpc_array_get_double",
+      "_xpc_array_get_int64",
+      "_xpc_array_get_string",
+      "_xpc_array_get_uint64",
+      "_xpc_array_get_value",
+      "_xpc_array_set_bool",
+      "_xpc_array_set_data",
+      "_xpc_array_set_double",
+      "_xpc_array_set_int64",
+      "_xpc_array_set_string",
+      "_xpc_array_set_uint64",
+      "_xpc_array_set_value",
+      "_xpc_bool_create",
+      "_xpc_bool_get_value",
+      "_xpc_connection_activate",
+      "_xpc_connection_cancel",
+      "_xpc_connection_create_mach_service",
+      "_xpc_connection_get_name",
+      "_xpc_connection_resume",
+      "_xpc_connection_send_message",
+      "_xpc_connection_send_message_with_reply",
+      "_xpc_connection_send_message_with_reply_sync",
+      "_xpc_connection_set_event_handler",
+      "_xpc_connection_set_target_queue",
+      "_xpc_connection_suspend",
+      "_xpc_copy",
+      "_xpc_copy_description",
+      "_xpc_data_create",
+      "_xpc_data_get_bytes",
+      "_xpc_data_get_bytes_ptr",
+      "_xpc_data_get_length",
+      "_xpc_dictionary_apply",
+      "_xpc_dictionary_create",
+      "_xpc_dictionary_create_empty",
+      "_xpc_dictionary_create_reply",
+      "_xpc_dictionary_get_array",
+      "_xpc_dictionary_get_bool",
+      "_xpc_dictionary_get_count",
+      "_xpc_dictionary_get_data",
+      "_xpc_dictionary_get_dictionary",
+      "_xpc_dictionary_get_double",
+      "_xpc_dictionary_get_int64",
+      "_xpc_dictionary_get_remote_connection",
+      "_xpc_dictionary_get_string",
+      "_xpc_dictionary_get_uint64",
+      "_xpc_dictionary_get_value",
+      "_xpc_dictionary_set_bool",
+      "_xpc_dictionary_set_data",
+      "_xpc_dictionary_set_double",
+      "_xpc_dictionary_set_int64",
+      "_xpc_dictionary_set_string",
+      "_xpc_dictionary_set_uint64",
+      "_xpc_dictionary_set_value",
+      "_xpc_double_create",
+      "_xpc_double_get_value",
+      "_xpc_equal",
+      "_xpc_get_type",
+      "_xpc_hash",
+      "_xpc_int64_create",
+      "_xpc_int64_get_value",
+      "_xpc_null_create",
+      "_xpc_release",
+      "_xpc_retain",
+      "_xpc_string_create",
+      "_xpc_string_get_length",
+      "_xpc_string_get_string_ptr",
+      "_xpc_uint64_create",
+      "_xpc_uint64_get_value"
     ]
   },
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 278,
+      "available": 280,
       "total": 1860,
-      "percent": 14.95
+      "percent": 15.05
     },
     {
       "name": "libSystem",
-      "available": 273,
+      "available": 275,
       "total": 382,
-      "percent": 71.47
+      "percent": 71.99
     },
     {
       "name": "Other libraries",
@@ -11848,9 +11953,9 @@
       "name": "Icon Composer QuickLook Preview",
       "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer QuickLook Preview.appex/Contents/MacOS/Icon Composer QuickLook Preview",
       "sha256": "933340aaa46d146a8f8f4a9e370f6ef8dce2bfcf614b69ab1cdc25037416130a",
-      "available": 4,
+      "available": 6,
       "total": 74,
-      "percent": 5.41,
+      "percent": 8.11,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -11887,14 +11992,6 @@
         {
           "library": "/System/Library/PrivateFrameworks/CoreSVG.framework/Versions/A/CoreSVG",
           "symbol": "_CGSVGDocumentWriteToData"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_copy"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_release"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -12138,9 +12235,9 @@
       "name": "Icon Composer Thumbnail",
       "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer Thumbnail.appex/Contents/MacOS/Icon Composer Thumbnail",
       "sha256": "2d9bb888d6e2760e22ca7039c3e31fd0f779af81b91e3755db2ce02b2193ebc0",
-      "available": 2,
+      "available": 4,
       "total": 64,
-      "percent": 3.12,
+      "percent": 6.25,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -12173,14 +12270,6 @@
         {
           "library": "/System/Library/PrivateFrameworks/CoreSVG.framework/Versions/A/CoreSVG",
           "symbol": "_CGSVGDocumentWriteToData"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_copy"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_release"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -14765,16 +14854,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_NDR_record",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__Block_copy",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__Block_release",
       "target_count": 2
     },
     {

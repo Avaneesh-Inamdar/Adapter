@@ -17,6 +17,7 @@ OUT = ROOT / 'docs/progress'
 SYSTEM = {'/usr/lib/libSystem.B.dylib', '/usr/lib/libSystem.dylib'}
 CF = {'/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation',
       '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation'}
+XPC = {'/usr/lib/system/libxpc.dylib'}
 
 
 def imports(path, expected, expected_dependencies=None):
@@ -111,6 +112,8 @@ def refresh():
 def registry():
     system = set()
     for p in (ROOT / 'src/darwin').glob('*.rs'):
+        if p.name == 'xpc.rs':
+            continue
         text = p.read_text()
         for arm in re.finditer(
                 r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*(?:\{[^{}]*?)?\w+\s+as\s+\*const', text):
@@ -124,7 +127,13 @@ def registry():
     system.discard('dyld_stub_binder')
     cf = set(re.findall(r'"([^"\n]+)"\s*=>\s*\w+\s+as\s+\*const',
                         (ROOT / 'src/frameworks/corefoundation.rs').read_text()))
-    return {'libSystem': system, 'CoreFoundation': cf}
+    xpc_text = (ROOT / 'src/darwin/xpc.rs').read_text()
+    xpc = set()
+    for arm in re.finditer(
+            r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*(?:\{[^{}]*?)?\w+\s+as\s+\*const', xpc_text):
+        xpc.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
+    xpc.update(re.findall(r'"(__xpc_[a-z0-9_]+)"\s*=>\s*addr\(', xpc_text))
+    return {'libSystem': system, 'CoreFoundation': cf, 'libxpc': xpc}
 
 
 def family(library):
@@ -132,6 +141,8 @@ def family(library):
         return 'libSystem'
     if library in CF:
         return 'CoreFoundation'
+    if library in XPC:
+        return 'libxpc'
     if library == '/usr/lib/libobjc.A.dylib':
         return 'Objective-C'
     match = re.search(r'/([^/]+)\.framework/', library)
@@ -139,7 +150,8 @@ def family(library):
 
 
 def available(library, name, adapters):
-    group = 'libSystem' if library in SYSTEM else 'CoreFoundation' if library in CF else None
+    group = ('libSystem' if library in SYSTEM else 'CoreFoundation' if library in CF
+             else 'libxpc' if library in XPC else None)
     return group is not None and name in adapters[group]
 
 

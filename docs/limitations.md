@@ -6,7 +6,7 @@
 | Apple Objective-C ABI | Metadata detected; no runtime implementation | Class/selector layouts, initialization/dispatch/ownership tests with real consumers |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
 | Darwin system calls / Mach services | No syscall interception or kernel personality. A D2 slice provides per-worker Mach namespaces, a loopback broker, simple messages with send/send-once rights, timeouts and a bootstrap service table | Complex messages, port sets, notifications and a pinned real Mach client; syscall probes |
-| Service management and XPC | D3 lets the broker start launchd-style jobs on lookup or `RunAtLoad`, with a documented plist subset, environment/log redirection and check-in wait. There is no launchd process, `launchctl`/`launch_msg`, KeepAlive, supervision, throttling, socket/event activation or per-user domain; XPC and `fork`/`exec` are absent | KeepAlive/supervision, socket activation, pre-created receive rights and a real libxpc client/server pair |
+| Service management and XPC | D3 lets the broker start launchd-style jobs on lookup or `RunAtLoad`, with a documented plist subset, environment/log redirection and check-in wait. D4 adds typed dictionary XPC between Adapter workers with listener check-in, demand spawn, blocks on a dispatcher thread, replies and invalidation. There is no launchd process, `launchctl`/`launch_msg`, KeepAlive, supervision, throttling, socket/event activation or per-user domain. XPC has no Apple wire format, `xpc_main`, GCD semantics, richer object types, peer validation or sandbox/entitlement enforcement, and `fork`/`exec` remain absent | KeepAlive/supervision, socket activation, pre-created receive rights, a real macOS XPC peer, and explicit sandbox/entitlement policy |
 | TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming, normal/recursive mutexes, condition variables and C++ thread-exit destructors verified | Cancellation, process-shared condition variables and reference-Mac ordering |
 | Dynamic libraries | Local Intel graph execution, reexports and runtime `dlopen`/`dlclose` of classic/chained/bundle plugins verified; cycles rejected; close runs finalizers but never unmaps; no dynamic TLS, cross-group sharing, `RTLD_NEXT` or interposition | True unload, TLS-bearing and cyclic plugins, symbol interposition and a real plugin consumer |
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
@@ -51,8 +51,12 @@ load launchd-style job plists and spawn registered guests on service lookup or
 `RunAtLoad`, but it is not launchd: there is no PID 1, `launchctl`, KeepAlive,
 supervision, throttling, socket activation, privileged/per-user namespace or
 pre-created receive right, and running jobs are not terminated when the broker
-exits. XPC remains absent. Mach ports are
-not substitutes for POSIX sockets or CRT process APIs. Signal handlers and
+exits. XPC connects only Adapter workers: payloads use an adapter-defined
+format, so a real macOS process cannot be a peer. There is no `xpc_main` or GCD
+execution, and dates, UUIDs, file descriptors, shared memory, endpoints, rich
+errors, peer requirements and sandbox/entitlement checks are absent. The broker
+does not authenticate or sandbox either peer. Mach ports are not substitutes
+for POSIX sockets or CRT process APIs. Signal handlers and
 alternate stacks are recorded but never invoked; pause blocks. pthread stack-size attributes are
 honored, but guard size, scheduling and cancellation are not. ripgrep's
 preprocessor path therefore fails cleanly with exit 2 instead of starting a

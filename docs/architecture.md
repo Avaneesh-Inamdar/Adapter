@@ -189,6 +189,35 @@ activation, privileged or per-user domain, or launchd-precreated receive right.
 See [the launchd evidence](reverse-engineering/launchd-bootstrap-evidence.md) and
 [the results](launchd-results.md).
 
+## XPC
+
+The D4 adapter resolves `/usr/lib/system/libxpc.dylib` and implements libxpc's
+public object model over an adapter-defined transport. Type constants and the
+two connection errors are exported static marker objects, matching the header
+rule that they are addresses rather than pointer variables. Live objects live
+in a registry with atomic reference counts; containers retain children, and
+strings, data, arrays and dictionaries own copies of their contents. Messages
+are serialized at send time with a little-endian tagged format, a depth cap of
+64, a 16 MiB total/value cap and a 1 MiB string/key cap.
+
+A listener connects by checking a service name into the same bootstrap table
+used by D2/D3. A client connection asks the broker for that name; the broker
+creates two route ids and a link, then delivers an accept event carrying the
+server's route. Messages and replies travel as broker frames validated against
+that link, so a route cannot address an unrelated worker. A single process-wide
+dispatcher thread invokes each connection's event-handler block, preserving
+per-connection order; target queues are recorded but not executed, and there is
+no GCD scheduling. Cancel releases the service port, closes the route and
+delivers `XPC_ERROR_CONNECTION_INVALID` locally and
+`XPC_ERROR_CONNECTION_INTERRUPTED` to the peer.
+
+The public boolean-returning adapters return `i32` 0/1: Rust `bool` returns do
+not define the upper `%eax` bytes, and C callers may read the whole `int`.
+Dates, UUIDs, file descriptors, shared memory, endpoints, rich errors,
+`xpc_main`, peer requirements and sandbox/entitlement enforcement are absent.
+See [the XPC evidence](reverse-engineering/xpc-evidence.md) and
+[the results](xpc-results.md).
+
 ## Darwin thread support
 
 On-disk TLV descriptors use the 24-byte function/key/offset layout described by

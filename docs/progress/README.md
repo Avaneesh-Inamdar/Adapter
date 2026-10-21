@@ -26,8 +26,8 @@ unobserved APIs, implementation completeness or runtime test results. ARM64 imag
 | Clipboard Viewer | 1 / 55 | 54 | 1.82% |
 | CrashReporterPrefs | 0 / 20 | 20 | 0.00% |
 | Icon Composer | 2 / 115 | 113 | 1.74% |
-| Icon Composer QuickLook Preview | 4 / 74 | 70 | 5.41% |
-| Icon Composer Thumbnail | 2 / 64 | 62 | 3.12% |
+| Icon Composer QuickLook Preview | 6 / 74 | 68 | 8.11% |
+| Icon Composer Thumbnail | 4 / 64 | 60 | 6.25% |
 | jq 1.8.2 | 136 / 136 | 0 | 100.00% |
 | ripgrep 15.2.0 | 131 / 131 | 0 | 100.00% |
 
