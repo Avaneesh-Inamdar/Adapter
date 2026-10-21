@@ -6,12 +6,26 @@ unsafe extern "C" {
     fn db_libc_begin();
     fn db_libc_flush();
     fn db_set_executable_path(path: *const std::ffi::c_char);
+    fn db_set_arguments(argc: i32, argv: *const *const std::ffi::c_char);
 }
 
 pub fn set_executable_path(path: &std::ffi::CStr) {
     #[cfg(windows)]
     unsafe {
         db_set_executable_path(path.as_ptr());
+    }
+}
+
+/// # Safety
+/// `argv` must point to `argc` readable C string pointers that outlive guest use.
+pub unsafe fn set_arguments(argc: i32, argv: *const *const std::ffi::c_char) {
+    #[cfg(windows)]
+    unsafe {
+        db_set_arguments(argc, argv);
+    }
+    #[cfg(not(windows))]
+    {
+        let _ = (argc, argv);
     }
 }
 
@@ -55,6 +69,9 @@ extern "C" fn db_get_errno() -> i32 {
 
 #[unsafe(no_mangle)]
 extern "sysv64" fn db_guest_exit(code: i32) -> ! {
+    if std::env::var_os("ADAPTER_TRACE_EXIT").is_some() {
+        eprintln!("adapter-run [exit]: guest requested {code}");
+    }
     if let Err(error) = super::callbacks::finalize(0) {
         eprintln!("adapter-run [exit]: {error}");
         std::process::exit(125);

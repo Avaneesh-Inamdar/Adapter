@@ -37,6 +37,7 @@ impl Drop for Block {
     }
 }
 thread_local! {static BLOCKS:RefCell<BTreeMap<(u64,usize),Block>>=const {RefCell::new(BTreeMap::new())};}
+thread_local! {static ATEXIT:RefCell<Vec<(usize,usize)>>=const {RefCell::new(Vec::new())};}
 pub struct Guard;
 pub fn begin(templates: Vec<Template>) -> Result<Guard> {
     if !templates.is_empty() {
@@ -69,7 +70,21 @@ impl Drop for Guard {
     }
 }
 pub fn clear_thread() {
+    let entries = ATEXIT.with(|v| std::mem::take(&mut *v.borrow_mut()));
+    for (function, object) in entries.into_iter().rev() {
+        let function: unsafe extern "sysv64" fn(*mut u8) = unsafe { std::mem::transmute(function) };
+        unsafe { function(object as *mut u8) };
+    }
     BLOCKS.with(|blocks| blocks.borrow_mut().clear());
+}
+
+unsafe extern "sysv64" fn tlv_atexit(
+    function: Option<unsafe extern "sysv64" fn(*mut u8)>,
+    object: *mut u8,
+) {
+    if let Some(function) = function {
+        ATEXIT.with(|v| v.borrow_mut().push((function as usize, object as usize)));
+    }
 }
 
 fn lookup(descriptor: usize) -> Result<*mut u8> {
@@ -219,6 +234,8 @@ pub fn thunk() -> u64 {
 pub fn symbol(name: &str) -> Option<u64> {
     if name == "__tlv_bootstrap" {
         Some(thunk())
+    } else if name == "__tlv_atexit" || name == "_tlv_atexit" {
+        Some(tlv_atexit as *const () as u64)
     } else {
         None
     }

@@ -13,6 +13,8 @@
 #include <math.h>
 
 static char **environment;
+static int guest_argc;
+static char **guest_argv;
 static SRWLOCK environment_lock = SRWLOCK_INIT;
 static char *utf8(const wchar_t *s) {
     int n = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, s, -1, NULL, 0, NULL, NULL);
@@ -258,6 +260,7 @@ static G int db_stat(const char *path, DbStat *out) {
     CloseHandle(h);
     return result;
 }
+static void set_descriptor_flags(int fd, int flags);
 static G int db_open(const char *path, int flags, int mode) {
     /* Darwin flags, translated rather than passed through to _wopen. */
     if (flags & ~(3 | 8 | 0x200 | 0x400 | 0x800 | 0x1000000)) {
@@ -290,7 +293,8 @@ static G int db_open(const char *path, int flags, int mode) {
             db_set_errno(21);
         else
             db_host_error();
-    }
+    } else
+        set_descriptor_flags(result, flags & ~(0x200 | 0x400 | 0x800 | 0x1000000));
     free(p);
     return result;
 }
@@ -316,6 +320,16 @@ static G int64_t db_pathconf(const char *path, int name) {
         return 255;
     db_set_errno(22);
     return -1;
+}
+static void guest_path(char *value) {
+    for (char *q = value; *q; q++)
+        if (*q == '\\')
+            *q = '/';
+    if (value[0] && value[1] == ':' && value[2] == '/') {
+        char drive = value[0];
+        value[0] = '/';
+        value[1] = drive;
+    }
 }
 static G char *db_realpath(const char *path, char *out) {
     wchar_t *p = db_path(path);
@@ -355,14 +369,7 @@ static G char *db_realpath(const char *path, char *out) {
     free(full);
     if (!value)
         return NULL;
-    for (char *q = value; *q; q++)
-        if (*q == '\\')
-            *q = '/';
-    if (value[0] && value[1] == ':' && value[2] == '/') {
-        char drive = value[0];
-        value[0] = '/';
-        value[1] = drive;
-    }
+    guest_path(value);
     if (!out)
         return value;
     if (strlen(value) >= 1024) {
@@ -403,6 +410,80 @@ static G int db_raise(int signal) {
     return -1;
 }
 
+/* Signal handlers are recorded faithfully so probing code sees success, but
+ * Windows never delivers POSIX signals to this adapter, so stored handlers are
+ * never invoked. sigaltstack is recorded for the same reason. */
+typedef struct {
+    uint64_t handler;
+    uint32_t mask;
+    int32_t flags;
+} DbSigaction;
+typedef struct {
+    void *sp;
+    size_t size;
+    int32_t flags;
+    int32_t pad;
+} DbStack;
+static DbSigaction signal_actions[32];
+static DbStack alternate_stack;
+static SRWLOCK signal_lock = SRWLOCK_INIT;
+
+static G int db_sigaction(int sig, const DbSigaction *act, DbSigaction *old) {
+    if (sig <= 0 || sig >= 32 || sig == 9 || sig == 17) {
+        db_set_errno(22);
+        return -1;
+    }
+    AcquireSRWLockExclusive(&signal_lock);
+    if (old)
+        *old = signal_actions[sig];
+    if (act)
+        signal_actions[sig] = *act;
+    ReleaseSRWLockExclusive(&signal_lock);
+    return 0;
+}
+static G int db_sigemptyset(uint32_t *set) {
+    if (!set) {
+        db_set_errno(14);
+        return -1;
+    }
+    *set = 0;
+    return 0;
+}
+static G int db_sigaddset(uint32_t *set, int sig) {
+    if (!set || sig <= 0 || sig >= 32) {
+        db_set_errno(22);
+        return -1;
+    }
+    *set |= 1u << (sig - 1);
+    return 0;
+}
+static G int db_sigaltstack(const DbStack *ss, DbStack *old) {
+    AcquireSRWLockExclusive(&signal_lock);
+    if (old)
+        *old = alternate_stack;
+    if (ss)
+        alternate_stack = *ss;
+    ReleaseSRWLockExclusive(&signal_lock);
+    return 0;
+}
+static G uint64_t db_signal(int sig, uint64_t handler) {
+    if (sig <= 0 || sig >= 32 || sig == 9 || sig == 17) {
+        db_set_errno(22);
+        return UINT64_MAX;
+    }
+    AcquireSRWLockExclusive(&signal_lock);
+    uint64_t old = signal_actions[sig].handler;
+    signal_actions[sig].handler = handler;
+    signal_actions[sig].mask = 0;
+    signal_actions[sig].flags = 0;
+    ReleaseSRWLockExclusive(&signal_lock);
+    return old;
+}
+static G int db_pause(void) {
+    for (;;)
+        Sleep(INFINITE);
+}
+
 /* Single-user identity: guests see process id and the root (0) uid/gid, and
  * identity changes succeed without persisting, matching root privileges. */
 static G int db_getpid(void) { return _getpid(); }
@@ -423,6 +504,122 @@ static G int db_seteuid(uint32_t uid) {
 static G int db_setegid(uint32_t gid) {
     (void)gid;
     return 0;
+}
+/* Child processes are a separate guest program with its own mapped image and
+ * address space; the runtime deliberately supports one active guest per host
+ * process, so fork/exec/spawn report ENOSYS rather than faking a child. */
+static G int db_fork(void) {
+    db_set_errno(78);
+    return -1;
+}
+static G int db_execvp(const char *file, char *const argv[]) {
+    (void)file;
+    (void)argv;
+    db_set_errno(78);
+    return -1;
+}
+static G int db_waitpid(int pid, int *status, int options) {
+    (void)pid;
+    (void)status;
+    (void)options;
+    db_set_errno(10); /* no child can ever have been created */
+    return -1;
+}
+static G int db_setpgid(int pid, int group) {
+    (void)pid;
+    (void)group;
+    db_set_errno(78);
+    return -1;
+}
+static G int db_setsid(void) {
+    db_set_errno(78);
+    return -1;
+}
+static G int db_setgroups(int count, const uint32_t *groups) {
+    (void)count;
+    (void)groups;
+    db_set_errno(78);
+    return -1;
+}
+#define SPAWN_ACTIONS_MAGIC 0x53464131u
+#define SPAWN_ATTR_MAGIC 0x53415431u
+typedef struct {
+    uint32_t magic;
+} DbSpawnActions;
+typedef struct {
+    uint32_t magic;
+    int32_t flags;
+    int32_t pgroup;
+    uint32_t sigdefault;
+} DbSpawnAttr;
+static G int db_spawn_file_actions_init(void **actions) {
+    if (!actions)
+        return 22;
+    DbSpawnActions *value = calloc(1, sizeof(*value));
+    if (!value)
+        return 12;
+    value->magic = SPAWN_ACTIONS_MAGIC;
+    *actions = value;
+    return 0;
+}
+static G int db_spawn_file_actions_destroy(void **actions) {
+    if (!actions || !*actions || ((DbSpawnActions *)*actions)->magic != SPAWN_ACTIONS_MAGIC)
+        return 22;
+    free(*actions);
+    *actions = NULL;
+    return 0;
+}
+static G int db_spawn_file_actions_adddup2(void **actions, int fd, int newfd) {
+    if (!actions || !*actions || ((DbSpawnActions *)*actions)->magic != SPAWN_ACTIONS_MAGIC ||
+        fd < 0 || newfd < 0)
+        return 22;
+    return 0;
+}
+static G int db_spawn_attr_init(void **attributes) {
+    if (!attributes)
+        return 22;
+    DbSpawnAttr *value = calloc(1, sizeof(*value));
+    if (!value)
+        return 12;
+    value->magic = SPAWN_ATTR_MAGIC;
+    *attributes = value;
+    return 0;
+}
+static G int db_spawn_attr_destroy(void **attributes) {
+    if (!attributes || !*attributes || ((DbSpawnAttr *)*attributes)->magic != SPAWN_ATTR_MAGIC)
+        return 22;
+    free(*attributes);
+    *attributes = NULL;
+    return 0;
+}
+static G int db_spawn_attr_setflags(void **attributes, int16_t flags) {
+    if (!attributes || !*attributes || ((DbSpawnAttr *)*attributes)->magic != SPAWN_ATTR_MAGIC)
+        return 22;
+    ((DbSpawnAttr *)*attributes)->flags = flags;
+    return 0;
+}
+static G int db_spawn_attr_setpgroup(void **attributes, int pgroup) {
+    if (!attributes || !*attributes || ((DbSpawnAttr *)*attributes)->magic != SPAWN_ATTR_MAGIC)
+        return 22;
+    ((DbSpawnAttr *)*attributes)->pgroup = pgroup;
+    return 0;
+}
+static G int db_spawn_attr_setsigdefault(void **attributes, const uint32_t *set) {
+    if (!attributes || !*attributes || ((DbSpawnAttr *)*attributes)->magic != SPAWN_ATTR_MAGIC)
+        return 22;
+    ((DbSpawnAttr *)*attributes)->sigdefault = set ? *set : 0;
+    return 0;
+}
+static G int db_posix_spawnp(int *pid, const char *file, const void **actions,
+                             const void **attributes, char *const argv[],
+                             char *const envp[]) {
+    (void)file;
+    (void)actions;
+    (void)attributes;
+    (void)argv;
+    (void)envp;
+    (void)pid;
+    return 78; /* posix_spawn reports the error as its return value */
 }
 /* Aggregation only plausibly changes NTFS ownership, so reject it like a
  * filesystem without chattr rights rather than silently pretending. */
@@ -1198,9 +1395,1161 @@ static G int db_NSGetExecutablePath(char *buf, uint32_t *bufsize) {
     return 0;
 }
 
+void db_set_arguments(int argc, char **argv) {
+    if (argc < 0 || (argc && !argv))
+        return;
+    char **copy = calloc((size_t)argc + 1, sizeof(char *));
+    if (!copy)
+        return;
+    int i;
+    for (i = 0; i < argc; i++) {
+        copy[i] = argv[i] ? _strdup(argv[i]) : NULL;
+        if (argv[i] && !copy[i]) {
+            while (i--)
+                free(copy[i]);
+            free(copy);
+            return;
+        }
+    }
+    for (i = 0; i < guest_argc; i++)
+        free(guest_argv[i]);
+    free(guest_argv);
+    guest_argc = argc;
+    guest_argv = copy;
+}
+static G int *db_NSGetArgc(void) { return &guest_argc; }
+static G char ***db_NSGetArgv(void) { return &guest_argv; }
+static G char ***db_NSGetEnviron(void) { return &environment; }
+static G int db_CCRandomGenerateBytes(void *bytes, size_t count) {
+    if (!count)
+        return 0;
+    if (!bytes || count > ULONG_MAX)
+        return -1;
+    return BCryptGenRandom(NULL, bytes, (ULONG)count, BCRYPT_USE_SYSTEM_PREFERRED_RNG) < 0 ? -1 : 0;
+}
+static G int db_clock_gettime(int clock_id, DbTimespec *out) {
+    if (!out) {
+        db_set_errno(22);
+        return -1;
+    }
+    switch (clock_id) {
+    case 0: { /* CLOCK_REALTIME */
+        FILETIME now;
+        GetSystemTimePreciseAsFileTime(&now);
+        *out = filetime(now);
+        return 0;
+    }
+    case 4: /* CLOCK_MONOTONIC_RAW */
+    case 6: /* CLOCK_MONOTONIC */
+    case 8: { /* CLOCK_UPTIME_RAW */
+        LARGE_INTEGER counter, frequency;
+        if (!QueryPerformanceCounter(&counter) || !QueryPerformanceFrequency(&frequency)) {
+            db_set_errno(22);
+            return -1;
+        }
+        out->sec = counter.QuadPart / frequency.QuadPart;
+        out->nsec = (int64_t)((counter.QuadPart % frequency.QuadPart) * 1000000000 /
+                              frequency.QuadPart);
+        return 0;
+    }
+    case 12: /* CLOCK_PROCESS_CPUTIME_ID */
+    case 16: { /* CLOCK_THREAD_CPUTIME_ID */
+        FILETIME created, exited, kernel, user;
+        BOOL ok = clock_id == 12 ? GetProcessTimes(GetCurrentProcess(), &created, &exited, &kernel,
+                                                   &user)
+                                 : GetThreadTimes(GetCurrentThread(), &created, &exited, &kernel,
+                                                  &user);
+        if (!ok) {
+            win_error();
+            return -1;
+        }
+        uint64_t kernel_ticks = ((uint64_t)kernel.dwHighDateTime << 32) | kernel.dwLowDateTime;
+        uint64_t user_ticks = ((uint64_t)user.dwHighDateTime << 32) | user.dwLowDateTime;
+        uint64_t ticks = kernel_ticks + user_ticks;
+        out->sec = (int64_t)(ticks / 10000000);
+        out->nsec = (int64_t)((ticks % 10000000) * 100);
+        return 0;
+    }
+    default:
+        db_set_errno(22);
+        return -1;
+    }
+}
+static G int db_nanosleep(const DbTimespec *request, DbTimespec *remaining) {
+    if (!request || request->sec < 0 || request->nsec < 0 || request->nsec >= 1000000000) {
+        db_set_errno(22);
+        return -1;
+    }
+    uint64_t ns = (uint64_t)request->sec * 1000000000 + (uint64_t)request->nsec;
+    uint64_t ms = (ns + 999999) / 1000000;
+    while (ms) {
+        DWORD chunk = ms > 60000 ? 60000 : (DWORD)ms;
+        Sleep(chunk);
+        ms -= chunk;
+    }
+    if (remaining) {
+        remaining->sec = 0;
+        remaining->nsec = 0;
+    }
+    return 0;
+}
+static G int db_sched_yield(void) {
+    SwitchToThread();
+    return 0;
+}
+static G char *db_getcwd(char *buf, size_t size) {
+    DWORD needed = GetCurrentDirectoryW(0, NULL);
+    if (!needed) {
+        win_error();
+        return NULL;
+    }
+    wchar_t *wide_path = malloc((size_t)needed * sizeof(wchar_t));
+    if (!wide_path) {
+        db_set_errno(12);
+        return NULL;
+    }
+    if (!GetCurrentDirectoryW(needed, wide_path)) {
+        free(wide_path);
+        win_error();
+        return NULL;
+    }
+    char *value = utf8(wide_path);
+    free(wide_path);
+    if (!value)
+        return NULL;
+    guest_path(value);
+    size_t length = strlen(value) + 1;
+    if (!buf)
+        return value;
+    if (size < length) {
+        free(value);
+        db_set_errno(34); /* ERANGE */
+        return NULL;
+    }
+    memcpy(buf, value, length);
+    free(value);
+    return buf;
+}
+static G int db_chdir(const char *path) {
+    wchar_t *p = db_path(path);
+    if (!p)
+        return -1;
+    int result = SetCurrentDirectoryW(p) ? 0 : -1;
+    if (result)
+        win_error();
+    free(p);
+    return result;
+}
+static G int db_chroot(const char *path) {
+    (void)path;
+    db_set_errno(45); /* ENOTSUP: the host has no process-local filesystem root. */
+    return -1;
+}
+static G int64_t db_sysconf(int name) {
+    SYSTEM_INFO info;
+    switch (name) {
+    case 1: /* _SC_ARG_MAX */
+        return 1048576;
+    case 2: /* _SC_CHILD_MAX */
+        return 266;
+    case 3: /* _SC_CLK_TCK */
+        return 100;
+    case 4: /* _SC_NGROUPS_MAX */
+        return 16;
+    case 5: /* _SC_OPEN_MAX */
+        return _getmaxstdio();
+    case 6: /* _SC_JOB_CONTROL */
+    case 7: /* _SC_SAVED_IDS */
+        return 1;
+    case 8: /* _SC_VERSION */
+        return 200112;
+    case 29: /* _SC_PAGESIZE / _SC_PAGE_SIZE */
+        GetSystemInfo(&info);
+        return info.dwPageSize;
+    case 57: /* _SC_NPROCESSORS_CONF */
+    case 58: /* _SC_NPROCESSORS_ONLN */
+        GetSystemInfo(&info);
+        return info.dwNumberOfProcessors;
+    case 72: /* _SC_HOST_NAME_MAX */
+    case 73: /* _SC_LOGIN_NAME_MAX */
+    case 74: /* _SC_TTY_NAME_MAX */
+        return 255;
+    case 200: { /* _SC_PHYS_PAGES */
+        MEMORYSTATUSEX memory = {.dwLength = sizeof(memory)};
+        if (!GlobalMemoryStatusEx(&memory)) {
+            db_set_errno(22);
+            return -1;
+        }
+        GetSystemInfo(&info);
+        return (int64_t)(memory.ullTotalPhys / info.dwPageSize);
+    }
+    default:
+        db_set_errno(22);
+        return -1;
+    }
+}
+typedef struct {
+    char sysname[256];
+    char nodename[256];
+    char release[256];
+    char version[256];
+    char machine[256];
+} DbUtsname;
+_Static_assert(sizeof(DbUtsname) == 1280, "Darwin utsname");
+static void copy_field(char *field, size_t size, const char *value) {
+    size_t length = strlen(value);
+    if (length >= size)
+        length = size - 1;
+    memcpy(field, value, length);
+    field[length] = 0;
+}
+static G int db_uname(DbUtsname *out) {
+    if (!out) {
+        db_set_errno(22);
+        return -1;
+    }
+    char hostname[256] = "";
+    if (db_gethostname(hostname, sizeof(hostname)))
+        hostname[0] = 0;
+    memset(out, 0, sizeof(*out));
+    copy_field(out->sysname, sizeof(out->sysname), "Darwin");
+    copy_field(out->nodename, sizeof(out->nodename), hostname);
+    copy_field(out->release, sizeof(out->release), "24.6.0");
+    copy_field(out->version, sizeof(out->version),
+               "Darwin Kernel Version 24.6.0: Adapter compatibility layer");
+    copy_field(out->machine, sizeof(out->machine), "x86_64");
+    return 0;
+}
+static G int db_strerror_r(int error, char *buf, size_t size) {
+    char *message = strerror(error);
+    if (!buf || !size)
+        return 22;
+    size_t length = strlen(message);
+    if (length >= size)
+        return 34;
+    memcpy(buf, message, length + 1);
+    return 0;
+}
+typedef struct {
+    char *pw_name;
+    char *pw_passwd;
+    uint32_t pw_uid, pw_gid;
+    int64_t pw_change;
+    char *pw_class;
+    char *pw_gecos;
+    char *pw_dir;
+    char *pw_shell;
+    int64_t pw_expire;
+} DbPasswd;
+_Static_assert(sizeof(DbPasswd) == 72, "Darwin passwd");
+static G int db_getpwuid_r(uint32_t uid, DbPasswd *result, char *buf, size_t size,
+                           DbPasswd **found) {
+    if (!result || !found) {
+        db_set_errno(22);
+        return 22;
+    }
+    *found = NULL;
+    if (uid != 0)
+        return 0;
+    const char *name = db_getenv("USERNAME");
+    if (!name || !*name)
+        name = "adapter";
+    const char *home = db_getenv("USERPROFILE");
+    if (!home || !*home)
+        home = "C:";
+    const char *fields[] = {name, "*", "", name, home, "/bin/sh"};
+    size_t used = 0;
+    for (size_t i = 0; i < sizeof(fields) / sizeof(fields[0]); i++)
+        used += strlen(fields[i]) + 1;
+    if (!buf || used > size)
+        return 34;
+    char *cursor = buf;
+    char *places[6];
+    for (size_t i = 0; i < sizeof(fields) / sizeof(fields[0]); i++) {
+        size_t length = strlen(fields[i]) + 1;
+        memcpy(cursor, fields[i], length);
+        places[i] = cursor;
+        cursor += length;
+    }
+    memset(result, 0, sizeof(*result));
+    result->pw_name = places[0];
+    result->pw_passwd = places[1];
+    result->pw_uid = 0;
+    result->pw_gid = 0;
+    result->pw_class = places[2];
+    result->pw_gecos = places[3];
+    result->pw_dir = places[4];
+    result->pw_shell = places[5];
+    *found = result;
+    return 0;
+}
+static G void *db_memmove_chk(void *dest, const void *src, size_t count, size_t dest_size) {
+    if (dest_size < count)
+        db_guest_exit(134);
+    return memmove(dest, src, count);
+}
+static G void db_memset_pattern16(void *dest, const void *pattern, size_t count) {
+    unsigned char *d = dest;
+    const unsigned char *p = pattern;
+    for (size_t done = 0; done < count;) {
+        size_t chunk = count - done < 16 ? count - done : 16;
+        memcpy(d + done, p, chunk);
+        done += chunk;
+    }
+}
+static G void db_immediate_exit(int code) {
+    _exit(code); /* C `_exit`: no atexit handlers or stdio flush. */
+}
+static G int64_t db_read(int fd, void *buffer, size_t count) {
+    if (!count)
+        return 0;
+    if (!buffer) {
+        db_set_errno(14); /* EFAULT */
+        return -1;
+    }
+    int chunk = count > INT_MAX ? INT_MAX : (int)count;
+    int result = _read(fd, buffer, chunk);
+    if (result < 0)
+        db_host_error();
+    return result;
+}
+typedef struct {
+    void *base;
+    size_t length;
+} DbIovec;
+static G int64_t db_writev(int fd, const DbIovec *vectors, int count) {
+    if (count < 0 || count > 1024 || (count && !vectors)) {
+        db_set_errno(22);
+        return -1;
+    }
+    int64_t total = 0;
+    for (int i = 0; i < count; i++) {
+        if (!vectors[i].length)
+            continue;
+        int64_t written = db_write(fd, vectors[i].base, vectors[i].length);
+        if (written < 0)
+            return total ? total : -1;
+        total += written;
+        if ((size_t)written < vectors[i].length)
+            break;
+    }
+    return total;
+}
+static G int64_t db_lseek(int fd, int64_t offset, int whence) {
+    int64_t result = _lseeki64(fd, offset, whence);
+    if (result < 0)
+        db_host_error();
+    return result;
+}
+static G int db_dup(int fd) {
+    int result = _dup(fd);
+    if (result < 0)
+        db_host_error();
+    return result;
+}
+static G int db_dup2(int old_fd, int new_fd) {
+    int result = _dup2(old_fd, new_fd);
+    if (result < 0)
+        db_host_error();
+    return result;
+}
+static G int db_pipe(int *fds) {
+    int result = _pipe(fds, 4096, _O_BINARY);
+    if (result)
+        db_host_error();
+    else {
+        set_descriptor_flags(fds[0], 0);
+        set_descriptor_flags(fds[1], 1);
+    }
+    return result;
+}
+#define DB_MAX_FDS 8192
+static int descriptor_flags[DB_MAX_FDS];
+static int descriptor_flags_ready;
+static SRWLOCK descriptor_lock = SRWLOCK_INIT;
+static void set_descriptor_flags(int fd, int flags) {
+    if (fd < 0 || fd >= DB_MAX_FDS)
+        return;
+    AcquireSRWLockExclusive(&descriptor_lock);
+    if (!descriptor_flags_ready) {
+        descriptor_flags[0] = 0;
+        descriptor_flags[1] = 1;
+        descriptor_flags[2] = 1;
+        descriptor_flags_ready = 1;
+    }
+    descriptor_flags[fd] = flags;
+    ReleaseSRWLockExclusive(&descriptor_lock);
+}
+static int get_descriptor_flags(int fd) {
+    if (fd < 0 || fd >= DB_MAX_FDS)
+        return -1;
+    AcquireSRWLockShared(&descriptor_lock);
+    int flags = descriptor_flags_ready ? descriptor_flags[fd] : -1;
+    ReleaseSRWLockShared(&descriptor_lock);
+    return flags;
+}
+/* Darwin fcntl commands and status bits. The runtime owns no socket layer, so
+ * O_NONBLOCK is bookkeeping; opening modes and O_APPEND remain meaningful. */
+static G int db_fcntl(int fd, int command, int value) {
+    switch (command) {
+    case 0: /* F_DUPFD */
+    case 67: /* F_DUPFD_CLOEXEC; children are unsupported, so close-on-exec is moot */
+        return db_dup(fd);
+    case 1: /* F_GETFD */
+        return 0;
+    case 2: /* F_SETFD */
+        return 0;
+    case 3: { /* F_GETFL */
+        int flags = get_descriptor_flags(fd);
+        if (flags < 0) {
+            db_set_errno(9);
+            return -1;
+        }
+        return flags;
+    }
+    case 4: { /* F_SETFL */
+        int flags = get_descriptor_flags(fd);
+        if (flags < 0) {
+            db_set_errno(9);
+            return -1;
+        }
+        if (value & ~(0x4 | 0x8)) {
+            db_set_errno(22);
+            return -1;
+        }
+        set_descriptor_flags(fd, (flags & ~(0x4 | 0x8)) | (value & (0x4 | 0x8)));
+        return 0;
+    }
+    default:
+        db_set_errno(45); /* ENOTSUP */
+        return -1;
+    }
+}
+typedef struct {
+    uint16_t rows, columns, xpixels, ypixels;
+} DbWinsize;
+static G int db_ioctl(int fd, unsigned long request, uintptr_t argument) {
+    if (request == 0x40087468UL) { /* TIOCGWINSZ */
+        if (!argument) {
+            db_set_errno(14);
+            return -1;
+        }
+        DbWinsize *size = (DbWinsize *)argument;
+        intptr_t handle = _get_osfhandle(fd);
+        CONSOLE_SCREEN_BUFFER_INFO info;
+        if (handle != -1 && GetConsoleScreenBufferInfo((HANDLE)handle, &info)) {
+            size->rows = (uint16_t)(info.srWindow.Bottom - info.srWindow.Top + 1);
+            size->columns = (uint16_t)(info.srWindow.Right - info.srWindow.Left + 1);
+            size->xpixels = 0;
+            size->ypixels = 0;
+            return 0;
+        }
+        if (_isatty(fd)) {
+            size->rows = 24;
+            size->columns = 80;
+            size->xpixels = 0;
+            size->ypixels = 0;
+            return 0;
+        }
+        db_set_errno(25);
+        return -1;
+    }
+    if (request == 0x4004667fUL) { /* FIONREAD */
+        if (!argument) {
+            db_set_errno(14);
+            return -1;
+        }
+        intptr_t handle = _get_osfhandle(fd);
+        DWORD available = 0;
+        if (handle == -1 || !PeekNamedPipe((HANDLE)handle, NULL, 0, NULL, &available, NULL))
+            available = 0;
+        *(int *)argument = (int)available;
+        return 0;
+    }
+    if (request == 0x8004667eUL) { /* FIONBIO */
+        if (!argument) {
+            db_set_errno(14);
+            return -1;
+        }
+        int enable = *(int *)argument;
+        int flags = get_descriptor_flags(fd);
+        if (flags < 0) {
+            db_set_errno(9);
+            return -1;
+        }
+        set_descriptor_flags(fd, enable ? (flags | 0x4) : (flags & ~0x4));
+        return 0;
+    }
+    db_set_errno(25); /* ENOTTY */
+    return -1;
+}
+#define DB_AT_FDCWD (-2)
+#define DB_DIR_MAGIC 0x4449525f41445054ULL
+typedef struct {
+    uint64_t d_ino;
+    uint64_t d_seekoff;
+    uint16_t d_reclen;
+    uint16_t d_namlen;
+    uint8_t d_type;
+    uint8_t d_name[1024];
+} DbDirent;
+_Static_assert(sizeof(DbDirent) == 1048, "Darwin dirent");
+_Static_assert(offsetof(DbDirent, d_name) == 21, "Darwin dirent name");
+typedef struct {
+    uint64_t magic;
+    HANDLE find;
+    int fd;
+    int first;
+    int done;
+    wchar_t *pattern;
+} DbDir;
+static G int db_fstatat(int fd, const char *path, DbStat *out, int flags) {
+    if (!path || !out) {
+        db_set_errno(22);
+        return -1;
+    }
+    if (flags & ~0x20) {
+        db_set_errno(22);
+        return -1;
+    }
+    if (fd == DB_AT_FDCWD || path[0] == '/')
+        return db_stat(path, out);
+    intptr_t raw = _get_osfhandle(fd);
+    if (raw == -1) {
+        db_set_errno(9);
+        return -1;
+    }
+    DWORD length = GetFinalPathNameByHandleW((HANDLE)raw, NULL, 0, FILE_NAME_NORMALIZED);
+    if (!length) {
+        win_error();
+        return -1;
+    }
+    wchar_t *base = malloc(((size_t)length + 1) * sizeof(wchar_t));
+    wchar_t *relative = db_path(path);
+    if (!base || !relative) {
+        free(base);
+        free(relative);
+        db_set_errno(12);
+        return -1;
+    }
+    if (!GetFinalPathNameByHandleW((HANDLE)raw, base, length + 1, FILE_NAME_NORMALIZED)) {
+        free(base);
+        free(relative);
+        win_error();
+        return -1;
+    }
+    wchar_t *start = base;
+    if (!wcsncmp(start, L"\\\\?\\", 4))
+        start += 4;
+    size_t root_length = wcslen(start), leaf_length = wcslen(relative);
+    wchar_t *combined = malloc((root_length + leaf_length + 2) * sizeof(wchar_t));
+    if (!combined) {
+        free(base);
+        free(relative);
+        db_set_errno(12);
+        return -1;
+    }
+    memcpy(combined, start, root_length * sizeof(wchar_t));
+    combined[root_length] = '\\';
+    memcpy(combined + root_length + 1, relative, (leaf_length + 1) * sizeof(wchar_t));
+    char *utf8_path = utf8(combined);
+    free(combined);
+    free(base);
+    free(relative);
+    if (!utf8_path)
+        return -1;
+    int result = db_stat(utf8_path, out);
+    free(utf8_path);
+    return result;
+}
+static G DbDir *db_opendir(const char *path) {
+    if (!path) {
+        db_set_errno(22);
+        return NULL;
+    }
+    wchar_t *p = db_path(path);
+    if (!p)
+        return NULL;
+    HANDLE handle =
+        CreateFileW(p, FILE_LIST_DIRECTORY | FILE_READ_ATTRIBUTES,
+                    FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING,
+                    FILE_FLAG_BACKUP_SEMANTICS, NULL);
+    if (handle == INVALID_HANDLE_VALUE) {
+        win_error();
+        free(p);
+        return NULL;
+    }
+    int fd = _open_osfhandle((intptr_t)handle, _O_RDONLY | _O_BINARY);
+    if (fd < 0) {
+        CloseHandle(handle);
+        free(p);
+        db_host_error();
+        return NULL;
+    }
+    size_t length = wcslen(p);
+    wchar_t *pattern = malloc((length + 3) * sizeof(wchar_t));
+    DbDir *dir = calloc(1, sizeof(*dir));
+    if (!pattern || !dir) {
+        free(pattern);
+        free(dir);
+        _close(fd);
+        free(p);
+        db_set_errno(12);
+        return NULL;
+    }
+    memcpy(pattern, p, length * sizeof(wchar_t));
+    size_t at = length;
+    if (!at || (pattern[at - 1] != '\\' && pattern[at - 1] != '/'))
+        pattern[at++] = '\\';
+    pattern[at++] = '*';
+    pattern[at] = 0;
+    free(p);
+    dir->magic = DB_DIR_MAGIC;
+    dir->find = INVALID_HANDLE_VALUE;
+    dir->fd = fd;
+    dir->first = 1;
+    dir->pattern = pattern;
+    return dir;
+}
+static G int db_readdir_r(DbDir *dir, DbDirent *entry, DbDirent **result) {
+    if (!dir || dir->magic != DB_DIR_MAGIC || !entry || !result) {
+        if (result)
+            *result = NULL;
+        return 22;
+    }
+    *result = NULL;
+    WIN32_FIND_DATAW data;
+    if (dir->first) {
+        dir->find = FindFirstFileW(dir->pattern, &data);
+        dir->first = 0;
+        if (dir->find == INVALID_HANDLE_VALUE) {
+            DWORD error = GetLastError();
+            if (error == ERROR_FILE_NOT_FOUND)
+                return 0;
+            win_error();
+            return db_get_errno();
+        }
+    } else {
+        if (dir->done)
+            return 0;
+        if (!FindNextFileW(dir->find, &data)) {
+            DWORD error = GetLastError();
+            if (error == ERROR_NO_MORE_FILES) {
+                dir->done = 1;
+                return 0;
+            }
+            win_error();
+            return db_get_errno();
+        }
+    }
+    char name[1024];
+    int count = WideCharToMultiByte(CP_UTF8, WC_ERR_INVALID_CHARS, data.cFileName, -1, name,
+                                    sizeof(name), NULL, NULL);
+    if (count <= 0 || (size_t)count > sizeof(entry->d_name)) {
+        db_set_errno(63);
+        return 63;
+    }
+    memset(entry, 0, sizeof(*entry));
+    size_t name_length = (size_t)count - 1;
+    entry->d_namlen = (uint16_t)name_length;
+    entry->d_reclen = (uint16_t)((21 + name_length + 1 + 7) & ~(size_t)7);
+    if (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        entry->d_type = 4; /* DT_DIR */
+    else if (data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
+        entry->d_type = 10; /* DT_LNK */
+    else
+        entry->d_type = 8; /* DT_REG */
+    memcpy(entry->d_name, name, name_length + 1);
+    *result = entry;
+    return 0;
+}
+static G int db_closedir(DbDir *dir) {
+    if (!dir || dir->magic != DB_DIR_MAGIC) {
+        db_set_errno(9);
+        return -1;
+    }
+    if (dir->find != INVALID_HANDLE_VALUE)
+        FindClose(dir->find);
+    free(dir->pattern);
+    int result = _close(dir->fd);
+    dir->magic = 0;
+    free(dir);
+    if (result)
+        db_host_error();
+    return result;
+}
+static G int db_dirfd(DbDir *dir) {
+    if (!dir || dir->magic != DB_DIR_MAGIC) {
+        db_set_errno(9);
+        return -1;
+    }
+    return dir->fd;
+}
+typedef struct DbRegion {
+    struct DbRegion *next;
+    void *base;
+    void *view;
+    size_t length;
+    int anonymous;
+} DbRegion;
+#define DB_MAP_FAILED ((void *)(intptr_t)-1)
+static DbRegion *regions;
+static SRWLOCK region_lock = SRWLOCK_INIT;
+static DWORD protection(int prot) {
+    int value = prot & 7;
+    if (!value)
+        return PAGE_NOACCESS;
+    if (value & 4)
+        return value & 2 ? PAGE_EXECUTE_READWRITE : PAGE_EXECUTE_READ;
+    return value & 2 ? PAGE_READWRITE : PAGE_READONLY;
+}
+static int remember_region(void *base, void *view, size_t length, int anonymous) {
+    DbRegion *region = malloc(sizeof(*region));
+    if (!region) {
+        db_set_errno(12);
+        return -1;
+    }
+    region->base = base;
+    region->view = view;
+    region->length = length;
+    region->anonymous = anonymous;
+    AcquireSRWLockExclusive(&region_lock);
+    region->next = regions;
+    regions = region;
+    ReleaseSRWLockExclusive(&region_lock);
+    return 0;
+}
+static G void *db_mmap(void *address, size_t length, int prot, int flags, int fd, int64_t offset) {
+    if (!length || offset < 0) {
+        db_set_errno(22);
+        return DB_MAP_FAILED;
+    }
+    if (flags & 0x10) { /* MAP_FIXED */
+        /* Rust's startup guard-page setup re-maps the lowest stack page at an
+         * exact address. That address is already inside the reserved host
+         * stack, so commit it in place instead of replacing the stack; the
+         * follow-up mprotect(PROT_NONE) then models Darwin's guard. */
+        if (!address) {
+            db_set_errno(22);
+            return DB_MAP_FAILED;
+        }
+        if (!VirtualAlloc(address, length, MEM_COMMIT, protection(prot))) {
+            win_error();
+            return DB_MAP_FAILED;
+        }
+        return address;
+    }
+    if (flags & 0x1000) { /* MAP_ANON */
+        void *mapped = VirtualAlloc(NULL, length, MEM_RESERVE | MEM_COMMIT, protection(prot));
+        if (!mapped) {
+            win_error();
+            return DB_MAP_FAILED;
+        }
+        if (remember_region(mapped, mapped, length, 1)) {
+            VirtualFree(mapped, 0, MEM_RELEASE);
+            return DB_MAP_FAILED;
+        }
+        return mapped;
+    }
+    if (fd < 0) {
+        db_set_errno(9);
+        return DB_MAP_FAILED;
+    }
+    intptr_t raw = _get_osfhandle(fd);
+    if (raw == -1) {
+        db_set_errno(9);
+        return DB_MAP_FAILED;
+    }
+    SYSTEM_INFO info;
+    GetSystemInfo(&info);
+    uint64_t alignment = info.dwAllocationGranularity;
+    uint64_t aligned = (uint64_t)offset & ~(alignment - 1);
+    size_t delta = (size_t)((uint64_t)offset - aligned);
+    if (length > SIZE_MAX - delta) {
+        db_set_errno(12);
+        return DB_MAP_FAILED;
+    }
+    size_t map_length = length + delta;
+    int writable = (prot & 2) != 0;
+    DWORD section_protection =
+        writable ? ((flags & 1) ? PAGE_READWRITE : PAGE_WRITECOPY) : PAGE_READONLY;
+    uint64_t end = aligned + map_length;
+    HANDLE section = CreateFileMappingW((HANDLE)raw, NULL, section_protection, (DWORD)(end >> 32),
+                                        (DWORD)end, NULL);
+    if (!section) {
+        win_error();
+        return DB_MAP_FAILED;
+    }
+    DWORD access = (prot & 1 ? FILE_MAP_READ : 0) | (prot & 4 ? FILE_MAP_EXECUTE : 0);
+    if (writable)
+        access |= (flags & 1) ? FILE_MAP_WRITE : FILE_MAP_COPY;
+    if (!access)
+        access = FILE_MAP_READ;
+    void *view =
+        MapViewOfFile(section, access, (DWORD)(aligned >> 32), (DWORD)aligned, map_length);
+    CloseHandle(section);
+    if (!view) {
+        win_error();
+        return DB_MAP_FAILED;
+    }
+    void *base = (char *)view + delta;
+    if (remember_region(base, view, length, 0)) {
+        UnmapViewOfFile(view);
+        return DB_MAP_FAILED;
+    }
+    return base;
+}
+static G int db_munmap(void *address, size_t length) {
+    if (!address) {
+        db_set_errno(22);
+        return -1;
+    }
+    AcquireSRWLockExclusive(&region_lock);
+    DbRegion **link = &regions;
+    while (*link) {
+        DbRegion *region = *link;
+        if (region->base == address && region->length == length) {
+            *link = region->next;
+            ReleaseSRWLockExclusive(&region_lock);
+            int result = region->anonymous ? (VirtualFree(region->view, 0, MEM_RELEASE) ? 0 : -1)
+                                           : (UnmapViewOfFile(region->view) ? 0 : -1);
+            free(region);
+            if (result)
+                win_error();
+            return result;
+        }
+        link = &region->next;
+    }
+    ReleaseSRWLockExclusive(&region_lock);
+    db_set_errno(22);
+    return -1;
+}
+static G int db_mprotect(void *address, size_t length, int prot) {
+    if (!address || !length) {
+        db_set_errno(22);
+        return -1;
+    }
+    DWORD previous;
+    if (!VirtualProtect(address, length, protection(prot), &previous)) {
+        win_error();
+        return -1;
+    }
+    return 0;
+}
+static G int db_madvise(void *address, size_t length, int advice) {
+    (void)address;
+    (void)length;
+    (void)advice;
+    return 0; /* Advisory only; host paging policy is left to Windows. */
+}
+typedef struct {
+    void *pointer;
+    void *base;
+    size_t size, alignment;
+} DbAlignment;
+#define DB_ALIGN_SLOTS 4096
+static DbAlignment alignments[DB_ALIGN_SLOTS];
+static SRWLOCK alignment_lock = SRWLOCK_INIT;
+static size_t alignment_hash(void *pointer) {
+    uint64_t value = (uint64_t)(uintptr_t)pointer;
+    value ^= value >> 33;
+    value *= 0xff51afd7ed558ccdULL;
+    value ^= value >> 33;
+    return (size_t)value & (DB_ALIGN_SLOTS - 1);
+}
+static G int db_posix_memalign(void **out, size_t alignment, size_t size) {
+    if (!out)
+        return 22;
+    *out = NULL;
+    if (alignment < sizeof(void *) || (alignment & (alignment - 1)))
+        return 22;
+    /* The returned pointer is advanced into the block, so reserve room for
+     * both the worst-case shift and the caller's full requested size. */
+    if (size > SIZE_MAX - alignment)
+        return 12;
+    void *base = malloc(size + alignment);
+    if (!base)
+        return 12;
+    uintptr_t aligned = ((uintptr_t)base + sizeof(void *) + alignment - 1) & ~(alignment - 1);
+    AcquireSRWLockExclusive(&alignment_lock);
+    size_t slot = alignment_hash((void *)aligned);
+    size_t start = slot;
+    while (alignments[slot].pointer) {
+        slot = (slot + 1) & (DB_ALIGN_SLOTS - 1);
+        if (slot == start) {
+            ReleaseSRWLockExclusive(&alignment_lock);
+            free(base);
+            return 12;
+        }
+    }
+    alignments[slot] = (DbAlignment){(void *)aligned, base, size, alignment};
+    ReleaseSRWLockExclusive(&alignment_lock);
+    *out = (void *)aligned;
+    return 0;
+}
+static int alignment_slot(void *pointer) {
+    size_t slot = alignment_hash(pointer);
+    size_t start = slot;
+    while (alignments[slot].pointer) {
+        if (alignments[slot].pointer == pointer)
+            return (int)slot;
+        slot = (slot + 1) & (DB_ALIGN_SLOTS - 1);
+        if (slot == start)
+            break;
+    }
+    return -1;
+}
+static G void db_free(void *pointer) {
+    if (!pointer)
+        return;
+    AcquireSRWLockExclusive(&alignment_lock);
+    int slot = alignment_slot(pointer);
+    if (slot < 0) {
+        ReleaseSRWLockExclusive(&alignment_lock);
+        free(pointer);
+        return;
+    }
+    void *base = alignments[slot].base;
+    alignments[slot].pointer = NULL;
+    /* Reinsert the following cluster so probing never stops on this hole. */
+    size_t next = ((size_t)slot + 1) & (DB_ALIGN_SLOTS - 1);
+    while (alignments[next].pointer) {
+        DbAlignment entry = alignments[next];
+        alignments[next].pointer = NULL;
+        size_t target = alignment_hash(entry.pointer);
+        while (alignments[target].pointer)
+            target = (target + 1) & (DB_ALIGN_SLOTS - 1);
+        alignments[target] = entry;
+        next = (next + 1) & (DB_ALIGN_SLOTS - 1);
+    }
+    ReleaseSRWLockExclusive(&alignment_lock);
+    free(base);
+}
+static G void *db_aligned_realloc(void *pointer, size_t size) {
+    if (!pointer)
+        return malloc(size);
+    AcquireSRWLockExclusive(&alignment_lock);
+    int slot = alignment_slot(pointer);
+    if (slot < 0) {
+        ReleaseSRWLockExclusive(&alignment_lock);
+        return realloc(pointer, size);
+    }
+    size_t alignment = alignments[slot].alignment, old_size = alignments[slot].size;
+    void *base = alignments[slot].base;
+    ReleaseSRWLockExclusive(&alignment_lock);
+    if (size > SIZE_MAX - alignment) {
+        db_set_errno(12);
+        return NULL;
+    }
+    void *next = malloc(size + alignment);
+    if (!next) {
+        db_set_errno(12);
+        return NULL;
+    }
+    uintptr_t aligned = ((uintptr_t)next + sizeof(void *) + alignment - 1) & ~(alignment - 1);
+    memcpy((void *)aligned, pointer, old_size < size ? old_size : size);
+    AcquireSRWLockExclusive(&alignment_lock);
+    slot = alignment_slot(pointer);
+    if (slot >= 0) {
+        alignments[slot].pointer = (void *)aligned;
+        alignments[slot].base = next;
+        alignments[slot].size = size;
+    }
+    ReleaseSRWLockExclusive(&alignment_lock);
+    free(base);
+    return (void *)aligned;
+}
+static G void *db_realloc_guest(void *pointer, size_t size) {
+    if (!pointer)
+        return malloc(size);
+    AcquireSRWLockShared(&alignment_lock);
+    int aligned = alignment_slot(pointer) >= 0;
+    ReleaseSRWLockShared(&alignment_lock);
+    if (aligned)
+        return db_aligned_realloc(pointer, size);
+    void *result = realloc(pointer, size);
+    if (!result && size)
+        db_set_errno(12);
+    return result;
+}
+typedef struct DbSemaphore {
+    struct DbSemaphore *next;
+    HANDLE handle;
+} DbSemaphore;
+static DbSemaphore *semaphores;
+static SRWLOCK semaphore_lock = SRWLOCK_INIT;
+static uint64_t monotonic_ns(void) {
+    LARGE_INTEGER counter, frequency;
+    if (!QueryPerformanceCounter(&counter) || !QueryPerformanceFrequency(&frequency))
+        return 0;
+    return (uint64_t)(counter.QuadPart / frequency.QuadPart) * 1000000000 +
+           (uint64_t)(counter.QuadPart % frequency.QuadPart) * 1000000000 /
+               (uint64_t)frequency.QuadPart;
+}
+static G void *db_dispatch_semaphore_create(int64_t value) {
+    if (value < 0 || value > LONG_MAX) {
+        db_set_errno(22);
+        return NULL;
+    }
+    HANDLE handle = CreateSemaphoreW(NULL, (LONG)value, LONG_MAX, NULL);
+    DbSemaphore *semaphore = malloc(sizeof(*semaphore));
+    if (!handle || !semaphore) {
+        if (handle)
+            CloseHandle(handle);
+        free(semaphore);
+        db_set_errno(12);
+        return NULL;
+    }
+    semaphore->handle = handle;
+    AcquireSRWLockExclusive(&semaphore_lock);
+    semaphore->next = semaphores;
+    semaphores = semaphore;
+    ReleaseSRWLockExclusive(&semaphore_lock);
+    return semaphore;
+}
+static G int64_t db_dispatch_semaphore_signal(void *object) {
+    if (!object) {
+        db_set_errno(22);
+        return 0;
+    }
+    AcquireSRWLockShared(&semaphore_lock);
+    DbSemaphore *semaphore = semaphores;
+    while (semaphore && semaphore != object)
+        semaphore = semaphore->next;
+    ReleaseSRWLockShared(&semaphore_lock);
+    if (!semaphore) {
+        db_set_errno(22);
+        return 0;
+    }
+    return ReleaseSemaphore(semaphore->handle, 1, NULL) ? 1 : 0;
+}
+static G int64_t db_dispatch_semaphore_wait(void *object, uint64_t deadline) {
+    if (!object) {
+        db_set_errno(22);
+        return -1;
+    }
+    AcquireSRWLockShared(&semaphore_lock);
+    DbSemaphore *semaphore = semaphores;
+    while (semaphore && semaphore != object)
+        semaphore = semaphore->next;
+    ReleaseSRWLockShared(&semaphore_lock);
+    if (!semaphore) {
+        db_set_errno(22);
+        return -1;
+    }
+    DWORD milliseconds;
+    if (deadline == UINT64_MAX)
+        milliseconds = INFINITE;
+    else {
+        uint64_t now = monotonic_ns();
+        uint64_t wait = deadline > now ? deadline - now : 0;
+        uint64_t rounded = (wait + 999999) / 1000000;
+        milliseconds = rounded >= INFINITE ? INFINITE - 1 : (DWORD)rounded;
+    }
+    DWORD result = WaitForSingleObject(semaphore->handle, milliseconds);
+    if (result == WAIT_OBJECT_0)
+        return 0;
+    if (result == WAIT_TIMEOUT)
+        return 60; /* Darwin ETIMEDOUT */
+    db_set_errno(22);
+    return -1;
+}
+static G uint64_t db_dispatch_time(uint64_t when, int64_t delta) {
+    if (when == UINT64_MAX)
+        return UINT64_MAX;
+    if (!when)
+        when = monotonic_ns();
+    if (delta > 0) {
+        uint64_t add = (uint64_t)delta;
+        return when > UINT64_MAX - add ? UINT64_MAX : when + add;
+    }
+    if (delta < 0) {
+        uint64_t subtract = (uint64_t)(-(delta + 1)) + 1;
+        return when > subtract ? when - subtract : 0;
+    }
+    return when;
+}
+static G void db_dispatch_release(void *object) {
+    if (!object)
+        return;
+    AcquireSRWLockExclusive(&semaphore_lock);
+    DbSemaphore **link = &semaphores;
+    while (*link && *link != object)
+        link = &(*link)->next;
+    DbSemaphore *semaphore = *link;
+    if (semaphore)
+        *link = semaphore->next;
+    ReleaseSRWLockExclusive(&semaphore_lock);
+    if (semaphore) {
+        CloseHandle(semaphore->handle);
+        free(semaphore);
+    }
+}
+typedef int (*DbUnwindTrace)(void *context, void *argument);
+static G int db_unwind_backtrace(DbUnwindTrace trace, void *argument) {
+    /* Guest frames require a Darwin DWARF walker. Reporting the end of the
+     * stack keeps diagnostics honest instead of inventing host frames. */
+    (void)trace;
+    (void)argument;
+    return 5; /* _URC_END_OF_STACK */
+}
+static G uintptr_t db_unwind_get(const void *context) {
+    (void)context;
+    return 0;
+}
+static G uintptr_t db_unwind_get_ip_info(const void *context, int *before) {
+    (void)context;
+    if (before)
+        *before = 0;
+    return 0;
+}
+static G void db_unwind_set(const void *context, int index, uintptr_t value) {
+    (void)context;
+    (void)index;
+    (void)value;
+}
+static G void db_unwind_set_ip(const void *context, uintptr_t value) {
+    (void)context;
+    (void)value;
+}
+static G void db_unwind_resume(void *exception) {
+    (void)exception;
+    fputs("adapter-run [unwind]: guest requested unwinding without a Darwin unwinder\n", stderr);
+    db_guest_exit(134);
+}
 uintptr_t db_system_symbol(const char *name) {
     LOOKUP("_NSGetExecutablePath", db_NSGetExecutablePath);
     LOOKUP("__NSGetExecutablePath", db_NSGetExecutablePath);
+    LOOKUP("_NSGetArgc", db_NSGetArgc);
+    LOOKUP("__NSGetArgc", db_NSGetArgc);
+    LOOKUP("_NSGetArgv", db_NSGetArgv);
+    LOOKUP("__NSGetArgv", db_NSGetArgv);
+    LOOKUP("_NSGetEnviron", db_NSGetEnviron);
+    LOOKUP("__NSGetEnviron", db_NSGetEnviron);
+    LOOKUP("_CCRandomGenerateBytes", db_CCRandomGenerateBytes);
+    LOOKUP("_clock_gettime", db_clock_gettime);
+    LOOKUP("_nanosleep", db_nanosleep);
+    LOOKUP("_sched_yield", db_sched_yield);
+    LOOKUP("_getcwd", db_getcwd);
+    LOOKUP("_chdir", db_chdir);
+    LOOKUP("_chroot", db_chroot);
+    LOOKUP("_sysconf", db_sysconf);
+    LOOKUP("_uname", db_uname);
+    LOOKUP("_strerror_r", db_strerror_r);
+    LOOKUP("_getpwuid_r", db_getpwuid_r);
+    LOOKUP("___memmove_chk", db_memmove_chk);
+    LOOKUP("__exit", db_immediate_exit);
+    LOOKUP("__Unwind_Backtrace", db_unwind_backtrace);
+    LOOKUP("__Unwind_GetCFA", db_unwind_get);
+    LOOKUP("__Unwind_GetDataRelBase", db_unwind_get);
+    LOOKUP("__Unwind_GetIP", db_unwind_get);
+    LOOKUP("__Unwind_GetIPInfo", db_unwind_get_ip_info);
+    LOOKUP("__Unwind_GetLanguageSpecificData", db_unwind_get);
+    LOOKUP("__Unwind_GetRegionStart", db_unwind_get);
+    LOOKUP("__Unwind_GetTextRelBase", db_unwind_get);
+    LOOKUP("__Unwind_Resume", db_unwind_resume);
+    LOOKUP("__Unwind_SetGR", db_unwind_set);
+    LOOKUP("__Unwind_SetIP", db_unwind_set_ip);
     LOOKUP("_environ", &environment);
     LOOKUP("_getenv", db_getenv);
     LOOKUP("_setenv", db_setenv);
@@ -1240,6 +2589,55 @@ uintptr_t db_system_symbol(const char *name) {
     LOOKUP("_rmdir", db_rmdir);
     LOOKUP("_rename", db_rename);
     LOOKUP("_write", db_write);
+    LOOKUP("_read", db_read);
+    LOOKUP("_writev", db_writev);
+    LOOKUP("_lseek", db_lseek);
+    LOOKUP("_close$NOCANCEL", db_close);
+    LOOKUP("_dup", db_dup);
+    LOOKUP("_dup2", db_dup2);
+    LOOKUP("_pipe", db_pipe);
+    LOOKUP("_fcntl", db_fcntl);
+    LOOKUP("_ioctl", db_ioctl);
+    LOOKUP("_fstatat$INODE64", db_fstatat);
+    LOOKUP("_opendir$INODE64", db_opendir);
+    LOOKUP("_readdir_r$INODE64", db_readdir_r);
+    LOOKUP("_closedir", db_closedir);
+    LOOKUP("_dirfd", db_dirfd);
+    LOOKUP("_mmap", db_mmap);
+    LOOKUP("_munmap", db_munmap);
+    LOOKUP("_mprotect", db_mprotect);
+    LOOKUP("_madvise", db_madvise);
+    LOOKUP("_posix_madvise", db_madvise);
+    LOOKUP("_posix_memalign", db_posix_memalign);
+    LOOKUP("_realloc", db_realloc_guest);
+    LOOKUP("_free", db_free);
+    LOOKUP("_dispatch_release", db_dispatch_release);
+    LOOKUP("_dispatch_semaphore_create", db_dispatch_semaphore_create);
+    LOOKUP("_dispatch_semaphore_signal", db_dispatch_semaphore_signal);
+    LOOKUP("_dispatch_semaphore_wait", db_dispatch_semaphore_wait);
+    LOOKUP("_dispatch_time", db_dispatch_time);
+    LOOKUP("_sigaction", db_sigaction);
+    LOOKUP("_sigemptyset", db_sigemptyset);
+    LOOKUP("_sigaddset", db_sigaddset);
+    LOOKUP("_sigaltstack", db_sigaltstack);
+    LOOKUP("_signal", db_signal);
+    LOOKUP("_pause", db_pause);
+    LOOKUP("_fork", db_fork);
+    LOOKUP("_execvp", db_execvp);
+    LOOKUP("_waitpid", db_waitpid);
+    LOOKUP("_setpgid", db_setpgid);
+    LOOKUP("_setsid", db_setsid);
+    LOOKUP("_setgroups", db_setgroups);
+    LOOKUP("_posix_spawn_file_actions_init", db_spawn_file_actions_init);
+    LOOKUP("_posix_spawn_file_actions_destroy", db_spawn_file_actions_destroy);
+    LOOKUP("_posix_spawn_file_actions_adddup2", db_spawn_file_actions_adddup2);
+    LOOKUP("_posix_spawnattr_init", db_spawn_attr_init);
+    LOOKUP("_posix_spawnattr_destroy", db_spawn_attr_destroy);
+    LOOKUP("_posix_spawnattr_setflags", db_spawn_attr_setflags);
+    LOOKUP("_posix_spawnattr_setpgroup", db_spawn_attr_setpgroup);
+    LOOKUP("_posix_spawnattr_setsigdefault", db_spawn_attr_setsigdefault);
+    LOOKUP("_posix_spawnp", db_posix_spawnp);
+    LOOKUP("_memset_pattern16", db_memset_pattern16);
     LOOKUP("_sleep", db_sleep);
     LOOKUP("_usleep", db_usleep);
     LOOKUP("_srandom", db_srandom);

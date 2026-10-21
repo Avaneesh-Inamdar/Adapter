@@ -217,11 +217,33 @@ mod native {
                 })
                 .collect();
             let _callbacks = crate::darwin::callbacks::begin(ranges)?;
+            let images = self
+                .plan
+                .images
+                .iter()
+                .enumerate()
+                .map(|(index, node)| {
+                    let text = node
+                        .image
+                        .segments
+                        .iter()
+                        .find(|s| s.name == "__TEXT")
+                        .ok_or("image has no __TEXT segment")?;
+                    let header = self.mappings[index].relocated(text.vmaddr)?;
+                    Ok((
+                        node.path.display().to_string(),
+                        header,
+                        header as i64 - text.vmaddr as i64,
+                    ))
+                })
+                .collect::<Result<Vec<_>>>()?;
+            crate::darwin::dyld::begin(images);
             let _tls = crate::darwin::tlv::begin(self.tls.clone())?;
             let _thread_state = crate::darwin::thread_state::begin()?;
             let _threads = crate::darwin::threads::begin()?;
             crate::darwin::libc::begin();
             crate::darwin::libc::set_executable_path(&argv[0]);
+            unsafe { crate::darwin::libc::set_arguments(argv.len() as i32, av.as_ptr()) };
             type Init = unsafe extern "sysv64" fn(
                 i32,
                 *const *const c_char,
