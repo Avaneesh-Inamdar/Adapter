@@ -434,14 +434,39 @@
       "_xpc_string_get_string_ptr",
       "_xpc_uint64_create",
       "_xpc_uint64_get_value"
+    ],
+    "Objective-C": [
+      "__objc_empty_cache",
+      "_class_createInstance",
+      "_class_getInstanceSize",
+      "_class_getName",
+      "_class_getSuperclass",
+      "_class_isMetaClass",
+      "_objc_alloc",
+      "_objc_alloc_init",
+      "_objc_autorelease",
+      "_objc_autoreleasePoolPop",
+      "_objc_autoreleasePoolPush",
+      "_objc_getClass",
+      "_objc_lookUpClass",
+      "_objc_msgSend",
+      "_objc_msgSendSuper2",
+      "_objc_release",
+      "_objc_retain",
+      "_object_dispose",
+      "_object_getClass",
+      "_sel_getName",
+      "_sel_getUid",
+      "_sel_isEqual",
+      "_sel_registerName"
     ]
   },
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 280,
+      "available": 292,
       "total": 1860,
-      "percent": 15.05
+      "percent": 15.7
     },
     {
       "name": "libSystem",
@@ -493,9 +518,9 @@
     },
     {
       "name": "Objective-C",
-      "available": 0,
+      "available": 12,
       "total": 53,
-      "percent": 0.0
+      "percent": 22.64
     },
     {
       "name": "IOKit",
@@ -677,9 +702,9 @@
       "name": "AU Lab",
       "source": "additional-tools27/Additional Tools/Audio/AU Lab.app/Contents/MacOS/AU Lab",
       "sha256": "6b04e361965e2ff23a717d71d8f2c24bf4b02138ad06e09a9d2761f1322f77cf",
-      "available": 65,
+      "available": 73,
       "total": 603,
-      "percent": 10.78,
+      "percent": 12.11,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio",
@@ -2755,22 +2780,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_copyStruct"
         },
         {
@@ -2780,14 +2789,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_getProperty"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -2811,14 +2812,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_setProperty_atomic"
         },
         {
@@ -2839,9 +2832,9 @@
       "name": "Pixie",
       "source": "additional-tools27/Additional Tools/Graphics/Pixie.app/Contents/MacOS/Pixie",
       "sha256": "b53927c07a96489110c4985837f8dfe410027ed8e57edc0c428b478cf5976951",
-      "available": 7,
+      "available": 15,
       "total": 134,
-      "percent": 5.22,
+      "percent": 11.19,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -3285,22 +3278,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_destroyWeak"
         },
         {
@@ -3313,14 +3290,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_msgSend_stret"
         },
         {
@@ -3330,14 +3299,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_respondsToSelector"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -3357,9 +3318,9 @@
       "name": "LogTool",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/LogTool",
       "sha256": "d79c6d3283eb3c4e4df6659a0c99aeaa8c0b8549868157f343ff142400e341ce",
-      "available": 18,
+      "available": 25,
       "total": 34,
-      "percent": 52.94,
+      "percent": 73.53,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -3395,35 +3356,7 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_enumerationMutation"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
         }
       ]
     },
@@ -3431,9 +3364,9 @@
       "name": "Quartz Debug",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Quartz Debug",
       "sha256": "efc44dd7adf3db75a246952e6c626c0284ca9dfd981c72e0908a1e7825d1fabc",
-      "available": 39,
+      "available": 49,
       "total": 420,
-      "percent": 9.29,
+      "percent": 11.67,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -4829,19 +4762,11 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_class_addMethod"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_class_getInstanceMethod"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_class_getSuperclass"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -4854,18 +4779,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_method_setImplementation"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -4893,14 +4806,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_msgSendSuper2_stret"
         },
         {
@@ -4918,14 +4823,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_respondsToSelector"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -4954,10 +4851,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_terminate"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_object_getClass"
         }
       ]
     },
@@ -4965,9 +4858,9 @@
       "name": "Server",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Server",
       "sha256": "bb655c463178450b3889013a99ca449c6b06ca840b0a25b11a2b8c24fa410543",
-      "available": 31,
+      "available": 39,
       "total": 232,
-      "percent": 13.36,
+      "percent": 16.81,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -5687,22 +5580,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_begin_catch"
         },
         {
@@ -5727,14 +5604,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_msgSend_stret"
         },
         {
@@ -5748,14 +5617,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_respondsToSelector"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -5779,9 +5640,9 @@
       "name": "HomeKit Accessory Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/HomeKit Accessory Simulator.app/Contents/MacOS/HomeKit Accessory Simulator",
       "sha256": "1301a2bcf9f46d5b9ddcb4c09c1f0c4bf26f85abc434a357671a4d28a4f06a80",
-      "available": 8,
+      "available": 16,
       "total": 319,
-      "percent": 2.51,
+      "percent": 5.02,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -6505,22 +6366,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_autoreleaseReturnValue"
         },
         {
@@ -6557,14 +6402,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_msgSendSuper2_stret"
         },
         {
@@ -6586,14 +6423,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_respondsToSelector"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -7033,9 +6862,9 @@
       "name": "IORegistryExplorer",
       "source": "additional-tools27/Additional Tools/Hardware/IORegistryExplorer.app/Contents/MacOS/IORegistryExplorer",
       "sha256": "e6c9f274f7da68055d5ef6a27315c25d25c34d03559d1485ed25ab9cf5243bd0",
-      "available": 13,
+      "available": 21,
       "total": 188,
-      "percent": 6.91,
+      "percent": 11.17,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -7667,22 +7496,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_begin_catch"
         },
         {
@@ -7703,14 +7516,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_msgSend_stret"
         },
         {
@@ -7727,14 +7532,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_terminate"
         }
       ]
@@ -7743,9 +7540,9 @@
       "name": "Network Link Conditioner",
       "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/MacOS/Network Link Conditioner",
       "sha256": "57f582aed1291c6e97f89a99b023405ee5706978757d2a3e18cee7b9a66980d6",
-      "available": 10,
+      "available": 18,
       "total": 105,
-      "percent": 9.52,
+      "percent": 17.14,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -8073,31 +7870,7 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_enumerationMutation"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -8117,14 +7890,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_setProperty_nonatomic"
         }
       ]
@@ -8133,9 +7898,9 @@
       "name": "NLCBackgroundApp",
       "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/PlugIns/NLCBackgroundApp.app/Contents/MacOS/NLCBackgroundApp",
       "sha256": "39017746b84001b0795b4a3e951d9b40c32ed50efcd17a2ee45ca4e6b5aed87d",
-      "available": 9,
+      "available": 15,
       "total": 38,
-      "percent": 23.68,
+      "percent": 39.47,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -8228,30 +7993,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_OBJC_METACLASS_$_NSObject"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         }
       ]
     },
@@ -8259,9 +8000,9 @@
       "name": "com.apple.Network-Link-Conditioner.remoteservice",
       "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/XPCServices/com.apple.Network-Link-Conditioner.remoteservice.xpc/Contents/MacOS/com.apple.Network-Link-Conditioner.remoteservice",
       "sha256": "237e16328c50390df2d84a5fe9a04397a1b426e210e8949d35e7c31e8397d579",
-      "available": 1,
+      "available": 6,
       "total": 16,
-      "percent": 6.25,
+      "percent": 37.5,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -8297,31 +8038,11 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autoreleasePoolPop"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autoreleasePoolPush"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_begin_catch"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_end_catch"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
         }
       ]
     },
@@ -8329,9 +8050,9 @@
       "name": "PacketLogger",
       "source": "additional-tools27/Additional Tools/Hardware/PacketLogger.app/Contents/MacOS/PacketLogger",
       "sha256": "10f290584470a84ca205fd7d27302b98d975b464381922fb0c318b4305fdc4f1",
-      "available": 26,
+      "available": 34,
       "total": 219,
-      "percent": 11.87,
+      "percent": 15.53,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -8927,22 +8648,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_autoreleaseReturnValue"
         },
         {
@@ -8963,14 +8668,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_msgSend_stret"
         },
         {
@@ -8988,14 +8685,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_respondsToSelector"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -9111,9 +8800,9 @@
       "name": "Printer Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/Printer Simulator",
       "sha256": "83f7b928a9cedf70c72b42740bf54c503285dabb9d5090f60747b3181e0d28b7",
-      "available": 14,
+      "available": 22,
       "total": 135,
-      "percent": 10.37,
+      "percent": 16.3,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -9537,22 +9226,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_begin_catch"
         },
         {
@@ -9569,14 +9242,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_msgSend_stret"
         },
         {
@@ -9589,14 +9254,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_setProperty_atomic"
         }
       ]
@@ -9605,9 +9262,9 @@
       "name": "PrinterSimulatorServer",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/PrinterSimulatorServer",
       "sha256": "ee0e716d8b4bcf9ca07a3500731e6465ace72504d44b4ffbafd5953e4b39da1a",
-      "available": 73,
+      "available": 81,
       "total": 463,
-      "percent": 15.77,
+      "percent": 17.49,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -11107,22 +10764,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autoreleasePoolPop"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autoreleasePoolPush"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_autoreleaseReturnValue"
         },
         {
@@ -11132,22 +10773,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_getProperty"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -11175,9 +10800,9 @@
       "name": "Clipboard Viewer",
       "source": "additional-tools27/Additional Tools/Utilities/Clipboard Viewer.app/Contents/MacOS/Clipboard Viewer",
       "sha256": "bd2de66f1344b28376dfc6b68f0df1fc4885337da32efd872da82ef1ff8b97b9",
-      "available": 1,
+      "available": 8,
       "total": 55,
-      "percent": 1.82,
+      "percent": 14.55,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -11349,31 +10974,11 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_alloc_init"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_exception_throw"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_getProperty"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -11385,14 +10990,6 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_setProperty_atomic"
         }
       ]
@@ -11401,9 +10998,9 @@
       "name": "CrashReporterPrefs",
       "source": "additional-tools27/Additional Tools/Utilities/CrashReporterPrefs.app/Contents/MacOS/CrashReporterPrefs",
       "sha256": "6d84387b0f696a24bd9e80cc312670b4eeac0557d6c5a60d45485f0226f407f4",
-      "available": 0,
+      "available": 3,
       "total": 20,
-      "percent": 0.0,
+      "percent": 15.0,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -11472,18 +11069,6 @@
         {
           "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_OBJC_METACLASS_$_NSObject"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
         }
       ]
     },
@@ -11491,9 +11076,9 @@
       "name": "Icon Composer",
       "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/MacOS/Icon Composer",
       "sha256": "342aa8f9f7463b87b073a59b0518c9b5e09d86985d3417a6c3521073bb8dacb3",
-      "available": 2,
+      "available": 8,
       "total": 115,
-      "percent": 1.74,
+      "percent": 6.96,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -11557,35 +11142,11 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_allocWithZone"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_autorelease"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_self"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -11953,9 +11514,9 @@
       "name": "Icon Composer QuickLook Preview",
       "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer QuickLook Preview.appex/Contents/MacOS/Icon Composer QuickLook Preview",
       "sha256": "933340aaa46d146a8f8f4a9e370f6ef8dce2bfcf614b69ab1cdc25037416130a",
-      "available": 6,
+      "available": 11,
       "total": 74,
-      "percent": 8.11,
+      "percent": 14.86,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -12003,31 +11564,11 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_allocWithZone"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_self"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -12235,9 +11776,9 @@
       "name": "Icon Composer Thumbnail",
       "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer Thumbnail.appex/Contents/MacOS/Icon Composer Thumbnail",
       "sha256": "2d9bb888d6e2760e22ca7039c3e31fd0f779af81b91e3755db2ce02b2193ebc0",
-      "available": 4,
+      "available": 9,
       "total": 64,
-      "percent": 6.25,
+      "percent": 14.06,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -12285,31 +11826,11 @@
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "__objc_empty_cache"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_allocWithZone"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSend"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_msgSendSuper2"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
           "symbol": "_objc_opt_self"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_release"
-        },
-        {
-          "library": "/usr/lib/libobjc.A.dylib",
-          "symbol": "_objc_retain"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -12508,37 +12029,12 @@
     },
     {
       "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "__objc_empty_cache",
-      "target_count": 18
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_msgSend",
-      "target_count": 18
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_msgSendSuper2",
-      "target_count": 17
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
       "symbol": "_OBJC_CLASS_$_NSObject",
-      "target_count": 16
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_release",
       "target_count": 16
     },
     {
       "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
       "symbol": "___CFConstantStringClassReference",
-      "target_count": 15
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_retain",
       "target_count": 15
     },
     {
@@ -12549,21 +12045,6 @@
     {
       "library": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
       "symbol": "_OBJC_CLASS_$_NSString",
-      "target_count": 12
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_alloc",
-      "target_count": 12
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_alloc_init",
-      "target_count": 12
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_autorelease",
       "target_count": 12
     },
     {
@@ -15139,16 +14620,6 @@
     {
       "library": "/usr/lib/libicucore.A.dylib",
       "symbol": "_uregex_start",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_autoreleasePoolPop",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_objc_autoreleasePoolPush",
       "target_count": 2
     },
     {
@@ -19493,11 +18964,6 @@
     },
     {
       "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_class_getSuperclass",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
       "symbol": "_method_getImplementation",
       "target_count": 1
     },
@@ -19519,11 +18985,6 @@
     {
       "library": "/usr/lib/libobjc.A.dylib",
       "symbol": "_objc_loadWeak",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libobjc.A.dylib",
-      "symbol": "_object_getClass",
       "target_count": 1
     },
     {

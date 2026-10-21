@@ -10,24 +10,24 @@ unobserved APIs, implementation completeness or runtime test results. ARM64 imag
 
 | Image | Adapters available | Missing | API coverage |
 | --- | ---: | ---: | ---: |
-| AU Lab | 65 / 603 | 538 | 10.78% |
-| Pixie | 7 / 134 | 127 | 5.22% |
-| LogTool | 18 / 34 | 16 | 52.94% |
-| Quartz Debug | 39 / 420 | 381 | 9.29% |
-| Server | 31 / 232 | 201 | 13.36% |
-| HomeKit Accessory Simulator | 8 / 319 | 311 | 2.51% |
-| IORegistryExplorer | 13 / 188 | 175 | 6.91% |
-| Network Link Conditioner | 10 / 105 | 95 | 9.52% |
-| NLCBackgroundApp | 9 / 38 | 29 | 23.68% |
-| com.apple.Network-Link-Conditioner.remoteservice | 1 / 16 | 15 | 6.25% |
-| PacketLogger | 26 / 219 | 193 | 11.87% |
-| Printer Simulator | 14 / 135 | 121 | 10.37% |
-| PrinterSimulatorServer | 73 / 463 | 390 | 15.77% |
-| Clipboard Viewer | 1 / 55 | 54 | 1.82% |
-| CrashReporterPrefs | 0 / 20 | 20 | 0.00% |
-| Icon Composer | 2 / 115 | 113 | 1.74% |
-| Icon Composer QuickLook Preview | 6 / 74 | 68 | 8.11% |
-| Icon Composer Thumbnail | 4 / 64 | 60 | 6.25% |
+| AU Lab | 73 / 603 | 530 | 12.11% |
+| Pixie | 15 / 134 | 119 | 11.19% |
+| LogTool | 25 / 34 | 9 | 73.53% |
+| Quartz Debug | 49 / 420 | 371 | 11.67% |
+| Server | 39 / 232 | 193 | 16.81% |
+| HomeKit Accessory Simulator | 16 / 319 | 303 | 5.02% |
+| IORegistryExplorer | 21 / 188 | 167 | 11.17% |
+| Network Link Conditioner | 18 / 105 | 87 | 17.14% |
+| NLCBackgroundApp | 15 / 38 | 23 | 39.47% |
+| com.apple.Network-Link-Conditioner.remoteservice | 6 / 16 | 10 | 37.50% |
+| PacketLogger | 34 / 219 | 185 | 15.53% |
+| Printer Simulator | 22 / 135 | 113 | 16.30% |
+| PrinterSimulatorServer | 81 / 463 | 382 | 17.49% |
+| Clipboard Viewer | 8 / 55 | 47 | 14.55% |
+| CrashReporterPrefs | 3 / 20 | 17 | 15.00% |
+| Icon Composer | 8 / 115 | 107 | 6.96% |
+| Icon Composer QuickLook Preview | 11 / 74 | 63 | 14.86% |
+| Icon Composer Thumbnail | 9 / 64 | 55 | 14.06% |
 | jq 1.8.2 | 136 / 136 | 0 | 100.00% |
 | ripgrep 15.2.0 | 131 / 131 | 0 | 100.00% |
 
@@ -39,18 +39,10 @@ jq and ripgrep have recorded execution tests. The Apple applications have inspec
 | Imported symbol | Library | Intel images using it |
 | --- | --- | ---: |
 | `_OBJC_METACLASS_$_NSObject` | Objective-C | 18 |
-| `__objc_empty_cache` | Objective-C | 18 |
-| `_objc_msgSend` | Objective-C | 18 |
-| `_objc_msgSendSuper2` | Objective-C | 17 |
 | `_OBJC_CLASS_$_NSObject` | Objective-C | 16 |
-| `_objc_release` | Objective-C | 16 |
 | `___CFConstantStringClassReference` | CoreFoundation | 15 |
-| `_objc_retain` | Objective-C | 15 |
 | `_NSLog` | Foundation | 13 |
 | `_OBJC_CLASS_$_NSString` | Foundation | 12 |
-| `_objc_alloc` | Objective-C | 12 |
-| `_objc_alloc_init` | Objective-C | 12 |
-| `_objc_autorelease` | Objective-C | 12 |
 | `_NSApplicationMain` | AppKit | 11 |
 | `_OBJC_CLASS_$_NSDictionary` | CoreFoundation | 11 |
 | `_OBJC_CLASS_$_NSColor` | AppKit | 10 |
@@ -63,6 +55,14 @@ jq and ripgrep have recorded execution tests. The Apple applications have inspec
 | `_NSFontAttributeName` | AppKit | 9 |
 | `_OBJC_CLASS_$_NSImage` | AppKit | 9 |
 | `_OBJC_CLASS_$_NSWorkspace` | AppKit | 9 |
+| `_OBJC_CLASS_$_NSArray` | CoreFoundation | 9 |
+| `_OBJC_CLASS_$_NSMutableData` | CoreFoundation | 9 |
+| `_OBJC_CLASS_$_NSMutableDictionary` | CoreFoundation | 9 |
+| `_OBJC_CLASS_$_NSUserDefaults` | CoreFoundation | 9 |
+| `_OBJC_CLASS_$_NSMutableString` | Foundation | 9 |
+| `_objc_getProperty` | Objective-C | 9 |
+| `_objc_setProperty_atomic` | Objective-C | 9 |
+| `_NSApp` | AppKit | 8 |
 
 Full missing lists, library names and target hashes: [status.json](status.json).
 

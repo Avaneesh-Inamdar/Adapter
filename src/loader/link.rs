@@ -38,6 +38,7 @@ pub fn adapter_symbol(library: &str, symbol: &str) -> Option<u64> {
     match library {
         "/usr/lib/libSystem.B.dylib" | "/usr/lib/libSystem.dylib" => crate::darwin::symbol(symbol),
         "/usr/lib/system/libxpc.dylib" => crate::darwin::xpc::symbol(symbol),
+        "/usr/lib/libobjc.A.dylib" => crate::objc::symbol(symbol),
         /* libiconv is a dependency of many Rust programs; their imports resolve
          * through libSystem, so this adapter currently exposes no symbols. */
         "/usr/lib/libiconv.2.dylib" => None,
@@ -323,6 +324,12 @@ fn prepare_kind(path: &Path, cfg: &Config, executable_root: bool) -> Result<Prog
     let mut total = 0u64;
     for (index, path) in graph.nodes.iter().enumerate() {
         let image = inspect::read(path)?;
+        if !executable_root && image.sections.iter().any(|s| s.name.starts_with("__objc_")) {
+            return Err(format!(
+                "preflight {}: dynamic Objective-C registration is unsupported",
+                path.display()
+            ));
+        }
         if image.architecture != "x86_64"
             || image.cpu_subtype & 0xffffff != 3
             || !image.unsupported.is_empty()

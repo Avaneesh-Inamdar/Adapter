@@ -63,6 +63,7 @@ pub fn adapter(name: &str) -> bool {
             | "/usr/lib/libSystem.dylib"
             | "/usr/lib/libiconv.2.dylib"
             | "/usr/lib/system/libxpc.dylib"
+            | "/usr/lib/libobjc.A.dylib"
             | "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation"
             | "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation"
     )

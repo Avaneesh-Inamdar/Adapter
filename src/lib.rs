@@ -3,6 +3,7 @@ pub mod darwin;
 pub mod frameworks;
 pub mod inspect;
 pub mod loader;
+pub mod objc;
 pub mod platform;
 pub mod runtime;
 

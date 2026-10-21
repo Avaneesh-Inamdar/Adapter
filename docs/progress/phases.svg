@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420" role="img" aria-labelledby="title desc">
+<title id="title">Adapter delivery phases</title>
+<desc id="desc">Seven phases with dependency arrows. P0 evidence is in progress; P1 runtimes and P2 services have implemented slices. UI, ARM64 and Xcode remain.</desc>
+<rect width="1100" height="420" rx="12" fill="#101824"/>
+<defs><marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0 0L7 3.5L0 7" fill="none" stroke="#94a3b8"/></marker></defs>
+<path d="M265 95L284 95" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M530 95L549 95" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M795 95L814 95" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M410 150L410 219" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M675 150L675 219" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M940 150L940 190L675 190L675 219" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M530 275L549 275" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M795 275L814 275" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="25" y="45" width="240" height="105" rx="8" fill="#1e293b" stroke="#38bdf8"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="39" y="70" fill="#38bdf8" font-size="15">P0 · verified-slice</text>
+<text x="39" y="98" fill="#f8fafc" font-size="18">Evidence and contracts</text>
+<text x="39" y="125" fill="#cbd5e1" font-size="14">Mac probes / guest debugger</text></g>
+<rect x="290" y="45" width="240" height="105" rx="8" fill="#1e293b" stroke="#fbbf24"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="304" y="70" fill="#fbbf24" font-size="15">P1 · implemented-slices</text>
+<text x="304" y="98" fill="#f8fafc" font-size="18">Loaders and runtimes</text>
+<text x="304" y="125" fill="#cbd5e1" font-size="14">ObjC slice verified</text></g>
+<rect x="555" y="45" width="240" height="105" rx="8" fill="#1e293b" stroke="#fbbf24"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="569" y="70" fill="#fbbf24" font-size="15">P2 · implemented-slices</text>
+<text x="569" y="98" fill="#f8fafc" font-size="18">System services</text>
+<text x="569" y="125" fill="#cbd5e1" font-size="14">IPC / XPC slices</text></g>
+<rect x="820" y="45" width="240" height="105" rx="8" fill="#1e293b" stroke="#94a3b8"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="834" y="70" fill="#94a3b8" font-size="15">P3 · not-started</text>
+<text x="834" y="98" fill="#f8fafc" font-size="18">Graphics and desktop</text>
+<text x="834" y="125" fill="#cbd5e1" font-size="14">NSWindow gate pending</text></g>
+<rect x="290" y="225" width="240" height="105" rx="8" fill="#1e293b" stroke="#94a3b8"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="304" y="250" fill="#94a3b8" font-size="15">P4 · not-started</text>
+<text x="304" y="278" fill="#f8fafc" font-size="18">ARM64 / arm64e</text>
+<text x="304" y="305" fill="#cbd5e1" font-size="14">Backend decision recorded</text></g>
+<rect x="555" y="225" width="240" height="105" rx="8" fill="#1e293b" stroke="#94a3b8"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="569" y="250" fill="#94a3b8" font-size="15">P5 · not-started</text>
+<text x="569" y="278" fill="#f8fafc" font-size="18">Xcode integration</text>
+<text x="569" y="305" fill="#cbd5e1" font-size="14">Five binary gates pending</text></g>
+<rect x="820" y="225" width="240" height="105" rx="8" fill="#1e293b" stroke="#94a3b8"/>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="834" y="250" fill="#94a3b8" font-size="15">P6 · not-started</text>
+<text x="834" y="278" fill="#f8fafc" font-size="18">Instruments and devices</text>
+<text x="834" y="305" fill="#cbd5e1" font-size="14">Simulator deferred</text></g>
+<g fill="#cbd5e1" font-family="Segoe UI,Arial,sans-serif" font-size="15">
+<text x="25" y="370">All 36 requested work items are assigned. Arrows show dependencies; phases contain bounded slices.</text>
+<text x="25" y="397">API coverage is measured separately. No overall macOS completion percentage is claimed.</text></g></svg>

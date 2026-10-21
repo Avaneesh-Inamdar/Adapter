@@ -18,6 +18,7 @@ SYSTEM = {'/usr/lib/libSystem.B.dylib', '/usr/lib/libSystem.dylib'}
 CF = {'/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation',
       '/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation'}
 XPC = {'/usr/lib/system/libxpc.dylib'}
+OBJC = {'/usr/lib/libobjc.A.dylib'}
 
 
 def imports(path, expected, expected_dependencies=None):
@@ -133,7 +134,13 @@ def registry():
             r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*(?:\{[^{}]*?)?\w+\s+as\s+\*const', xpc_text):
         xpc.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
     xpc.update(re.findall(r'"(__xpc_[a-z0-9_]+)"\s*=>\s*addr\(', xpc_text))
-    return {'libSystem': system, 'CoreFoundation': cf, 'libxpc': xpc}
+    objc_text = (ROOT / 'src/objc/mod.rs').read_text()
+    objc = set()
+    for arm in re.finditer(
+            r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*\w+\s+as\s+\*const', objc_text):
+        objc.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
+    objc.update(re.findall(r'"([^"\n]+)"\s*=>\s*\w+\.as_ptr\(\)\s+as\s+u64', objc_text))
+    return {'libSystem': system, 'CoreFoundation': cf, 'libxpc': xpc, 'Objective-C': objc}
 
 
 def family(library):
@@ -151,7 +158,7 @@ def family(library):
 
 def available(library, name, adapters):
     group = ('libSystem' if library in SYSTEM else 'CoreFoundation' if library in CF
-             else 'libxpc' if library in XPC else None)
+             else 'libxpc' if library in XPC else 'Objective-C' if library in OBJC else None)
     return group is not None and name in adapters[group]
 
 
@@ -275,7 +282,7 @@ def update_readme(report):
              '| --- | ---: | ---: | --- |']
     statuses = {'jq 1.8.2': '14 recorded tests passed', 'ripgrep 15.2.0': '11 recorded CLI tests passed',
                 'LogTool': 'Inspected; not run',
-                'Clipboard Viewer': 'Inspected; Objective-C/AppKit missing'}
+                'Clipboard Viewer': 'Inspected; framework classes/AppKit missing'}
     for name, status in statuses.items():
         row = next(t for t in report['targets'] if t['name'] == name)
         lines.append(f"| {name} | {row['available']} / {row['total']} | {row['percent']:.2f}% | {status} |")

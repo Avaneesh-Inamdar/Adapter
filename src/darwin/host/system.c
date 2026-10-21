@@ -1080,6 +1080,11 @@ static void guest_tm(const struct tm *h, DbTm *t) {
     t->isdst = h->tm_isdst;
 }
 static G int64_t db_timegm(DbTm *t) {
+    if (!t) {
+        db_set_errno(22);
+        return -1;
+    }
+    t->isdst = 0;
     int64_t y = (int64_t)t->year + 1900, mon = t->mon;
     y += floor_div(mon, 12);
     mon -= floor_div(mon, 12) * 12;
@@ -1088,6 +1093,13 @@ static G int64_t db_timegm(DbTm *t) {
     DbTm normalized;
     if (!utc(value, &normalized))
         return -1;
+    /* Darwin time2sub rejects normalized calendar years below 1900 before
+     * adding saved seconds. Its retry also normalizes seconds first. */
+    if (normalized.year < 0) {
+        DbTm before_seconds;
+        if (!utc(value - t->sec, &before_seconds) || before_seconds.year < 0)
+            return -1;
+    }
     *t = normalized;
     return value;
 }

@@ -192,6 +192,7 @@ mod native {
             for (index, mapping) in loaded.mappings.iter().enumerate() {
                 mapping.protect(&loaded.plan.images[index].image)?;
             }
+            super::debug::record(&loaded.plan, &loaded.mappings)?;
             Ok(loaded)
         }
         fn executable_pointer(&self, pointer: u64) -> bool {
@@ -400,6 +401,35 @@ mod native {
                 ap.as_ptr() as usize,
                 trace,
             )?;
+            let mut objc_images = Vec::new();
+            for (node, mapping) in self.plan.images.iter().zip(&self.mappings) {
+                let mut regions = Vec::new();
+                for segment in &node.image.segments {
+                    if segment.name == "__PAGEZERO" || segment.vmsize == 0 {
+                        continue;
+                    }
+                    regions.push(crate::objc::Region {
+                        address: mapping.relocated(segment.vmaddr)?,
+                        size: segment.vmsize,
+                        readable: segment.initprot & 1 != 0,
+                        writable: segment.initprot & 2 != 0 && segment.flags & 0x10 == 0,
+                        executable: segment.initprot & 4 != 0,
+                    });
+                }
+                let mut sections = Vec::new();
+                for section in &node.image.sections {
+                    if section.name.starts_with("__objc_") && section.size != 0 {
+                        sections.push(crate::objc::MetadataSection {
+                            name: section.name.clone(),
+                            address: mapping.relocated(section.address)?,
+                            size: section.size,
+                        });
+                    }
+                }
+                objc_images.push(crate::objc::Image { regions, sections });
+            }
+            let objc = crate::objc::begin(objc_images)?;
+            objc.initialize()?;
             self.initialize(
                 argv.len() as i32,
                 av.as_ptr(),
@@ -438,6 +468,8 @@ mod native {
         loaded.run(cfg, args, trace)
     }
 }
+#[cfg(all(windows, target_arch = "x86_64"))]
+pub mod debug;
 #[cfg(all(windows, target_arch = "x86_64"))]
 mod dynamic;
 #[cfg(all(windows, target_arch = "x86_64"))]

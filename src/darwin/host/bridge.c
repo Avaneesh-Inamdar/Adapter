@@ -507,10 +507,21 @@ static G char *db_strdup(const char *s) {
 }
 static G size_t db_strspn(const char *s, const char *a) { return strspn(s, a); }
 static G int64_t db_strtol(const char *s, char **end, int base) {
+    if (base != 0 && (base < 2 || base > 36)) {
+        if (end)
+            *end = (char *)s;
+        db_set_errno(22);
+        return 0;
+    }
     errno = 0;
-    int64_t v = _strtoi64(s, end, base);
+    char *parsed;
+    int64_t v = _strtoi64(s, &parsed, base);
+    if (end)
+        *end = parsed;
     if (errno)
         db_host_error();
+    else if (parsed == s)
+        db_set_errno(22);
     return v;
 }
 static G int db_atoi(const char *s) { return (int)db_strtol(s, NULL, 10); }

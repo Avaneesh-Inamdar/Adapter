@@ -104,9 +104,10 @@ Three integration tests cover the gate:
 
 ## Verification
 
-The full verifier passed all 14 stages. The current run contains **132 distinct
-tests: 31 Rust, nine archive and 92 integration**; all 92 integration tests also
-pass against the release build. All prior jq, ripgrep, dynamic-loading, thread,
+The verifier at this milestone passed all 14 stages with **132 distinct tests:
+31 Rust, nine archive and 92 integration**; all 92 integration tests also passed
+against the release build. Later slices grew the suites; the
+[current summary](test-results/summary.json) holds the final counts. All prior jq, ripgrep, dynamic-loading, thread,
 libc, Mach and launchd suites remain in the same run. The pinned headers,
 symbol inventory and connection contract are recorded in
 [the XPC evidence](reverse-engineering/xpc-evidence.md).

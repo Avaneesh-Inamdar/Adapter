@@ -1,0 +1,536 @@
+{
+  "schema_version": 1,
+  "contracts": [
+    {
+      "id": "loader",
+      "version": 1,
+      "scope": "Intel PIE startup graphs and bounded runtime dylib groups",
+      "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
+      "implementation": [
+        "src/loader/link.rs",
+        "src/runtime/mod.rs",
+        "src/runtime/dynamic.rs"
+      ],
+      "tests": [
+        "tests/integration/test_runtime.py",
+        "tests/fixtures/dlopen.c"
+      ],
+      "layouts": [
+        {
+          "name": "mach_header_64",
+          "size": 32,
+          "align": 8,
+          "fields": [
+            {
+              "name": "magic",
+              "offset": 0,
+              "size": 4
+            },
+            {
+              "name": "cputype",
+              "offset": 4,
+              "size": 4
+            },
+            {
+              "name": "ncmds",
+              "offset": 16,
+              "size": 4
+            },
+            {
+              "name": "sizeofcmds",
+              "offset": 20,
+              "size": 4
+            },
+            {
+              "name": "flags",
+              "offset": 24,
+              "size": 4
+            }
+          ]
+        }
+      ],
+      "ownership": "Mappings belong to loaded image groups. dlclose finalizes but retains mappings.",
+      "callbacks": "Validate executable constructor/finalizer addresses; dependency-order construction and reverse teardown.",
+      "errors": "Unsupported input fails before guest entry with worker exit125; guest exit codes preserved.",
+      "lifecycle": "Resolve imports before mapping; relocate all images before constructors; join owned threads before unmapping.",
+      "unsupported": "No shared cache, weak coalescing, dynamic TLV or dynamic Objective-C registration.",
+      "sources": [
+        "https://github.com/apple-oss-distributions/dyld",
+        "docs/dynamic-loading-results.md"
+      ]
+    },
+    {
+      "id": "libc",
+      "version": 1,
+      "scope": "C/POSIX locale, stream/format and jq/ripgrep-oriented POSIX adapters",
+      "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
+      "implementation": [
+        "src/darwin/host/bridge.h",
+        "src/darwin/host/format.c",
+        "src/darwin/host/system.c"
+      ],
+      "tests": [
+        "tests/fixtures/libc.c",
+        "tests/fixtures/file_time.c",
+        "tests/integration/test_libc.py"
+      ],
+      "layouts": [
+        {
+          "name": "Darwin FILE prefix",
+          "size": 152,
+          "align": 8,
+          "fields": [
+            {
+              "name": "flags",
+              "offset": 16,
+              "size": 2
+            },
+            {
+              "name": "file",
+              "offset": 18,
+              "size": 2
+            }
+          ]
+        },
+        {
+          "name": "SysV va_list",
+          "size": 24,
+          "align": 8,
+          "fields": [
+            {
+              "name": "gp_offset",
+              "offset": 0,
+              "size": 4
+            },
+            {
+              "name": "fp_offset",
+              "offset": 4,
+              "size": 4
+            },
+            {
+              "name": "overflow_arg_area",
+              "offset": 8,
+              "size": 8
+            },
+            {
+              "name": "reg_save_area",
+              "offset": 16,
+              "size": 8
+            }
+          ]
+        },
+        {
+          "name": "Darwin stat64",
+          "size": 144,
+          "align": 8,
+          "fields": [
+            {
+              "name": "mode",
+              "offset": 4,
+              "size": 2
+            },
+            {
+              "name": "size",
+              "offset": 96,
+              "size": 8
+            }
+          ]
+        },
+        {
+          "name": "Darwin tm",
+          "size": 56,
+          "align": 8,
+          "fields": [
+            {
+              "name": "sec through isdst",
+              "offset": 0,
+              "size": 36
+            },
+            {
+              "name": "gmtoff",
+              "offset": 40,
+              "size": 8
+            },
+            {
+              "name": "zone",
+              "offset": 48,
+              "size": 8
+            }
+          ]
+        }
+      ],
+      "ownership": "Guest FILE and host CRT stream are separate objects; never pass guest stat/tm/va_list to CRT.",
+      "callbacks": "printf entry assembly captures SysV registers; no guest callback escapes the declared ABI.",
+      "errors": "Per-thread Darwin errno; explicit ENOTSUP paths; errno mapping remains partial.",
+      "lifecycle": "Session owns stream/environment state and flushes at exit; fopen/fclose manage individual streams.",
+      "unsupported": "No Unicode locales, cookie streams, positional/wide/80-bit formatting or complete POSIX metadata/timezones.",
+      "sources": [
+        "docs/jq-libc-results.md",
+        "https://github.com/apple-oss-distributions/Libc",
+        "docs/differential-testing.md"
+      ]
+    },
+    {
+      "id": "threads",
+      "version": 1,
+      "scope": "TLV, pthread lifecycle, keys, once and synchronization subset",
+      "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
+      "implementation": [
+        "src/darwin/threads.rs",
+        "src/darwin/sync.rs",
+        "src/darwin/tlv.rs"
+      ],
+      "tests": [
+        "tests/fixtures/thread_state.c",
+        "tests/fixtures/condvars.c",
+        "tests/fixtures/cxx_tls.cpp"
+      ],
+      "layouts": [
+        {
+          "name": "TLV descriptor",
+          "size": 24,
+          "align": 8,
+          "fields": [
+            {
+              "name": "thunk",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "key",
+              "offset": 8,
+              "size": 8
+            },
+            {
+              "name": "offset",
+              "offset": 16,
+              "size": 8
+            }
+          ]
+        }
+      ],
+      "ownership": "Runtime owns thread tokens and per-thread storage; mutex/condition host objects are process-local.",
+      "callbacks": "Start routines, key destructors and TLV destructors are SysV64; teardown permits bounded destructor re-registration.",
+      "errors": "pthread APIs return Darwin error numbers; condition timedwait uses absolute guest deadlines.",
+      "lifecycle": "Join owned threads before mapping teardown; run thread-local destruction and main-session cleanup.",
+      "unsupported": "No cancellation, process-shared waiting, shared-cache TLV or complete Darwin ordering proof.",
+      "sources": [
+        "docs/thread-lifecycle-results.md",
+        "https://github.com/apple-oss-distributions/libpthread"
+      ]
+    },
+    {
+      "id": "mach",
+      "version": 1,
+      "scope": "Simple messages and bootstrap routing in local/broker namespaces",
+      "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
+      "implementation": [
+        "src/darwin/mach.rs",
+        "src/broker/mod.rs"
+      ],
+      "tests": [
+        "tests/fixtures/mach_errors.c",
+        "tests/fixtures/mach_client.c",
+        "tests/fixtures/mach_server.c"
+      ],
+      "layouts": [
+        {
+          "name": "mach_msg_header_t",
+          "size": 24,
+          "align": 4,
+          "fields": [
+            {
+              "name": "bits",
+              "offset": 0,
+              "size": 4
+            },
+            {
+              "name": "size",
+              "offset": 4,
+              "size": 4
+            },
+            {
+              "name": "remote",
+              "offset": 8,
+              "size": 4
+            },
+            {
+              "name": "local",
+              "offset": 12,
+              "size": 4
+            },
+            {
+              "name": "voucher",
+              "offset": 16,
+              "size": 4
+            },
+            {
+              "name": "id",
+              "offset": 20,
+              "size": 4
+            }
+          ]
+        }
+      ],
+      "ownership": "Names refer to worker-owned rights; broker routes global endpoints and retires disconnected peers.",
+      "callbacks": "Synchronous message APIs; no arbitrary host pointer or kernel handle passed as a guest right.",
+      "errors": "XNU-style send/receive errors, header inversion, timeout and LARGE retry for supported operations.",
+      "lifecycle": "Allocate/insert/deallocate within the owning namespace; send-once consumed; death invalidates routes.",
+      "unsupported": "No complex/OOL/port descriptors, port sets, kernel enforcement, notifications or task APIs.",
+      "sources": [
+        "docs/mach-ipc-results.md",
+        "https://github.com/apple-oss-distributions/xnu"
+      ]
+    },
+    {
+      "id": "blocks-xpc",
+      "version": 1,
+      "scope": "Non-ObjC Blocks and Adapter-defined typed XPC between workers",
+      "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
+      "implementation": [
+        "src/darwin/blocks.rs",
+        "src/darwin/xpc.rs"
+      ],
+      "tests": [
+        "tests/fixtures/xpc_client.c",
+        "tests/fixtures/xpc_server.c",
+        "tests/fixtures/xpc_missing.c"
+      ],
+      "layouts": [
+        {
+          "name": "Block literal prefix",
+          "size": 32,
+          "align": 8,
+          "fields": [
+            {
+              "name": "isa",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "flags",
+              "offset": 8,
+              "size": 4
+            },
+            {
+              "name": "reserved",
+              "offset": 12,
+              "size": 4
+            },
+            {
+              "name": "invoke",
+              "offset": 16,
+              "size": 8
+            },
+            {
+              "name": "descriptor",
+              "offset": 24,
+              "size": 8
+            }
+          ]
+        }
+      ],
+      "ownership": "Copied handler blocks and typed objects are retained/released by runtime; no guest pointer serialized.",
+      "callbacks": "SysV invoke on dispatcher thread; copied handlers remain alive through queued dispatch.",
+      "errors": "Missing services and disconnected peers yield invalid/interrupted connection events.",
+      "lifecycle": "Listener check-in, accepted peers, sync reply, cancellation and peer retirement are bounded implemented paths.",
+      "unsupported": "No Apple wire interoperability, GCD/xpc_main, richer handles, ObjC captures, entitlements or security boundary.",
+      "sources": [
+        "docs/xpc-results.md",
+        "https://github.com/apple-oss-distributions/libclosure",
+        "docs/upstream-sources.md"
+      ]
+    },
+    {
+      "id": "cf",
+      "version": 1,
+      "scope": "Five immutable runtime-created UTF-8 string functions",
+      "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
+      "implementation": [
+        "src/frameworks/corefoundation.rs"
+      ],
+      "tests": [
+        "tests/fixtures/corefoundation.c"
+      ],
+      "layouts": [
+        {
+          "name": "CF reference value",
+          "size": 8,
+          "align": 8,
+          "fields": [
+            {
+              "name": "opaque pointer",
+              "offset": 0,
+              "size": 8
+            }
+          ]
+        }
+      ],
+      "ownership": "Opaque runtime-owned strings; CF retain/release only for admitted objects.",
+      "callbacks": "No callback-based collection or allocator interface exposed.",
+      "errors": "Unsupported encoding or insufficient conversion space returns the implemented failure result.",
+      "lifecycle": "Session owns the string registry; explicit retain/release changes references.",
+      "unsupported": "No constant CF strings, collections, toll-free bridge, Foundation or runloop.",
+      "sources": [
+        "https://github.com/apple-oss-distributions/CF",
+        "docs/compatibility.md"
+      ]
+    },
+    {
+      "id": "objc",
+      "version": 1,
+      "scope": "Validated raw-isa manual-reference-counted startup images",
+      "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
+      "implementation": [
+        "src/objc/mod.rs",
+        "src/objc/dispatch.s"
+      ],
+      "tests": [
+        "tests/integration/test_objc.py",
+        "tests/fixtures/objc_core.m"
+      ],
+      "layouts": [
+        {
+          "name": "class_t",
+          "size": 40,
+          "align": 8,
+          "fields": [
+            {
+              "name": "isa",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "superclass",
+              "offset": 8,
+              "size": 8
+            },
+            {
+              "name": "cache",
+              "offset": 16,
+              "size": 16
+            },
+            {
+              "name": "data",
+              "offset": 32,
+              "size": 8
+            }
+          ]
+        },
+        {
+          "name": "class_ro_t",
+          "size": 72,
+          "align": 8,
+          "fields": [
+            {
+              "name": "flags",
+              "offset": 0,
+              "size": 4
+            },
+            {
+              "name": "instanceStart",
+              "offset": 4,
+              "size": 4
+            },
+            {
+              "name": "instanceSize",
+              "offset": 8,
+              "size": 4
+            },
+            {
+              "name": "ivarLayout",
+              "offset": 16,
+              "size": 8
+            },
+            {
+              "name": "name",
+              "offset": 24,
+              "size": 8
+            },
+            {
+              "name": "methods",
+              "offset": 32,
+              "size": 8
+            },
+            {
+              "name": "protocols",
+              "offset": 40,
+              "size": 8
+            },
+            {
+              "name": "ivars",
+              "offset": 48,
+              "size": 8
+            },
+            {
+              "name": "weakLayout",
+              "offset": 56,
+              "size": 8
+            },
+            {
+              "name": "properties",
+              "offset": 64,
+              "size": 8
+            }
+          ]
+        },
+        {
+          "name": "method_t absolute",
+          "size": 24,
+          "align": 8,
+          "fields": [
+            {
+              "name": "selector",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "types",
+              "offset": 8,
+              "size": 8
+            },
+            {
+              "name": "imp",
+              "offset": 16,
+              "size": 8
+            }
+          ]
+        }
+      ],
+      "ownership": "Runtime-owned instances, counts and explicit balanced autorelease pools; no custom RR interception.",
+      "callbacks": "msgSend preserves SysV GP/SSE/stack arguments and tail-jumps; superclass-first load and lazy initialize run outside registry lock.",
+      "errors": "Validate metadata before selector patching or constructors; unknown selector terminates125.",
+      "lifecycle": "Register complete startup graph, load before C constructors; guard remains live through guest finalizers.",
+      "unsupported": "No categories/protocols/ARC/weak/tagged pointers/nonpointer isa/compact lists/dynamic registration/exception or aggregate-return dispatch.",
+      "sources": [
+        "docs/reverse-engineering/objc-runtime-evidence.md",
+        "docs/abi/objc-v1.md"
+      ],
+      "symbols": [
+        "__objc_empty_cache",
+        "_class_createInstance",
+        "_class_getInstanceSize",
+        "_class_getName",
+        "_class_getSuperclass",
+        "_class_isMetaClass",
+        "_objc_alloc",
+        "_objc_alloc_init",
+        "_objc_autorelease",
+        "_objc_autoreleasePoolPop",
+        "_objc_autoreleasePoolPush",
+        "_objc_getClass",
+        "_objc_lookUpClass",
+        "_objc_msgSend",
+        "_objc_msgSendSuper2",
+        "_objc_release",
+        "_objc_retain",
+        "_object_dispose",
+        "_object_getClass",
+        "_sel_getName",
+        "_sel_getUid",
+        "_sel_isEqual",
+        "_sel_registerName"
+      ]
+    }
+  ]
+}

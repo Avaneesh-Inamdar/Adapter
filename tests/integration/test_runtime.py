@@ -148,8 +148,8 @@ class RuntimeTests(unittest.TestCase):
     def test_missing_library(self):
         path=self.mutate("hello",lambda d:d.__setitem__(slice(d.index(b"/usr/lib/libSystem.B.dylib"),d.index(b"/usr/lib/libSystem.B.dylib")+len(b"/usr/lib/libSystem.B.dylib")),b"/usr/lib/libAbsent.B.dylib"))
         p=call("adapter-run","--check",path);self.assertEqual(p.returncode,125);self.assertIn("required dependencies unresolved",p.stderr)
-    def test_objc_evidence_and_rejection(self):
-        d=self.inspect("objc");self.assertTrue(any("Objective-C metadata" in x for x in d["unsupported"]));p=call("adapter-run","--check",FIX/"objc");self.assertEqual(p.returncode,125)
+    def test_objc_metadata_and_class_dispatch(self):
+        d=self.inspect("objc");self.assertTrue(any(s['name']=='__objc_classlist' for s in d['sections']));p=call("adapter-run",FIX/"objc");self.assertEqual(p.returncode,42,p.stderr)
     def test_timeout(self):
         p=call("adapter-run","--timeout","1",FIX/"loop",timeout=5);self.assertEqual(p.returncode,125);self.assertIn("timed out",p.stderr)
     def test_crash_is_in_worker(self):

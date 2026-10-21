@@ -7,7 +7,8 @@ not a Git repository; initialized Git without overwriting existing source.
 Host: Windows build 10.0.26300, x64. Rust 1.99.0 MSVC target, Python 3.12,
 LLVM 23.1.3, MinGW GCC 16.2.0, and CMake 4.4.3 were observed. The implemented
 build uses Cargo/MSVC plus Clang C/assembly ABI adapters, not MinGW/CMake. Clang and ld64.lld are installed outside
-PATH. No reference Mac is available.
+PATH. The initial work had no reference Mac. A hosted Intel Mac now supplies the
+first same-artifact libc comparison; see [differential testing](differential-testing.md).
 
 ## Native implementation
 
@@ -32,6 +33,8 @@ Module boundaries:
 | `src/platform/windows.rs` | VirtualAlloc/VirtualProtect, copying, SG_READ_ONLY final protections, instruction-cache flush, RAII release |
 | `src/runtime` | Preflight, import availability, relocation, initialization, entry invocation, worker timeout |
 | `src/runtime/dynamic.rs` | Post-startup `dlopen` groups, reference-counted handles, export snapshots, `dlsym` scope, per-image close finalization |
+| `src/objc` | Validated raw-isa startup metadata, selectors, class initialization, SysV message dispatch and runtime-owned objects/pools |
+| `src/runtime/debug.rs` | Optional flushed image/slide/symbol records and LLDB mapped-image breakpoint hook |
 | `src/broker` | Loopback Mach transport protocol, endpoint/token handshake, per-connection request dispatch, payload routing, launchd-style job plist loading and on-demand job activation |
 | `src/broker/main.rs` | `adapter-broker`: endpoint file creation, service namespace, connection liveness and port retirement |
 | `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, `dlfcn`, Mach IPC and TLV ABI bridges, Darwin stack probe and exit callbacks |
@@ -93,7 +96,10 @@ Ordinary image symbol addends are bounded against the final provider. Cyclic
 dependency graphs and weak/resolver exports used by a binding are rejected.
 All imports resolve before mapping; every image is relocated and every callback
 validated before any constructor runs. Constructors follow dependency order,
-and process exit registrations run in reverse registration order before image
+with admitted Objective-C registration and superclass-first `+load` before C
+constructors; ordinary sends trigger lazy superclass-first `+initialize`.
+See [the versioned contract](abi/objc-v1.md) for admission and teardown boundaries.
+Process exit registrations run in reverse registration order before image
 finalizers. There is no fallback to loading macOS imports as Windows DLLs.
 
 ## Runtime dynamic loading

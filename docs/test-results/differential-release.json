@@ -1,0 +1,48 @@
+{
+  "candidate": "E:\\Xcode\\target\\mac-reference-39667131995\\adapter-release.json",
+  "case_count": 4096,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "gmtime_r": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "memcmp": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "memmove": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "snprintf": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "strcmp": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "strlen": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "strtol": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "timegm": {
+      "matched": 512,
+      "mismatched": 0
+    }
+  },
+  "matched": 4096,
+  "mismatched": 0,
+  "program_sha256": "2cd055d52ae1ae2dca3979a81bb20fab4e58b9e110ea6358aa9219ee6eece2bc",
+  "reference": "E:\\Xcode\\target\\mac-reference-39667131995\\mac-reference-6a03795bae6a421597bda7aa1c35d10695b0d0f0\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-libc-v1"
+}

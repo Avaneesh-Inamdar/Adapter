@@ -5,7 +5,7 @@ Mach-O code and supplies Darwin API adapters. Intel instructions run directly
 on the CPU. ARM64 translation is not implemented.
 
 [Build](#build-and-run) · [API coverage](#api-coverage) ·
-[Working features](#what-works) · [Work to do](#work-to-do) ·
+[Phases](#delivery-phases) · [Working features](#what-works) · [Work to do](#work-to-do) ·
 [Architecture](docs/architecture.md) · [Contributing](CONTRIBUTING.md)
 
 ## API coverage
@@ -14,7 +14,7 @@ on the CPU. ARM64 translation is not implemented.
 
 [![API adapter coverage](docs/progress/api-coverage.svg)](docs/progress/README.md)
 
-**280 / 1,860 known Intel imports have adapters: 15.05%.**
+**292 / 1,860 known Intel imports have adapters: 15.70%.**
 
 This counts unique **(library install name, imported symbol)** pairs from
 18 inspected Apple Intel images, jq 1.8.2 and ripgrep 15.2.0. It includes imported data.
@@ -26,8 +26,8 @@ ARM64 and transitive dependencies are outside this count.
 | --- | ---: | ---: | --- |
 | jq 1.8.2 | 136 / 136 | 100.00% | 14 recorded tests passed |
 | ripgrep 15.2.0 | 131 / 131 | 100.00% | 11 recorded CLI tests passed |
-| LogTool | 18 / 34 | 52.94% | Inspected; not run |
-| Clipboard Viewer | 1 / 55 | 1.82% | Inspected; Objective-C/AppKit missing |
+| LogTool | 25 / 34 | 73.53% | Inspected; not run |
+| Clipboard Viewer | 8 / 55 | 14.55% | Inspected; framework classes/AppKit missing |
 | Xcode 27 launcher | — | — | ARM64; no translator |
 <!-- API-COVERAGE:END -->
 
@@ -58,32 +58,62 @@ When adding a new target, see the inventory refresh command in
 | Mach IPC | Simple messages between unchanged Mach-O processes through a loopback broker; receive/send/send-once rights, XNU header inversion, timeouts, LARGE retry, bootstrap check-in/lookup and retirement errors | [Mach adapter](src/darwin/mach.rs), [broker](src/broker), [fixtures](tests/fixtures/mach_server.c), [results](docs/mach-ipc-results.md) |
 | launchd jobs | Broker loads launchd-style plists, reserves `MachServices` names and starts registered jobs on first lookup or `RunAtLoad`; environment and log redirection, check-in wait, respawn after exit | [job parser](src/broker/job.rs), [broker activation](src/broker/main.rs), [results](docs/launchd-results.md) |
 | XPC | Unchanged libxpc client/server processes exchange typed dictionary messages and replies through the broker; listener check-in, demand spawn, accepted peers, event-handler blocks, typed containers, connection invalidation/interruption | [XPC adapter](src/darwin/xpc.rs), [server](tests/fixtures/xpc_server.c), [client](tests/fixtures/xpc_client.c), [results](docs/xpc-results.md) |
+| Objective-C | Validated raw-isa classes/metaclasses and selectors, inheritance, `msgSend`/`Super2`, `+load`/`+initialize`, scalar GP/SSE/stack calls, nil and explicit runtime-owned ownership/pools | [Runtime](src/objc), [ABI contract](docs/abi/objc-v1.md), [consumers and results](docs/objc-results.md) |
+| Guest debugging | Windows LLDB captures actual exceptions, relocated Mach-O PCs, registers, disassembly and stacks; VM-address breakpoints and instruction stepping | [Debugger](tools/guest_debug.py), [usage and limits](docs/guest-debugging.md) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 132 distinct tests: 31 Rust, nine archive
-and 92 integration tests. All 92 integration tests also passed in release. The
+**Test state:** the current run passed 160 distinct tests: 32 Rust, 22 archive
+and 106 integration tests. All 106 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
 ripgrep binary exercising 11 CLI workflows, two unchanged Mach-O processes
 exchanging Mach messages through the broker, a broker-started launchd-style
-job reached by the same unchanged client, and an unchanged libxpc client/server
-pair exchanging typed dictionary messages and replies. This is Windows-side
-evidence; no reference-Mac run exists.
+job reached by the same unchanged client, an unchanged libxpc client/server
+pair exchanging typed dictionary messages and replies, five Objective-C
+metadata consumers and nine Windows LLDB guest-debugging cases. This is
+Windows-side evidence; the only reference-Mac execution is the hosted
+4,096-case libc [differential run](docs/differential-testing.md#recorded-run-2026-10-22).
 [Current run](docs/test-results/latest.json) ·
 [Summary](docs/test-results/summary.json).
+
+## Delivery phases
+
+[![Delivery phases](docs/progress/phases.svg)](docs/phases.md)
+
+All **36 requested work items** are assigned in the [phase work list](docs/phases.md).
+The graph records dependencies and implemented slices. The API percentage above
+uses a measured import inventory; it is not a percentage of macOS completed.
+
+| Phase | Scope | Current state |
+| --- | --- | --- |
+| P0 | Mac reference, differential probes, guest debugging, ABI contracts | First 4,096-case Mac comparison matches in debug and release; nine debugger tests pass in both profiles; expand coverage per subsystem |
+| P1 | Shared cache, Objective-C, Swift, unwind, Mach VM | Intel loader and bounded Objective-C slice work; other listed runtimes remain |
+| P2 | GCD, Foundation, runloops, IPC, XPC, launchd, processes, daemons | Simple IPC, job and XPC slices work; broader system behavior remains |
+| P3 | Graphics, IOSurface, Metal, AppKit, SwiftUI, WindowServer | Not started |
+| P4 | ARM64 backend, 16K pages, memory ordering, arm64e | Native Windows ARM64 preferred when hardware is available; no ARM execution yet |
+| P5 | Debugserver primitives, signing/keychain, tool/SDK paths, Xcode | Not started; all five application gates pending |
+| P6 | Instruments, devices, Simulator | Not started; Simulator deferred |
+
+The application gates are binary pass/fail: **NSWindow hello-world → xcodebuild →
+Xcode welcome window → open project → build project**. None has passed.
+See [acceptance criteria](docs/phases.md#binary-acceptance-gates),
+[versioned ABI contracts](docs/abi/README.md) and the
+[upstream source catalog](docs/upstream-sources.md) for implementation starting points.
+The catalog distinguishes reusable code from Apple-dependent implementations and
+private components for which no complete public implementation was found.
 
 ## Work to do
 
 | Work | Current gap | Start here | Needed evidence |
 | --- | --- | --- | --- |
-| Reference-Mac comparison | All runtime evidence is Windows-side; generated probes and jq outputs have not been compared with macOS | [Verifier](tools/verify.py), [current logs](docs/test-results/latest.json) | Same-artifact output and error comparisons on a real Mac |
+| Reference-Mac comparison | Hosted Intel Mac libc differential passes 4,096/4,096 in debug and release; Objective-C, threading, jq/ripgrep and service ordering still need reference captures | [Harness](tools/differential.py), [reference workflow](.github/workflows/mac-reference.yml), [results](docs/differential-testing.md#recorded-run-2026-10-22) | Extend same-artifact probes and retain OS, hashes and failure details |
 | TLS lifecycle | In-process C++ TLV destruction works; shared-cache TLVs, `__cxa_thread_atexit` and exact Darwin destructor ordering are unverified | [TLS planning](src/loader/tls.rs), [TLV runtime](src/darwin/tlv.rs) | Shared-cache and cross-compiler consumers plus reference ordering |
 | Synchronization | Condition variables work in-process; no cancellation, process-shared objects, errorcheck/adaptive mutexes or nondefault scheduling | [Sync adapters](src/darwin/sync.rs), [threads](src/darwin/threads.rs) | Cancellation/cleanup and cross-process lifetime tests |
 | Dynamic loading | Runtime load works, but images are never unmapped; dynamic TLS and `@rpath` arguments are rejected, `RTLD_NEXT`/`RTLD_SELF` and `dladdr` are absent, and cross-group dependency sharing, interposition, ObjC registration and cyclic initialization are unsupported | [Dynamic registry](src/runtime/dynamic.rs), [roadmap D1](docs/roadmap.md) | True unload, TLS-bearing plugins, `RTLD_NEXT`/interposition and a pinned real plugin consumer |
 | OS services | Mach ports, simple messages, a bootstrap table, broker-started launchd-style jobs and simple XPC connections work across processes; complex messages, launchd supervision/`launchctl`, XPC beyond the typed dictionary subset and `fork`/`exec` are absent | [Roadmap D2-D5](docs/roadmap.md), [Mach results](docs/mach-ipc-results.md), [launchd results](docs/launchd-results.md), [XPC results](docs/xpc-results.md) | Complex-message and pinned real Mach consumers, launchd supervision/KeepAlive and socket activation, and XPC interoperability with a real macOS peer; none is implied by POSIX adapters |
-| Objective-C | No class/selector registration, dispatch, ownership or class initialization | [Metadata probe](tests/fixtures/objc.m), [missing imports](docs/progress/status.json) | Execute a small Apple-ABI object/method consumer before trying an app |
+| Objective-C | Startup raw-isa MRC slice works; relative lists, categories, protocols, ARC/weak, dynamic registration, exceptions and aggregate/x87 sends remain | [ABI contract](docs/abi/objc-v1.md), [results](docs/objc-results.md), [missing imports](docs/progress/status.json) | Add each metadata/lifetime extension with positive, rejection and native Mac probes |
 | Frameworks and GUI | Foundation, AppKit and SwiftUI absent; CF limited to strings | [Framework adapters](src/frameworks), [Apple target inventory](docs/reverse-engineering/apple-inputs/targets.json) | Grow APIs from a chosen target; test object lifetime, resources, windows and events |
 | libc completeness | Missing APIs and partial semantics: Unicode locales, cookie streams, wide/positional/long-double formatting, filesystem metadata, date formats and timezone behavior | [ABI adapters](src/darwin/host), [API contracts](docs/compatibility.md) | Focused Mach-O probes and same-artifact output/error comparisons |
 | Exceptions and OS services | No Darwin unwinder, general signal model, syscall personality, complex Mach messages, networking or fork/exec | [Runtime](src/runtime), [limitations](docs/limitations.md) | Separate consumers for each service and failure path |
@@ -91,8 +121,9 @@ evidence; no reference-Mac run exists.
 
 Choose a consumer from the missing-API inventory, implement the required
 behavior and add a test.
-`objc_msgSend` and related runtime imports occur in most inspected Apple apps;
-adding more unrelated libc wrappers alone will not make those apps run.
+`objc_msgSend` and related runtime imports occur in most inspected Apple apps.
+The bounded dispatcher now exists; those apps still require additional metadata,
+frameworks and services before they can execute.
 
 ## Build and run
 
@@ -162,8 +193,9 @@ Native Windows paths also work for ordinary file opens.
    varargs explicitly; do not pass Darwin FILE/stat/tm/va_list objects to the CRT.
 3. Add a Mach-O consumer under `tests/fixtures` or a pinned real-binary regression
    under `tests/integration`. Cover failure behavior as well as the successful call.
-4. Run `python tools/verify.py`, update the [API contract](docs/compatibility.md),
+4. Update the owning [ABI contract](docs/abi/README.md), run `python tools/verify.py`,
    then run `python tools/update_progress.py` and commit the regenerated coverage.
+   Update [phase states](docs/phases.json) only when their recorded evidence changes.
 
 [Detailed roadmap](docs/roadmap.md) · [Architecture](docs/architecture.md) ·
 [Known limitations](docs/limitations.md) · [Contribution guide](CONTRIBUTING.md)

@@ -27,7 +27,11 @@ def build():
     exports = {
         "System": ["puts", "strlen", "malloc", "free", "memcpy", "memcmp", "__cxa_atexit", "__cxa_finalize", "atexit", "_tlv_bootstrap", "pthread_create", "pthread_join", "pthread_self", "pthread_equal", "pthread_key_create", "pthread_key_delete", "pthread_getspecific", "pthread_setspecific", "pthread_once", "__error", "deliberately_missing", "_DefaultRuneLocale", "__stdinp", "__stdoutp", "__stderrp", "environ", "setlocale", "getenv", "setenv", "unsetenv", "__maskrune", "printf", "fprintf", "snprintf", "vsnprintf", "sscanf", "vsscanf", "strcmp", "fread", "fwrite", "getc", "fputc", "fputs", "feof", "ferror", "fflush", "fileno", "fclose", "clearerr", "__srget", "__swbuf", "nexttoward", "exit", "_NSGetExecutablePath", "dlopen", "dlsym", "dlclose", "dlerror", "_dyld_image_count", "mach_port_allocate", "mach_port_deallocate", "mach_port_mod_refs", "mach_port_destroy", "mach_port_insert_right", "mach_msg", "bootstrap_check_in", "bootstrap_look_up", "_Block_copy", "_Block_release"],
         "CoreFoundation": ["CFStringCreateWithCString", "CFStringGetLength", "CFStringGetCString", "CFRetain", "CFRelease"],
-        "objc": ["objc_msgSend", "_objc_empty_cache"],
+        "objc": ["objc_msgSend", "objc_msgSendSuper2", "_objc_empty_cache", "class_createInstance",
+            "object_dispose", "object_getClass", "class_getSuperclass", "objc_getClass",
+            "class_getName", "sel_getName", "class_getInstanceSize", "class_isMetaClass",
+            "sel_isEqual", "sel_registerName", "objc_retain", "objc_release", "objc_autorelease",
+            "objc_autoreleasePoolPush", "objc_autoreleasePoolPop", "objc_alloc", "objc_alloc_init"],
         "xpc": ["xpc_retain", "xpc_release", "xpc_get_type", "xpc_equal", "xpc_hash",
             "xpc_dictionary_create", "xpc_dictionary_create_empty", "xpc_dictionary_create_reply",
             "xpc_dictionary_set_value", "xpc_dictionary_get_value", "xpc_dictionary_get_count",
@@ -45,6 +49,7 @@ def build():
             "xpc_connection_send_message_with_reply_sync", "xpc_connection_get_name"],
     }
     versions = ["-arch", "x86_64", "-platform_version", "macos", "10.13", "10.13"]
+    exports["System"] += ["strtol"]
     exports["System"] += ["fopen$DARWIN_EXTSN", "fdopen$DARWIN_EXTSN", "stat$INODE64", "fstat$INODE64", "realpath$DARWIN_EXTSN", "open", "close", "pathconf", "dirname", "fgets", "timegm", "time", "gmtime_r", "gettimeofday", "strftime", "strptime", "memset", "write", "usleep", "_tlv_atexit", "pthread_mutex_init", "pthread_mutex_lock", "pthread_mutex_trylock", "pthread_mutex_unlock", "pthread_mutex_destroy", "pthread_cond_init", "pthread_cond_destroy", "pthread_cond_wait", "pthread_cond_timedwait", "pthread_cond_signal", "pthread_cond_broadcast", "pthread_condattr_init", "pthread_condattr_destroy", "pthread_condattr_getpshared", "pthread_condattr_setpshared"]
     for library, symbols in exports.items():
         asm = OUT / (library + ".s")
@@ -71,19 +76,22 @@ def build():
         run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-c", asm, "-o", OUT / (library + ".o"))
         install = {"System":"/usr/lib/libSystem.B.dylib","CoreFoundation":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation","objc":"/usr/lib/libobjc.A.dylib","xpc":"/usr/lib/system/libxpc.dylib"}[library]
         run(tool("ld64.lld"), *versions, "-dylib", "-install_name", install, "-o", OUT / ("lib" + library + ".dylib"), OUT / (library + ".o"))
-    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
-        extension=".m" if name=="objc" else ".cpp" if name=="cxx_tls" else ".c"
+    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "objc_core", "objc_category", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
+        extension=".m" if name.startswith("objc") else ".cpp" if name=="cxx_tls" else ".c"
         flags=["-O0","-fno-stack-protector","-fno-asynchronous-unwind-tables"]
         flags+= ["-fno-exceptions","-fno-rtti"] if extension==".cpp" else ["-ffreestanding"]
         if name in ("blocks", "xpc_server", "xpc_client", "xpc_missing"): flags+=["-fblocks"]
         run(tool("clang"), "-target", "x86_64-apple-macos10.13", *flags, "-c", ROOT / ("tests/fixtures/" + name + extension), "-o", OUT / (name + ".o"))
         libraries = [] if name == "return37" else ["-L", OUT, "-lSystem"]
         if name == "corefoundation": libraries += ["-lCoreFoundation"]
-        if name == "objc": libraries += ["-lobjc"]
+        if name.startswith("objc"): libraries += ["-lobjc"]
         if name.startswith("xpc_"): libraries = ["-L", OUT, "-lxpc", "-lSystem"]
         run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main", "-o", OUT / name, OUT / (name + ".o"), *libraries)
-        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls"]:
-            run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
+        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "objc_core"]:
+            objc_flags = ["-no_objc_relative_method_lists"] if name == "objc_core" else []
+            run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains",*objc_flags,"-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
+            if name == "objc_core":
+                run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/"objc_core-relative",OUT/(name+".o"),*libraries)
     # A `dlopen` plugin and its host exercise the runtime image registry.
     run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",
         "-fno-asynchronous-unwind-tables", "-ffreestanding", "-c",

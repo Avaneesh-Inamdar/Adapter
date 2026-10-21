@@ -13,8 +13,11 @@ def verify():
     llvm=Path(os.environ.get('ADAPTER_LLVM',r'C:\Program Files\LLVM\bin'))
     native=[str(p.relative_to(ROOT)) for p in (ROOT/'src/darwin/host').iterdir() if p.suffix in ['.c','.h']]
     native+=['tests/fixtures/libc.c','tests/fixtures/file_time.c','tests/fixtures/condvars.c','tests/fixtures/cxx_tls.cpp','tests/fixtures/plugin.c','tests/fixtures/plugin_tls.c','tests/fixtures/dlopen.c','tests/fixtures/mach_server.c','tests/fixtures/mach_client.c','tests/fixtures/mach_errors.c','tests/fixtures/xpc_server.c','tests/fixtures/xpc_client.c','tests/fixtures/xpc_missing.c']
+    native+=['tests/fixtures/objc_core.m','tests/fixtures/objc_category.m']
     stages=[
         ('format',['cargo','fmt','--all','--','--check'],None),
+        ('abi-contracts',[sys.executable,'tools/check_contracts.py'],None),
+        ('phase-docs',[sys.executable,'tools/update_phases.py'],None),
         ('native-format',[str(llvm/'clang-format.exe'),'--dry-run','--Werror',*native],None),
         ('clippy',['cargo','clippy','--locked','--all-targets','--','-D','warnings'],None),
         ('rust-tests',['cargo','test','--locked'],None),

@@ -1,11 +1,14 @@
 # Exact repository file additions
 
-The workspace was initially empty. All files below were created across these iterations.
-User inputs under `req files/`, generated binaries/extractions under `target/`,
-and generated Mach-O fixtures are excluded from Git. No user input was overwritten.
+The workspace was initially empty. Every file below was created across these
+iterations. The list is generated from the Git index plus untracked files at the
+final commit rather than edited by hand. User inputs under `req files/`,
+generated binaries/extractions under `target/` and generated Mach-O fixtures
+stay out of Git and out of this list. No user input was overwritten.
 
 - `.clang-format`
 - `.gitattributes`
+- `.github/workflows/mac-reference.yml`
 - `.gitignore`
 - `CONTRIBUTING.md`
 - `Cargo.lock`
@@ -13,19 +16,28 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `LICENSE`
 - `README.md`
 - `build.rs`
+- `docs/abi/README.md`
+- `docs/abi/contracts.json`
+- `docs/abi/objc-v1.md`
 - `docs/architecture.md`
 - `docs/compatibility.md`
 - `docs/component-research.md`
+- `docs/differential-testing.md`
 - `docs/dylib-tls-results.md`
 - `docs/dynamic-loading-results.md`
 - `docs/file-changes.md`
+- `docs/guest-debugging.md`
 - `docs/jq-libc-results.md`
 - `docs/launchd-results.md`
 - `docs/limitations.md`
 - `docs/mach-ipc-results.md`
+- `docs/objc-results.md`
+- `docs/phases.json`
+- `docs/phases.md`
 - `docs/progress/README.md`
 - `docs/progress/api-coverage.svg`
 - `docs/progress/imports.json`
+- `docs/progress/phases.svg`
 - `docs/progress/status.json`
 - `docs/reverse-engineering/apple-inputs/0205ffcc7154df8c.json`
 - `docs/reverse-engineering/apple-inputs/0ad2a065251bc085.json`
@@ -80,10 +92,12 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `docs/reverse-engineering/apple-inputs/rea-xcode-xip.json`
 - `docs/reverse-engineering/apple-inputs/targets.json`
 - `docs/reverse-engineering/apple-inputs/xip-summary.json`
+- `docs/reverse-engineering/differential-reference-macho.json`
 - `docs/reverse-engineering/dynamic-loading-evidence.md`
 - `docs/reverse-engineering/jq-libc-abi.md`
 - `docs/reverse-engineering/launchd-bootstrap-evidence.md`
 - `docs/reverse-engineering/mach-ipc-evidence.md`
+- `docs/reverse-engineering/objc-runtime-evidence.md`
 - `docs/reverse-engineering/ripgrep-target.md`
 - `docs/reverse-engineering/thread-lifecycle-evidence.md`
 - `docs/reverse-engineering/xcode27.md`
@@ -91,6 +105,7 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `docs/ripgrep-results.md`
 - `docs/roadmap.md`
 - `docs/session-results.md`
+- `docs/test-results/abi-contracts.log`
 - `docs/test-results/apple-corpus-regression.json`
 - `docs/test-results/archive-tests.log`
 - `docs/test-results/clippy.log`
@@ -99,6 +114,10 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `docs/test-results/compatibility-report.log`
 - `docs/test-results/compatibility.json`
 - `docs/test-results/debug-build.log`
+- `docs/test-results/differential-candidate-debug.json.gz`
+- `docs/test-results/differential-candidate-release.json.gz`
+- `docs/test-results/differential-debug.json`
+- `docs/test-results/differential-release.json`
 - `docs/test-results/fixtures.log`
 - `docs/test-results/format.log`
 - `docs/test-results/integration-debug-previous-pass.log`
@@ -109,11 +128,13 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `docs/test-results/jq-preflight.json`
 - `docs/test-results/jq-preflight.log`
 - `docs/test-results/latest.json`
+- `docs/test-results/mac-reference-39667131995.json.gz`
 - `docs/test-results/namespace-debug.log`
 - `docs/test-results/namespace-regression.json`
 - `docs/test-results/namespace-release.log`
 - `docs/test-results/native-analysis.json`
 - `docs/test-results/native-format.log`
+- `docs/test-results/phase-docs.log`
 - `docs/test-results/progress-generation.json`
 - `docs/test-results/reference-artifact.log`
 - `docs/test-results/reference-ripgrep.log`
@@ -126,6 +147,7 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `docs/test-results/summary-previous-pass.json`
 - `docs/test-results/summary.json`
 - `docs/thread-lifecycle-results.md`
+- `docs/upstream-sources.md`
 - `docs/xpc-results.md`
 - `src/broker/job.rs`
 - `src/broker/main.rs`
@@ -158,8 +180,11 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `src/loader/link.rs`
 - `src/loader/mod.rs`
 - `src/loader/tls.rs`
+- `src/objc/dispatch.s`
+- `src/objc/mod.rs`
 - `src/platform/mod.rs`
 - `src/platform/windows.rs`
+- `src/runtime/debug.rs`
 - `src/runtime/dynamic.rs`
 - `src/runtime/main.rs`
 - `src/runtime/mod.rs`
@@ -167,6 +192,7 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `tests/build_fixtures.py`
 - `tests/build_tls_abi.py`
 - `tests/compatibility/targets.json`
+- `tests/differential/libc_cases.c`
 - `tests/fetch_reference.py`
 - `tests/fixtures/abi.c`
 - `tests/fixtures/blocks.c`
@@ -187,6 +213,8 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `tests/fixtures/mach_errors.c`
 - `tests/fixtures/mach_server.c`
 - `tests/fixtures/objc.m`
+- `tests/fixtures/objc_category.m`
+- `tests/fixtures/objc_core.m`
 - `tests/fixtures/plugin.c`
 - `tests/fixtures/plugin_tls.c`
 - `tests/fixtures/return37.c`
@@ -199,20 +227,27 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `tests/fixtures/xpc_client.c`
 - `tests/fixtures/xpc_missing.c`
 - `tests/fixtures/xpc_server.c`
+- `tests/integration/test_guest_debug.py`
 - `tests/integration/test_jq.py`
 - `tests/integration/test_libc.py`
+- `tests/integration/test_objc.py`
 - `tests/integration/test_ripgrep.py`
 - `tests/integration/test_runtime.py`
 - `tests/unit/macho.rs`
 - `tests/unit/test_archives.py`
+- `tests/unit/test_differential.py`
 - `tools/analyze_apple_targets.py`
 - `tools/check_apple_corpus.py`
+- `tools/check_contracts.py`
+- `tools/differential.py`
 - `tools/extract_apple_package.py`
 - `tools/fetch_jq.py`
 - `tools/fetch_jq_tests.py`
 - `tools/fetch_ripgrep.py`
+- `tools/guest_debug.py`
 - `tools/inspect_xip.py`
 - `tools/read_xip_member.py`
 - `tools/report_results.py`
+- `tools/update_phases.py`
 - `tools/update_progress.py`
 - `tools/verify.py`

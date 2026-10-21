@@ -34,6 +34,7 @@ extern size_t fwrite(const void *, size_t, size_t, File *), fread(void *, size_t
 extern char *fgets(char *, int, File *), *strptime(const char *, const char *, Tm *),
     *dirname(char *);
 extern long timegm(Tm *), time(long *), pathconf(const char *, int);
+extern long strtol(const char *, char **, int);
 extern Tm *gmtime_r(const long *, Tm *);
 extern int gettimeofday(Timespec *, void *);
 extern void free(void *);
@@ -98,6 +99,21 @@ int main(int argc, char **argv) {
     parsed.min = 0;
     parsed.sec = 0;
     CHECK(timegm(&parsed) == 978307200 && parsed.year == 101 && parsed.mon == 0);
+    /* Regressions found by the same-artifact Intel Mac comparison. */
+    parsed = (Tm){.year = -1, .mon = 5, .mday = 13, .isdst = -1, .wday = 8, .yday = 367};
+    CHECK(timegm(&parsed) == -1 && parsed.year == -1 && parsed.mon == 5 && parsed.mday == 13 &&
+          parsed.isdst == 0 && parsed.wday == 8 && parsed.yday == 367);
+    parsed = (Tm){.year = 0, .mon = 0, .mday = 1};
+    CHECK(timegm(&parsed) == -2208988800L && parsed.wday == 1 && parsed.yday == 0);
+    char *number_end;
+    const char *no_number = "  +!";
+    *__error() = 0;
+    CHECK(strtol(no_number, &number_end, 10) == 0 && number_end == no_number && *__error() == 22);
+    const char *invalid_base = "123";
+    CHECK(strtol(invalid_base, &number_end, 1) == 0 && number_end == invalid_base &&
+          *__error() == 22);
+    *__error() = 77;
+    CHECK(strtol("123!", &number_end, 10) == 123 && *number_end == '!' && *__error() == 77);
     Timespec now;
     long seconds;
     CHECK(gettimeofday(&now, 0) == 0 && now.nsec >= 0 && now.nsec < 1000000 && time(&seconds) > 0);

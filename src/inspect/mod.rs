@@ -361,7 +361,23 @@ pub fn parse(input: &[u8]) -> Result<Image> {
                             .unsupported
                             .push(format!("thread-local initialization functions: {}", s.name));
                     }
-                    if s.name.starts_with("__objc_") {
+                    if s.name.starts_with("__objc_")
+                        && !matches!(
+                            s.name.as_str(),
+                            "__objc_classlist"
+                                | "__objc_nlclslist"
+                                | "__objc_classrefs"
+                                | "__objc_superrefs"
+                                | "__objc_selrefs"
+                                | "__objc_imageinfo"
+                                | "__objc_const"
+                                | "__objc_data"
+                                | "__objc_methname"
+                                | "__objc_methtype"
+                                | "__objc_classname"
+                                | "__objc_ivar"
+                        )
+                    {
                         image
                             .unsupported
                             .push(format!("Objective-C metadata: {}", s.name));

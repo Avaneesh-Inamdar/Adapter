@@ -3,7 +3,7 @@
 | Risk | Current status / mitigation | Next evidence needed |
 |---|---|---|
 | ARM64 Xcode/toolchain on x64 host | All sampled core Xcode/CLT images ARM64 only; execution rejected | A separately scoped instruction translator or Intel artifact |
-| Apple Objective-C ABI | Metadata detected; no runtime implementation | Class/selector layouts, initialization/dispatch/ownership tests with real consumers |
+| Apple Objective-C ABI | Bounded raw-isa MRC startup runtime verified with real compiled consumers | Relative lists, categories/protocols, ARC/weak, dynamic registration, exceptions and native Mac lifecycle comparisons; see [contract](abi/objc-v1.md) |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
 | Darwin system calls / Mach services | No syscall interception or kernel personality. A D2 slice provides per-worker Mach namespaces, a loopback broker, simple messages with send/send-once rights, timeouts and a bootstrap service table | Complex messages, port sets, notifications and a pinned real Mach client; syscall probes |
 | Service management and XPC | D3 lets the broker start launchd-style jobs on lookup or `RunAtLoad`, with a documented plist subset, environment/log redirection and check-in wait. D4 adds typed dictionary XPC between Adapter workers with listener check-in, demand spawn, blocks on a dispatcher thread, replies and invalidation. There is no launchd process, `launchctl`/`launch_msg`, KeepAlive, supervision, throttling, socket/event activation or per-user domain. XPC has no Apple wire format, `xpc_main`, GCD semantics, richer object types, peer validation or sandbox/entitlement enforcement, and `fork`/`exec` remain absent | KeepAlive/supervision, socket activation, pre-created receive rights, a real macOS XPC peer, and explicit sandbox/entitlement policy |
@@ -12,7 +12,7 @@
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
 | Modern dyld variants | Chained formats restricted; no weak/flat binding | Real target-specific encodings + negative regression corpus |
 | ABI differences | SysV calls plus measured printf-family varargs and x87 argument adapters | General aggregates/vectors, wide/positional/long-double formatting, exception/unwind interaction |
-| Runtime semantic equivalence | Probes and original jq/ripgrep workflows; no reference Mac | Same-artifact reference output and API error comparisons |
+| Runtime semantic equivalence | First 4,096-case libc same-artifact hosted-Mac comparison; jq/ripgrep and other subsystem tests remain Windows-side | Expand reference coverage beyond eight C library families; see [harness](differential-testing.md) |
 | Untrusted code / parsing | Bounds/resource caps; worker timeout; not a security sandbox | Dedicated fuzzing and hardened execution isolation |
 | Apple authentication | Embedded content checksums verified where reported; signer trust unverified | Independent trusted Apple signature/certificate validation |
 | REA limitations | Portable inventories work; Ghidra is installed but the win32 provider accepts PE only; Hopper needs macOS and IDA is unconfigured | A supported engine/host; no invented decompiler findings |
@@ -21,7 +21,8 @@
 
 Unsupported executable formats include Mach-O32, swapped-endian thin files,
 ARM execution, non-PIE files, LC_UNIXTHREAD entry, encrypted/protected images,
-section relocations, shared-cache/preinitialized TLVs and Objective-C metadata.
+section relocations and shared-cache/preinitialized TLVs. Objective-C admission is
+limited to the metadata and message ABI in [contract v1](abi/objc-v1.md).
 Thin C++ TLV initialization functions execute as guest code through the adapter's
 TLV lookup; shared-cache TLV layouts remain unsupported. Code signatures
 are reported by command location, not verified or enforced. Unknown required

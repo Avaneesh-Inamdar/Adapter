@@ -7,9 +7,9 @@
 <text x="28" y="62" font-size="13" fill="#cbd5e1">20 Intel images · direct imports · source registry count</text>
 <text x="28" y="107" font-size="14">All known Intel imports</text>
 <rect x="270" y="90" width="410" height="24" rx="4" fill="#374151"/>
-<rect x="270" y="90" width="61.70" height="24" rx="4" fill="#fbbf24"/>
-<text x="704" y="107" font-size="14" font-family="monospace">15.05%</text>
-<text x="804" y="107" font-size="14" fill="#cbd5e1">280 / 1860</text>
+<rect x="270" y="90" width="64.37" height="24" rx="4" fill="#fbbf24"/>
+<text x="704" y="107" font-size="14" font-family="monospace">15.70%</text>
+<text x="804" y="107" font-size="14" fill="#cbd5e1">292 / 1860</text>
 <text x="28" y="151" font-size="14">libSystem</text>
 <rect x="270" y="134" width="410" height="24" rx="4" fill="#374151"/>
 <rect x="270" y="134" width="295.16" height="24" rx="4" fill="#fbbf24"/>
@@ -22,9 +22,9 @@
 <text x="804" y="195" font-size="14" fill="#cbd5e1">5 / 188</text>
 <text x="28" y="239" font-size="14">Objective-C</text>
 <rect x="270" y="222" width="410" height="24" rx="4" fill="#374151"/>
-<rect x="270" y="222" width="0.00" height="24" rx="4" fill="#64748b"/>
-<text x="704" y="239" font-size="14" font-family="monospace">0.00%</text>
-<text x="804" y="239" font-size="14" fill="#cbd5e1">0 / 53</text>
+<rect x="270" y="222" width="92.82" height="24" rx="4" fill="#fbbf24"/>
+<text x="704" y="239" font-size="14" font-family="monospace">22.64%</text>
+<text x="804" y="239" font-size="14" fill="#cbd5e1">12 / 53</text>
 <text x="28" y="283" font-size="14">Foundation</text>
 <rect x="270" y="266" width="410" height="24" rx="4" fill="#374151"/>
 <rect x="270" y="266" width="0.00" height="24" rx="4" fill="#64748b"/>

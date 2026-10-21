@@ -1,8 +1,10 @@
 # Evidence-ranked roadmap
 
-Each milestone has a concrete consumer and acceptance gate. A completed slice
-does not mean its entire subsystem is complete. No reference-Mac equivalence
-or general macOS/Xcode compatibility is established.
+The authoritative delivery plan is [P0–P6](phases.md), covering all 36 requested
+items, dependencies and five binary application gates. This page retains the
+history and detailed D1–D5 service implementation tracks. A completed slice
+does not mean its entire subsystem is complete. The first libc Mac differential
+slice is verified; general macOS/Xcode compatibility is not established.
 
 ## Completed milestones
 
@@ -96,8 +98,8 @@ kernel personality or security boundary.
 
 1. **Expand binary and API evidence.** Add the next pinned Intel command-line
    target and selected upstream jq/ripgrep cases; identify actual missing APIs
-   before extending them. Compare the same artifacts on a reference Mac when one
-   is available. Extend formats, timezones, metadata fidelity and numerical edge
+   before extending them. Extend the hosted-Mac differential job beyond the
+   first 4,096 libc cases. Extend formats, timezones, metadata fidelity and numerical edge
    behavior from concrete failures. Gate: reproducible output/error assertions,
    provenance, explicit unsupported cases and no regression in existing tests.
 2. **Thread and loader lifecycle.** Condition variables and C++ TLV destruction
@@ -121,11 +123,12 @@ kernel personality or security boundary.
    sandbox/entitlement behavior. Gate: a pinned real launchd consumer and a real
    macOS XPC peer, plus queue fairness, right-transfer, failure-order and
    broker-loss behavior compared with a reference Mac.
-4. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
-   real Intel target. Register classes/metaclasses/selectors and implement
-   dispatch, ownership and initialization from measured layouts. Gate: execute
-   actual metadata and method calls, including inheritance/initialization and
-   ownership. GNUstep/libobjc2 needs an Apple ABI adaptation experiment.
+4. **Extend the Apple Objective-C runtime.** The raw-isa MRC slice now executes
+   actual metadata, inheritance, initialization, mixed-register/stack dispatch
+   and explicit runtime-owned ownership in classic/chained consumers. Next:
+   relative lists, categories/protocols, native Mac lifecycle comparisons and
+   stronger ownership coverage. See [contract v1](abi/objc-v1.md). ARC/weak,
+   exceptions and dynamic registration remain separate gates.
 5. **Foundation and broader CF.** Follow actual imported types/methods. Start
    with constant CF strings, ownership and collections before bridging. Gate:
    targeted consumers with verified object layouts and lifetime behavior.

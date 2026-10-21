@@ -54,7 +54,7 @@
     "exit_code": 0,
     "source": "LLVM-cross-linked eight-thread probe",
     "reference_macos_verified": false,
-    "sha256": "faeed1ab546f0b256fe8ed66d1b589cd20fe4d3aa84573a94fbf5903c3a1d1ec",
+    "sha256": "221189407b2bb153dadfdded3cec3fbcf1991d7e47a036952ccbce2192fd9747",
     "verified_debug": true,
     "verified_release": true,
     "compatibility_status": "listed Windows behavior verified; reference macOS unverified"
@@ -102,7 +102,7 @@
     "exit_code": 0,
     "source": "LLVM-cross-linked guarded ABI probe",
     "reference_macos_verified": false,
-    "sha256": "9093bc8a7b04938e522f8cd505c9f623c6fabeecfdc2fc8fcc1fd5a8ce4b7507",
+    "sha256": "c94c5d0080f28a86c5ffa30085538cf2a82b6a3794eb0e54778e906ad9fb83b8",
     "verified_debug": true,
     "verified_release": true,
     "compatibility_status": "listed Windows behavior verified; reference macOS unverified"

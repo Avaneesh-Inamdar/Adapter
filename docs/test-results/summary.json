@@ -1,17 +1,36 @@
 {
-  "rust_tests_passed": 31,
+  "rust_tests_passed": 32,
   "rust_test_status": "passed",
-  "archive_tests_passed": 9,
+  "archive_tests_passed": 22,
   "integration_tests_attempted": {
-    "debug": 92,
-    "release": 92
+    "debug": 106,
+    "release": 106
   },
   "integration_status": {
     "debug": "passed",
     "release": "passed"
   },
-  "distinct_tests_passed_final": 132,
+  "distinct_tests_passed_final": 160,
   "jq_test_methods": 14,
   "ripgrep_test_methods": 11,
-  "reference_macos_verified": false
+  "compatibility_rows_reference_macos_verified": false,
+  "libc_differential": {
+    "hosted_intel_mac_run": "39667131995",
+    "profiles": {
+      "debug": {
+        "status": "equal",
+        "cases": 4096,
+        "matched": 4096,
+        "mismatched": 0,
+        "program_sha256": "2cd055d52ae1ae2dca3979a81bb20fab4e58b9e110ea6358aa9219ee6eece2bc"
+      },
+      "release": {
+        "status": "equal",
+        "cases": 4096,
+        "matched": 4096,
+        "mismatched": 0,
+        "program_sha256": "2cd055d52ae1ae2dca3979a81bb20fab4e58b9e110ea6358aa9219ee6eece2bc"
+      }
+    }
+  }
 }

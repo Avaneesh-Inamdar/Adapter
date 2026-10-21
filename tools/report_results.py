@@ -86,12 +86,24 @@ def report():
     archive_count = int(re.search(r'Ran (\d+) tests',(OUT/'archive-tests.log').read_text()).group(1))
     counts = {k:int(re.search(r'Ran (\d+) tests',v).group(1)) for k,v in logs.items()}
     rust_status='blocked' if 'os error 4551' in rust else 'passed'
+    # Retained differential reports come from tools/differential.py and cover one
+    # same-artifact libc suite on Darwin and on Windows; absent files stay absent.
+    differential = {}
+    for profile in ['debug', 'release']:
+        path = OUT/f'differential-{profile}.json'
+        if not path.exists():
+            continue
+        value = json.loads(path.read_text(encoding='utf-8'))
+        differential[profile] = {'status': value['status'], 'cases': value['case_count'],
+                                 'matched': value['matched'], 'mismatched': value['mismatched'],
+                                 'program_sha256': value.get('program_sha256')}
     summary = {'rust_tests_passed':rust_count,'rust_test_status':rust_status,'archive_tests_passed':archive_count,'integration_tests_attempted':counts,
                'integration_status':{k:'passed' if passed[k] else 'blocked' for k in logs},
                'distinct_tests_passed_final':rust_count+archive_count+len(re.findall(r'^test_.* \.\.\. ok$',logs['debug'],re.M)),
                'jq_test_methods':len(re.findall(r'^test_.*\(test_jq\.JqTests\.',logs['debug'],re.M)),
                'ripgrep_test_methods':len(re.findall(r'^test_.*\(test_ripgrep\.RipgrepTests\.',logs['debug'],re.M)),
-               'reference_macos_verified':False}
+               'compatibility_rows_reference_macos_verified':False,
+               'libc_differential':{'hosted_intel_mac_run':'39667131995','profiles':differential}}
     (OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print('Recorded verification reports:',summary['distinct_tests_passed_final'],'distinct tests passed in final run')
 

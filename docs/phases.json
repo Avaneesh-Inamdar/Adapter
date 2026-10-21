@@ -1,0 +1,469 @@
+{
+  "schema_version": 1,
+  "updated": "2026-10-22",
+  "scope": "All 36 requested work items. Implemented slices do not imply complete subsystem support.",
+  "architecture_decision": {
+    "current": "Windows x64 runs Intel guests directly; keep it as the regression baseline.",
+    "preferred_next": "Native Windows ARM64 port, conditional on an available ARM64 host and ABI probes.",
+    "alternative": "ARM64-to-x64 dynarec is a separate backend if the x64-host requirement is retained.",
+    "hardware_available": false,
+    "arm64_execution_implemented": false,
+    "memory_ordering": "Measure guest atomic ordering. Apple's Rosetta TSO control is not assumed available on Windows ARM hardware."
+  },
+  "phases": [
+    {
+      "id": "P0",
+      "name": "Evidence, contracts and debugging",
+      "status": "verified-slice",
+      "depends_on": [],
+      "items": [
+        1,
+        2,
+        4,
+        5
+      ],
+      "exit_gate": "Same-artifact Mac/Adapter comparisons with complete case IDs; versioned ABI contracts; guest-PC, registers and instruction-step evidence."
+    },
+    {
+      "id": "P1",
+      "name": "Loaders and language runtimes",
+      "status": "implemented-slices",
+      "depends_on": [
+        "P0"
+      ],
+      "items": [
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "exit_gate": "Measured shared-cache images, ObjC/Swift consumers, cross-image unwinding and Mach VM error/lifetime probes."
+    },
+    {
+      "id": "P2",
+      "name": "System services and Foundation",
+      "status": "implemented-slices",
+      "depends_on": [
+        "P1"
+      ],
+      "items": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "exit_gate": "Reference-matched queues/runloops, complex IPC, process behavior and real service consumers; preserve existing broker regressions."
+    },
+    {
+      "id": "P3",
+      "name": "Graphics and desktop UI",
+      "status": "not-started",
+      "depends_on": [
+        "P2"
+      ],
+      "items": [
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "exit_gate": "NSWindow hello-world with observed drawing, input, pasteboard and orderly teardown; resource/shader tests before claiming graphics coverage."
+    },
+    {
+      "id": "P4",
+      "name": "ARM64 and arm64e execution",
+      "status": "not-started",
+      "depends_on": [
+        "P0",
+        "P1"
+      ],
+      "items": [
+        3,
+        12,
+        13
+      ],
+      "exit_gate": "Pinned ARM64 CLI and architecture litmus probes; 16K guest-page semantics; authenticated-pointer tests separately from plain ARM64."
+    },
+    {
+      "id": "P5",
+      "name": "Xcode integration",
+      "status": "not-started",
+      "depends_on": [
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "items": [
+        6,
+        31,
+        32,
+        33
+      ],
+      "exit_gate": "Pass each of M0 through M4 with the actual named executable and a retained trace/output artifact."
+    },
+    {
+      "id": "P6",
+      "name": "Instruments, devices and Simulator",
+      "status": "not-started",
+      "depends_on": [
+        "P5"
+      ],
+      "items": [
+        34,
+        35,
+        36
+      ],
+      "exit_gate": "Measured DTX/device pairing conversations and actual device tests; Simulator remains deferred until prior Xcode gates pass."
+    }
+  ],
+  "items": [
+    {
+      "id": 1,
+      "name": "Real macOS reference execution",
+      "phase": "P0",
+      "status": "reference-verified",
+      "work": "Hosted Intel Mac reference executed successfully (run39667131995); compressed native capture, OS/build and exact executable hash retained. Physical device/GPU/desktop traces remain separate.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 2,
+      "name": "Differential harness: thousands of probes",
+      "phase": "P0",
+      "status": "verified-slice",
+      "work": "4096 same-artifact cases across eight libc families match in debug and release after correcting strtol no-conversion errno and timegm pre-1900 rejection (236 of 4096 differed before the fix). Expand to other subsystems and programs.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 3,
+      "name": "ARM64 backend decision",
+      "phase": "P4",
+      "status": "decision-recorded",
+      "work": "Prefer native Windows ARM64 when hardware is available; retain dynarec as a separately scoped x64-host backend. Neither is implemented.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 4,
+      "name": "Guest crash debugging and single-step",
+      "phase": "P0",
+      "status": "verified-slice",
+      "work": "Nine Windows LLDB tests cover genuine guest UD2, register/disassembly/backtrace capture, relocated symbols, VM breakpoints, instruction step and timeout cleanup, in debug and release; the release hook needed a unique body to survive identical-code folding. Darwin debugserver APIs remain P5.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 5,
+      "name": "Strict subsystem ABI contracts",
+      "phase": "P0",
+      "status": "implemented-contracts",
+      "work": "Seven versioned subsystem contracts and automated layout/path/symbol-drift checks exist. Extend contracts and native reference coverage with every new subsystem.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 6,
+      "name": "Binary pass/fail milestones",
+      "phase": "P5",
+      "status": "not-started",
+      "work": "NSWindow hello-world -> xcodebuild -> Xcode welcome window -> open project -> build project. API registrations cannot satisfy a milestone.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 7,
+      "name": "System image and dyld shared cache",
+      "phase": "P1",
+      "status": "not-started",
+      "work": "Acquire identified user-supplied image, extract/rebase caches and subcaches, resolve shared-cache fixups and image lifecycle. Existing XIP extraction is not cache loading.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 8,
+      "name": "Apple-ABI Objective-C runtime",
+      "phase": "P1",
+      "status": "verified-slice",
+      "work": "Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize and runtime-owned ownership. Categories, protocols, ARC, compact lists, exceptions and dynamic registration remain.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 9,
+      "name": "Swift guest runtime",
+      "phase": "P1",
+      "status": "not-started",
+      "work": "Apple Mach-O Swift metadata/refcounting/concurrency/reflection and ObjC interop. Native Windows Swift alone does not satisfy this ABI.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 10,
+      "name": "Darwin compact unwind and DWARF",
+      "phase": "P1",
+      "status": "not-started",
+      "work": "Loaded-image unwind lookup, personalities and C++/ObjC exceptions across guest/host frames; distinguish Windows SEH.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 11,
+      "name": "Mach VM emulation",
+      "phase": "P1",
+      "status": "not-started",
+      "work": "vm_*/mach_vm_* address spaces, protection, region queries, task rights, sharing and exact errors over host VM.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 12,
+      "name": "16K guest pages and ARM memory ordering",
+      "phase": "P4",
+      "status": "not-started",
+      "work": "Preserve guest alignment/protection/query semantics independently of host page granularity; run atomic litmus tests before choosing ordering adaptations.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 13,
+      "name": "arm64e pointer authentication",
+      "phase": "P4",
+      "status": "not-started",
+      "work": "Keys/discriminators/address diversity, signed returns and authenticated fixups. Plain ARM64 or stripping pointer bits is insufficient.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 14,
+      "name": "libdispatch / GCD",
+      "phase": "P2",
+      "status": "not-started",
+      "work": "Assess upstream Windows backend, bridge guest Blocks/calling convention, queues, QoS and Mach dispatch sources.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 15,
+      "name": "Full CoreFoundation and Foundation",
+      "phase": "P2",
+      "status": "implemented-slice",
+      "work": "Current CF strings only; add collections, constant objects, resources, bundles, NSObject lifecycle and toll-free bridging from consumers.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 16,
+      "name": "CFRunLoop on Mach ports",
+      "phase": "P2",
+      "status": "not-started",
+      "work": "Modes, sources, observers, timers, wakeups and Mach-port callbacks, with reference ordering.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 17,
+      "name": "Complex Mach messages",
+      "phase": "P2",
+      "status": "implemented-slice",
+      "work": "Simple broker messages exist. Add OOL/port descriptors, rights transfer, copy/deallocate rules and partial-failure cleanup.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 18,
+      "name": "XPC",
+      "phase": "P2",
+      "status": "implemented-slice",
+      "work": "Typed broker transport exists; Apple interoperability, richer objects, GCD scheduling, peer validation and entitlements remain.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 19,
+      "name": "Real launchd semantics",
+      "phase": "P2",
+      "status": "implemented-slice",
+      "work": "Job plist/demand-spawn subset exists. Add domains, KeepAlive, supervision/throttling, socket activation, inherited rights and launchctl behavior.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 20,
+      "name": "fork / exec / posix_spawn",
+      "phase": "P2",
+      "status": "not-started",
+      "work": "Start with spawn and argument/environment/descriptor inheritance; model fork snapshots and atfork separately.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 21,
+      "name": "Signals and syscall personality",
+      "phase": "P2",
+      "status": "not-started",
+      "work": "Guest signal numbers/contexts, masking, alternate stacks, restart and direct syscall interception.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 22,
+      "name": "IOKit / sysctl / proc_info",
+      "phase": "P2",
+      "status": "not-started",
+      "work": "Target-specific device/process facts and guest object/handle ownership; no host-handle substitution.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 23,
+      "name": "macOS service daemons",
+      "phase": "P2",
+      "status": "not-started",
+      "work": "cfprefsd, notifyd, distnoted, LaunchServices, securityd/trustd and opendirectoryd contracts, persistence and reference conversations.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 24,
+      "name": "FSEvents and Spotlight",
+      "phase": "P2",
+      "status": "not-started",
+      "work": "Persistent event IDs, rescan/drop semantics, indexing and query behavior; Windows directory notifications are only a backend.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 25,
+      "name": "CoreGraphics / CoreText / CoreAnimation / ImageIO / ColorSync",
+      "phase": "P3",
+      "status": "not-started",
+      "work": "Geometry, fonts/text metrics, image/color handling and compositor lifetimes with actual consumers.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 26,
+      "name": "IOSurface",
+      "phase": "P3",
+      "status": "not-started",
+      "work": "Pixel layouts, process sharing, rights, synchronization and host GPU resource interop.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 27,
+      "name": "Metal to D3D12; AIR to DXIL",
+      "phase": "P3",
+      "status": "not-started",
+      "work": "Separate resource/queue/synchronization API contracts and shader translation. DXC emits DXIL but does not decode AIR.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 28,
+      "name": "AppKit",
+      "phase": "P3",
+      "status": "not-started",
+      "work": "Windows/events, responders, menus, resources, text and accessibility under the Apple guest object ABI.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 29,
+      "name": "SwiftUI",
+      "phase": "P3",
+      "status": "not-started",
+      "work": "Depends on guest Swift/ObjC/Foundation, rendering and window lifecycle; no complete current Apple implementation available in the reviewed public sources.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 30,
+      "name": "WindowServer replacement",
+      "phase": "P3",
+      "status": "not-started",
+      "work": "Win32 window/input/IME/focus/pasteboard/drag-drop/accessibility backend and guest-facing service contract.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 31,
+      "name": "LLDB/debugserver Mach primitives",
+      "phase": "P5",
+      "status": "not-started",
+      "work": "Exception ports, task_for_pid, thread_get_state, suspend/resume and memory access. Host LLDB debugging is a separate P0 capability.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 32,
+      "name": "codesign / Security / keychain",
+      "phase": "P5",
+      "status": "not-started",
+      "work": "Signature/trust parsing, guest signing/entitlement policy and persistent keychain behavior with test fixtures.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 33,
+      "name": "xcrun / xcode-select / SDK paths",
+      "phase": "P5",
+      "status": "not-started",
+      "work": "Developer directory state, tool/SDK discovery, platform/version queries and actual subprocess execution.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 34,
+      "name": "Instruments and DTX services",
+      "phase": "P6",
+      "status": "not-started",
+      "work": "Pin protocol implementation, capture real service conversations and bridge profiling capabilities; protocol code is not the Instruments app.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 35,
+      "name": "Physical devices / USB / usbmuxd / CoreDevice / pairing",
+      "phase": "P6",
+      "status": "external-gate",
+      "work": "Windows transport/drivers, trust records, developer mode and service versions require an actual device acceptance run.",
+      "source": "upstream-sources.md"
+    },
+    {
+      "id": 36,
+      "name": "iOS Simulator / CoreSimulator / iOS runtime",
+      "phase": "P6",
+      "status": "deferred",
+      "work": "Defer until earlier Xcode gates pass; automation clients do not replace CoreSimulator or iOS frameworks.",
+      "source": "upstream-sources.md"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M0",
+      "name": "NSWindow hello-world",
+      "depends_on": [],
+      "passed": false,
+      "evidence": null,
+      "acceptance": "Actual guest NSWindow appears, draws, receives input and closes cleanly."
+    },
+    {
+      "id": "M1",
+      "name": "xcodebuild",
+      "depends_on": [
+        "M0"
+      ],
+      "passed": false,
+      "evidence": null,
+      "acceptance": "Identified Apple xcodebuild performs version/SDK queries through Adapter; host compiler invocation is not a substitute."
+    },
+    {
+      "id": "M2",
+      "name": "Xcode welcome window",
+      "depends_on": [
+        "M1"
+      ],
+      "passed": false,
+      "evidence": null,
+      "acceptance": "Identified Xcode launcher reaches the interactive welcome window with service/runtime logs."
+    },
+    {
+      "id": "M3",
+      "name": "Open project",
+      "depends_on": [
+        "M2"
+      ],
+      "passed": false,
+      "evidence": null,
+      "acceptance": "Open a pinned small project and reach editor/project state without a fatal unsupported call."
+    },
+    {
+      "id": "M4",
+      "name": "Build project",
+      "depends_on": [
+        "M3"
+      ],
+      "passed": false,
+      "evidence": null,
+      "acceptance": "Build the pinned project, retain the output artifact and compare command/results with the Mac reference."
+    }
+  ]
+}

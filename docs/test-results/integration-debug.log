@@ -1,4 +1,13 @@
 Verified jq-1.8.2 test data: 20 files, 188d03d029e8242a366d2286f07638924afe997120f6057e606f3c7a33984312
+test_bad_guest_breakpoint_is_tool_error (test_guest_debug.GuestDebuggerTests.test_bad_guest_breakpoint_is_tool_error) ... ok
+test_existing_output_is_refused (test_guest_debug.GuestDebuggerTests.test_existing_output_is_refused) ... ok
+test_explicit_guest_vm_breakpoint (test_guest_debug.GuestDebuggerTests.test_explicit_guest_vm_breakpoint) ... ok
+test_guest_stdout_and_trace_are_retained (test_guest_debug.GuestDebuggerTests.test_guest_stdout_and_trace_are_retained) ... ok
+test_missing_debug_hook_is_not_a_guest_crash (test_guest_debug.GuestDebuggerTests.test_missing_debug_hook_is_not_a_guest_crash) ... ok
+test_normal_nonzero_exit_is_not_a_crash (test_guest_debug.GuestDebuggerTests.test_normal_nonzero_exit_is_not_a_crash) ... ok
+test_real_illegal_instruction_fault_and_guest_symbol (test_guest_debug.GuestDebuggerTests.test_real_illegal_instruction_fault_and_guest_symbol) ... ok
+test_single_instruction_changes_guest_pc (test_guest_debug.GuestDebuggerTests.test_single_instruction_changes_guest_pc) ... ok
+test_timeout_kills_owned_worker (test_guest_debug.GuestDebuggerTests.test_timeout_kills_owned_worker) ... ok
 test_environment_and_cli_variables (test_jq.JqTests.test_environment_and_cli_variables) ... ok
 test_filter_file_and_module_search (test_jq.JqTests.test_filter_file_and_module_search) ... ok
 test_large_stream_and_reduction (test_jq.JqTests.test_large_stream_and_reduction) ... ok
@@ -16,6 +25,11 @@ test_version_and_help (test_jq.JqTests.test_version_and_help) ... ok
 test_explicit_exit_finalizes_and_flushes (test_libc.LibcTests.test_explicit_exit_finalizes_and_flushes) ... ok
 test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) ... ok
 test_utf8_file_stat_errors_and_utc_time (test_libc.LibcTests.test_utf8_file_stat_errors_and_utc_time) ... ok
+test_categories_rejected_before_constructor (test_objc.ObjcTests.test_categories_rejected_before_constructor) ... ok
+test_core_classic_and_chained (test_objc.ObjcTests.test_core_classic_and_chained) ... ok
+test_image_flags_rejected_before_constructor (test_objc.ObjcTests.test_image_flags_rejected_before_constructor) ... ok
+test_invalid_method_count_rejected_before_constructor (test_objc.ObjcTests.test_invalid_method_count_rejected_before_constructor) ... ok
+test_relative_lists_rejected_before_constructor (test_objc.ObjcTests.test_relative_lists_rejected_before_constructor) ... ok
 test_binary_detection_and_text_mode (test_ripgrep.RipgrepTests.test_binary_detection_and_text_mode) ... ok
 test_exit_codes_and_regex_errors (test_ripgrep.RipgrepTests.test_exit_codes_and_regex_errors) ... ok
 test_json_stream (test_ripgrep.RipgrepTests.test_json_stream) ... ok
@@ -69,7 +83,7 @@ test_mach_failure_semantics_local (test_runtime.RuntimeTests.test_mach_failure_s
 test_mach_failure_semantics_with_broker (test_runtime.RuntimeTests.test_mach_failure_semantics_with_broker) ... ok
 test_mach_missing_broker_endpoint_fails_before_entry (test_runtime.RuntimeTests.test_mach_missing_broker_endpoint_fails_before_entry) ... ok
 test_missing_library (test_runtime.RuntimeTests.test_missing_library) ... ok
-test_objc_evidence_and_rejection (test_runtime.RuntimeTests.test_objc_evidence_and_rejection) ... ok
+test_objc_metadata_and_class_dispatch (test_runtime.RuntimeTests.test_objc_metadata_and_class_dispatch) ... ok
 test_overlapping_universal_slices (test_runtime.RuntimeTests.test_overlapping_universal_slices) ... ok
 test_preflight_does_not_execute (test_runtime.RuntimeTests.test_preflight_does_not_execute) ... ok
 test_published_macos_binary_if_fetched (test_runtime.RuntimeTests.test_published_macos_binary_if_fetched) ... ok
@@ -93,6 +107,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 92 tests in 10.167s
+Ran 106 tests in 16.789s
 
 OK
