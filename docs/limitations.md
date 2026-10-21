@@ -5,9 +5,10 @@
 | ARM64 Xcode/toolchain on x64 host | All sampled core Xcode/CLT images ARM64 only; execution rejected | A separately scoped instruction translator or Intel artifact |
 | Apple Objective-C ABI | Metadata detected; no runtime implementation | Class/selector layouts, initialization/dispatch/ownership tests with real consumers |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
-| Darwin system calls / Mach services | No syscall interception or kernel personality | Controlled syscall probe and Windows adapter model |
+| Darwin system calls / Mach services | No syscall interception, kernel personality, Mach port namespace or bootstrap server | Controlled syscall and Mach message probes with send/receive rights |
+| Service management and XPC | `launchd` jobs, on-demand activation and XPC are absent; `fork`/`exec` fail | A broker/service consumer and a real libxpc client/server pair |
 | TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming, normal/recursive mutexes, condition variables and C++ thread-exit destructors verified | Cancellation, process-shared condition variables and reference-Mac ordering |
-| Dynamic libraries | Local Intel graph execution and reexports verified; cycles rejected | Cyclic initialization, weak/interposed exports, resolver functions, runtime dlopen/dlclose |
+| Dynamic libraries | Local Intel graph execution and reexports verified; cycles rejected; no runtime `dlopen`/`dlclose`; `dlsym` covers adapter symbols only | Load/unload, symbol-scope and constructor/destructor consumers; cyclic initialization, weak/interposed exports, resolver functions |
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
 | Modern dyld variants | Chained formats restricted; no weak/flat binding | Real target-specific encodings + negative regression corpus |
 | ABI differences | SysV calls plus measured printf-family varargs and x87 argument adapters | General aggregates/vectors, wide/positional/long-double formatting, exception/unwind interaction |
@@ -40,7 +41,11 @@ unsupported. Direct environment-array mutation is unverified.
 Condition variables exist in-process, but a condattr marked process-shared does
 not enable cross-process waiting because the host object is process-local.
 Networking, resource lookup APIs, fork/exec, security services, Metal, AppKit
-event loops, and runtime dlopen are absent. Signal handlers and alternate stacks
+event loops, and runtime dlopen are absent. Mach ports and send/receive rights,
+the bootstrap namespace, `launchd` job management and XPC are also absent; they
+are not substitutes for POSIX sockets or CRT process APIs. A broker daemon that
+maps ports to Windows named pipes is a recorded design hypothesis, not an
+implemented or measured mechanism. Signal handlers and alternate stacks
 are recorded but never invoked; pause blocks. pthread stack-size attributes are
 honored, but guard size, scheduling and cancellation are not. ripgrep's
 preprocessor path therefore fails cleanly with exit 2 instead of starting a

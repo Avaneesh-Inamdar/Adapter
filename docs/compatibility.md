@@ -21,6 +21,8 @@ general macOS application compatibility is established.
 | pthread lifecycle / thread state | Partial | Create/join/self/equal, once, keys/destructors, errno isolation, stack-size attributes, naming and thread IDs, normal/recursive mutexes, condition variables and condattrs | No cancellation, errorcheck/adaptive mutexes or process-shared condition variables |
 | CF immutable UTF-8 strings | Five functions | Guest UTF-8/UTF-16 and ownership fixture | Runtime-created opaque strings only |
 | Bundle executable discovery | Yes | Hello.app, traversal rejection | Resource APIs/GUI absent |
+| Runtime dyld loading | Absent | — | No `dlopen`/`dlclose`; `dlsym` searches adapter symbols only |
+| Mach IPC / bootstrap / launchd / XPC | Absent | — | Separate dependency-ordered tracks; no POSIX substitute is claimed |
 | Objective-C | Detection only | Cross-linked metadata probe + Apple apps | Not executable |
 | jq macOS amd64 1.8.2 | Demonstrated tested workflows | 13 CLI methods plus the pinned upstream `jq.test` suite: 550/550 with module fixtures, debug and release | No reference-Mac comparison; suite excludes upstream shell/`man.test` harnesses |
 | ripgrep macOS amd64 15.2.0 | Demonstrated tested workflows | 11 CLI methods: version/help, literal/regex/context, ignore/hidden, JSON, PCRE2/UTF-8, stdin, binary, 2 MiB mmap, 40-file threads, exit codes, clean `--pre` failure; debug and release | No reference-Mac comparison; this target does not exercise condition variables; process spawning and signal delivery are absent |

@@ -30,6 +30,29 @@ or general macOS/Xcode compatibility is established.
   [results](thread-lifecycle-results.md) and
   [ABI evidence](reverse-engineering/thread-lifecycle-evidence.md).
 
+## OS services and dynamic loading track
+
+macOS applications depend on services below and above the BSD/libc layer.
+These are separate implementation tracks, ordered by dependency; no layer is
+satisfied by adapters for another. Current state is planning plus the measured
+gaps in the import inventory, not compatibility evidence.
+
+| Stage | Component | Current state | Required for | Acceptance gate |
+| --- | --- | --- | --- | --- |
+| D1 | Runtime dyld loading: `dlopen`/`dlsym`/`dlclose` of Intel dylibs and bundles | Startup graphs, exports, constructors and finalizers work. `dlsym` searches only adapter symbols and ignores its handle; `dlopen`, `dlclose` and `dlerror` are absent | Plugin architectures, Xcode's `libIDEApplicationLoader.dylib` path, many complex CLIs | A Mach-O consumer loads a dylib not linked at startup, resolves and calls its export, observes constructors/destructors, and checks duplicate/missing/symbol errors; then a pinned real target |
+| D2 | Mach IPC: ports, send/receive rights, messages, bootstrap namespace | Absent; BSD/POSIX adapters do not emulate it | `launchd`, XPC, parts of CF/Foundation and crash reporting | Controlled two-process send/receive with right and failure semantics; a single-process shim is not sufficient evidence |
+| D3 | `launchd`/bootstrap: job registration, spawn, on-demand activation, service namespace | Absent; `fork`/`exec` are explicit failures | XPC services, background tools, Xcode workers | A broker starts a registered job and a measured consumer reaches it; process model and teardown documented |
+| D4 | XPC: connections, serialization, peer validation | Absent; depends on D2 and D3 | Xcode subsystems and modern app services | Real libxpc client/server consumer or measured app service; sandbox and entitlement limits explicit |
+| D5 | Xcode service consumers: SourceKit, CoreSimulator, `xcodebuild`, plugins | Xcode is ARM64; Objective-C and GUI prerequisites are also missing | Xcode | Measured service call from a real Intel target after D1-D4 and Objective-C/Foundation |
+
+The proposed broker daemon (mapping Mach ports to Windows named pipes or local
+RPC) is an engineering hypothesis, not a measured design. Port rights, queue
+semantics, bootstrap registration and process teardown need probes before any
+broker is claimed. `launchd` is PID 1 on Darwin, and Adapter has no process
+personality, `fork` or `exec`, so D3 cannot be a thin plist translation. D1 is
+the first track because it is closed-loop, testable without IPC services, and a
+prerequisite for loading Xcode's own application-loader bundles.
+
 ## Next acceptance gates
 
 1. **Expand binary and API evidence.** Add the next pinned Intel command-line
@@ -40,9 +63,9 @@ or general macOS/Xcode compatibility is established.
    provenance, explicit unsupported cases and no regression in existing tests.
 2. **Thread and loader lifecycle.** Condition variables and C++ TLV destruction
    are verified in-process. Remaining: pthread cancellation (including cleanup
-   handlers), process-shared synchronization objects, runtime
-   dlopen/dlsym/dlclose and cyclic initialization. Gate: measured consumers for
-   each; cancellation and unload lifetime tests, not just create/destroy. Current
+   handlers), process-shared synchronization objects, runtime dyld loading
+   (D1), and cyclic initialization. Gate: measured consumers for each;
+   cancellation and load/unload lifetime tests, not just create/destroy. Current
    cycles and unsupported exports remain explicit pre-constructor failures.
 3. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
    real Intel target. Register classes/metaclasses/selectors and implement
@@ -62,8 +85,9 @@ or general macOS/Xcode compatibility is established.
    cannot execute the sampled ARM64 Xcode/compiler images.
 7. **Xcode and wider OS services.** Continue DVTFoundation/DVTUserInterfaceKit/
    IDEKit analysis and dynamic dependency discovery. Gate: a measured service/
-   framework consumer before claiming launcher or IDE support. Mach services,
-   security, networking, developer tools and GUI integration remain major work.
+   framework consumer before claiming launcher or IDE support. Track D1-D5
+   above; Mach services, `launchd`, XPC, security, networking, developer tools
+   and GUI integration remain major work.
 
 Keep all existing dylib, TLS, parser, archive, libc and jq tests as regression
 requirements. README percentages count source-registered adapters against the
