@@ -95,3 +95,8 @@ closure recorded as separate future work. The identified libIDEApplicationLoader
 has now been extracted and inspected; the next Xcode-specific analysis targets
 are its DVTUserInterfaceKit/IDEKit dependency closure. That requires substantial
 additional framework/Objective-C investigation before a runtime implementation.
+
+Selected SDK headers are extracted with provenance under
+`target/artifacts/xcode27-sdk/`. The pthread condition-variable layouts and the
+CPIO hardlink-canary behavior that affects those extracts are documented in
+[thread lifecycle evidence](thread-lifecycle-evidence.md).

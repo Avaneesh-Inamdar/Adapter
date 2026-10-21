@@ -31,7 +31,7 @@ Module boundaries:
 | `src/loader/tls.rs` | TLV descriptor/template bounds and alignment validation |
 | `src/platform/windows.rs` | VirtualAlloc/VirtualProtect, copying, SG_READ_ONLY final protections, instruction-cache flush, RAII release |
 | `src/runtime` | Preflight, import availability, relocation, initialization, entry invocation, worker timeout |
-| `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, dyld image introspection, TLV ABI bridge, Darwin stack probe and exit callbacks |
+| `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, TLV ABI bridge, Darwin stack probe and exit callbacks |
 | `src/darwin/host` | C adapters for libSystem stdio/files/stat/time/locale, signals, process stubs, dispatch, mmap and directory iteration |
 | `src/frameworks/corefoundation.rs` | Five opaque immutable-string/ownership adapters |
 
@@ -101,7 +101,9 @@ other registers, using XSAVE/XRSTOR for enabled extended state (up to 16 KiB),
 or FXSAVE/FXRSTOR on hosts without OS-enabled XSAVE. Stack pages are probed and
 state buffers aligned. This preserves a stricter ABI than ordinary sysv64;
 linked assembly probes retain GPR, SSE and AVX values across TLV access. Shared
-cache/preinitialized thunks and TLV initialization functions remain unsupported.
+cache/preinitialized thunks remain unsupported. Image-provided TLV initialization
+code executes as ordinary guest code, and `__tlv_atexit` registrations are
+drained per thread in LIFO order.
 
 The worker links with an 8 MiB main-thread stack reserve (`/STACK:8388608`) to
 match Darwin's default. Windows MSVC otherwise reserves 1 MiB; jq's upstream
@@ -113,15 +115,20 @@ returns their pointer-width results. A running-thread count prevents mappings
 being released even if another guest thread has consumed the corresponding
 join handle. Unjoined owned threads are waited for before teardown; this differs
 from Darwin process exit and a nonterminating thread reaches the worker timeout.
-Only default/null pthread attributes are accepted; opaque tokens do not expose
-Apple pthread_t internals or support pthread cleanup-stack macros/cancellation.
+Stack-size pthread attributes are honored; other attributes, Apple pthread_t
+internals and pthread cleanup-stack macros are not exposed. Cancellation is
+unsupported.
 
 Thread-specific keys have per-thread values and four destructor passes. Once
 controls use their address and the observed Darwin initializer signature; the
 opaque storage is not replaced with a Windows structure. Initialization occurs
 outside locks while other callers wait. A separate errno integer belongs to
-each thread. Thread cancellation, general mutex/condition APIs, C++ TLV
-constructors/destructors, and fork interactions remain unsupported.
+each thread. Condition variables support static initialization, wait,
+absolute-deadline timedwait, signal and broadcast over host condition variables;
+process-shared use, cancellation and fork interactions remain unsupported.
+C++ TLV constructors and destructors are implemented, including cleanup-time
+re-registration; ordering against key destructors and image finalizers is an
+adapter choice rather than a verified Darwin ordering.
 
 ## Darwin libc data and I/O
 

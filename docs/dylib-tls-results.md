@@ -93,11 +93,12 @@ and [destructor-pass limit](https://github.com/apple-oss-distributions/Libc/blob
 ground the interface declarations. Tests demonstrate the implemented subset;
 reference-Mac equivalence remains unverified.
 
-Cycles, weak coalescing, symbol resolvers, shared-cache TLVs, C++ TLV
-initializers/destructors, cancellation, nondefault pthread attributes, general
-mutex/condition APIs, runtime dlopen/dlclose, Foundation and GUI remain absent.
-Unjoined owned threads are waited for before unmapping, which differs from
-Darwin exit behavior. Xcode 27 remains ARM64-only in the sampled launcher/tools.
+Cycles, weak coalescing, symbol resolvers, shared-cache TLVs, cancellation,
+process-shared synchronization, runtime dlopen/dlclose, Foundation and GUI
+remain absent. Later work added C++ TLV destruction, in-process condition
+variables and stack-size attributes; see
+[the thread lifecycle iteration](thread-lifecycle-results.md). Unjoined owned
+threads are waited for before unmapping, which differs from Darwin exit behavior. Xcode 27 remains ARM64-only in the sampled launcher/tools.
 
 jq 1.8.2 now passes the implemented TLS preparation and chained-fixup stages,
 then static binding rejects `__DefaultRuneLocale`. It was not executed. The

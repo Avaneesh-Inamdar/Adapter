@@ -6,7 +6,7 @@
 | Apple Objective-C ABI | Metadata detected; no runtime implementation | Class/selector layouts, initialization/dispatch/ownership tests with real consumers |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
 | Darwin system calls / Mach services | No syscall interception or kernel personality | Controlled syscall probe and Windows adapter model |
-| TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming and normal/recursive mutexes verified | C++ TLV lifecycle, cancellation, condition variables and reference behavior |
+| TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming, normal/recursive mutexes, condition variables and C++ thread-exit destructors verified | Cancellation, process-shared condition variables and reference-Mac ordering |
 | Dynamic libraries | Local Intel graph execution and reexports verified; cycles rejected | Cyclic initialization, weak/interposed exports, resolver functions, runtime dlopen/dlclose |
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
 | Modern dyld variants | Chained formats restricted; no weak/flat binding | Real target-specific encodings + negative regression corpus |
@@ -20,8 +20,9 @@
 
 Unsupported executable formats include Mach-O32, swapped-endian thin files,
 ARM execution, non-PIE files, LC_UNIXTHREAD entry, encrypted/protected images,
-section relocations, shared-cache/preinitialized TLVs, TLV initialization
-functions and Objective-C metadata. Code signatures
+section relocations, shared-cache/preinitialized TLVs and Objective-C metadata.
+Thin C++ TLV initialization functions execute as guest code through the adapter's
+TLV lookup; shared-cache TLV layouts remain unsupported. Code signatures
 are reported by command location, not verified or enforced. Unknown required
 load commands are rejected for execution.
 
@@ -36,12 +37,14 @@ POSIX filesystem semantics remain incomplete. stat uid/gid are zero, permissions
 are synthesized and ctime uses modification time. Directory descriptors are
 unsupported. Direct environment-array mutation is unverified.
 
-Condition variables, networking, resource lookup APIs, fork/exec, security
-services, Metal, AppKit event loops, and runtime dlopen are absent. Signal
-handlers and alternate stacks are recorded but never invoked; pause blocks.
-pthread stack-size attributes are honored, but guard size, scheduling and
-cancellation are not. ripgrep's preprocessor path therefore fails cleanly with
-exit 2 instead of starting a child process.
+Condition variables exist in-process, but a condattr marked process-shared does
+not enable cross-process waiting because the host object is process-local.
+Networking, resource lookup APIs, fork/exec, security services, Metal, AppKit
+event loops, and runtime dlopen are absent. Signal handlers and alternate stacks
+are recorded but never invoked; pause blocks. pthread stack-size attributes are
+honored, but guard size, scheduling and cancellation are not. ripgrep's
+preprocessor path therefore fails cleanly with exit 2 instead of starting a
+child process.
 Xcode's dynamically loaded application libraries make its five direct launcher
 dependencies a lower bound, not its complete dependency closure.
 
@@ -50,9 +53,13 @@ Unjoined guest threads are waited for before unmapping rather than terminated
 as Darwin exit would do. Nonterminating workers are stopped by the parent
 timeout. pthread_t tokens do not implement Apple's internal structure, cleanup
 macros or cancellation. Once controls support the public static initializer
-contract, not inspection/modification of private opaque state. C++ TLS
-initializers/destructors and exceptions remain unsupported. XSAVE state over
-16 KiB causes a controlled rejection for programs using TLV templates.
+contract, not inspection/modification of private opaque state. Apple Clang's
+`__tlv_atexit` path runs C++ `thread_local` destructors LIFO at worker exit and at
+main-session teardown; destructors that register additional entries are drained
+in the same pass. The `__cxa_thread_atexit` spelling, exception-driven
+unwinding, pthread cancellation cleanup and Darwin's exact ordering between
+key destructors and TLS destructors are not established. XSAVE state over 16 KiB
+causes a controlled rejection for programs using TLV templates.
 
 The archive tools create fresh output directories, copy only chosen regular
 files, record symlink targets without creating links, bound chunk sizes, and

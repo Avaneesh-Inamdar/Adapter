@@ -36,8 +36,10 @@ test_bundle (test_runtime.RuntimeTests.test_bundle) ... ok
 test_bundle_traversal_rejected (test_runtime.RuntimeTests.test_bundle_traversal_rejected) ... ok
 test_chained_corefoundation (test_runtime.RuntimeTests.test_chained_corefoundation) ... ok
 test_chained_hello (test_runtime.RuntimeTests.test_chained_hello) ... ok
+test_condition_variables (test_runtime.RuntimeTests.test_condition_variables) ... ok
 test_corefoundation (test_runtime.RuntimeTests.test_corefoundation) ... ok
 test_crash_is_in_worker (test_runtime.RuntimeTests.test_crash_is_in_worker) ... ok
+test_cxx_thread_local_destructors (test_runtime.RuntimeTests.test_cxx_thread_local_destructors) ... ok
 test_dependency_bad_callback_prevents_all_initializers (test_runtime.RuntimeTests.test_dependency_bad_callback_prevents_all_initializers) ... ok
 test_dependency_cycle_fails_before_constructors (test_runtime.RuntimeTests.test_dependency_cycle_fails_before_constructors) ... ok
 test_dependency_graph (test_runtime.RuntimeTests.test_dependency_graph) ... ok
@@ -76,6 +78,6 @@ test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_archite
 test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ok
 
 ----------------------------------------------------------------------
-Ran 75 tests in 6.511s
+Ran 77 tests in 6.506s
 
 OK

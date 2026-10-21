@@ -23,6 +23,12 @@ or general macOS/Xcode compatibility is established.
 - [x] Execute unchanged ripgrep 15.2.0 across 11 CLI workflows, including
   gitignore/hidden rules, JSON, PCRE2, stdin, binary detection, mmap and
   multithreaded search, on both profiles. See [results](ripgrep-results.md).
+- [x] pthread condition variables with Darwin layouts, `PTHREAD_COND_INITIALIZER`,
+  signal/broadcast/absolute-deadline timedwait and condattr pshared values;
+  C++ thread-local construction and `__tlv_atexit` destruction across workers
+  and main-session teardown, including cleanup-time re-registration. See
+  [results](thread-lifecycle-results.md) and
+  [ABI evidence](reverse-engineering/thread-lifecycle-evidence.md).
 
 ## Next acceptance gates
 
@@ -32,12 +38,12 @@ or general macOS/Xcode compatibility is established.
    is available. Extend formats, timezones, metadata fidelity and numerical edge
    behavior from concrete failures. Gate: reproducible output/error assertions,
    provenance, explicit unsupported cases and no regression in existing tests.
-2. **Thread and loader lifecycle.** Add C++ TLV initializers/destructors plus the
-   condition variables and cancellation semantics needed by measured consumers;
-   investigate runtime dlopen/dlsym/dlclose and cyclic initialization. Gate:
-   multithread/multi-image constructor/destructor ordering, lifetime and
-   failure-path consumers. Current cycles and unsupported exports remain explicit
-   pre-constructor failures.
+2. **Thread and loader lifecycle.** Condition variables and C++ TLV destruction
+   are verified in-process. Remaining: pthread cancellation (including cleanup
+   handlers), process-shared synchronization objects, runtime
+   dlopen/dlsym/dlclose and cyclic initialization. Gate: measured consumers for
+   each; cancellation and unload lifetime tests, not just create/destroy. Current
+   cycles and unsupported exports remain explicit pre-constructor failures.
 3. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
    real Intel target. Register classes/metaclasses/selectors and implement
    dispatch, ownership and initialization from measured layouts. Gate: execute

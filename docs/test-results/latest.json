@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-21T17:15:07.127132+00:00",
+  "run_utc": "2026-10-21T17:31:35.912323+00:00",
   "all_passed": true,
   "stages": [
     {
@@ -26,7 +26,9 @@
         "src\\darwin\\host\\format.c",
         "src\\darwin\\host\\system.c",
         "tests/fixtures/libc.c",
-        "tests/fixtures/file_time.c"
+        "tests/fixtures/file_time.c",
+        "tests/fixtures/condvars.c",
+        "tests/fixtures/cxx_tls.cpp"
       ],
       "exit_code": 0,
       "seconds": 0.078,
@@ -44,7 +46,7 @@
         "warnings"
       ],
       "exit_code": 0,
-      "seconds": 0.219,
+      "seconds": 0.235,
       "log": "clippy.log"
     },
     {
@@ -55,7 +57,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.344,
+      "seconds": 0.265,
       "log": "rust-tests.log"
     },
     {
@@ -66,7 +68,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.078,
+      "seconds": 0.079,
       "log": "debug-build.log"
     },
     {
@@ -96,7 +98,7 @@
         "tools/fetch_jq_tests.py"
       ],
       "exit_code": 0,
-      "seconds": 0.125,
+      "seconds": 0.156,
       "log": "reference-test-data.log"
     },
     {
@@ -106,7 +108,7 @@
         "tests/build_fixtures.py"
       ],
       "exit_code": 0,
-      "seconds": 2.672,
+      "seconds": 3.422,
       "log": "fixtures.log"
     },
     {
@@ -121,7 +123,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 0.297,
+      "seconds": 0.25,
       "log": "archive-tests.log"
     },
     {
@@ -136,7 +138,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 6.656,
+      "seconds": 6.625,
       "log": "integration-debug.log"
     },
     {
@@ -148,7 +150,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.078,
+      "seconds": 3.703,
       "log": "release-build.log"
     },
     {
@@ -163,7 +165,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 5.984,
+      "seconds": 6.594,
       "log": "integration-release.log"
     },
     {
@@ -173,7 +175,7 @@
         "tools/report_results.py"
       ],
       "exit_code": 0,
-      "seconds": 0.407,
+      "seconds": 0.343,
       "log": "compatibility-report.log"
     }
   ]
