@@ -1,22 +1,22 @@
 
 running 17 tests
-test darwin::dl::tests::error_string_is_returned_once_and_can_be_replaced ... ok
 test broker::job::tests::maps_guest_drive_paths ... ok
-test darwin::callbacks::tests::reverse_order_dso_filter_once_and_reset ... ok
-test darwin::tlv::tests::destructors_registered_during_cleanup_run_in_the_same_pass ... ok
-test darwin::sync::tests::mutexattr_rejects_unsupported_types_and_stale_tags ... ok
-test darwin::sync::tests::condition_variable_times_out_and_rejects_stale_tags ... ok
-test darwin::blocks::tests::retains_a_heap_block_until_the_last_release ... ok
-test darwin::sync::tests::statically_initialized_condition_variable_signals_without_init ... ok
 test darwin::threads::tests::attributes_default_and_validate_stack_size ... ok
+test darwin::callbacks::tests::reverse_order_dso_filter_once_and_reset ... ok
+test darwin::dl::tests::error_string_is_returned_once_and_can_be_replaced ... ok
+test darwin::sync::tests::condition_variable_times_out_and_rejects_stale_tags ... ok
+test darwin::sync::tests::mutexattr_rejects_unsupported_types_and_stale_tags ... ok
+test darwin::sync::tests::recursive_mutex_tracks_depth_and_owner ... ok
 test broker::job::tests::program_arguments_can_supply_the_program ... ok
+test darwin::sync::tests::statically_initialized_condition_variable_signals_without_init ... ok
 test darwin::blocks::tests::copies_stack_blocks_and_releases_them ... ok
+test broker::job::tests::parses_program_arguments_and_services ... ok
+test darwin::blocks::tests::retains_a_heap_block_until_the_last_release ... ok
+test objc::tests::validates_atomically_and_dispatches_registers_stack_and_nil ... ok
 test loader::fixups::tests::dyld_add_is_modular ... ok
 test broker::job::tests::rejects_missing_and_invalid_fields ... ok
-test darwin::sync::tests::recursive_mutex_tracks_depth_and_owner ... ok
-test broker::job::tests::parses_program_arguments_and_services ... ok
+test darwin::tlv::tests::destructors_registered_during_cleanup_run_in_the_same_pass ... ok
 test darwin::tlv::tests::template_copy_alignment_thread_isolation_and_session_reset ... ok
-test objc::tests::validates_atomically_and_dispatches_registers_stack_and_nil ... ok
 
 test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
@@ -37,31 +37,30 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 15 tests
-test sleb_valid ... ok
 test command_table_must_be_exact ... ok
-test forged_command_count ... ok
-test fat64_selection ... ok
 test chained_absolute_and_offset_rebases ... ok
-test chained_bounds_and_reserved_bits ... ok
 test chained_import_and_addend_table ... ok
+test every_truncated_header_is_error ... ok
 test invalid_command_size ... ok
-test leb_reject_truncation_and_overflow ... ok
+test forged_command_count ... ok
+test chained_bounds_and_reserved_bits ... ok
 test range_overflow ... ok
+test leb_reject_truncation_and_overflow ... ok
+test sleb_valid ... ok
+test uleb_valid ... ok
 test valid_header ... ok
 test windows_final_protection_and_release ... ok
-test uleb_valid ... ok
-test every_truncated_header_is_error ... ok
+test fat64_selection ... ok
 test deterministic_mutation_probe ... ok
 
-test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-   Compiling adapter v0.1.0 (E:\Xcode)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.59s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running unittests src\lib.rs (target\debug\deps\adapter-a529ab94d5400193.exe)
      Running unittests src\broker\main.rs (target\debug\deps\adapter_broker-b449c9c1cc3b0752.exe)
      Running unittests src\inspect\main.rs (target\debug\deps\adapter_inspect-0dc31ae02b5f3fb6.exe)

@@ -101,6 +101,7 @@ def report():
         return block
     differential = retained('differential-')
     objc_differential = retained('differential-objc-')
+    thread_differential = retained('differential-thread-')
     summary = {'rust_tests_passed':rust_count,'rust_test_status':rust_status,'archive_tests_passed':archive_count,'integration_tests_attempted':counts,
                'integration_status':{k:'passed' if passed[k] else 'blocked' for k in logs},
                'distinct_tests_passed_final':rust_count+archive_count+len(re.findall(r'^test_.* \.\.\. ok$',logs['debug'],re.M)),
@@ -108,7 +109,8 @@ def report():
                'ripgrep_test_methods':len(re.findall(r'^test_.*\(test_ripgrep\.RipgrepTests\.',logs['debug'],re.M)),
                'compatibility_rows_reference_macos_verified':False,
                'libc_differential':{'hosted_intel_mac_run':'39667131995','profiles':differential},
-               'objective_c_differential':{'hosted_intel_mac_run':'39673099968','profiles':objc_differential}}
+               'objective_c_differential':{'hosted_intel_mac_run':'39673099968','profiles':objc_differential},
+               'thread_differential':{'hosted_intel_mac_run':'39675626670','profiles':thread_differential}}
     (OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print('Recorded verification reports:',summary['distinct_tests_passed_final'],'distinct tests passed in final run')
 

@@ -1,0 +1,48 @@
+{
+  "candidate": "target\\candidate-thread-debug.json",
+  "case_count": 1024,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "attr": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "cond": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "createjoin": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "identity": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "mutex": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "once": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "retval": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "tls": {
+      "matched": 128,
+      "mismatched": 0
+    }
+  },
+  "matched": 1024,
+  "mismatched": 0,
+  "program_sha256": "c8533b6eaca23d21d698f15ff7aca361ce2d21ed5f144c0a5b7b82107f64540b",
+  "reference": "E:\\Xcode\\target\\ref-run\\mac-reference-adapter-thread-v1-c131f5a9c9efdfe32727963fed820ff1e66382d3\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-thread-v1"
+}

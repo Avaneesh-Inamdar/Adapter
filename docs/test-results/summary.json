@@ -51,5 +51,24 @@
         "program_sha256": "95ab88d498c5bbf706f50b3392eef44b47a3c4f5536b1de743b103679f0e4f60"
       }
     }
+  },
+  "thread_differential": {
+    "hosted_intel_mac_run": "39675626670",
+    "profiles": {
+      "debug": {
+        "status": "equal",
+        "cases": 1024,
+        "matched": 1024,
+        "mismatched": 0,
+        "program_sha256": "c8533b6eaca23d21d698f15ff7aca361ce2d21ed5f144c0a5b7b82107f64540b"
+      },
+      "release": {
+        "status": "equal",
+        "cases": 1024,
+        "matched": 1024,
+        "mismatched": 0,
+        "program_sha256": "c8533b6eaca23d21d698f15ff7aca361ce2d21ed5f144c0a5b7b82107f64540b"
+      }
+    }
   }
 }

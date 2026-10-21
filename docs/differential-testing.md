@@ -1,6 +1,6 @@
 # Same-binary Darwin/Windows differential testing
 
-The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Two suites use it: `adapter-libc-v1` (4,096 deterministic cases across eight libc families) and `adapter-objc-v1` (4,096 cases across eight Objective-C families). A generator/build alone does not execute the guest and does not establish reference behavior.
+The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Three suites use it: `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families) and `adapter-thread-v1` (1,024 cases across eight threading families). A generator/build alone does not execute the guest and does not establish reference behavior.
 
 ## Commands
 
@@ -65,6 +65,23 @@ Offline verifier tests: `python -m unittest discover -s tests/unit -p test_diffe
 | loadorder | `+load` order encoded digit-per-call | order code, call count |
 
 Deliberate exclusions: the suite never probes runtime-owned retain counts, `objc_retain` on a root class without `-retain`, ARC, weak tables, exceptions, tagged or packed isa, or aggregate message returns, because those are documented divergences or unsupported rather than claims this slice makes. A first dispatch proved the point: `objc_retain` on a free-standing compiler root class aborts on Darwin (`unrecognized selector -[Probe retain]`) while Adapter counts runtime-owned references, so the probe now tests object identity instead.
+
+## Threading suite (`adapter-thread-v1`)
+
+`tests/differential/thread_cases.c` uses the same no-header declaration style and creates real OS threads. Every family synchronises before reading shared state, so a correct runtime answers identically on Darwin and through Adapter whatever the scheduler does: the mutex family joins both workers before reading the counter, and the condition family has the main thread hold the lock and wait before the worker may signal.
+
+| Family | Probe | Result vector |
+| --- | --- | --- |
+| createjoin | two workers returning `arg*7+1`, both joined | create status sum, join status sum, summed return values |
+| identity | worker compares itself with the creating thread and with itself | self nonzero, self-equal, worker code (`1` = not the creator) |
+| mutex | two workers increment a shared counter 50 times under one mutex | final counter, success flag |
+| once | two workers call `pthread_once` with `PTHREAD_ONCE_INIT` (`__sig` `0x30b1bcba`, not zero) | body run count, summed return codes |
+| tls | two workers store a per-thread value in one key and read it back | workers that read their own value, creator's value is null |
+| cond | creator waits under the lock, worker sets the flag and signals | flag seen, unlock status |
+| attr | `pthread_attr_init`/`setstacksize` (1 MiB)/create/join/destroy | summed status codes, worker return value |
+| retval | two workers returning distinct computed pointers | both expected return values matched |
+
+This suite runs 1,024 cases (128 per family), not 4,096: every case creates real threads with 1 MiB stacks, so 4,096 cases exceeded the 60-second capture budget on the Windows side and the count is chosen for a bounded run rather than for uniformity with the other suites.
 
 ## Recorded run (2026-10-22)
 
@@ -163,7 +180,42 @@ Darwin capture answered `0` for the compiler-emitted root class, so the change
 was reverted and allocation keeps its own minimum. Before the fix the `classinfo`
 family mismatched 512/512; after it every family matched.
 
-Limits of this evidence: the reference is a hosted macOS VM, not a physical Mac;
-the Objective-C suite covers eight families and excludes the divergences listed
-above; JSONL equality is exact but `classinfo` carries 32-bit hashes. Threading,
-Mach/XPC/launchd, jq and ripgrep still have no reference capture.
+## Recorded threading run (2026-10-22)
+
+| Item | Recorded value |
+| --- | --- |
+| Native reference | GitHub Actions run `39675626670`, standard `macos-15-intel` hosted VM, workflow commit `c131f5a` |
+| Reference host | `Darwin 24.6.0` (`xnu-11417.140.69.711.44~1`), `x86_64`, Python 3.14.7 |
+| Reference compiler | `/usr/bin/clang`, Apple clang 17.0.0 (`clang-1700.0.13.5`), SHA-256 `7f30f076d0e9c38f772a76449fca9da8cf97f6a3d43b94c90a00e4f9ce7ad39e` |
+| Consumer program | `thread-differential`, 10,208 bytes, thin x86-64 executable, SHA-256 `c8533b6eaca23d21d698f15ff7aca361ce2d21ed5f144c0a5b7b82107f64540b` |
+| Consumer source | `thread_cases.c`, SHA-256 `fb6e0f18e214709e3f8565d2bbb0f2b77ca194a6d16e4cf796fb23329eb7a762` |
+| Cases | 1,024 (eight families, 128 each) |
+| Windows candidates | `target/debug/adapter-run.exe` SHA-256 `679f2856d568c00e50dba4255b75329539653ab1baa4e9a9433473fc963d1f0d`; `target/release/adapter-run.exe` SHA-256 `51bc98eea423f46cee072bb4b3a57a1c0a63778b167a7e42735e5a2c6ec7e92a`; Windows 10.0.26300 x64, Python 3.12.10 |
+| Result | `equal` in both profiles: 1,024 matched, 0 mismatched, 128/128 per family |
+
+Retained evidence from that run:
+
+| File | Bytes | SHA-256 (stored bytes) |
+| --- | ---: | --- |
+| `docs/test-results/mac-reference-thread-39675626670.json.gz` | 14,562 | `600cfcea9c780110d75e8088b2b21cde10109ca44f1bd7edb527c3d855000720` |
+| `docs/test-results/differential-thread-candidate-debug.json.gz` | 14,831 | `ce27ae330573ca02ba3c22762181d7d2a4ec5ec908253b6940665e4e01f419d4` |
+| `docs/test-results/differential-thread-candidate-release.json.gz` | 14,823 | `0eb9c048407c4a610a1b37db6cd4d930fbdc99e196897939d48a4aa371cd01ac` |
+| `docs/test-results/differential-thread-debug.json` | 1,079 | `ba23b1cdb8ff9d0814f393f6b10f0a321d1d3da835ccde64e643f5f8c5d26705` |
+| `docs/test-results/differential-thread-release.json` | 1,073 | `9ebe1672fbb11d978d18dc4d4ba44ee98a6210e99a4476d19d3e53491a50be8d` |
+
+The reference gzip decodes to the 219,195-byte native capture `reference.json`
+(SHA-256 `4327f1094be1c57619aee385e7c641c1f9e47c19099b27a4d16f8fc07a4e8901`,
+`mode: native`, `system: Darwin`). The candidate gzips decode to captures with
+SHA-256 `e2d275b0b8083449ea19fecf37bcd27b6d79122b849d9beaf2c859714354a605`
+(debug) and `ded5a791ef1a0368739f55f4fe3984c7cbf0d89879f4a20dbfc77a8f529de1dc`
+(release). This suite matched on its first dispatch, so it found no Adapter defect;
+the value is that `pthread_once`, per-thread keys, condition handoff and thread
+return values now have Darwin reference evidence instead of only Windows-side
+integration tests.
+
+Limits of this evidence: the reference is a hosted macOS VM, not a physical Mac.
+The suites cover eight libc, eight Objective-C and eight threading families and
+exclude addresses, wall clock, locale strings, zone names, ARC/weak ownership and
+thread cancellation, priority or scheduling policy; JSONL equality is exact but
+`memcmp`/`memmove` and `classinfo` vectors carry 32-bit hashes. Mach/XPC/launchd,
+jq and ripgrep still have no reference capture.

@@ -41,7 +41,7 @@ The consumer sources are [objc_core.m](../tests/fixtures/objc_core.m) and [objc_
 
 ## Verification and remaining work
 
-The full verification run passed all 16 stages with **159 distinct tests: 32 Rust, 22 archive and 105 integration**; every integration test also passed against the release build, and the Objective-C tests are in both profiles.
+The full verification run passed all 16 stages with **160 distinct tests: 32 Rust, 23 archive and 105 integration**; every integration test also passed against the release build, and the Objective-C tests are in both profiles.
 
 A hosted Intel Mac executed the same 4,096-case binary and matched Adapter in every case, so selector registration, dispatch, Super2 sends, category override, nil returns, class identity/size/metaclass state, object creation/identity and `+load` order now have Darwin reference evidence. That reference is a hosted macOS VM, and it covers compiler-emitted classes only. Concurrent initialization, selector uniqueness across multiple startup images, Foundation/AppKit behavior and broader real application behavior remain unverified.
 

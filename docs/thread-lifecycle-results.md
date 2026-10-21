@@ -79,6 +79,20 @@ availability against inspected imports, not implemented API breadth.
   images remain unsupported.
 - No reference-Mac execution or same-artifact output comparison exists.
 
+## Reference update (2026-10-22)
+
+The statement that no reference-Mac comparison exists no longer holds for the
+threading surface. The same-binary `adapter-thread-v1` suite (1,024 cases over
+create/join, identity, mutex, once, TLS keys, condition handoff, stack-size
+attributes and thread return values) matched a hosted Intel Mac in every case in
+both debug and release. Run `39675626670`, the retained capture and the exact
+hashes are recorded in
+[differential testing](differential-testing.md#recorded-threading-run-2026-10-22).
+
+Cancellation, cleanup handlers, robustness/errorcheck/adaptive mutexes,
+`PTHREAD_PROCESS_SHARED` wakeups, relative timedwait and TLV destructor ordering
+against `atexit`/image finalizers remain adapter-defined and unverified on Darwin.
+
 ## Reproduction
 
 ```powershell

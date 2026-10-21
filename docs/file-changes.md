@@ -122,6 +122,10 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/differential-objc-debug.json`
 - `docs/test-results/differential-objc-release.json`
 - `docs/test-results/differential-release.json`
+- `docs/test-results/differential-thread-candidate-debug.json.gz`
+- `docs/test-results/differential-thread-candidate-release.json.gz`
+- `docs/test-results/differential-thread-debug.json`
+- `docs/test-results/differential-thread-release.json`
 - `docs/test-results/fixtures.log`
 - `docs/test-results/format.log`
 - `docs/test-results/integration-debug-previous-pass.log`
@@ -134,6 +138,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/latest.json`
 - `docs/test-results/mac-reference-39667131995.json.gz`
 - `docs/test-results/mac-reference-objc-39673099968.json.gz`
+- `docs/test-results/mac-reference-thread-39675626670.json.gz`
 - `docs/test-results/namespace-debug.log`
 - `docs/test-results/namespace-regression.json`
 - `docs/test-results/namespace-release.log`
@@ -199,6 +204,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/compatibility/targets.json`
 - `tests/differential/libc_cases.c`
 - `tests/differential/objc_cases.m`
+- `tests/differential/thread_cases.c`
 - `tests/fetch_reference.py`
 - `tests/fixtures/abi.c`
 - `tests/fixtures/blocks.c`
