@@ -16,6 +16,17 @@ test_version_and_help (test_jq.JqTests.test_version_and_help) ... ok
 test_explicit_exit_finalizes_and_flushes (test_libc.LibcTests.test_explicit_exit_finalizes_and_flushes) ... ok
 test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) ... ok
 test_utf8_file_stat_errors_and_utc_time (test_libc.LibcTests.test_utf8_file_stat_errors_and_utc_time) ... ok
+test_binary_detection_and_text_mode (test_ripgrep.RipgrepTests.test_binary_detection_and_text_mode) ... ok
+test_exit_codes_and_regex_errors (test_ripgrep.RipgrepTests.test_exit_codes_and_regex_errors) ... ok
+test_json_stream (test_ripgrep.RipgrepTests.test_json_stream) ... ok
+test_large_file_memory_map (test_ripgrep.RipgrepTests.test_large_file_memory_map) ... ok
+test_literal_and_regex_search (test_ripgrep.RipgrepTests.test_literal_and_regex_search) ... ok
+test_multithreaded_directory_search (test_ripgrep.RipgrepTests.test_multithreaded_directory_search) ... ok
+test_pcre2_and_unicode (test_ripgrep.RipgrepTests.test_pcre2_and_unicode) ... ok
+test_preprocessor_spawn_fails_cleanly (test_ripgrep.RipgrepTests.test_preprocessor_spawn_fails_cleanly) ... ok
+test_recursive_ignore_and_hidden (test_ripgrep.RipgrepTests.test_recursive_ignore_and_hidden) ... ok
+test_stdin_is_preferred_over_cwd (test_ripgrep.RipgrepTests.test_stdin_is_preferred_over_cwd) ... ok
+test_version_and_help (test_ripgrep.RipgrepTests.test_version_and_help) ... ok
 test_abi_internal_float_and_stack_arguments (test_runtime.RuntimeTests.test_abi_internal_float_and_stack_arguments) ... ok
 test_bad_chained_version (test_runtime.RuntimeTests.test_bad_chained_version) ... ok
 test_bad_fixup (test_runtime.RuntimeTests.test_bad_fixup) ... ok
@@ -65,6 +76,6 @@ test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_archite
 test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ok
 
 ----------------------------------------------------------------------
-Ran 64 tests in 5.494s
+Ran 75 tests in 6.511s
 
 OK

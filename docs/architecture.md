@@ -31,7 +31,8 @@ Module boundaries:
 | `src/loader/tls.rs` | TLV descriptor/template bounds and alignment validation |
 | `src/platform/windows.rs` | VirtualAlloc/VirtualProtect, copying, SG_READ_ONLY final protections, instruction-cache flush, RAII release |
 | `src/runtime` | Preflight, import availability, relocation, initialization, entry invocation, worker timeout |
-| `src/darwin` | libc adapters, process exit callbacks, pthread lifecycle/state, and TLV ABI bridge |
+| `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, dyld image introspection, TLV ABI bridge, Darwin stack probe and exit callbacks |
+| `src/darwin/host` | C adapters for libSystem stdio/files/stat/time/locale, signals, process stubs, dispatch, mmap and directory iteration |
 | `src/frameworks/corefoundation.rs` | Five opaque immutable-string/ownership adapters |
 
 Execution stages: discover -> inspect graph -> reject unsupported requirements

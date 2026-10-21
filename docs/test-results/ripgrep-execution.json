@@ -1,0 +1,45 @@
+{
+  "run_utc": "2026-10-21T17:15:07.085566+00:00",
+  "artifact_sha256": "0c9a0066db0d26b640777db88045b0ccdd58509a746700e43e1c4ff8707a5ed0",
+  "reference_mac_run": false,
+  "profiles": {
+    "debug": {
+      "status": "passed",
+      "adapter_run_sha256": "9a1d3e4cc89c618219675b43b71d109f8e7933950efe2b8e381068ce75c0364d"
+    },
+    "release": {
+      "status": "passed",
+      "adapter_run_sha256": "12cfdd71d92cc8f81114362ab244710e8bd2aafc7dd85883e72b926115e44a5a"
+    }
+  },
+  "executions": [
+    {
+      "profile": "debug",
+      "command": [
+        "target/debug/adapter-run.exe",
+        "tests/fixtures/generated/reference/ripgrep-macos-amd64",
+        "--",
+        "-n",
+        "needle"
+      ],
+      "stdin": "alpha\nneedle here\n",
+      "exit_code": 0,
+      "stdout": "2:needle here\n",
+      "stderr": ""
+    },
+    {
+      "profile": "release",
+      "command": [
+        "target/release/adapter-run.exe",
+        "tests/fixtures/generated/reference/ripgrep-macos-amd64",
+        "--",
+        "-n",
+        "needle"
+      ],
+      "stdin": "alpha\nneedle here\n",
+      "exit_code": 0,
+      "stdout": "2:needle here\n",
+      "stderr": ""
+    }
+  ]
+}

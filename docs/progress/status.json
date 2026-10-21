@@ -1,6 +1,6 @@
 {
   "metric": "Source-registered adapters / unique (install name, imported symbol) pairs",
-  "scope": "19 inspected Intel images; direct imports only",
+  "scope": "20 inspected Intel images; direct imports only",
   "not_measured": [
     "semantic completeness",
     "transitive dependencies",
@@ -10,18 +10,38 @@
   ],
   "adapter_symbols": {
     "libSystem": [
+      "_CCRandomGenerateBytes",
+      "_NSGetArgc",
+      "_NSGetArgv",
+      "_NSGetEnviron",
       "_NSGetExecutablePath",
       "__DefaultRuneLocale",
+      "__NSGetArgc",
+      "__NSGetArgv",
+      "__NSGetEnviron",
       "__NSGetExecutablePath",
+      "__Unwind_Backtrace",
+      "__Unwind_GetCFA",
+      "__Unwind_GetDataRelBase",
+      "__Unwind_GetIP",
+      "__Unwind_GetIPInfo",
+      "__Unwind_GetLanguageSpecificData",
+      "__Unwind_GetRegionStart",
+      "__Unwind_GetTextRelBase",
+      "__Unwind_Resume",
+      "__Unwind_SetGR",
+      "__Unwind_SetIP",
       "____chkstk_darwin",
       "___assert_rtn",
       "___bzero",
+      "___chkstk_darwin",
       "___cxa_atexit",
       "___cxa_finalize",
       "___error",
       "___exp10",
       "___maskrune",
       "___memcpy_chk",
+      "___memmove_chk",
       "___srget",
       "___stack_chk_fail",
       "___stack_chk_guard",
@@ -29,6 +49,12 @@
       "___stdinp",
       "___stdoutp",
       "___swbuf",
+      "__dyld_get_image_header",
+      "__dyld_get_image_name",
+      "__dyld_get_image_vmaddr_slide",
+      "__dyld_image_count",
+      "__exit",
+      "__tlv_atexit",
       "__tlv_bootstrap",
       "_abort",
       "_access",
@@ -46,21 +72,41 @@
       "_bsearch",
       "_calloc",
       "_cbrt",
+      "_chdir",
       "_chmod",
       "_chown",
+      "_chroot",
       "_clearerr",
+      "_clock_gettime",
       "_close",
+      "_close$NOCANCEL",
+      "_closedir",
       "_cos",
       "_cosh",
+      "_dirfd",
       "_dirname",
+      "_dispatch_release",
+      "_dispatch_semaphore_create",
+      "_dispatch_semaphore_signal",
+      "_dispatch_semaphore_wait",
+      "_dispatch_time",
+      "_dlsym",
+      "_dup",
+      "_dup2",
+      "_dyld_get_image_header",
+      "_dyld_get_image_name",
+      "_dyld_get_image_vmaddr_slide",
+      "_dyld_image_count",
       "_environ",
       "_erf",
       "_erfc",
+      "_execvp",
       "_exit",
       "_exp",
       "_exp2",
       "_expm1",
       "_fclose",
+      "_fcntl",
       "_fdim",
       "_fdopen",
       "_fdopen$DARWIN_EXTSN",
@@ -73,6 +119,7 @@
       "_fmod",
       "_fopen",
       "_fopen$DARWIN_EXTSN",
+      "_fork",
       "_fprintf",
       "_fputc",
       "_fputs",
@@ -80,17 +127,21 @@
       "_free",
       "_frexp",
       "_fstat$INODE64",
+      "_fstatat$INODE64",
       "_ftell",
       "_fwrite",
       "_getc",
+      "_getcwd",
       "_getenv",
       "_geteuid",
       "_gethostname",
       "_getpid",
+      "_getpwuid_r",
       "_gettimeofday",
       "_getuid",
       "_gmtime_r",
       "_hypot",
+      "_ioctl",
       "_isatty",
       "_j0",
       "_j1",
@@ -106,7 +157,9 @@
       "_log1p",
       "_log2",
       "_logb",
+      "_lseek",
       "_lstat$INODE64",
+      "_madvise",
       "_malloc",
       "_memchr",
       "_memcmp",
@@ -118,17 +171,40 @@
       "_mkdir",
       "_mkdtemp",
       "_mktime",
+      "_mmap",
       "_modf",
+      "_mprotect",
+      "_munmap",
+      "_nanosleep",
       "_nextafter",
       "_nexttoward",
       "_open",
+      "_opendir$INODE64",
       "_pathconf",
+      "_pause",
       "_perror",
+      "_pipe",
+      "_posix_madvise",
+      "_posix_memalign",
+      "_posix_spawn_file_actions_adddup2",
+      "_posix_spawn_file_actions_destroy",
+      "_posix_spawn_file_actions_init",
+      "_posix_spawnattr_destroy",
+      "_posix_spawnattr_init",
+      "_posix_spawnattr_setflags",
+      "_posix_spawnattr_setpgroup",
+      "_posix_spawnattr_setsigdefault",
+      "_posix_spawnp",
       "_pow",
       "_printf",
+      "_pthread_attr_destroy",
+      "_pthread_attr_init",
+      "_pthread_attr_setstacksize",
       "_pthread_create",
       "_pthread_detach",
       "_pthread_equal",
+      "_pthread_get_stackaddr_np",
+      "_pthread_get_stacksize_np",
       "_pthread_getspecific",
       "_pthread_join",
       "_pthread_key_create",
@@ -138,14 +214,21 @@
       "_pthread_mutex_lock",
       "_pthread_mutex_trylock",
       "_pthread_mutex_unlock",
+      "_pthread_mutexattr_destroy",
+      "_pthread_mutexattr_init",
+      "_pthread_mutexattr_settype",
       "_pthread_once",
       "_pthread_self",
+      "_pthread_setname_np",
       "_pthread_setspecific",
+      "_pthread_threadid_np",
       "_putchar",
       "_puts",
       "_qsort",
       "_raise",
       "_random",
+      "_read",
+      "_readdir_r$INODE64",
       "_realloc",
       "_realpath$DARWIN_EXTSN",
       "_remainder",
@@ -153,12 +236,21 @@
       "_rmdir",
       "_scalb",
       "_scalbln",
+      "_sched_yield",
       "_setegid",
       "_setenv",
       "_seteuid",
       "_setgid",
+      "_setgroups",
       "_setlocale",
+      "_setpgid",
+      "_setsid",
       "_setuid",
+      "_sigaction",
+      "_sigaddset",
+      "_sigaltstack",
+      "_sigemptyset",
+      "_signal",
       "_sin",
       "_sinh",
       "_sleep",
@@ -172,6 +264,7 @@
       "_strcpy",
       "_strdup",
       "_strerror",
+      "_strerror_r",
       "_strftime",
       "_strlen",
       "_strncmp",
@@ -179,19 +272,23 @@
       "_strrchr",
       "_strspn",
       "_strtol",
+      "_sysconf",
       "_tan",
       "_tanh",
       "_tgamma",
       "_time",
       "_timegm",
       "_umask",
+      "_uname",
       "_unlink",
       "_unsetenv",
       "_usleep",
       "_utimes",
       "_vsnprintf",
       "_vsscanf",
+      "_waitpid",
       "_write",
+      "_writev",
       "_y0",
       "_y1",
       "_yn"
@@ -207,21 +304,21 @@
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 181,
-      "total": 1778,
-      "percent": 10.18
+      "available": 270,
+      "total": 1860,
+      "percent": 14.52
+    },
+    {
+      "name": "libSystem",
+      "available": 265,
+      "total": 382,
+      "percent": 69.37
     },
     {
       "name": "Other libraries",
       "available": 0,
       "total": 315,
       "percent": 0.0
-    },
-    {
-      "name": "libSystem",
-      "available": 176,
-      "total": 300,
-      "percent": 58.67
     },
     {
       "name": "CoreGraphics",
@@ -445,9 +542,9 @@
       "name": "AU Lab",
       "source": "additional-tools27/Additional Tools/Audio/AU Lab.app/Contents/MacOS/AU Lab",
       "sha256": "6b04e361965e2ff23a717d71d8f2c24bf4b02138ad06e09a9d2761f1322f77cf",
-      "available": 57,
+      "available": 59,
       "total": 603,
-      "percent": 9.45,
+      "percent": 9.78,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio",
@@ -2195,10 +2292,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "___sincos_stret"
         },
         {
@@ -2236,10 +2329,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dispatch_mig_server"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_release"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -3231,9 +3320,9 @@
       "name": "Quartz Debug",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Quartz Debug",
       "sha256": "efc44dd7adf3db75a246952e6c626c0284ca9dfd981c72e0908a1e7825d1fabc",
-      "available": 33,
+      "available": 36,
       "total": 420,
-      "percent": 7.86,
+      "percent": 8.57,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -4517,10 +4606,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "___sincos_stret"
         },
         {
@@ -4538,10 +4623,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_register2"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dlsym"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -4590,10 +4671,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_regfree"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sigaction"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -4789,9 +4866,9 @@
       "name": "Server",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Server",
       "sha256": "bb655c463178450b3889013a99ca449c6b06ca840b0a25b11a2b8c24fa410543",
-      "available": 25,
+      "available": 28,
       "total": 232,
-      "percent": 10.78,
+      "percent": 12.07,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -5403,10 +5480,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_backtrace"
         },
         {
@@ -5420,10 +5493,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_register2"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dlsym"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -5472,10 +5541,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_regfree"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_sigaction"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -5627,9 +5692,9 @@
       "name": "HomeKit Accessory Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/HomeKit Accessory Simulator.app/Contents/MacOS/HomeKit Accessory Simulator",
       "sha256": "1301a2bcf9f46d5b9ddcb4c09c1f0c4bf26f85abc434a357671a4d28a4f06a80",
-      "available": 7,
+      "available": 8,
       "total": 319,
-      "percent": 2.19,
+      "percent": 2.51,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -6285,10 +6350,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "__dispatch_main_q"
         },
         {
@@ -6885,9 +6946,9 @@
       "name": "IORegistryExplorer",
       "source": "additional-tools27/Additional Tools/Hardware/IORegistryExplorer.app/Contents/MacOS/IORegistryExplorer",
       "sha256": "e6c9f274f7da68055d5ef6a27315c25d25c34d03559d1485ed25ab9cf5243bd0",
-      "available": 11,
+      "available": 12,
       "total": 188,
-      "percent": 5.85,
+      "percent": 6.38,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -7488,10 +7549,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_NXGetLocalArchInfo"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -8143,9 +8200,9 @@
       "name": "com.apple.Network-Link-Conditioner.remoteservice",
       "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/XPCServices/com.apple.Network-Link-Conditioner.remoteservice.xpc/Contents/MacOS/com.apple.Network-Link-Conditioner.remoteservice",
       "sha256": "237e16328c50390df2d84a5fe9a04397a1b426e210e8949d35e7c31e8397d579",
-      "available": 0,
+      "available": 1,
       "total": 16,
-      "percent": 0.0,
+      "percent": 6.25,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -8170,10 +8227,6 @@
         {
           "library": "/System/Library/Frameworks/PreferencePanes.framework/Versions/A/PreferencePanes",
           "symbol": "_PreferencePaneMain"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -8217,9 +8270,9 @@
       "name": "PacketLogger",
       "source": "additional-tools27/Additional Tools/Hardware/PacketLogger.app/Contents/MacOS/PacketLogger",
       "sha256": "10f290584470a84ca205fd7d27302b98d975b464381922fb0c318b4305fdc4f1",
-      "available": 24,
+      "available": 26,
       "total": 219,
-      "percent": 10.96,
+      "percent": 11.87,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -8695,10 +8748,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "___strlcpy_chk"
         },
         {
@@ -8736,10 +8785,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dispatch_sync"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_time"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -9007,9 +9052,9 @@
       "name": "Printer Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/Printer Simulator",
       "sha256": "83f7b928a9cedf70c72b42740bf54c503285dabb9d5090f60747b3181e0d28b7",
-      "available": 13,
+      "available": 14,
       "total": 135,
-      "percent": 9.63,
+      "percent": 10.37,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -9305,10 +9350,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Unwind_Resume"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "__dispatch_main_q"
         },
         {
@@ -9505,9 +9546,9 @@
       "name": "PrinterSimulatorServer",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/PrinterSimulatorServer",
       "sha256": "ee0e716d8b4bcf9ca07a3500731e6465ace72504d44b4ffbafd5953e4b39da1a",
-      "available": 71,
+      "available": 73,
       "total": 463,
-      "percent": 15.33,
+      "percent": 15.77,
       "missing": [
         {
           "library": "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
@@ -10375,10 +10416,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_read"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_recv"
         },
         {
@@ -10388,10 +10425,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_setsockopt"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_signal"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -12413,6 +12446,15 @@
       "total": 136,
       "percent": 100.0,
       "missing": []
+    },
+    {
+      "name": "ripgrep 15.2.0",
+      "source": "tests/fixtures/generated/reference/ripgrep-macos-amd64",
+      "sha256": "0c9a0066db0d26b640777db88045b0ccdd58509a746700e43e1c4ff8707a5ed0",
+      "available": 131,
+      "total": 131,
+      "percent": 100.0,
+      "missing": []
     }
   ],
   "missing_by_target_count": [
@@ -12629,11 +12671,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "__NSConcreteStackBlock",
-      "target_count": 8
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__Unwind_Resume",
       "target_count": 8
     },
     {
@@ -14863,11 +14900,6 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dlsym",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_expf",
       "target_count": 2
     },
@@ -14929,11 +14961,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_regfree",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_sigaction",
       "target_count": 2
     },
     {
@@ -18308,11 +18335,6 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_release",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_dispatch_resume",
       "target_count": 1
     },
@@ -18344,11 +18366,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_dispatch_source_set_event_handler",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_time",
       "target_count": 1
     },
     {
@@ -18458,11 +18475,6 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_read",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_recv",
       "target_count": 1
     },
@@ -18479,11 +18491,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_setsockopt",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_signal",
       "target_count": 1
     },
     {

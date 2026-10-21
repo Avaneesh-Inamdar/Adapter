@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-21T16:48:28.595885+00:00",
+  "run_utc": "2026-10-21T17:15:07.127132+00:00",
   "all_passed": true,
   "stages": [
     {
@@ -12,7 +12,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.172,
+      "seconds": 0.187,
       "log": "format.log"
     },
     {
@@ -29,7 +29,7 @@
         "tests/fixtures/file_time.c"
       ],
       "exit_code": 0,
-      "seconds": 0.047,
+      "seconds": 0.078,
       "log": "native-format.log"
     },
     {
@@ -44,7 +44,7 @@
         "warnings"
       ],
       "exit_code": 0,
-      "seconds": 1.843,
+      "seconds": 0.219,
       "log": "clippy.log"
     },
     {
@@ -55,7 +55,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 2.235,
+      "seconds": 0.344,
       "log": "rust-tests.log"
     },
     {
@@ -66,7 +66,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.062,
+      "seconds": 0.078,
       "log": "debug-build.log"
     },
     {
@@ -76,8 +76,18 @@
         "tools/fetch_jq.py"
       ],
       "exit_code": 0,
-      "seconds": 0.094,
+      "seconds": 0.093,
       "log": "reference-artifact.log"
+    },
+    {
+      "stage": "reference-ripgrep",
+      "command": [
+        "C:\\Users\\avane\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/fetch_ripgrep.py"
+      ],
+      "exit_code": 0,
+      "seconds": 0.11,
+      "log": "reference-ripgrep.log"
     },
     {
       "stage": "reference-test-data",
@@ -86,7 +96,7 @@
         "tools/fetch_jq_tests.py"
       ],
       "exit_code": 0,
-      "seconds": 0.141,
+      "seconds": 0.125,
       "log": "reference-test-data.log"
     },
     {
@@ -96,7 +106,7 @@
         "tests/build_fixtures.py"
       ],
       "exit_code": 0,
-      "seconds": 2.546,
+      "seconds": 2.672,
       "log": "fixtures.log"
     },
     {
@@ -111,7 +121,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 0.313,
+      "seconds": 0.297,
       "log": "archive-tests.log"
     },
     {
@@ -126,7 +136,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 5.594,
+      "seconds": 6.656,
       "log": "integration-debug.log"
     },
     {
@@ -138,7 +148,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 4.453,
+      "seconds": 0.078,
       "log": "release-build.log"
     },
     {
@@ -153,7 +163,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 5.187,
+      "seconds": 5.984,
       "log": "integration-release.log"
     },
     {
@@ -163,7 +173,7 @@
         "tools/report_results.py"
       ],
       "exit_code": 0,
-      "seconds": 0.25,
+      "seconds": 0.407,
       "log": "compatibility-report.log"
     }
   ]

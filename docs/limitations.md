@@ -6,12 +6,12 @@
 | Apple Objective-C ABI | Metadata detected; no runtime implementation | Class/selector layouts, initialization/dispatch/ownership tests with real consumers |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
 | Darwin system calls / Mach services | No syscall interception or kernel personality | Controlled syscall probe and Windows adapter model |
-| TLS and pthread semantics | Basic TLV templates, threads, keys, once and errno verified | C++ TLV lifecycle, cancellation, pthread attributes, general locks and reference behavior |
+| TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming and normal/recursive mutexes verified | C++ TLV lifecycle, cancellation, condition variables and reference behavior |
 | Dynamic libraries | Local Intel graph execution and reexports verified; cycles rejected | Cyclic initialization, weak/interposed exports, resolver functions, runtime dlopen/dlclose |
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
 | Modern dyld variants | Chained formats restricted; no weak/flat binding | Real target-specific encodings + negative regression corpus |
 | ABI differences | SysV calls plus measured printf-family varargs and x87 argument adapters | General aggregates/vectors, wide/positional/long-double formatting, exception/unwind interaction |
-| Runtime semantic equivalence | Probes and original jq workflows; no reference Mac | Same-artifact reference output and API error comparisons |
+| Runtime semantic equivalence | Probes and original jq/ripgrep workflows; no reference Mac | Same-artifact reference output and API error comparisons |
 | Untrusted code / parsing | Bounds/resource caps; worker timeout; not a security sandbox | Dedicated fuzzing and hardened execution isolation |
 | Apple authentication | Embedded content checksums verified where reported; signer trust unverified | Independent trusted Apple signature/certificate validation |
 | REA limitations | Portable inventories work; Ghidra is installed but the win32 provider accepts PE only; Hopper needs macOS and IDA is unconfigured | A supported engine/host; no invented decompiler findings |
@@ -25,7 +25,8 @@ functions and Objective-C metadata. Code signatures
 are reported by command location, not verified or enforced. Unknown required
 load commands are rejected for execution.
 
-Only the jq-oriented filesystem, locale, FILE/stat and libc slice is implemented.
+Only the jq/ripgrep-oriented filesystem, locale, FILE/stat, threading and libc
+slice is implemented.
 C/POSIX locale is supported; Unicode/system locales are not. stdio uses separate
 guest/host objects; full Darwin buffering/private locks and cookie streams are
 absent. printf-family positional, wide and 80-bit long-double formatting is
@@ -35,8 +36,12 @@ POSIX filesystem semantics remain incomplete. stat uid/gid are zero, permissions
 are synthesized and ctime uses modification time. Directory descriptors are
 unsupported. Direct environment-array mutation is unverified.
 
-General locks, networking, resource lookup APIs, custom stacks, fork/exec,
-security services, Metal, AppKit event loops, and runtime dlopen are absent.
+Condition variables, networking, resource lookup APIs, fork/exec, security
+services, Metal, AppKit event loops, and runtime dlopen are absent. Signal
+handlers and alternate stacks are recorded but never invoked; pause blocks.
+pthread stack-size attributes are honored, but guard size, scheduling and
+cancellation are not. ripgrep's preprocessor path therefore fails cleanly with
+exit 2 instead of starting a child process.
 Xcode's dynamically loaded application libraries make its five direct launcher
 dependencies a lower bound, not its complete dependency closure.
 

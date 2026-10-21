@@ -63,8 +63,24 @@ def report():
     profiles={k:{'status':'passed' if passed[k] else 'blocked',
                  'adapter_run_sha256':hashlib.sha256((ROOT/f'target/{k}/adapter-run.exe').read_bytes()).hexdigest()}
               for k in logs}
+    jq_row = next(row for row in rows if row['test'] == 'test_upstream_test_suite')
     (OUT/'jq-execution.json').write_text(json.dumps({'run_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        'artifact_sha256':rows[-1]['sha256'],'reference_mac_run':False,'profiles':profiles,'executions':executions},indent=2)+'\n')
+        'artifact_sha256':jq_row['sha256'],'reference_mac_run':False,'profiles':profiles,'executions':executions},indent=2)+'\n')
+    rg_row = next(row for row in rows
+                  if row['fixture'] == 'reference/ripgrep-macos-amd64'
+                  and row['test'] == 'test_version_and_help')
+    rg_executions = []
+    for profile in ['debug','release']:
+        if blocked[profile]:
+            continue
+        command = [f'target/{profile}/adapter-run.exe', 'tests/fixtures/generated/reference/ripgrep-macos-amd64', '--', '-n', 'needle']
+        p = subprocess.run(command,cwd=ROOT,input=b'alpha\nneedle here\n',capture_output=True,timeout=15)
+        if p.returncode or p.stdout != b'2:needle here\n' or p.stderr:
+            raise RuntimeError(f'live ripgrep sample failed: {profile}')
+        rg_executions.append({'profile':profile,'command':command,'stdin':'alpha\nneedle here\n',
+                              'exit_code':p.returncode,'stdout':p.stdout.decode('utf-8'),'stderr':p.stderr.decode('utf-8')})
+    (OUT/'ripgrep-execution.json').write_text(json.dumps({'run_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        'artifact_sha256':rg_row['sha256'],'reference_mac_run':False,'profiles':profiles,'executions':rg_executions},indent=2)+'\n')
     rust = (OUT/'rust-tests.log').read_text(encoding='utf-8')
     rust_count = sum(map(int,re.findall(r'test result: ok\. (\d+) passed',rust)))
     archive_count = int(re.search(r'Ran (\d+) tests',(OUT/'archive-tests.log').read_text()).group(1))
@@ -74,6 +90,7 @@ def report():
                'integration_status':{k:'passed' if passed[k] else 'blocked' for k in logs},
                'distinct_tests_passed_final':rust_count+archive_count+len(re.findall(r'^test_.* \.\.\. ok$',logs['debug'],re.M)),
                'jq_test_methods':len(re.findall(r'^test_.*\(test_jq\.JqTests\.',logs['debug'],re.M)),
+               'ripgrep_test_methods':len(re.findall(r'^test_.*\(test_ripgrep\.RipgrepTests\.',logs['debug'],re.M)),
                'reference_macos_verified':False}
     (OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print('Recorded verification reports:',summary['distinct_tests_passed_final'],'distinct tests passed in final run')

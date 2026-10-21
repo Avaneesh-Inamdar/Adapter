@@ -1,15 +1,15 @@
 {
-  "run_utc": "2026-10-21T16:48:28.563161+00:00",
+  "run_utc": "2026-10-21T17:15:06.997176+00:00",
   "artifact_sha256": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0",
   "reference_mac_run": false,
   "profiles": {
     "debug": {
       "status": "passed",
-      "adapter_run_sha256": "13b9437ff76dee7814eb30e61ec860075eccc0f3dea3574c78feb9c0b3b8d3b3"
+      "adapter_run_sha256": "9a1d3e4cc89c618219675b43b71d109f8e7933950efe2b8e381068ce75c0364d"
     },
     "release": {
       "status": "passed",
-      "adapter_run_sha256": "1feaa58e990187b60bf0e6a91ef32c888c765abbeb36f1e0443c7b291c0b5b91"
+      "adapter_run_sha256": "12cfdd71d92cc8f81114362ab244710e8bd2aafc7dd85883e72b926115e44a5a"
     }
   },
   "executions": [

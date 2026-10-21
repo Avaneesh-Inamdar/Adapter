@@ -16,13 +16,14 @@ general macOS application compatibility is established.
 | Classic dyld rebases and pointer binds | Yes | hello, CF probes | No weak/interposed/flat namespaces |
 | Chained fixups / offset initializers | Partial | hello-chained, CF-chained | Only emitted subset tested |
 | Initializers and image cleanup | Yes | Ordered cross-image constructors, callbacks/destructors and repeated workers | No Darwin process teardown equivalence |
-| libSystem adapters | jq-oriented subset | Original jq workflows plus libc/ABI/lifecycle/thread probes | API subsets documented below; full libc semantics unverified |
+| libSystem adapters | jq/ripgrep-oriented subset | Original jq and ripgrep workflows plus libc/ABI/lifecycle/thread probes | API subsets documented below; full libc semantics unverified |
 | Darwin TLV/TLS | Partial | Nonzero/zero/aligned/pointer templates; eight threads across two images; register probes | No shared-cache TLVs or TLV init functions |
-| pthread lifecycle / thread state | Partial | Create/join/self/equal, once, keys/destructors, errno isolation | Default attributes only; no cancellation/general locks |
+| pthread lifecycle / thread state | Partial | Create/join/self/equal, once, keys/destructors, errno isolation, stack-size attributes, naming and thread IDs, normal/recursive mutexes | No condition variables, cancellation, errorcheck/adaptive mutexes or process-shared locks |
 | CF immutable UTF-8 strings | Five functions | Guest UTF-8/UTF-16 and ownership fixture | Runtime-created opaque strings only |
 | Bundle executable discovery | Yes | Hello.app, traversal rejection | Resource APIs/GUI absent |
 | Objective-C | Detection only | Cross-linked metadata probe + Apple apps | Not executable |
 | jq macOS amd64 1.8.2 | Demonstrated tested workflows | 13 CLI methods plus the pinned upstream `jq.test` suite: 550/550 with module fixtures, debug and release | No reference-Mac comparison; suite excludes upstream shell/`man.test` harnesses |
+| ripgrep macOS amd64 15.2.0 | Demonstrated tested workflows | 11 CLI methods: version/help, literal/regex/context, ignore/hidden, JSON, PCRE2/UTF-8, stdin, binary, 2 MiB mmap, 40-file threads, exit codes, clean `--pre` failure; debug and release | No reference-Mac comparison; process spawning, condition variables and signal delivery are absent |
 | Xcode 27.0 build 27A266 | Inspection only | XAR Content checksum, ARM64 header, startup disassembly | Not executable / not compatible |
 | Sampled CLT 27 executables | Inspection only | 13 ARM64-only images | Not executable / not compatible |
 | Additional Tools / Icon Composer | Inspection only | Intel/ARM slices and actual dependencies | Not executable / not compatible |
@@ -50,7 +51,13 @@ CFIndex and size_t are 64-bit even though Windows C long is 32-bit.
 | CFStringGetCString | Copies UTF-8 plus NUL if buffer fits | Returns false for small buffer/unsupported encoding | Exact fit and one-byte-short buffer |
 | CFRetain / CFRelease | Count ownership of runtime-created strings | No Apple constant strings, custom allocator, other CF types, or toll-free bridging | Retain/release/use/release |
 | __cxa_atexit / __cxa_finalize / atexit / exit | Executable callbacks, DSO filter, reverse registration order; exit flushes host streams | Explicit exit terminates worker after callbacks; full signals/termination semantics absent | Cross-image order, finalize-twice and explicit exit/flush consumers |
-| pthread_create / pthread_join | Own host threads and bridge guest start/return pointers | Null/default attributes; 128 running threads / 4096 total starts; Darwin error numbers | Eight threads, error returns and return values |
+| pthread_create / pthread_join | Own host threads and bridge guest start/return pointers | Darwin attributes accepted for stack size (16 KiB to 512 MiB); 128 running threads / 4096 total starts; Darwin error numbers | Eight threads, error returns and return values; ripgrep's worker pool |
+| pthread_attr_init/destroy/setstacksize | Validated opaque Darwin-attribute prefix and host stack reservation | Only stack size is honored; guard-size and scheduling attributes are not modelled | Attribute unit tests; ripgrep thread creation |
+| pthread_get_stackaddr_np / pthread_get_stacksize_np | Current host thread limits | Windows-provided bounds, not Darwin's reserved secondary-stack layout | Attribute/stack fixture and ripgrep |
+| pthread_setname_np / pthread_threadid_np | Win32 thread description and thread ID | Names truncated at 63 UTF-8 bytes; IDs are Windows TIDs | Thread fixture |
+| pthread_mutex_init/lock/trylock/unlock/destroy | SRWLOCK-backed normal and recursive mutexes with owner/depth tracking | No condition variables, errorcheck/adaptive types, robust/process-shared mutexes or Darwin private layout | Recursive-depth, owner-error, type-rejection and ripgrep synchronization tests |
+| sigaction/signal/sigprocmask/sigaltstack/raise/pause | Records Darwin handlers, masks, flags and alternate stack; rejects SIGKILL/SIGSTOP | Handlers are never delivered and pause blocks forever; no Darwin signal/SEH integration | Rust std startup path only; no delivery test |
+| fork/execvp/waitpid/setpgid/setsid/setgroups/posix_spawn* | Explicit ENOSYS/ECHILD failures; spawn action/attribute objects are opaque and validated | No child process creation or process-group/credential changes | ripgrep `--pre` fails cleanly with exit 2 |
 | pthread_self / pthread_equal | Stable per-session identity tokens | Apple pthread structure internals unavailable | Worker/main identity checks |
 | pthread_key_create/delete/getspecific/setspecific | Per-thread key values and up to four destructor passes | 512 live keys; keys not reused; no reserved/private keys | Reentrant destructor rearming, thread isolation and deleted-key errors |
 | pthread_once | Per-control initialization and waiting callers | Static controls with Darwin initializer signature; no cancellation/fork support | Eight concurrent callers, repeated calls, visibility of initialized data |
@@ -85,11 +92,31 @@ exit callbacks. A second consumer tests UTF-8 paths, binary file writes/reads,
 guarded stat buffers, errno and UTC conversions. Real jq tests exercise regex,
 Unicode, streaming, files, modules, sorting/grouping, dates, math and errors.
 
+### ripgrep 15.2.0
+
+The published [ripgrep 15.2.0 macOS amd64 release](https://github.com/BurntSushi/ripgrep/releases/tag/15.2.0)
+is pinned by SHA-256 in `tools/fetch_ripgrep.py`. Its 131 API imports are all
+bound (the 132nd symbol is `dyld_stub_binder`, handled by the eager binder
+diagnostic). The second target forced adapters for directory `fdopendir`/`dirfd`,
+`MAP_FIXED` and file-backed `mmap`, `posix_memalign` overrun safety, `F_DUPFD_CLOEXEC`,
+`_SC_HOST_NAME_MAX`, `memset_pattern16`, `___chkstk_darwin`, dispatch semaphores,
+Darwin signal recording, pthread attributes/stack limits/naming/IDs and
+normal/recursive mutexes. Eleven tests cover version/help, literal and regex
+search, context, gitignore and hidden rules, JSON, PCRE2 and UTF-8, stdin,
+binary detection, a 2 MiB memory-mapped file, 40-file multithreaded listing,
+exit codes, and a clean `--pre` failure. All pass in debug and release; see
+[results](ripgrep-results.md) and the [target evidence](reverse-engineering/ripgrep-target.md).
+
+Process creation is deliberately absent: `fork`, `execvp`, `waitpid` and
+`posix_spawnp` return ENOSYS/ECHILD instead of starting a child. Signal handlers
+are stored but not delivered. Consequently ripgrep's preprocessor feature fails
+with exit 2 rather than executing a command.
+
 No Foundation classes are implemented. The dyld_stub_binder symbol resolves to
 an explicit terminating diagnostic; it is not a lazy linker. All supported lazy
 slots are bound eagerly before guest execution.
 
 Latest commands/results are recorded in [test-results/latest.json](test-results/latest.json).
-Final local executable launches were blocked by Windows Application Control;
-see the per-profile statuses and the previous passing evidence in the milestone report.
-The latest iteration and remaining limits are described in [jq-libc-results](jq-libc-results.md).
+The current run passed all 14 verification stages, including 75 integration
+tests in both profiles. The latest iteration and remaining limits are described
+in [jq-libc-results](jq-libc-results.md) and [ripgrep-results](ripgrep-results.md).

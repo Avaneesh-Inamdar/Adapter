@@ -20,20 +20,24 @@ or general macOS/Xcode compatibility is established.
   libc consumers, passing debug and release. See [results](jq-libc-results.md).
 - [x] Pass the pinned upstream jq 1.8.2 `tests/jq.test` suite (550 tests) with its
   module fixtures through the unchanged binary on both build profiles.
+- [x] Execute unchanged ripgrep 15.2.0 across 11 CLI workflows, including
+  gitignore/hidden rules, JSON, PCRE2, stdin, binary detection, mmap and
+  multithreaded search, on both profiles. See [results](ripgrep-results.md).
 
 ## Next acceptance gates
 
-1. **Expand binary and API evidence.** Add another pinned Intel command-line
-   target and selected upstream jq cases; identify actual missing APIs before
-   extending them. Compare the same artifacts on a reference Mac when one is
-   available. Extend formats, timezones, metadata fidelity and numerical edge
+1. **Expand binary and API evidence.** Add the next pinned Intel command-line
+   target and selected upstream jq/ripgrep cases; identify actual missing APIs
+   before extending them. Compare the same artifacts on a reference Mac when one
+   is available. Extend formats, timezones, metadata fidelity and numerical edge
    behavior from concrete failures. Gate: reproducible output/error assertions,
    provenance, explicit unsupported cases and no regression in existing tests.
-2. **Thread and loader lifecycle.** Add C++ TLV initializers/destructors and the
-   synchronization primitives needed by measured consumers; investigate runtime
-   dlopen/dlsym/dlclose and cyclic initialization. Gate: multithread/multi-image
-   constructor/destructor ordering, lifetime and failure-path consumers. Current
-   cycles and unsupported exports remain explicit pre-constructor failures.
+2. **Thread and loader lifecycle.** Add C++ TLV initializers/destructors plus the
+   condition variables and cancellation semantics needed by measured consumers;
+   investigate runtime dlopen/dlsym/dlclose and cyclic initialization. Gate:
+   multithread/multi-image constructor/destructor ordering, lifetime and
+   failure-path consumers. Current cycles and unsupported exports remain explicit
+   pre-constructor failures.
 3. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
    real Intel target. Register classes/metaclasses/selectors and implement
    dispatch, ownership and initialization from measured layouts. Gate: execute

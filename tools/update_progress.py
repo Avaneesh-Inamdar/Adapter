@@ -100,15 +100,21 @@ def refresh():
     digest = 'e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0'
     rows.append({'name': 'jq 1.8.2', 'source': str(jq.relative_to(ROOT)).replace('\\', '/'),
                  'sha256': digest, 'architecture': 'x86_64', 'imports': imports(jq, digest)})
+    rg = ROOT / 'tests/fixtures/generated/reference/ripgrep-macos-amd64'
+    rg_digest = '0c9a0066db0d26b640777db88045b0ccdd58509a746700e43e1c4ff8707a5ed0'
+    rows.append({'name': 'ripgrep 15.2.0', 'source': str(rg.relative_to(ROOT)).replace('\\', '/'),
+                 'sha256': rg_digest, 'architecture': 'x86_64', 'imports': imports(rg, rg_digest)})
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / 'imports.json').write_text(json.dumps(rows, indent=2) + '\n', encoding='utf-8')
+    (OUT / 'imports.json').write_text(json.dumps(rows, indent=2) + '\n', encoding='utf-8', newline='\n')
 
 
 def registry():
     system = set()
     for p in (ROOT / 'src/darwin').glob('*.rs'):
         text = p.read_text()
-        system.update(re.findall(r'"([^"\n]+)"\s*=>\s*\w+\s+as\s+\*const', text))
+        for arm in re.finditer(
+                r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*(?:\{[^{}]*?)?\w+\s+as\s+\*const', text):
+            system.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
         system.update(re.findall(r'if name == "([^"\n]+)"', text))
     for p in (ROOT / 'src/darwin/host').glob('*.c'):
         text = p.read_text()
@@ -144,7 +150,8 @@ def generate():
     for item in records:
         if item['architecture'] != 'x86_64':
             continue
-        pairs = {(lib, name) for lib, names in item['imports'].items() for name in names}
+        pairs = {(lib, name) for lib, names in item['imports'].items() for name in names
+                 if name != 'dyld_stub_binder'}
         known.update(pairs)
         for pair in pairs:
             groups[family(pair[0])].add(pair)
@@ -171,7 +178,7 @@ def generate():
               'missing_by_target_count': [{'library': lib, 'symbol': name, 'target_count': n}
                                         for (lib, name), n in sorted(missing_frequency.items(),
                                                                     key=lambda item: (-item[1], item[0]))]}
-    (OUT / 'status.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
+    (OUT / 'status.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8', newline='\n')
     chart_rows = [rows[0]]
     main = ['libSystem', 'CoreFoundation', 'Objective-C', 'Foundation', 'AppKit', 'CoreGraphics']
     chart_rows += [row for label in main for row in rows[1:] if row['name'] == label]
@@ -206,7 +213,7 @@ def chart(rows, target_count):
                 f'<text x="704" y="{y+17}" font-size="14" font-family="monospace">{pct:.2f}%</text>',
                 f'<text x="804" y="{y+17}" font-size="14" fill="#cbd5e1">{row["available"]} / {row["total"]}</text>']
     svg += [f'<text x="28" y="{height-18}" font-size="12" fill="#9ca3af">An adapter may implement only part of an API. Missing APIs are listed in status.json.</text>', '</g></svg>']
-    (OUT / 'api-coverage.svg').write_text('\n'.join(svg) + '\n', encoding='utf-8')
+    (OUT / 'api-coverage.svg').write_text('\n'.join(svg) + '\n', encoding='utf-8', newline='\n')
 
 
 def details(report):
@@ -220,7 +227,7 @@ def details(report):
     for row in report['targets']:
         lines.append(f"| {row['name']} | {row['available']} / {row['total']} | {row['total']-row['available']} | {row['percent']:.2f}% |")
     lines += ['', 'A 100% row means the direct import names have adapters, not that the program is fully supported.',
-              'jq has recorded execution tests. The Apple applications have inspection evidence only.', '',
+              'jq and ripgrep have recorded execution tests. The Apple applications have inspection evidence only.', '',
               '## Missing APIs used by the most targets', '',
               '| Imported symbol | Library | Intel images using it |', '| --- | --- | ---: |']
     for row in report['missing_by_target_count'][:25]:
@@ -237,7 +244,7 @@ def details(report):
     lines += ['Registry extraction covers the current Rust symbol matches and C LOOKUP/LM registrations.',
               'If a new adapter library or registration style is added, update `registry()` and `available()`',
               'in the generator as part of that change. Counts indicate a registration exists, not complete API semantics.', '']
-    (OUT / 'README.md').write_text('\n'.join(lines), encoding='utf-8')
+    (OUT / 'README.md').write_text('\n'.join(lines), encoding='utf-8', newline='\n')
 
 
 def update_readme(report):
@@ -248,13 +255,14 @@ def update_readme(report):
     lines = [start, '', '[![API adapter coverage](docs/progress/api-coverage.svg)](docs/progress/README.md)', '',
              f"**{total['available']:,} / {total['total']:,} known Intel imports have adapters: {total['percent']:.2f}%.**", '',
              'This counts unique **(library install name, imported symbol)** pairs from',
-             f"{len(report['targets'])-1} inspected Apple Intel images and jq 1.8.2. It includes imported data.",
+             f"{sum(1 for t in report['targets'] if t['name'] not in ('jq 1.8.2', 'ripgrep 15.2.0'))} inspected Apple Intel images, jq 1.8.2 and ripgrep 15.2.0. It includes imported data.",
              'An adapter may implement only part of an API. The percentage measures adapter',
              'availability, not application compatibility or total macOS completion.',
              'ARM64 and transitive dependencies are outside this count.', '',
              '| Program | Direct imports with adapters | API coverage | Execution status |',
              '| --- | ---: | ---: | --- |']
-    statuses = {'jq 1.8.2': '13 recorded CLI tests passed', 'LogTool': 'Inspected; not run',
+    statuses = {'jq 1.8.2': '14 recorded tests passed', 'ripgrep 15.2.0': '11 recorded CLI tests passed',
+                'LogTool': 'Inspected; not run',
                 'Clipboard Viewer': 'Inspected; Objective-C/AppKit missing'}
     for name, status in statuses.items():
         row = next(t for t in report['targets'] if t['name'] == name)

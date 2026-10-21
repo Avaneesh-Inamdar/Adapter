@@ -14,23 +14,24 @@ on the CPU. ARM64 translation is not implemented.
 
 [![API adapter coverage](docs/progress/api-coverage.svg)](docs/progress/README.md)
 
-**181 / 1,778 known Intel imports have adapters: 10.18%.**
+**270 / 1,860 known Intel imports have adapters: 14.52%.**
 
 This counts unique **(library install name, imported symbol)** pairs from
-18 inspected Apple Intel images and jq 1.8.2. It includes imported data.
+18 inspected Apple Intel images, jq 1.8.2 and ripgrep 15.2.0. It includes imported data.
 An adapter may implement only part of an API. The percentage measures adapter
 availability, not application compatibility or total macOS completion.
 ARM64 and transitive dependencies are outside this count.
 
 | Program | Direct imports with adapters | API coverage | Execution status |
 | --- | ---: | ---: | --- |
-| jq 1.8.2 | 136 / 136 | 100.00% | 13 recorded CLI tests passed |
+| jq 1.8.2 | 136 / 136 | 100.00% | 14 recorded tests passed |
+| ripgrep 15.2.0 | 131 / 131 | 100.00% | 11 recorded CLI tests passed |
 | LogTool | 18 / 34 | 52.94% | Inspected; not run |
 | Clipboard Viewer | 1 / 55 | 1.82% | Inspected; Objective-C/AppKit missing |
 | Xcode 27 launcher | — | — | ARM64; no translator |
 <!-- API-COVERAGE:END -->
 
-[All 19 Intel images](docs/progress/README.md) ·
+[All 20 Intel images](docs/progress/README.md) ·
 [Missing APIs by target](docs/progress/status.json) ·
 [Recorded imports and hashes](docs/progress/imports.json)
 
@@ -55,12 +56,14 @@ When adding a new target, see the inventory refresh command in
 | libc | C/POSIX rune data, separate Darwin FILE objects, binary I/O, printf-family varargs, UTF-8 paths/stat64, environment, selected time/string/math APIs | [Native adapters](src/darwin/host), [libc tests](tests/integration/test_libc.py) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
+| Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 90 distinct tests: 17 Rust, nine archive
-and 64 integration tests. All 64 integration tests also passed in release. The
+**Test state:** the current run passed 105 distinct tests: 21 Rust, nine archive
+and 75 integration tests. All 75 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
-`tests/jq.test` suite with its module fixtures (550/550). This is Windows-side
-evidence; no reference-Mac run exists.
+`tests/jq.test` suite with its module fixtures (550/550), and the unmodified
+ripgrep binary exercising 11 CLI workflows. This is Windows-side evidence; no
+reference-Mac run exists.
 [Current run](docs/test-results/latest.json) ·
 [Summary](docs/test-results/summary.json).
 
@@ -70,7 +73,7 @@ evidence; no reference-Mac run exists.
 | --- | --- | --- | --- |
 | Reference-Mac comparison | All runtime evidence is Windows-side; generated probes and jq outputs have not been compared with macOS | [Verifier](tools/verify.py), [current logs](docs/test-results/latest.json) | Same-artifact output and error comparisons on a real Mac |
 | TLS lifecycle | No C++ TLV initialization/destruction or shared-cache TLVs | [TLS planning](src/loader/tls.rs), [TLV runtime](src/darwin/tlv.rs) | Multi-image/thread initialization and destructor-order consumer |
-| Synchronization | No general pthread mutex/condition APIs, cancellation or nondefault attributes | [Thread state](src/darwin/thread_state.rs), [threads](src/darwin/threads.rs) | Darwin layout evidence, contention and lifetime tests |
+| Synchronization | No condition variables, cancellation, errorcheck/adaptive mutexes or nondefault scheduling | [Sync adapters](src/darwin/sync.rs), [threads](src/darwin/threads.rs) | Darwin layout evidence plus contention, timeout and lifetime tests |
 | Dynamic loading | No runtime dlopen/dlsym/dlclose, cyclic initialization, weak coalescing or resolver exports | [Linker](src/loader/link.rs), [loader](src/loader/mod.rs) | Load/unload and symbol-scope consumers before expanding support |
 | Objective-C | No class/selector registration, dispatch, ownership or class initialization | [Metadata probe](tests/fixtures/objc.m), [missing imports](docs/progress/status.json) | Execute a small Apple-ABI object/method consumer before trying an app |
 | Frameworks and GUI | Foundation, AppKit and SwiftUI absent; CF limited to strings | [Framework adapters](src/frameworks), [Apple target inventory](docs/reverse-engineering/apple-inputs/targets.json) | Grow APIs from a chosen target; test object lifetime, resources, windows and events |
@@ -96,11 +99,12 @@ cd Adapter
 cargo build --locked
 python tests/build_fixtures.py
 python tools/fetch_jq.py
+python tools/fetch_ripgrep.py
 python tools/verify.py
 ```
 
-The jq fetch is pinned by SHA-256. No Mac or Apple SDK is needed for the test
-fixtures. Downloaded binaries and supplied Apple archives stay out of Git.
+Reference fetches are pinned by SHA-256. No Mac or Apple SDK is needed for the
+test fixtures. Downloaded binaries and supplied Apple archives stay out of Git.
 
 ```powershell
 target/debug/adapter-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -- --version
@@ -108,6 +112,9 @@ target/debug/adapter-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -
 
 target/debug/adapter-inspect.exe --json tests/fixtures/generated/reference/jq-macos-amd64
 target/debug/adapter-run.exe --check tests/fixtures/generated/reference/jq-macos-amd64
+
+target/debug/adapter-run.exe tests/fixtures/generated/reference/ripgrep-macos-amd64 -- --version
+printf 'alpha\nneedle here\n' | target/debug/adapter-run.exe tests/fixtures/generated/reference/ripgrep-macos-amd64 -- -n needle
 ```
 
 `--check` performs static preflight; it does not execute or certify the program.
@@ -136,4 +143,4 @@ Native Windows paths also work for ordinary file opens.
 [Known limitations](docs/limitations.md) · [Contribution guide](CONTRIBUTING.md)
 
 Source is [MIT licensed](LICENSE). External test artifacts retain their own
-licenses. Adapter is independent of Apple and jq.
+licenses. Adapter is independent of Apple, jq and ripgrep.
