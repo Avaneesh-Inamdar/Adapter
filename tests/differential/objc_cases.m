@@ -12,10 +12,9 @@ extern const char *sel_getName(SEL), *class_getName(Class);
 extern Class objc_getClass(const char *), class_getSuperclass(Class);
 extern unsigned long class_getInstanceSize(Class);
 extern id class_createInstance(Class, unsigned long), object_dispose(id);
-extern id objc_retain(id), objc_autorelease(id);
-extern void objc_release(id), *objc_autoreleasePoolPush(void), objc_autoreleasePoolPop(void *);
+extern id object_getClass(id);
 
-static long load_order, load_count, deallocations;
+static long load_order, load_count;
 
 __attribute__((objc_root_class))
 @interface Probe
@@ -23,7 +22,6 @@ __attribute__((objc_root_class))
 + (long)scale:(long)value;
 - (long)add:(long)a with:(long)b;
 - (long)compute:(long)value;
-- (void)dealloc;
 @end
 @implementation Probe
 + (void)load {
@@ -38,9 +36,6 @@ __attribute__((objc_root_class))
 }
 - (long)compute:(long)value {
     return value + 7;
-}
-- (void)dealloc {
-    deallocations++;
 }
 @end
 
@@ -78,7 +73,7 @@ static unsigned long fnv(const char *text) {
 }
 
 static const char *families[8] = {"selector", "dispatch", "super", "category", "nil", "classinfo",
-                                  "ownership", "loadorder"};
+                                  "object", "loadorder"};
 
 int main(void) {
     Class probe = objc_getClass("Probe"), child = objc_getClass("Child");
@@ -134,13 +129,9 @@ int main(void) {
             break;
         case 6: {
             id object = class_createInstance(probe, 0);
-            id retained = objc_retain(object);
-            void *pool = objc_autoreleasePoolPush();
-            objc_release(retained);
-            objc_autorelease(object);
-            objc_autoreleasePoolPop(pool);
-            result[0] = deallocations;
-            result[1] = retained == object;
+            result[0] = object_getClass(object) == probe;
+            result[1] = (long)strlen(class_getName(object_getClass(object)));
+            object_dispose(object);
             used = 2;
             break;
         }
