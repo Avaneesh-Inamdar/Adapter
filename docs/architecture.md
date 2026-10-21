@@ -32,7 +32,9 @@ Module boundaries:
 | `src/platform/windows.rs` | VirtualAlloc/VirtualProtect, copying, SG_READ_ONLY final protections, instruction-cache flush, RAII release |
 | `src/runtime` | Preflight, import availability, relocation, initialization, entry invocation, worker timeout |
 | `src/runtime/dynamic.rs` | Post-startup `dlopen` groups, reference-counted handles, export snapshots, `dlsym` scope, per-image close finalization |
-| `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, `dlfcn` and TLV ABI bridges, Darwin stack probe and exit callbacks |
+| `src/broker` | Loopback Mach transport protocol, endpoint/token handshake, per-connection request dispatch and payload routing |
+| `src/broker/main.rs` | `adapter-broker`: endpoint file creation, service namespace, connection liveness and port retirement |
+| `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, `dlfcn`, Mach IPC and TLV ABI bridges, Darwin stack probe and exit callbacks |
 | `src/darwin/host` | C adapters for libSystem stdio/files/stat/time/locale, signals, process stubs, dispatch, mmap and directory iteration |
 | `src/frameworks/corefoundation.rs` | Five opaque immutable-string/ownership adapters |
 
@@ -129,6 +131,38 @@ order. Dynamic TLS, `@rpath` expansion, `RTLD_NEXT`/`RTLD_SELF`, `dladdr`,
 interposition and ObjC registration remain unsupported. See
 [the evidence](reverse-engineering/dynamic-loading-evidence.md) and
 [the results](dynamic-loading-results.md).
+
+## Mach IPC
+
+The D2 adapter separates message routing from guest-visible names. Each worker
+allocates local names for task-self, bootstrap and its own receive/send rights;
+a receive port also has a global id made of a broker connection number and a
+sequence, so the broker can address it without sharing guest name spaces.
+Messages between ports in one worker bypass the broker; other destinations go
+over a loopback connection authenticated by a 128-bit token in the endpoint
+file. The broker forwards the payload and retires global ids when a receive
+right is destroyed or a worker disconnects.
+
+`mach_msg` validates header size, dispositions, options, notification ports and
+the 16 MiB cap before sending. A successful send consumes `MOVE_SEND` or
+`MOVE_SEND_ONCE` rights; `COPY_SEND`, `MAKE_SEND` and `MAKE_SEND_ONCE` behave as
+their names require. On receive, the adapter reproduces XNU's copyout
+inversion: the header's remote/local port-type fields are swapped, the local
+name is the receiving port, and the reply name is a newly materialized send or
+send-once right. `MACH_RCV_LARGE` leaves an oversized message queued for a
+retry; without it the message is dropped and `MACH_RCV_TOO_LARGE` returned.
+Timeouts use a monotonic deadline. A lost broker connection fails pending
+operations instead of blocking forever.
+
+The broker delivery callback only appends to a process-wide inbox and wakes a
+condition variable; guest Mach state is never taken on the reader thread, which
+prevents a send/receive deadlock between workers. `bootstrap_check_in` creates
+the receive right and registers the service name; `bootstrap_look_up` returns a
+send right. Both use the process-local service table when no broker endpoint is
+configured. Complex messages, port descriptors, OOL memory, vouchers, trailers,
+port sets, notifications, introspection and launchd-managed check-in are not
+implemented. See [the ABI evidence](reverse-engineering/mach-ipc-evidence.md)
+and [the results](mach-ipc-results.md).
 
 ## Darwin thread support
 

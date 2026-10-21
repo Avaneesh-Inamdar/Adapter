@@ -58,6 +58,10 @@ test_inspect_arm64 (test_runtime.RuntimeTests.test_inspect_arm64) ... ok
 test_inspect_thin (test_runtime.RuntimeTests.test_inspect_thin) ... ok
 test_inspect_universal (test_runtime.RuntimeTests.test_inspect_universal) ... ok
 test_local_dylib_execution (test_runtime.RuntimeTests.test_local_dylib_execution) ... ok
+test_mach_cross_process_echo_and_retire (test_runtime.RuntimeTests.test_mach_cross_process_echo_and_retire) ... ok
+test_mach_failure_semantics_local (test_runtime.RuntimeTests.test_mach_failure_semantics_local) ... ok
+test_mach_failure_semantics_with_broker (test_runtime.RuntimeTests.test_mach_failure_semantics_with_broker) ... ok
+test_mach_missing_broker_endpoint_fails_before_entry (test_runtime.RuntimeTests.test_mach_missing_broker_endpoint_fails_before_entry) ... ok
 test_missing_library (test_runtime.RuntimeTests.test_missing_library) ... ok
 test_objc_evidence_and_rejection (test_runtime.RuntimeTests.test_objc_evidence_and_rejection) ... ok
 test_overlapping_universal_slices (test_runtime.RuntimeTests.test_overlapping_universal_slices) ... ok
@@ -81,6 +85,6 @@ test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_archite
 test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ok
 
 ----------------------------------------------------------------------
-Ran 80 tests in 5.978s
+Ran 84 tests in 8.338s
 
 OK

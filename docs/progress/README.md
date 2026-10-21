@@ -10,15 +10,15 @@ unobserved APIs, implementation completeness or runtime test results. ARM64 imag
 
 | Image | Adapters available | Missing | API coverage |
 | --- | ---: | ---: | ---: |
-| AU Lab | 59 / 603 | 544 | 9.78% |
+| AU Lab | 65 / 603 | 538 | 10.78% |
 | Pixie | 7 / 134 | 127 | 5.22% |
 | LogTool | 18 / 34 | 16 | 52.94% |
-| Quartz Debug | 36 / 420 | 384 | 8.57% |
-| Server | 28 / 232 | 204 | 12.07% |
+| Quartz Debug | 39 / 420 | 381 | 9.29% |
+| Server | 31 / 232 | 201 | 13.36% |
 | HomeKit Accessory Simulator | 8 / 319 | 311 | 2.51% |
-| IORegistryExplorer | 12 / 188 | 176 | 6.38% |
-| Network Link Conditioner | 7 / 105 | 98 | 6.67% |
-| NLCBackgroundApp | 6 / 38 | 32 | 15.79% |
+| IORegistryExplorer | 13 / 188 | 175 | 6.91% |
+| Network Link Conditioner | 10 / 105 | 95 | 9.52% |
+| NLCBackgroundApp | 9 / 38 | 29 | 23.68% |
 | com.apple.Network-Link-Conditioner.remoteservice | 1 / 16 | 15 | 6.25% |
 | PacketLogger | 26 / 219 | 193 | 11.87% |
 | Printer Simulator | 14 / 135 | 121 | 10.37% |

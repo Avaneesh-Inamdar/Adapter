@@ -36,19 +36,25 @@ or general macOS/Xcode compatibility is established.
   rejection of dynamic TLS. See [results](dynamic-loading-results.md) and
   [evidence](reverse-engineering/dynamic-loading-evidence.md). Images are never
   unmapped and the listed scope restrictions remain.
+- [x] D2 Mach IPC slice: unchanged Mach-O server and client processes exchange a
+  request and send-once reply through a loopback broker, with bootstrap check-in
+  and lookup, XNU receive-header inversion, right consumption and documented
+  failure codes. See [results](mach-ipc-results.md) and
+  [ABI evidence](reverse-engineering/mach-ipc-evidence.md). Complex messages,
+  port sets, notifications, launchd and XPC remain absent.
 
 ## OS services and dynamic loading track
 
 macOS applications depend on services below and above the BSD/libc layer.
 These are separate implementation tracks, ordered by dependency; no layer is
-satisfied by adapters for another. D1 now has an implemented slice with an
-in-process consumer; D2-D5 remain planning plus the measured gaps in the import
+satisfied by adapters for another. D1 and D2 now have implemented slices with
+measured consumers; D3-D5 remain planning plus the measured gaps in the import
 inventory, not compatibility evidence.
 
 | Stage | Component | Current state | Required for | Acceptance gate |
 | --- | --- | --- | --- | --- |
 | D1 | Runtime dyld loading: `dlopen`/`dlsym`/`dlclose` of Intel dylibs and bundles | Implemented slice: per-image groups, refcounted handles, `RTLD_GLOBAL`/`LOCAL`/`NOLOAD`/`FIRST`, constructors and per-image finalizers, adapter-only install-name groups. Images are never unmapped; dynamic TLS, `@rpath` arguments, `RTLD_NEXT`/`RTLD_SELF`, `dladdr`, interposition and cross-group sharing are unsupported | Plugin architectures, Xcode's `libIDEApplicationLoader.dylib` path, many complex CLIs | Startup consumer met in-process over classic, chained and bundle plugins. Remaining: a pinned real Intel plugin consumer, true unload, dynamic TLS and cyclic initialization |
-| D2 | Mach IPC: ports, send/receive rights, messages, bootstrap namespace | Absent; BSD/POSIX adapters do not emulate it | `launchd`, XPC, parts of CF/Foundation and crash reporting | Controlled two-process send/receive with right and failure semantics; a single-process shim is not sufficient evidence |
+| D2 | Mach IPC: ports, send/receive rights, messages, bootstrap namespace | Implemented slice: per-worker name spaces, broker-routed simple messages, send/send-once consumption, receive-header inversion, timeouts and LARGE retry, bootstrap check-in/lookup and lifecycle errors. No complex messages, port sets, notifications, introspection or launchd-managed check-in | `launchd`, XPC, parts of CF/Foundation and crash reporting | Met by two unchanged Mach-O processes over a loopback broker plus failure-semantics probes. Remaining: complex messages, port descriptors and a pinned real Intel Mach client |
 | D3 | `launchd`/bootstrap: job registration, spawn, on-demand activation, service namespace | Absent; `fork`/`exec` are explicit failures | XPC services, background tools, Xcode workers | A broker starts a registered job and a measured consumer reaches it; process model and teardown documented |
 | D4 | XPC: connections, serialization, peer validation | Absent; depends on D2 and D3 | Xcode subsystems and modern app services | Real libxpc client/server consumer or measured app service; sandbox and entitlement limits explicit |
 | D5 | Xcode service consumers: SourceKit, CoreSimulator, `xcodebuild`, plugins | Xcode is ARM64; Objective-C and GUI prerequisites are also missing | Xcode | Measured service call from a real Intel target after D1-D4 and Objective-C/Foundation |
@@ -61,7 +67,11 @@ personality, `fork` or `exec`, so D3 cannot be a thin plist translation. D1 was
 the first track because it is closed-loop, testable without IPC services, and a
 prerequisite for loading Xcode's own application-loader bundles. Its in-process
 consumer now exists; a real pinned plugin target and the unsupported load
-semantics remain before that Xcode path can be attempted.
+semantics remain before that Xcode path can be attempted. D2 followed because
+launchd and XPC are expressed in Mach messages; the cross-process consumer now
+exists, but complex messages and a pinned real Mach client remain before D3 can
+build job registration on it. The broker is deliberately a routing service for
+trusted local workers, not a kernel personality or security boundary.
 
 ## Next acceptance gates
 
@@ -79,23 +89,30 @@ semantics remain before that Xcode path can be attempted.
    consumers for each; cancellation and load/unload lifetime tests, not just
    create/destroy. Current cycles and unsupported exports remain explicit
    pre-constructor failures.
-3. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
+3. **Mach IPC depth and launchd bootstrap.** The two-process message path is
+   verified for simple messages. Remaining D2 work: complex messages and port
+   descriptors, out-of-line memory, port sets and notifications, introspection
+   calls, and a pinned real Intel Mach client. D3 then needs job registration,
+   spawn, on-demand activation and broker-managed check-in. Gate: a registered
+   job started by a broker and reached by a measured consumer; queue fairness,
+   right-transfer and broker-loss behavior compared with a reference Mac.
+4. **Apple Objective-C runtime experiment.** Start with `objc.m`, then a small
    real Intel target. Register classes/metaclasses/selectors and implement
    dispatch, ownership and initialization from measured layouts. Gate: execute
    actual metadata and method calls, including inheritance/initialization and
    ownership. GNUstep/libobjc2 needs an Apple ABI adaptation experiment.
-4. **Foundation and broader CF.** Follow actual imported types/methods. Start
+5. **Foundation and broader CF.** Follow actual imported types/methods. Start
    with constant CF strings, ownership and collections before bridging. Gate:
    targeted consumers with verified object layouts and lifetime behavior.
-5. **GUI consumer.** Clipboard Viewer has an Intel slice with 55 undefined
+6. **GUI consumer.** Clipboard Viewer has an Intel slice with 55 undefined
    symbols/five direct dependencies. Objective-C, Foundation, AppKit event loops
    and resources are prerequisites; Pixie also needs private graphics APIs.
    Gate: observed window creation, input/events, drawing and orderly teardown.
-6. **ARM64 translation.** Treat CPU translation, ABI/TLS/exception integration
+7. **ARM64 translation.** Treat CPU translation, ABI/TLS/exception integration
    as a distinct architecture. Gate: controlled ARM64 machine-code probes then
    a pinned real CLI target with matched outputs. Native x64 mapping alone
    cannot execute the sampled ARM64 Xcode/compiler images.
-7. **Xcode and wider OS services.** Continue DVTFoundation/DVTUserInterfaceKit/
+8. **Xcode and wider OS services.** Continue DVTFoundation/DVTUserInterfaceKit/
    IDEKit analysis and dynamic dependency discovery. Gate: a measured service/
    framework consumer before claiming launcher or IDE support. Track D1-D5
    above; Mach services, `launchd`, XPC, security, networking, developer tools

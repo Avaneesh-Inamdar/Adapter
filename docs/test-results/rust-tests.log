@@ -1,15 +1,15 @@
 
 running 10 tests
+test darwin::dl::tests::error_string_is_returned_once_and_can_be_replaced ... ok
 test darwin::callbacks::tests::reverse_order_dso_filter_once_and_reset ... ok
-test darwin::sync::tests::recursive_mutex_tracks_depth_and_owner ... ok
-test darwin::threads::tests::attributes_default_and_validate_stack_size ... ok
-test darwin::sync::tests::mutexattr_rejects_unsupported_types_and_stale_tags ... ok
-test darwin::sync::tests::statically_initialized_condition_variable_signals_without_init ... ok
-test loader::fixups::tests::dyld_add_is_modular ... ok
 test darwin::sync::tests::condition_variable_times_out_and_rejects_stale_tags ... ok
 test darwin::tlv::tests::destructors_registered_during_cleanup_run_in_the_same_pass ... ok
+test darwin::sync::tests::statically_initialized_condition_variable_signals_without_init ... ok
+test darwin::sync::tests::mutexattr_rejects_unsupported_types_and_stale_tags ... ok
+test loader::fixups::tests::dyld_add_is_modular ... ok
+test darwin::threads::tests::attributes_default_and_validate_stack_size ... ok
+test darwin::sync::tests::recursive_mutex_tracks_depth_and_owner ... ok
 test darwin::tlv::tests::template_copy_alignment_thread_isolation_and_session_reset ... ok
-test darwin::dl::tests::error_string_is_returned_once_and_can_be_replaced ... ok
 
 test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
@@ -24,21 +24,26 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
 running 15 tests
-test command_table_must_be_exact ... ok
-test every_truncated_header_is_error ... ok
-test invalid_command_size ... ok
-test range_overflow ... ok
-test chained_bounds_and_reserved_bits ... ok
-test chained_absolute_and_offset_rebases ... ok
-test chained_import_and_addend_table ... ok
-test leb_reject_truncation_and_overflow ... ok
-test uleb_valid ... ok
-test forged_command_count ... ok
-test fat64_selection ... ok
-test windows_final_protection_and_release ... ok
-test valid_header ... ok
 test sleb_valid ... ok
+test leb_reject_truncation_and_overflow ... ok
+test chained_absolute_and_offset_rebases ... ok
+test range_overflow ... ok
+test chained_import_and_addend_table ... ok
+test invalid_command_size ... ok
+test chained_bounds_and_reserved_bits ... ok
+test fat64_selection ... ok
+test forged_command_count ... ok
+test valid_header ... ok
+test uleb_valid ... ok
+test windows_final_protection_and_release ... ok
+test every_truncated_header_is_error ... ok
+test command_table_must_be_exact ... ok
 test deterministic_mutation_probe ... ok
 
 test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
@@ -48,9 +53,10 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
      Running unittests src\lib.rs (target\debug\deps\adapter-a529ab94d5400193.exe)
+     Running unittests src\broker\main.rs (target\debug\deps\adapter_broker-b449c9c1cc3b0752.exe)
      Running unittests src\inspect\main.rs (target\debug\deps\adapter_inspect-0dc31ae02b5f3fb6.exe)
      Running unittests src\runtime\main.rs (target\debug\deps\adapter_run-a5c20013ece1b522.exe)
-     Running tests\unit\macho.rs (target\debug\deps\macho-6291065a4539862e.exe)
+     Running tests\unit\macho.rs (target\debug\deps\macho-4a4399b2339eba5f.exe)
    Doc-tests adapter

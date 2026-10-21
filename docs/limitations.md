@@ -5,8 +5,8 @@
 | ARM64 Xcode/toolchain on x64 host | All sampled core Xcode/CLT images ARM64 only; execution rejected | A separately scoped instruction translator or Intel artifact |
 | Apple Objective-C ABI | Metadata detected; no runtime implementation | Class/selector layouts, initialization/dispatch/ownership tests with real consumers |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
-| Darwin system calls / Mach services | No syscall interception, kernel personality, Mach port namespace or bootstrap server | Controlled syscall and Mach message probes with send/receive rights |
-| Service management and XPC | `launchd` jobs, on-demand activation and XPC are absent; `fork`/`exec` fail | A broker/service consumer and a real libxpc client/server pair |
+| Darwin system calls / Mach services | No syscall interception or kernel personality. A D2 slice provides per-worker Mach namespaces, a loopback broker, simple messages with send/send-once rights, timeouts and a bootstrap service table | Complex messages, port sets, notifications and a pinned real Mach client; syscall probes |
+| Service management and XPC | `launchd` jobs, on-demand activation and XPC are absent; `fork`/`exec` fail. D2's bootstrap table accepts check-in/lookup but does not spawn or supervise jobs | A broker-spawned job consumer and a real libxpc client/server pair |
 | TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming, normal/recursive mutexes, condition variables and C++ thread-exit destructors verified | Cancellation, process-shared condition variables and reference-Mac ordering |
 | Dynamic libraries | Local Intel graph execution, reexports and runtime `dlopen`/`dlclose` of classic/chained/bundle plugins verified; cycles rejected; close runs finalizers but never unmaps; no dynamic TLS, cross-group sharing, `RTLD_NEXT` or interposition | True unload, TLS-bearing and cyclic plugins, symbol interposition and a real plugin consumer |
 | Exceptions/unwind/signals | No Darwin unwinder or signal model | Cross-image C++/ObjC throws, Windows SEH interaction |
@@ -41,12 +41,15 @@ unsupported. Direct environment-array mutation is unverified.
 Condition variables exist in-process, but a condattr marked process-shared does
 not enable cross-process waiting because the host object is process-local.
 Networking, resource lookup APIs, fork/exec, security services, Metal and AppKit
-event loops are absent. Mach ports and send/receive rights,
-the bootstrap namespace, `launchd` job management and XPC are also absent; they
-are not substitutes for POSIX sockets or CRT process APIs. A broker daemon that
-maps ports to Windows named pipes is a recorded design hypothesis, not an
-implemented or measured mechanism. Signal handlers and alternate stacks
-are recorded but never invoked; pause blocks. pthread stack-size attributes are
+event loops are absent. Mach ports now have a D2 slice: per-worker namespaces,
+send/send-once and receive rights, simple messages with the Darwin receive
+header inversion, timeouts and a loopback broker that owns service names. This
+broker routes messages between trusted local workers; it is not a Mach kernel,
+adds no memory protection or kernel-enforced right transfer, rejects complex
+messages, out-of-line memory, port sets and notifications, and cannot spawn
+`launchd` jobs. `launchd` job management and XPC remain absent. Mach ports are
+not substitutes for POSIX sockets or CRT process APIs. Signal handlers and
+alternate stacks are recorded but never invoked; pause blocks. pthread stack-size attributes are
 honored, but guard size, scheduling and cancellation are not. ripgrep's
 preprocessor path therefore fails cleanly with exit 2 instead of starting a
 child process.

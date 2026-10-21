@@ -50,11 +50,19 @@
       "___stdinp",
       "___stdoutp",
       "___swbuf",
+      "__bootstrap_check_in",
+      "__bootstrap_look_up",
       "__dyld_get_image_header",
       "__dyld_get_image_name",
       "__dyld_get_image_vmaddr_slide",
       "__dyld_image_count",
       "__exit",
+      "__mach_msg",
+      "__mach_port_allocate",
+      "__mach_port_deallocate",
+      "__mach_port_destroy",
+      "__mach_port_insert_right",
+      "__mach_port_mod_refs",
       "__tlv_atexit",
       "__tlv_bootstrap",
       "_abort",
@@ -70,6 +78,8 @@
       "_atanh",
       "_atexit",
       "_atoi",
+      "_bootstrap_check_in",
+      "_bootstrap_look_up",
       "_bsearch",
       "_calloc",
       "_cbrt",
@@ -91,6 +101,9 @@
       "_dispatch_semaphore_signal",
       "_dispatch_semaphore_wait",
       "_dispatch_time",
+      "_dlclose",
+      "_dlerror",
+      "_dlopen",
       "_dlsym",
       "_dup",
       "_dup2",
@@ -160,6 +173,12 @@
       "_logb",
       "_lseek",
       "_lstat$INODE64",
+      "_mach_msg",
+      "_mach_port_allocate",
+      "_mach_port_deallocate",
+      "_mach_port_destroy",
+      "_mach_port_insert_right",
+      "_mach_port_mod_refs",
       "_madvise",
       "_malloc",
       "_memchr",
@@ -315,15 +334,15 @@
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 270,
+      "available": 278,
       "total": 1860,
-      "percent": 14.52
+      "percent": 14.95
     },
     {
       "name": "libSystem",
-      "available": 265,
+      "available": 273,
       "total": 382,
-      "percent": 69.37
+      "percent": 71.47
     },
     {
       "name": "Other libraries",
@@ -553,9 +572,9 @@
       "name": "AU Lab",
       "source": "additional-tools27/Additional Tools/Audio/AU Lab.app/Contents/MacOS/AU Lab",
       "sha256": "6b04e361965e2ff23a717d71d8f2c24bf4b02138ad06e09a9d2761f1322f77cf",
-      "available": 59,
+      "available": 65,
       "total": 603,
-      "percent": 9.78,
+      "percent": 10.78,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio",
@@ -2327,10 +2346,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_bootstrap_check_in"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dispatch_async"
         },
         {
@@ -2395,27 +2410,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_msg"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_allocate"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_deallocate"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_mach_port_get_attributes"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_insert_right"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_mod_refs"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -3331,9 +3326,9 @@
       "name": "Quartz Debug",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Quartz Debug",
       "sha256": "efc44dd7adf3db75a246952e6c626c0284ca9dfd981c72e0908a1e7825d1fabc",
-      "available": 36,
+      "available": 39,
       "total": 420,
-      "percent": 8.57,
+      "percent": 9.29,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -4625,10 +4620,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_bootstrap_check_in"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_port"
         },
         {
@@ -4654,14 +4645,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_mach_msg_server"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_allocate"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_insert_right"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -4877,9 +4860,9 @@
       "name": "Server",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Server",
       "sha256": "bb655c463178450b3889013a99ca449c6b06ca840b0a25b11a2b8c24fa410543",
-      "available": 28,
+      "available": 31,
       "total": 232,
-      "percent": 12.07,
+      "percent": 13.36,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -5495,10 +5478,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_bootstrap_check_in"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_port"
         },
         {
@@ -5524,14 +5503,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_mach_msg_server"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_allocate"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_insert_right"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -6957,9 +6928,9 @@
       "name": "IORegistryExplorer",
       "source": "additional-tools27/Additional Tools/Hardware/IORegistryExplorer.app/Contents/MacOS/IORegistryExplorer",
       "sha256": "e6c9f274f7da68055d5ef6a27315c25d25c34d03559d1485ed25ab9cf5243bd0",
-      "available": 12,
+      "available": 13,
       "total": 188,
-      "percent": 6.38,
+      "percent": 6.91,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -7563,10 +7534,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_destroy"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_mach_task_self_"
         },
         {
@@ -7671,9 +7638,9 @@
       "name": "Network Link Conditioner",
       "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/MacOS/Network Link Conditioner",
       "sha256": "57f582aed1291c6e97f89a99b023405ee5706978757d2a3e18cee7b9a66980d6",
-      "available": 7,
+      "available": 10,
       "total": 105,
-      "percent": 6.67,
+      "percent": 9.52,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -7961,10 +7928,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_bootstrap_look_up"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_port"
         },
         {
@@ -7973,15 +7936,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_msg"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_mach_msg_destroy"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_deallocate"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -8073,9 +8028,9 @@
       "name": "NLCBackgroundApp",
       "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/PlugIns/NLCBackgroundApp.app/Contents/MacOS/NLCBackgroundApp",
       "sha256": "39017746b84001b0795b4a3e951d9b40c32ed50efcd17a2ee45ca4e6b5aed87d",
-      "available": 6,
+      "available": 9,
       "total": 38,
-      "percent": 15.79,
+      "percent": 23.68,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -8131,10 +8086,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_bootstrap_look_up"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_port"
         },
         {
@@ -8143,15 +8094,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_msg"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_mach_msg_destroy"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_mach_port_deallocate"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -13586,11 +13529,6 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_bootstrap_check_in",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_dispatch_get_global_queue",
       "target_count": 3
     },
@@ -13602,26 +13540,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_mach_error_string",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mach_msg",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mach_port_allocate",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mach_port_deallocate",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mach_port_insert_right",
       "target_count": 3
     },
     {
@@ -14892,11 +14810,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_backtrace",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_bootstrap_look_up",
       "target_count": 2
     },
     {
@@ -18441,17 +18354,7 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mach_port_destroy",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_mach_port_get_attributes",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_mach_port_mod_refs",
       "target_count": 1
     },
     {
