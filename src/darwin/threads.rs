@@ -162,6 +162,20 @@ unsafe extern "sysv64" fn join(id: usize, result: *mut *mut c_void) -> i32 {
         Err(_) => ESRCH,
     }
 }
+unsafe extern "sysv64" fn detach(id: usize) -> i32 {
+    /* Detaching only relinquishes join ownership; the runtime still reaps the
+     * thread at teardown before any code or TLS is unmapped. */
+    let handle = match state().lock() {
+        Ok(mut s) => s.handles.remove(&id),
+        Err(_) => return ESRCH,
+    };
+    match handle {
+        /* Dropping the handle means the guest no longer joins it; the runtime
+         * still reaps the thread at teardown before code or TLS is unmapped. */
+        Some(_) => 0,
+        None => ESRCH,
+    }
+}
 extern "sysv64" fn current() -> usize {
     ID.with(|v| v.get())
 }
@@ -172,6 +186,7 @@ pub fn symbol(name: &str) -> Option<u64> {
     Some(match name {
         "_pthread_create" => create as *const () as u64,
         "_pthread_join" => join as *const () as u64,
+        "_pthread_detach" => detach as *const () as u64,
         "_pthread_self" => current as *const () as u64,
         "_pthread_equal" => equal as *const () as u64,
         _ => return None,
