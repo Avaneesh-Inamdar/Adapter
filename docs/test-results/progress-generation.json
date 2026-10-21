@@ -1,0 +1,18 @@
+{
+  "checks": {
+    "artifact_hashes": "18 Apple Intel images and pinned jq verified",
+    "apple_import_names_and_library_order": "matched existing Rust inspection reports",
+    "jq_import_count": "136; matched cached Rust inspection",
+    "c_adapter_registry": "126 names; matched LLVM Clang macro expansion",
+    "regeneration": "identical outputs on repeated runs",
+    "svg": "rendered and inspected; valid XML",
+    "local_markdown_links": "all targets exist"
+  },
+  "runtime_changes": false,
+  "target_execution_attempted": false,
+  "overall_known_api_coverage": {
+    "available": 144,
+    "total": 1778,
+    "percent": 8.1
+  }
+}

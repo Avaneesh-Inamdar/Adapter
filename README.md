@@ -1,115 +1,97 @@
 # Adapter
 
-**Run selected Intel macOS executables on Windows through a native compatibility runtime.**
+Runs selected Intel macOS binaries on Windows x64. Adapter loads the original
+Mach-O code and supplies Darwin API adapters. Intel instructions run directly
+on the CPU. ARM64 translation is not implemented.
 
-Adapter loads existing Mach-O machine code, resolves dylibs, translates Darwin
-APIs and calls Intel code directly on Windows x64. The runtime engine and tools
-currently use the **DarwinBridge** name: `db-inspect` and `db-run`.
+The Cargo package is still named `darwinbridge`. Its tools are `db-inspect`
+and `db-run`.
 
-**Current milestone:** the unchanged **jq 1.8.2 macOS amd64** executable runs on
-Windows. Automated tests cover piped JSON, Unicode, regex, large streams, files,
-modules, UTC dates, math, diagnostics and exit codes. Xcode and macOS GUI apps
-remain future targets. No overall macOS compatibility percentage is claimed.
-
-[Build & run](#build--run) · [Component map](#component-map) ·
-[Compatibility](docs/compatibility.md) · [Roadmap](docs/roadmap.md) ·
+[Build](#build-and-run) · [API coverage](#api-coverage) ·
+[Working features](#what-works) · [Work to do](#work-to-do) ·
 [Architecture](docs/architecture.md) · [Contributing](CONTRIBUTING.md)
 
-## Component map
+## API coverage
 
-**Verified** means the stated scope has passing tests. **Partial** means a tested
-subset exists with known gaps. **Planned** means execution support is absent.
-The map is inspired by the component/status presentation in
-[AnyPS5](https://github.com/boykopovar/AnyPS5); the implementation is independent.
+<!-- API-COVERAGE:START -->
 
-```mermaid
-flowchart LR
-    A[Mach-O / FAT inspection] --> B[Dependency and export resolution]
-    B --> C[Windows memory mapping]
-    C --> D[Classic / chained fixups]
-    D --> E[Intel SysV execution]
-    E --> F[Darwin libc and varargs]
-    E --> G[TLV / pthread subset]
-    F --> J[jq 1.8.2: tested workflows]
-    G --> J
-    E --> H[CoreFoundation string subset]
-    E -.-> O[Objective-C runtime]
-    O -.-> N[Foundation / broader CF]
-    N -.-> P[AppKit / GUI / services]
-    P -.-> X[Xcode integration]
-    R[ARM64 instruction translation] -.-> X
-    classDef verified fill:#dcfce7,stroke:#15803d,color:#14532d;
-    classDef partial fill:#fef3c7,stroke:#b45309,color:#78350f;
-    classDef planned fill:#f1f5f9,stroke:#64748b,color:#334155;
-    class A,C,J verified;
-    class B,D,E,F,G,H partial;
-    class O,N,P,X,R planned;
+[![API adapter coverage](docs/progress/api-coverage.svg)](docs/progress/README.md)
+
+**144 / 1,778 known Intel imports have adapters: 8.10%.**
+
+This counts unique **(library install name, imported symbol)** pairs from
+18 inspected Apple Intel images and jq 1.8.2. It includes imported data.
+An adapter may implement only part of an API. The percentage measures adapter
+availability, not application compatibility or total macOS completion.
+ARM64 and transitive dependencies are outside this count.
+
+| Program | Direct imports with adapters | API coverage | Execution status |
+| --- | ---: | ---: | --- |
+| jq 1.8.2 | 136 / 136 | 100.00% | 13 recorded CLI tests passed |
+| LogTool | 9 / 34 | 26.47% | Inspected; not run |
+| Clipboard Viewer | 1 / 55 | 1.82% | Inspected; Objective-C/AppKit missing |
+| Xcode 27 launcher | — | — | ARM64; no translator |
+<!-- API-COVERAGE:END -->
+
+[All 19 Intel images](docs/progress/README.md) ·
+[Missing APIs by target](docs/progress/status.json) ·
+[Recorded imports and hashes](docs/progress/imports.json)
+
+Regenerate the counts after adding adapters:
+
+```powershell
+python tools/update_progress.py
 ```
 
-| Component | Status | Finished and tested | Remaining work |
-| --- | --- | --- | --- |
-| Mach-O inspector | Verified scope | Intel/ARM64 headers, FAT32/FAT64 selection, bounded commands/sections/symbols, 43 Apple images | Wider format corpus, dedicated fuzzing |
-| Dependency resolver | Partial | Install names, sysroot/search paths, rpaths, bundles, two-level exports and reexports | Weak/flat/interposed binding, cyclic initialization, runtime `dlopen` |
-| Windows loader | Verified scope | Bounded mapping, rebases/binds, W^X protections, cleanup | Broader executable/load-command forms |
-| Modern dyld | Partial | Chained pointer formats 2/6, import formats 1/2, eager lazy binding | Multi-start pages, compressed symbols, other formats/resolvers |
-| Intel ABI bridge | Partial | SysV entry/callbacks, integer/SSE arguments, stack spill, LP64 integers, printf-family varargs | General aggregates, wide/positional/long-double formatting, unwind integration |
-| Process lifecycle | Partial | Dependency constructors, exit callbacks, DSO finalization, normal-return teardown, worker timeout | Full process/signal semantics, fork/exec |
-| Darwin locale | Partial | C/POSIX locale, cached RuneLocale data and ASCII masks | Unicode/system locales and xlocale APIs |
-| stdio and formatting | Partial | Separate Darwin `FILE` objects, standard streams, binary I/O, printf/fprintf/snprintf/vsnprintf | Full stdio surface, cookie streams, general buffering/locking |
-| Memory/strings/math | Partial | jq's imported allocation/string/math adapters; 80-bit `nexttoward` argument bridge | Complete libc, errno/fenv equivalence and numerical edge corpus |
-| Filesystem/environment/time | Partial | UTF-8 files, stat64 translation, drive paths, guest environment, UTC/time adapters | POSIX metadata fidelity, directory descriptors, full date formats/timezones |
-| Darwin TLV/TLS | Partial | Initialized/zero/aligned templates, per-thread/per-image storage, GPR/SSE/AVX preservation | C++ TLV initialization/destruction, shared-cache TLVs |
-| pthreads and errno | Partial | Create/join, identity, keys, destructor passes, once, per-thread errno | Mutexes/conditions, attributes, cancellation and cleanup |
-| CoreFoundation | Partial | Five immutable UTF-8 string/ownership functions, UTF-16 length | Other CF types, constant strings, bridging |
-| Objective-C | Planned | Metadata detection and rejection; target inspection | Classes/metaclasses, selectors, dispatch, ownership, initialization |
-| Foundation / AppKit / SwiftUI | Planned | Dependency evidence only | Framework behavior, resources, windows and event loops |
-| Darwin kernel services | Planned | Host API adapters for the tested libc slice | Syscall personality, Mach IPC, networking, security and device services |
-| ARM64 execution | Planned | Static inspection and slice identification | Instruction translation plus ABI/TLS/exception integration |
-| Xcode | Investigation | Archive inventory, selected extraction and launcher/tool dependency analysis | ARM64 execution, private frameworks, GUI, developer services |
+This reads the source registries and committed import inventory. It does not
+run a guest binary or require the Apple archives. Do not edit the chart by hand.
+When adding a new target, see the inventory refresh command in
+[the coverage notes](docs/progress/README.md).
 
-## What works today
+## What works
 
-- [x] Inspect thin/universal Mach-O files and discover `.app` executables.
-- [x] Execute Intel PIE programs and local dylib graphs with ordered lifecycle.
-- [x] Apply classic and supported chained fixups with two-level symbol lookup.
-- [x] Run TLS and pthread probes across eight threads and multiple images.
-- [x] Bridge Darwin locale data, standard streams and SysV variadic formatting.
-- [x] Run the original macOS jq executable through real JSON/file/module workflows.
-- [x] Reproduce builds, lint checks and tests with retained verification logs.
-
-An earlier milestone run passed **89 distinct tests** — 17 Rust tests,
-9 archive tests and 63 integration tests — with all 63 integration tests also
-passing against the release build. These include 13 jq tests and three libc ABI
-tests; individual methods exercise several cases/fixture variants.
-
-**Final local verification is blocked:** Windows Application Control denied
-execution of test/runtime binaries (error 4551) after the final locale/FILE input
-validation changes. Compilation and the available checks are recorded separately;
-blocked launches are not counted as passes. Security policy was not changed.
-See [the current run](docs/test-results/latest.json),
-[the previous passing summary](docs/test-results/summary-previous-pass.json) and
-[the jq/libc milestone](docs/jq-libc-results.md).
-
-## Compatibility
-
-| Target | Observed result | Boundary |
+| Area | Implemented behavior | Code / tests |
 | --- | --- | --- |
-| jq 1.8.2, published macOS amd64 | Runs tested CLI workflows on Windows | Hash-pinned original artifact; no reference-Mac comparison or full jq-suite claim |
-| Generated Intel Mach-O probes | Execute classic/chained/dylib/TLS/libc cases | SDK-free test consumers; not production apps |
-| CoreFoundation string consumer | Executes UTF-8/UTF-16 and ownership checks | Runtime-created strings only |
-| Xcode 27 and sampled command-line tools | Static analysis only | Sampled launcher/tools are ARM64-only |
-| Additional Tools / Icon Composer | Static inspection of Intel/ARM slices | Objective-C/framework/UI prerequisites remain |
+| Inspection | Mach-O64 headers, FAT32/FAT64 selection, commands, sections, symbols and dependencies; `.app` executable discovery | [Inspector](src/inspect/mod.rs), [parser tests](tests/unit/macho.rs) |
+| Intel loading | PIE executables, local dylibs, two-level exports/reexports, classic and supported chained fixups, constructors and teardown | [Loader](src/loader), [runtime](src/runtime), [integration tests](tests/integration/test_runtime.py) |
+| TLS and threads | Per-image/per-thread TLV storage, create/join, keys/destructor passes, once and errno | [Darwin modules](src/darwin), [thread probes](tests/fixtures/thread_state.c) |
+| libc | C/POSIX rune data, separate Darwin FILE objects, binary I/O, printf-family varargs, UTF-8 paths/stat64, environment, selected time/string/math APIs | [Native adapters](src/darwin/host), [libc tests](tests/integration/test_libc.py) |
+| CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
+| Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 
-`--check` validates the supported loader plan and import bindings. It does not
-execute the program or certify every API path. The worker isolates crashes and
-timeouts; it has the user's process permissions and is not a security sandbox.
+**Test state:** an earlier run passed 89 distinct tests: 17 Rust, nine archive
+and 63 integration tests. The 63 integration tests also passed in release.
+The final rerun was blocked by Windows Application Control, error 4551, after
+the last locale/FILE argument checks. Builds and lint passed; those blocked
+runtime checks have not been verified on the final revision.
+[Current run](docs/test-results/latest.json) ·
+[Previous passing summary](docs/test-results/summary-previous-pass.json).
 
-## Build & run
+## Work to do
 
-Requirements: Windows x64, Rust's MSVC toolchain and Visual C++/Windows SDK build
-tools, Python 3.12+, and LLVM with `clang`, `ld64.lld` and `llvm-ar`. This milestone
-was tested with Rust 1.99.0, Python 3.12 and LLVM 23.1.3. LLVM defaults to
-`C:\Program Files\LLVM\bin`; set `DARWINBRIDGE_LLVM` to use another directory.
+| Work | Current gap | Start here | Needed evidence |
+| --- | --- | --- | --- |
+| Test execution | Local policy blocks the built runtime and Rust test executables | [Verifier](tools/verify.py), [current logs](docs/test-results/latest.json) | Run the final revision on a host whose policy permits the artifacts; preserve blocked/failing results |
+| TLS lifecycle | No C++ TLV initialization/destruction or shared-cache TLVs | [TLS planning](src/loader/tls.rs), [TLV runtime](src/darwin/tlv.rs) | Multi-image/thread initialization and destructor-order consumer |
+| Synchronization | No general pthread mutex/condition APIs, cancellation or nondefault attributes | [Thread state](src/darwin/thread_state.rs), [threads](src/darwin/threads.rs) | Darwin layout evidence, contention and lifetime tests |
+| Dynamic loading | No runtime dlopen/dlsym/dlclose, cyclic initialization, weak coalescing or resolver exports | [Linker](src/loader/link.rs), [loader](src/loader/mod.rs) | Load/unload and symbol-scope consumers before expanding support |
+| Objective-C | No class/selector registration, dispatch, ownership or class initialization | [Metadata probe](tests/fixtures/objc.m), [missing imports](docs/progress/status.json) | Execute a small Apple-ABI object/method consumer before trying an app |
+| Frameworks and GUI | Foundation, AppKit and SwiftUI absent; CF limited to strings | [Framework adapters](src/frameworks), [Apple target inventory](docs/reverse-engineering/apple-inputs/targets.json) | Grow APIs from a chosen target; test object lifetime, resources, windows and events |
+| libc completeness | Missing APIs and partial semantics: Unicode locales, cookie streams, wide/positional/long-double formatting, filesystem metadata, date formats and timezone behavior | [ABI adapters](src/darwin/host), [API contracts](docs/compatibility.md) | Focused Mach-O probes and same-artifact output/error comparisons |
+| Exceptions and OS services | No Darwin unwinder, general signal model, syscall personality, Mach IPC, networking or fork/exec | [Runtime](src/runtime), [limitations](docs/limitations.md) | Separate consumers for each service and failure path |
+| ARM64 and Xcode | ARM instructions cannot execute through the Intel loader; private frameworks/services also missing | [Xcode findings](docs/reverse-engineering/xcode27.md), [roadmap](docs/roadmap.md) | ARM64 execution first, then measured framework/service bring-up |
+
+Choose a consumer from the missing-API inventory, implement the required
+behavior and add a test.
+`objc_msgSend` and related runtime imports occur in most inspected Apple apps;
+adding more unrelated libc wrappers alone will not make those apps run.
+
+## Build and run
+
+Requires Windows x64, Rust's MSVC toolchain, Visual C++/Windows SDK build tools,
+Python 3.12+, and LLVM with `clang`, `ld64.lld`, `llvm-ar` and `clang-format`.
+The recorded environment used Rust 1.99.0 and LLVM 23.1.3. LLVM defaults to
+`C:\Program Files\LLVM\bin`; override it with `DARWINBRIDGE_LLVM`.
 
 ```powershell
 git clone https://github.com/Avaneesh-Inamdar/Adapter.git
@@ -120,70 +102,41 @@ python tools/fetch_jq.py
 python tools/verify.py
 ```
 
-The first reference fetch downloads one public jq release asset and checks its
-fixed SHA-256. Subsequent runs verify the cached file. Apple SDKs and a Mac are
-not required to build the probe executables. No Apple binaries are distributed.
+The jq fetch is pinned by SHA-256. No Mac or Apple SDK is needed for the test
+fixtures. Downloaded binaries and supplied Apple archives stay out of Git.
 
 ```powershell
-# Inspect and preflight without executing.
-target/debug/db-inspect.exe --json tests/fixtures/generated/reference/jq-macos-amd64
-target/debug/db-run.exe --check tests/fixtures/generated/reference/jq-macos-amd64
-
-# Execute the original Intel macOS jq.
 target/debug/db-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -- --version
 '{"a":[1,2,3]}' | target/debug/db-run.exe tests/fixtures/generated/reference/jq-macos-amd64 -- -c '.a | map(. * 2)'
 
-# Trace a transitive dylib consumer.
-target/debug/db-run.exe --trace tests/fixtures/generated/dylibs/chained/multi
+target/debug/db-inspect.exe --json tests/fixtures/generated/reference/jq-macos-amd64
+target/debug/db-run.exe --check tests/fixtures/generated/reference/jq-macos-amd64
 ```
 
-Use `--` before guest arguments. Guest exit codes are preserved; runtime errors
-return 125. The default worker timeout is 10 seconds (`--timeout 1..3600`).
-Standard input is inherited and guest streams preserve binary bytes.
+`--check` performs static preflight; it does not execute or certify the program.
+Put guest arguments after `--`. Guest exit codes are preserved; runtime errors
+return 125. The worker timeout defaults to 10 seconds (`--timeout 1..3600`).
+The worker has the user's process permissions; it is not a security sandbox.
 
-For absolute paths used inside POSIX consumers, `/C/Users/...` maps to
-`C:\Users\...`; `/E/...` maps to drive E. Canonical paths use this spelling so
-unchanged macOS code recognizes them as absolute. Native Windows paths also
-work for ordinary file opens. Use the `/C/...` spelling for jq `-L` module paths.
+Guest paths `/C/Users/...` and `/E/...` map to Windows drives. Use that spelling
+for jq `-L` module search paths so macOS code recognizes them as absolute.
+Native Windows paths also work for ordinary file opens.
+`--config FILE` accepts JSON `sysroot` and `library_paths` fields.
 
-Optional `--config FILE` JSON accepts `sysroot` and `library_paths`, for example
-`{"sysroot":"E:/macos-root","library_paths":[]}`. See
-[the precise support contracts](docs/compatibility.md) and
-[known limitations](docs/limitations.md).
+## Adding support
 
-## Next milestones
+1. Pick a target from [the import inventory](docs/progress/status.json) and check
+   its architecture and current loader blockers.
+2. Find the missing behavior in the owning library. Guest calls use Darwin
+   x86-64 SysV; host calls use Windows conventions. Translate structures and
+   varargs explicitly; do not pass Darwin FILE/stat/tm/va_list objects to the CRT.
+3. Add a Mach-O consumer under `tests/fixtures` or a pinned real-binary regression
+   under `tests/integration`. Cover failure behavior as well as the successful call.
+4. Run `python tools/verify.py`, update the [API contract](docs/compatibility.md),
+   then run `python tools/update_progress.py` and commit the regenerated coverage.
 
-1. Expand the real binary corpus and add reference-Mac output/error comparisons.
-2. Complete C++ TLV lifecycle, required pthread synchronization and runtime dylib loading.
-3. Bring up a minimal Apple Objective-C metadata/dispatch consumer.
-4. Grow CoreFoundation/Foundation from measured target imports, then AppKit GUI behavior.
-5. Develop ARM64 translation and Xcode's private-framework/service integration as separate workstreams.
+[Detailed roadmap](docs/roadmap.md) · [Architecture](docs/architecture.md) ·
+[Known limitations](docs/limitations.md) · [Contribution guide](CONTRIBUTING.md)
 
-The [roadmap](docs/roadmap.md) lists concrete acceptance gates. Completed probe
-coverage is retained as a regression requirement for every phase.
-
-## Repository layout
-
-| Path | Purpose |
-| --- | --- |
-| `src/inspect` | Mach-O metadata and command-line inspector |
-| `src/loader` | Dependency graph, exports, fixups and TLS planning |
-| `src/runtime`, `src/platform` | Worker execution and Windows memory ownership |
-| `src/darwin` | SysV adapters, thread state and native libc ABI bridge |
-| `src/frameworks` | Measured framework subsets |
-| `tests` | Mach-O builders, ABI probes, negative tests and real jq workflows |
-| `tools` | Verification, pinned artifact fetch and read-only archive analysis |
-| `docs` | Architecture, support contracts, findings, roadmap and retained results |
-
-User-provided archives stay under ignored `req files/`; extraction outputs and
-analysis tools stay under ignored `target/`. Raw extracted data forks may be
-filesystem-compression placeholders; reports identify that limitation. See
-[Xcode evidence](docs/reverse-engineering/xcode27.md) and
-[jq ABI evidence](docs/reverse-engineering/jq-libc-abi.md).
-
-## Contributing and license
-
-Read [CONTRIBUTING.md](CONTRIBUTING.md) for build checks and the evidence expected
-for compatibility claims. Adapter is an early interoperability project with no
-release package yet. Source is [MIT licensed](LICENSE); external test artifacts
-remain under their respective licenses. Adapter is independent of Apple and jq.
+Source is [MIT licensed](LICENSE). External test artifacts retain their own
+licenses. Adapter is independent of Apple and jq.

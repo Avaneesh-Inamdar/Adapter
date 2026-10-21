@@ -20,6 +20,10 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `docs/file-changes.md`
 - `docs/jq-libc-results.md`
 - `docs/limitations.md`
+- `docs/progress/README.md`
+- `docs/progress/api-coverage.svg`
+- `docs/progress/imports.json`
+- `docs/progress/status.json`
 - `docs/reverse-engineering/apple-inputs/0205ffcc7154df8c.json`
 - `docs/reverse-engineering/apple-inputs/0ad2a065251bc085.json`
 - `docs/reverse-engineering/apple-inputs/0ca8c8b97fd3f7b8.json`
@@ -100,6 +104,7 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `docs/test-results/namespace-release.log`
 - `docs/test-results/native-analysis.json`
 - `docs/test-results/native-format.log`
+- `docs/test-results/progress-generation.json`
 - `docs/test-results/reference-artifact.log`
 - `docs/test-results/release-build.log`
 - `docs/test-results/release-policy-block-stdio.json`
@@ -168,4 +173,5 @@ and generated Mach-O fixtures are excluded from Git. No user input was overwritt
 - `tools/inspect_xip.py`
 - `tools/read_xip_member.py`
 - `tools/report_results.py`
+- `tools/update_progress.py`
 - `tools/verify.py`

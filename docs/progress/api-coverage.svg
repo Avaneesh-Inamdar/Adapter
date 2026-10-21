@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="478" viewBox="0 0 960 478" role="img" aria-labelledby="title desc">
+<title id="title">Known Intel API adapter coverage</title>
+<desc id="desc">Registered adapters divided by imported library and symbol pairs. Does not measure full software compatibility.</desc>
+<rect width="960" height="478" rx="12" fill="#111827"/>
+<g font-family="sans-serif" fill="#f9fafb">
+<text x="28" y="36" font-size="21" font-weight="600">Known Intel API adapter coverage</text>
+<text x="28" y="62" font-size="13" fill="#cbd5e1">19 Intel images · direct imports · source registry count</text>
+<text x="28" y="107" font-size="14">All known Intel imports</text>
+<rect x="270" y="90" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="90" width="33.21" height="24" rx="4" fill="#fbbf24"/>
+<text x="704" y="107" font-size="14" font-family="monospace">8.10%</text>
+<text x="804" y="107" font-size="14" fill="#cbd5e1">144 / 1778</text>
+<text x="28" y="151" font-size="14">libSystem</text>
+<rect x="270" y="134" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="134" width="189.95" height="24" rx="4" fill="#fbbf24"/>
+<text x="704" y="151" font-size="14" font-family="monospace">46.33%</text>
+<text x="804" y="151" font-size="14" fill="#cbd5e1">139 / 300</text>
+<text x="28" y="195" font-size="14">CoreFoundation</text>
+<rect x="270" y="178" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="178" width="10.91" height="24" rx="4" fill="#fbbf24"/>
+<text x="704" y="195" font-size="14" font-family="monospace">2.66%</text>
+<text x="804" y="195" font-size="14" fill="#cbd5e1">5 / 188</text>
+<text x="28" y="239" font-size="14">Objective-C</text>
+<rect x="270" y="222" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="222" width="0.00" height="24" rx="4" fill="#64748b"/>
+<text x="704" y="239" font-size="14" font-family="monospace">0.00%</text>
+<text x="804" y="239" font-size="14" fill="#cbd5e1">0 / 53</text>
+<text x="28" y="283" font-size="14">Foundation</text>
+<rect x="270" y="266" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="266" width="0.00" height="24" rx="4" fill="#64748b"/>
+<text x="704" y="283" font-size="14" font-family="monospace">0.00%</text>
+<text x="804" y="283" font-size="14" fill="#cbd5e1">0 / 125</text>
+<text x="28" y="327" font-size="14">AppKit</text>
+<rect x="270" y="310" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="310" width="0.00" height="24" rx="4" fill="#64748b"/>
+<text x="704" y="327" font-size="14" font-family="monospace">0.00%</text>
+<text x="804" y="327" font-size="14" fill="#cbd5e1">0 / 206</text>
+<text x="28" y="371" font-size="14">CoreGraphics</text>
+<rect x="270" y="354" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="354" width="0.00" height="24" rx="4" fill="#64748b"/>
+<text x="704" y="371" font-size="14" font-family="monospace">0.00%</text>
+<text x="804" y="371" font-size="14" fill="#cbd5e1">0 / 213</text>
+<text x="28" y="415" font-size="14">Other APIs</text>
+<rect x="270" y="398" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="398" width="0.00" height="24" rx="4" fill="#64748b"/>
+<text x="704" y="415" font-size="14" font-family="monospace">0.00%</text>
+<text x="804" y="415" font-size="14" fill="#cbd5e1">0 / 693</text>
+<text x="28" y="460" font-size="12" fill="#9ca3af">An adapter may implement only part of an API. Missing APIs are listed in status.json.</text>
+</g></svg>

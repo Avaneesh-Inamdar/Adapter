@@ -29,7 +29,9 @@ stat, tm, va_list or pthread layouts directly to the Windows CRT.
 Add a meaningful Mach-O consumer or real-binary regression for an ABI change,
 including errors/bounds where relevant. Unsupported inputs must fail clearly.
 Report the tested scope in `docs/compatibility.md`, and update the README map
-and roadmap when a milestone changes. Passing a small consumer is not proof of
+and roadmap when a milestone changes. Run `python tools/update_progress.py` to
+regenerate the README counts, API bars and missing-import lists after adapter changes.
+Passing a small consumer is not proof of
 complete framework or macOS compatibility. Reference-Mac claims need actual
 same-artifact comparison evidence.
 

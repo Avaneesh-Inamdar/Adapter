@@ -54,6 +54,6 @@ or general macOS/Xcode compatibility is established.
    security, networking, developer tools and GUI integration remain major work.
 
 Keep all existing dylib, TLS, parser, archive, libc and jq tests as regression
-requirements. The README component map distinguishes verified scope, partial
-implementation and planned execution support without an invented completion
-percentage for macOS as a whole.
+requirements. README percentages count source-registered adapters against the
+known Intel import inventory. The working-feature and remaining-work tables
+track behavior that those counts do not measure.
