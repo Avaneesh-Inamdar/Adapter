@@ -33,7 +33,7 @@ Module boundaries:
 | `src/platform/windows.rs` | VirtualAlloc/VirtualProtect, copying, SG_READ_ONLY final protections, instruction-cache flush, RAII release |
 | `src/runtime` | Preflight, import availability, relocation, initialization, entry invocation, worker timeout |
 | `src/runtime/dynamic.rs` | Post-startup `dlopen` groups, reference-counted handles, export snapshots, `dlsym` scope, per-image close finalization |
-| `src/objc` | Validated raw-isa startup metadata, selectors, class initialization, SysV message dispatch and runtime-owned objects/pools |
+| `src/objc` | Validated raw-isa startup metadata and relative method lists, startup categories, selectors, class initialization, SysV message dispatch and runtime-owned objects/pools |
 | `src/runtime/debug.rs` | Optional flushed image/slide/symbol records and LLDB mapped-image breakpoint hook |
 | `src/broker` | Loopback Mach transport protocol, endpoint/token handshake, per-connection request dispatch, payload routing, launchd-style job plist loading and on-demand job activation |
 | `src/broker/main.rs` | `adapter-broker`: endpoint file creation, service namespace, connection liveness and port retirement |
@@ -98,7 +98,7 @@ All imports resolve before mapping; every image is relocated and every callback
 validated before any constructor runs. Constructors follow dependency order,
 with admitted Objective-C registration and superclass-first `+load` before C
 constructors; ordinary sends trigger lazy superclass-first `+initialize`.
-See [the versioned contract](abi/objc-v1.md) for admission and teardown boundaries.
+See [the versioned contract](abi/objc-abi.md) for admission and teardown boundaries.
 Process exit registrations run in reverse registration order before image
 finalizers. There is no fallback to loading macOS imports as Windows DLLs.
 

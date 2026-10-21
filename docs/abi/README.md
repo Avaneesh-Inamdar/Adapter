@@ -3,7 +3,7 @@
 The guest ABI is a shared interface between subsystems. A host implementation
 with the same function name is not sufficient. The contracts in
 [contracts.json](contracts.json) define the currently implemented slices;
-[objc-v1.md](objc-v1.md) specifies the new Objective-C slice in detail.
+[objc-abi.md](objc-abi.md) specifies the Objective-C slice in detail (contract v2 adds relative method lists and startup categories).
 
 Before extending a subsystem:
 

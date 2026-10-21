@@ -378,8 +378,8 @@
     },
     {
       "id": "objc",
-      "version": 1,
-      "scope": "Validated raw-isa manual-reference-counted startup images",
+      "version": 2,
+      "scope": "Validated raw-isa manual-reference-counted startup images with relative method lists and startup categories",
       "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
       "implementation": [
         "src/objc/mod.rs",
@@ -387,7 +387,8 @@
       ],
       "tests": [
         "tests/integration/test_objc.py",
-        "tests/fixtures/objc_core.m"
+        "tests/fixtures/objc_core.m",
+        "tests/fixtures/objc_category.m"
       ],
       "layouts": [
         {
@@ -495,16 +496,75 @@
               "size": 8
             }
           ]
+        },
+        {
+          "name": "method_t relative",
+          "size": 12,
+          "align": 4,
+          "fields": [
+            {
+              "name": "selectorSlotOffset",
+              "offset": 0,
+              "size": 4
+            },
+            {
+              "name": "typesOffset",
+              "offset": 4,
+              "size": 4
+            },
+            {
+              "name": "impOffset",
+              "offset": 8,
+              "size": 4
+            }
+          ]
+        },
+        {
+          "name": "category_t",
+          "size": 48,
+          "align": 8,
+          "fields": [
+            {
+              "name": "name",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "cls",
+              "offset": 8,
+              "size": 8
+            },
+            {
+              "name": "instanceMethods",
+              "offset": 16,
+              "size": 8
+            },
+            {
+              "name": "classMethods",
+              "offset": 24,
+              "size": 8
+            },
+            {
+              "name": "protocols",
+              "offset": 32,
+              "size": 8
+            },
+            {
+              "name": "instanceProperties",
+              "offset": 40,
+              "size": 8
+            }
+          ]
         }
       ],
       "ownership": "Runtime-owned instances, counts and explicit balanced autorelease pools; no custom RR interception.",
       "callbacks": "msgSend preserves SysV GP/SSE/stack arguments and tail-jumps; superclass-first load and lazy initialize run outside registry lock.",
       "errors": "Validate metadata before selector patching or constructors; unknown selector terminates125.",
       "lifecycle": "Register complete startup graph, load before C constructors; guard remains live through guest finalizers.",
-      "unsupported": "No categories/protocols/ARC/weak/tagged pointers/nonpointer isa/compact lists/dynamic registration/exception or aggregate-return dispatch.",
+      "unsupported": "No protocols/properties/ARC/weak/tagged pointers/nonpointer isa/direct-selector or shared-cache lists/dynamic registration/exception or aggregate-return dispatch.",
       "sources": [
         "docs/reverse-engineering/objc-runtime-evidence.md",
-        "docs/abi/objc-v1.md"
+        "docs/abi/objc-abi.md"
       ],
       "symbols": [
         "__objc_empty_cache",

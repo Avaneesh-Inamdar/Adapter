@@ -58,21 +58,22 @@ When adding a new target, see the inventory refresh command in
 | Mach IPC | Simple messages between unchanged Mach-O processes through a loopback broker; receive/send/send-once rights, XNU header inversion, timeouts, LARGE retry, bootstrap check-in/lookup and retirement errors | [Mach adapter](src/darwin/mach.rs), [broker](src/broker), [fixtures](tests/fixtures/mach_server.c), [results](docs/mach-ipc-results.md) |
 | launchd jobs | Broker loads launchd-style plists, reserves `MachServices` names and starts registered jobs on first lookup or `RunAtLoad`; environment and log redirection, check-in wait, respawn after exit | [job parser](src/broker/job.rs), [broker activation](src/broker/main.rs), [results](docs/launchd-results.md) |
 | XPC | Unchanged libxpc client/server processes exchange typed dictionary messages and replies through the broker; listener check-in, demand spawn, accepted peers, event-handler blocks, typed containers, connection invalidation/interruption | [XPC adapter](src/darwin/xpc.rs), [server](tests/fixtures/xpc_server.c), [client](tests/fixtures/xpc_client.c), [results](docs/xpc-results.md) |
-| Objective-C | Validated raw-isa classes/metaclasses and selectors, inheritance, `msgSend`/`Super2`, `+load`/`+initialize`, scalar GP/SSE/stack calls, nil and explicit runtime-owned ownership/pools | [Runtime](src/objc), [ABI contract](docs/abi/objc-v1.md), [consumers and results](docs/objc-results.md) |
+| Objective-C | Validated raw-isa classes/metaclasses and selectors, absolute and relative method lists, startup categories with class-before-category `+load` order, inheritance, `msgSend`/`Super2`, `+initialize`, scalar GP/SSE/stack calls, nil and explicit runtime-owned ownership/pools | [Runtime](src/objc), [ABI contract](docs/abi/objc-abi.md), [consumers and results](docs/objc-results.md) |
 | Guest debugging | Windows LLDB captures actual exceptions, relocated Mach-O PCs, registers, disassembly and stacks; VM-address breakpoints and instruction stepping | [Debugger](tools/guest_debug.py), [usage and limits](docs/guest-debugging.md) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 160 distinct tests: 32 Rust, 22 archive
-and 106 integration tests. All 106 integration tests also passed in release. The
+**Test state:** the current run passed 159 distinct tests: 32 Rust, 22 archive
+and 105 integration tests. All 105 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
 ripgrep binary exercising 11 CLI workflows, two unchanged Mach-O processes
 exchanging Mach messages through the broker, a broker-started launchd-style
 job reached by the same unchanged client, an unchanged libxpc client/server
-pair exchanging typed dictionary messages and replies, five Objective-C
-metadata consumers and nine Windows LLDB guest-debugging cases. This is
+pair exchanging typed dictionary messages and replies, the Objective-C class and
+category consumers in classic, chained and relative fixup forms, and nine Windows
+LLDB guest-debugging cases. This is
 Windows-side evidence; the only reference-Mac execution is the hosted
 4,096-case libc [differential run](docs/differential-testing.md#recorded-run-2026-10-22).
 [Current run](docs/test-results/latest.json) ·
@@ -113,7 +114,7 @@ private components for which no complete public implementation was found.
 | Synchronization | Condition variables work in-process; no cancellation, process-shared objects, errorcheck/adaptive mutexes or nondefault scheduling | [Sync adapters](src/darwin/sync.rs), [threads](src/darwin/threads.rs) | Cancellation/cleanup and cross-process lifetime tests |
 | Dynamic loading | Runtime load works, but images are never unmapped; dynamic TLS and `@rpath` arguments are rejected, `RTLD_NEXT`/`RTLD_SELF` and `dladdr` are absent, and cross-group dependency sharing, interposition, ObjC registration and cyclic initialization are unsupported | [Dynamic registry](src/runtime/dynamic.rs), [roadmap D1](docs/roadmap.md) | True unload, TLS-bearing plugins, `RTLD_NEXT`/interposition and a pinned real plugin consumer |
 | OS services | Mach ports, simple messages, a bootstrap table, broker-started launchd-style jobs and simple XPC connections work across processes; complex messages, launchd supervision/`launchctl`, XPC beyond the typed dictionary subset and `fork`/`exec` are absent | [Roadmap D2-D5](docs/roadmap.md), [Mach results](docs/mach-ipc-results.md), [launchd results](docs/launchd-results.md), [XPC results](docs/xpc-results.md) | Complex-message and pinned real Mach consumers, launchd supervision/KeepAlive and socket activation, and XPC interoperability with a real macOS peer; none is implied by POSIX adapters |
-| Objective-C | Startup raw-isa MRC slice works; relative lists, categories, protocols, ARC/weak, dynamic registration, exceptions and aggregate/x87 sends remain | [ABI contract](docs/abi/objc-v1.md), [results](docs/objc-results.md), [missing imports](docs/progress/status.json) | Add each metadata/lifetime extension with positive, rejection and native Mac probes |
+| Objective-C | Startup raw-isa MRC slice works; relative lists, categories, protocols, ARC/weak, dynamic registration, exceptions and aggregate/x87 sends remain | [ABI contract](docs/abi/objc-abi.md), [results](docs/objc-results.md), [missing imports](docs/progress/status.json) | Add each metadata/lifetime extension with positive, rejection and native Mac probes |
 | Frameworks and GUI | Foundation, AppKit and SwiftUI absent; CF limited to strings | [Framework adapters](src/frameworks), [Apple target inventory](docs/reverse-engineering/apple-inputs/targets.json) | Grow APIs from a chosen target; test object lifetime, resources, windows and events |
 | libc completeness | Missing APIs and partial semantics: Unicode locales, cookie streams, wide/positional/long-double formatting, filesystem metadata, date formats and timezone behavior | [ABI adapters](src/darwin/host), [API contracts](docs/compatibility.md) | Focused Mach-O probes and same-artifact output/error comparisons |
 | Exceptions and OS services | No Darwin unwinder, general signal model, syscall personality, complex Mach messages, networking or fork/exec | [Runtime](src/runtime), [limitations](docs/limitations.md) | Separate consumers for each service and failure path |

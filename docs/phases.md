@@ -33,7 +33,7 @@ Status: **implemented-slices**. Dependencies: P0.
 | # | Work item | Status | Remaining work / boundary |
 | ---: | --- | --- | --- |
 | 7 | System image and dyld shared cache | not-started | Acquire identified user-supplied image, extract/rebase caches and subcaches, resolve shared-cache fixups and image lifecycle. Existing XIP extraction is not cache loading. |
-| 8 | Apple-ABI Objective-C runtime | verified-slice | Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize and runtime-owned ownership. Categories, protocols, ARC, compact lists, exceptions and dynamic registration remain. |
+| 8 | Apple-ABI Objective-C runtime | verified-slice | Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms. Protocols/properties, ARC, direct-selector lists, exceptions and dynamic registration remain. |
 | 9 | Swift guest runtime | not-started | Apple Mach-O Swift metadata/refcounting/concurrency/reflection and ObjC interop. Native Windows Swift alone does not satisfy this ABI. |
 | 10 | Darwin compact unwind and DWARF | not-started | Loaded-image unwind lookup, personalities and C++/ObjC exceptions across guest/host frames; distinguish Windows SEH. |
 | 11 | Mach VM emulation | not-started | vm_*/mach_vm_* address spaces, protection, region queries, task rights, sharing and exact errors over host VM. |

@@ -9,23 +9,19 @@ class ObjcTests(unittest.TestCase):
     def test_core_classic_and_chained(self):
         expected = ('objc:constructor\n'
                     'objc:metadata, inheritance, initialize, GP/SSE/stack, nil and ownership passed\n')
-        for name in ['objc_core', 'objc_core-chained']:
+        for name in ['objc_core', 'objc_core-chained', 'objc_core-relative']:
             p = call('adapter-run', FIX/name)
             self.assertEqual(p.returncode, 0, p.stderr)
             self.assertEqual(p.stdout, expected)
             self.assertEqual(p.stderr, '')
 
-    def test_categories_rejected_before_constructor(self):
-        p = call('adapter-run', FIX/'objc_category')
-        self.assertEqual(p.returncode, 125)
-        self.assertEqual(p.stdout, '')
-        self.assertIn('__objc_catlist', p.stderr)
-
-    def test_relative_lists_rejected_before_constructor(self):
-        p = call('adapter-run', FIX/'objc_core-relative')
-        self.assertEqual(p.returncode, 125)
-        self.assertEqual(p.stdout, '')
-        self.assertIn('Objective-C', p.stderr)
+    def test_categories_override_and_extend(self):
+        expected = 'objc:category methods override and extend the class\n'
+        for name in ['objc_category', 'objc_category-chained', 'objc_category-relative']:
+            p = call('adapter-run', FIX/name)
+            self.assertEqual(p.returncode, 0, p.stderr)
+            self.assertEqual(p.stdout, expected)
+            self.assertEqual(p.stderr, '')
 
     def test_invalid_method_count_rejected_before_constructor(self):
         helper = runtime.RuntimeTests()

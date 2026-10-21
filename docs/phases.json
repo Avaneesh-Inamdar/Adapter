@@ -188,7 +188,7 @@
       "name": "Apple-ABI Objective-C runtime",
       "phase": "P1",
       "status": "verified-slice",
-      "work": "Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize and runtime-owned ownership. Categories, protocols, ARC, compact lists, exceptions and dynamic registration remain.",
+      "work": "Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms. Protocols/properties, ARC, direct-selector lists, exceptions and dynamic registration remain.",
       "source": "upstream-sources.md"
     },
     {

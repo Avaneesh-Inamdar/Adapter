@@ -87,11 +87,11 @@ def build():
         if name.startswith("objc"): libraries += ["-lobjc"]
         if name.startswith("xpc_"): libraries = ["-L", OUT, "-lxpc", "-lSystem"]
         run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main", "-o", OUT / name, OUT / (name + ".o"), *libraries)
-        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "objc_core"]:
-            objc_flags = ["-no_objc_relative_method_lists"] if name == "objc_core" else []
+        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "objc_core", "objc_category"]:
+            objc_flags = ["-no_objc_relative_method_lists"] if name in ("objc_core", "objc_category") else []
             run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains",*objc_flags,"-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
-            if name == "objc_core":
-                run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/"objc_core-relative",OUT/(name+".o"),*libraries)
+            if name in ("objc_core", "objc_category"):
+                run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/(name+"-relative"),OUT/(name+".o"),*libraries)
     # A `dlopen` plugin and its host exercise the runtime image registry.
     run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",
         "-fno-asynchronous-unwind-tables", "-ffreestanding", "-c",

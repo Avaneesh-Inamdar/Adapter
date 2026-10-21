@@ -4,39 +4,44 @@ Recorded 2026-10-22 on Windows x86-64. This slice loads compiler-emitted Intel O
 
 ## Implemented
 
-- Raw class/metaclass registration, absolute method lists, bounded scalar ivar layout checks and canonical selectors.
+- Raw class/metaclass registration, absolute and relative ("small") method lists, bounded scalar ivar layout checks and canonical selectors.
+- Startup categories: class and instance methods attach to an existing registered class, category methods replace the class's own method of the same level, a selector supplied by two categories of one class is rejected, and a linker-duplicated `__objc_catlist`/`__objc_nlcatlist` record is attached once.
 - Instance and class lookup, inherited methods and `objc_msgSendSuper2`.
-- Superclass-first own `+load`, lazy `+initialize`, typed GPR/SSE/stack argument preservation and nil scalar returns.
+- Superclass-first own `+load`, then category `+load` with the target class as receiver, lazy `+initialize`, typed GPR/SSE/stack argument preservation and nil scalar returns.
 - Runtime-owned object allocation/disposal, metadata introspection, guest `alloc`/`init` dispatch and explicit balanced ownership/pools.
-- Rejection of unsupported metadata before guest load methods or constructors. Failed registration does not partially patch selectors.
+- Rejection of unsupported metadata before guest load methods or constructors. Failed registration does not partially patch selectors or attach a category.
 
-The exact admission rules, imports and remaining exclusions are in [Objective-C ABI contract v1](abi/objc-v1.md). Source evidence and compiler-output hashes are in [the pinned evidence report](reverse-engineering/objc-runtime-evidence.md).
+The exact admission rules, imports and remaining exclusions are in [Objective-C ABI contract v2](abi/objc-abi.md). Source evidence, compiler-output hashes and the relative-list observation are in [the pinned evidence report](reverse-engineering/objc-runtime-evidence.md).
 
 ## Confirmed checks
 
 | Check | Result |
 | --- | --- |
 | `tests/fixtures/objc.m` through Adapter | Class method resolved from metadata; process returned 42 |
-| `objc_core`, classic fixups | Passed: constructor marker, load/initialize order, inheritance, class/instance super sends, object and selector APIs, integer/float/stack arguments, nil and explicit balanced ownership |
-| `objc_core-chained`, absolute methods | Same successful consumer result; linker disables relative method-list rewriting for this positive case |
-| `tests/integration/test_objc.py` | Five test methods confirmed passing: one positive method exercises both fixup forms; four negative methods reject categories, relative lists, excessive method counts and unsupported image flags |
+| `objc_core`, `objc_core-chained`, `objc_core-relative` | Passed: constructor marker, load/initialize order, inheritance, class/instance super sends, object and selector APIs, integer/float/stack arguments, nil and explicit balanced ownership. The classic build uses 24-byte absolute method lists; the chained build disables relative rewriting (`-no_objc_relative_method_lists`); the relative build keeps clang's 12-byte relative lists |
+| `objc_category`, `objc_category-chained`, `objc_category-relative` | Passed in all three fixup forms: class and instance method overriding, a category-only class method, inherited category methods on a subclass, and `+load` order 1-3-2 (every class `+load` before the category `+load`) |
+| `tests/integration/test_objc.py` | Four test methods passing: two positive methods cover both consumers across the three fixup forms; two negative methods reject excessive method counts and unsupported image flags |
 | Negative constructor checks | No constructor marker or other guest stdout before rejection; status 125 |
 | `src/objc/mod.rs` unit test | Passed native Windows dispatch and atomic registration checks, including invalid IMP and ARC flags |
-| `cargo clippy --locked --all-targets -- -D warnings` during slice development | Passed |
+| `cargo clippy --locked --all-targets -- -D warnings` | Passed |
 
-The positive consumer prints:
+The positive consumers print:
 
 ```text
 objc:constructor
 objc:metadata, inheritance, initialize, GP/SSE/stack, nil and ownership passed
 ```
 
-The consumer source is [objc_core.m](../tests/fixtures/objc_core.m); the assertions are in [test_objc.py](../tests/integration/test_objc.py). The extra constructor marker makes rejection ordering observable rather than inferred from runtime logs.
+```text
+objc:category methods override and extend the class
+```
 
-## Pending validation and implementation
+The consumer sources are [objc_core.m](../tests/fixtures/objc_core.m) and [objc_category.m](../tests/fixtures/objc_category.m); the assertions are in [test_objc.py](../tests/integration/test_objc.py). The constructor marker in `objc_core` makes rejection ordering observable rather than inferred from runtime logs.
 
-The final full verification run passed all 16 stages with **160 distinct tests: 32 Rust, 22 archive and 106 integration**; all 106 integration tests also passed against the release build, and the five Objective-C tests are in both profiles. Focused passes above are not a substitute for that run.
+## Verification and remaining work
 
-No Objective-C reference process has been executed on a real Mac. The compiled metadata evidence uses LLVM on Windows targeting macOS. Darwin equivalence, concurrent initialization, selector uniqueness across multiple startup images and broader real application behavior remain unverified.
+The full verification run passed all 16 stages with **159 distinct tests: 32 Rust, 22 archive and 105 integration**; every integration test also passed against the release build, and the Objective-C tests are in both profiles.
 
-The next runtime work is relative method lists, categories/protocols and stronger ownership/lifecycle coverage, with a separate ABI contract revision and consumers for each. Foundation and AppKit require additional subsystems. Dynamic Objective-C plugins, shared-cache metadata, ARC/weak, exceptions, Swift, packed/tagged isa and aggregate/x87 message returns remain unsupported; the contract lists the precise boundaries.
+No Objective-C reference process has been executed on a real Mac. The compiled metadata evidence uses LLVM on Windows targeting macOS. Darwin equivalence of category attachment order and relative-list decoding, concurrent initialization, selector uniqueness across multiple startup images and broader real application behavior remain unverified.
+
+The next runtime work is protocols and properties, ARC/weak with a Mac differential probe, stronger ownership/lifecycle coverage and combined category-plus-load ordering on a reference Mac. Foundation and AppKit require additional subsystems. Dynamic Objective-C plugins, shared-cache metadata, exceptions, Swift, packed/tagged isa and aggregate/x87 message returns remain unsupported; the contract lists the precise boundaries.

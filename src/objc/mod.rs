@@ -47,6 +47,9 @@ struct Session {
     selectors: BTreeMap<Vec<u8>, CString>,
     allocations: BTreeMap<u64, Allocation>,
     initializing: BTreeMap<u64, Option<ThreadId>>,
+    /// Category +load implementations in discovery order; Apple calls a class's
+    /// own +load first and then each category +load, so they stay separate.
+    category_loads: Vec<(u64, u64)>,
     loaded: bool,
 }
 fn registry() -> &'static (Mutex<Option<Session>>, Condvar) {
@@ -160,40 +163,7 @@ impl Session {
         let mut methods = BTreeMap::new();
         let list = self.u64(ro + 32)?;
         if list != 0 {
-            if self.u32(list)? != 24 {
-                return Err("Objective-C relative/flagged method list unsupported".into());
-            }
-            let count = self.u32(list + 4)? as u64;
-            if count > 65536 {
-                return Err("Objective-C method limit exceeded".into());
-            }
-            self.range(list + 8, count * 24, false)?;
-            for i in 0..count {
-                let item = list + 8 + i * 24;
-                let selector = self.string(self.u64(item)?)?;
-                let types = self.string(self.u64(item + 8)?)?;
-                if types.contains(&b'!') {
-                    return Err("Objective-C vector calling convention unsupported".into());
-                }
-                let result = types.iter().copied().find(|c| !b"rnNoORV".contains(c));
-                if result.is_none()
-                    || matches!(result, Some(b'{' | b'(' | b'[' | b'D' | b'j' | b'!'))
-                {
-                    return Err(
-                        "Objective-C aggregate, long-double or vector return unsupported".into(),
-                    );
-                }
-                let imp = self.u64(item + 16)?;
-                if !self.regions.iter().any(|r| {
-                    r.executable && imp >= r.address && imp < r.address.saturating_add(r.size)
-                }) {
-                    return Err("Objective-C method IMP outside executable mapped segment".into());
-                }
-                if selector.is_empty() || methods.insert(selector.clone(), imp).is_some() {
-                    return Err("Objective-C empty or duplicate method selector".into());
-                }
-                self.intern(selector);
-            }
+            methods = self.read_methods(list)?;
         }
         let ivars = self.u64(ro + 48)?;
         if ivars != 0 {
@@ -236,6 +206,85 @@ impl Session {
             self.read_class_at(superclass, depth + 1)?;
         }
         Ok(())
+    }
+    fn targeted(base: u64, offset: i32) -> Result<u64> {
+        (base as i64)
+            .checked_add(i64::from(offset))
+            .map(|value| value as u64)
+            .ok_or_else(|| "Objective-C relative offset overflow".into())
+    }
+    /// Validate one method list. Clang emits 24-byte pointer entries unless the
+    /// target uses relative method lists, where the header's 0x80000000 small
+    /// flag selects 12-byte entries with three field-relative 32-bit offsets.
+    /// Outside the dyld shared cache a relative selector field names a
+    /// `__objc_selrefs` slot, so the name pointer is read indirectly.
+    fn read_methods(&mut self, list: u64) -> Result<BTreeMap<Vec<u8>, u64>> {
+        let mut methods = BTreeMap::new();
+        if list == 0 {
+            return Ok(methods);
+        }
+        let header = self.u32(list)?;
+        let relative = header & 0x8000_0000 != 0;
+        if header & 0x4000_0000 != 0 {
+            return Err("Objective-C direct-selector method lists unsupported".into());
+        }
+        let stride = header & !0xffff_0003;
+        let stride = if relative {
+            if stride != 12 {
+                return Err("Objective-C relative method entry size unsupported".into());
+            }
+            12u64
+        } else {
+            if stride != 24 {
+                return Err("Objective-C absolute method entry size unsupported".into());
+            }
+            24u64
+        };
+        let count = self.u32(list + 4)? as u64;
+        if count > 65536 {
+            return Err("Objective-C method limit exceeded".into());
+        }
+        self.range(list + 8, count * stride, false)?;
+        for index in 0..count {
+            let item = list + 8 + index * stride;
+            let (selector, types_address, imp) = if relative {
+                let slot = Self::targeted(item, self.u32(item)? as i32)?;
+                let types = Self::targeted(item + 4, self.u32(item + 4)? as i32)?;
+                (
+                    self.string(self.u64(slot)?)?,
+                    types,
+                    Self::targeted(item + 8, self.u32(item + 8)? as i32)?,
+                )
+            } else {
+                (
+                    self.string(self.u64(item)?)?,
+                    self.u64(item + 8)?,
+                    self.u64(item + 16)?,
+                )
+            };
+            let types = self.string(types_address)?;
+            if types.contains(&b'!') {
+                return Err("Objective-C vector calling convention unsupported".into());
+            }
+            let result = types.iter().copied().find(|c| !b"rnNoORV".contains(c));
+            if result.is_none() || matches!(result, Some(b'{' | b'(' | b'[' | b'D' | b'j' | b'!')) {
+                return Err(
+                    "Objective-C aggregate, long-double or vector return unsupported".into(),
+                );
+            }
+            if !self
+                .regions
+                .iter()
+                .any(|r| r.executable && imp >= r.address && imp < r.address.saturating_add(r.size))
+            {
+                return Err("Objective-C method IMP outside executable mapped segment".into());
+            }
+            if selector.is_empty() || methods.insert(selector.clone(), imp).is_some() {
+                return Err("Objective-C empty or duplicate method selector".into());
+            }
+            self.intern(selector);
+        }
+        Ok(methods)
     }
     fn lookup(&self, mut class: u64, selector: &[u8]) -> Option<u64> {
         for _ in 0..=self.classes.len() {
@@ -281,10 +330,12 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
         selectors: BTreeMap::new(),
         allocations: BTreeMap::new(),
         initializing: BTreeMap::new(),
+        category_loads: Vec::new(),
         loaded: false,
     };
     let mut patches = Vec::new();
     let mut references = Vec::new();
+    let mut categories = Vec::new();
     for image in &images {
         for section in &image.sections {
             match section.name.as_str() {
@@ -300,7 +351,7 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
                     }
                 }
                 "__objc_classlist" | "__objc_nlclslist" | "__objc_selrefs" | "__objc_classrefs"
-                | "__objc_superrefs" => {
+                | "__objc_superrefs" | "__objc_catlist" | "__objc_nlcatlist" => {
                     if section.size % 8 != 0 || section.size / 8 > 8192 {
                         return Err("Objective-C pointer section invalid size".into());
                     }
@@ -323,12 +374,21 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
                                 let canonical = session.intern(name);
                                 patches.push((slot, canonical));
                             }
+                            "__objc_catlist" | "__objc_nlcatlist" => {
+                                // A category carrying +load is emitted in
+                                // __objc_nlcatlist; the linker here also leaves
+                                // the same record in __objc_catlist, and
+                                // attaching it twice would double its methods.
+                                if !categories.contains(&value) {
+                                    categories.push(value);
+                                }
+                            }
                             _ => references.push(value),
                         }
                     }
                 }
                 "__objc_const" | "__objc_data" | "__objc_ivar" | "__objc_methname"
-                | "__objc_methtype" | "__objc_classname" => {}
+                | "__objc_methtype" | "__objc_classname" | "__objc_methlist" => {}
                 name if name.starts_with("__objc_") => {
                     return Err(format!("Objective-C section {name} unsupported"));
                 }
@@ -382,6 +442,64 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
             return Err("Objective-C class/super reference is not registered".into());
         }
     }
+    // Attach categories after every class in the graph is registered, so a
+    // category may target a class declared later in the same image or in a
+    // dependency. Apple gives category methods priority over the class's own
+    // methods; one selector supplied by two categories of the same class is
+    // ambiguous and rejected rather than resolved by link order.
+    let mut claimed: BTreeMap<(u64, bool), BTreeSet<Vec<u8>>> = BTreeMap::new();
+    for category in categories {
+        session.range(category, 48, false)?;
+        let name = session.string(session.u64(category)?)?;
+        let class = session.u64(category + 8)?;
+        let meta = match session.classes.get(&class) {
+            Some(data) if !data.meta => data.isa,
+            Some(_) => return Err("Objective-C category names a metaclass".into()),
+            None => {
+                return Err(format!(
+                    "Objective-C category {} names an unregistered class",
+                    String::from_utf8_lossy(&name)
+                ));
+            }
+        };
+        if name.is_empty() {
+            return Err("Objective-C category has an empty name".into());
+        }
+        if session.u64(category + 32)? != 0 || session.u64(category + 40)? != 0 {
+            return Err("Objective-C category protocols and properties unsupported".into());
+        }
+        let instance = session.read_methods(session.u64(category + 16)?)?;
+        let class_methods = session.read_methods(session.u64(category + 24)?)?;
+        for (is_instance, target, methods) in
+            [(true, class, instance), (false, meta, class_methods)]
+        {
+            for (selector, imp) in methods {
+                // +load is additive: Apple calls the class's own +load and then
+                // each category +load, so it must not replace the class entry.
+                if !is_instance && selector.as_slice() == b"load" {
+                    session.category_loads.push((class, imp));
+                    continue;
+                }
+                if !claimed
+                    .entry((class, is_instance))
+                    .or_default()
+                    .insert(selector.clone())
+                {
+                    return Err(format!(
+                        "Objective-C selector {} is defined by two categories of {}",
+                        String::from_utf8_lossy(&selector),
+                        String::from_utf8_lossy(&name)
+                    ));
+                }
+                session
+                    .classes
+                    .get_mut(&target)
+                    .ok_or("Objective-C category target class missing")?
+                    .methods
+                    .insert(selector, imp);
+            }
+        }
+    }
     // Do not partially mutate guest metadata if any validation above fails.
     for (slot, value) in patches {
         unsafe {
@@ -421,15 +539,21 @@ impl Guard {
                 }
                 depth
             });
-            classes
-                .into_iter()
-                .filter_map(|class| {
-                    let meta = &s.classes[&s.classes[&class].isa];
-                    meta.methods
-                        .get(b"load".as_slice())
-                        .map(|imp| (*imp, class, selector))
-                })
-                .collect::<Vec<_>>()
+            // Apple calls every class +load (superclass first) and only then
+            // each category +load, so the two passes stay separate.
+            let mut calls = Vec::new();
+            for class in classes {
+                if let Some(imp) = s.classes[&s.classes[&class].isa]
+                    .methods
+                    .get(b"load".as_slice())
+                {
+                    calls.push((*imp, class, selector));
+                }
+            }
+            for (owner, imp) in &s.category_loads {
+                calls.push((*imp, *owner, selector));
+            }
+            calls
         };
         for (imp, class, selector) in calls {
             unsafe {

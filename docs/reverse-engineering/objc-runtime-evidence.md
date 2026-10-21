@@ -83,3 +83,25 @@ RO bits relevant to rejection are observed in compiler output and corroborated b
 5. Verify truncation, invalid pointers, count multiplication, malformed strings and graph cycles without following unchecked guest addresses.
 
 **Implemented by this research:** only this tracked evidence report; generated source/object/assembly files live under ignored target/analysis. **Verified:** all three object and assembly compilations succeeded; LLVM metadata/relocation inspection matches the listed layouts and call forms. **Not verified:** Objective-C execution on DarwinBridge, real Apple-built application equivalence, message forwarding, exceptions, ARC/weak correctness, category/protocol integration, packed/tagged support or full concurrent initialization. No source/runtime changes or commits were made by this research task.
+
+## Revision 2: relative method lists and startup categories
+
+This section supersedes the "Compact methods" and "Categories/protocols" rows of OBJC-5 for the implemented slice: relative lists and startup categories are now admitted, direct-selector and shared-cache forms are still rejected.
+
+Observed 2026-10-22 with the same LLVM 23.1.3 toolchain on Windows, by inspecting the generated fixtures with `target/debug/adapter-inspect.exe --json` and dumping raw section bytes.
+
+| Fixture | Method-list container | `__objc_catlist` | Bytes | SHA-256 |
+| --- | --- | --- | ---: | --- |
+| `objc_core` (classic, `-no_fixup_chains`) | `__objc_const`, 24-byte absolute entries | absent | 19,936 | `ed5dbf9a211389733748ef467379a2f014b1a6fa4cd5764a2d2fbb34d57e42c4` |
+| `objc_core-chained` (`-no_objc_relative_method_lists`) | `__objc_const` | absent | 23,976 | `e317a6cf75a42cd562c238fe72a437f6a73154b1f6b5ac327424bca1a1f9fe0a` |
+| `objc_core-relative` (clang default relative lists) | `__objc_methlist`, 200 bytes | absent | 23,976 | `dd819e321b1e9620e104efb4aaa265829edf7d181dcdf262e4b4832b763d64ce` |
+| `objc_category` (classic) | `__objc_const` | present, 8 bytes | 14,352 | `96aa0b5aa2c913d02b94d78bb0270dc40d727155952c2470fb30926ab12b374f` |
+| `objc_category-chained` | `__objc_const` | present, 8 bytes | 18,432 | `b3dac2c9c952a9461504d2665fe07ef678fd0e06b3b55d33e892b3b04b0c85b4` |
+| `objc_category-relative` | `__objc_methlist`, 160 bytes | present, 8 bytes | 18,432 | `f360ea9a11c079c723d5a8569a841b67766f1f7803aef8de414bb3aefa48e48c` |
+
+With relative lists the linker moves every method list into `__objc_methlist`, and the class/category read-only records keep only pointers. The 12-byte entry's selector field names a `__objc_selrefs` slot rather than a string; following the field-relative offset into `__objc_selrefs` (112 bytes in `objc_core-relative`) is what makes the name read indirect.
+
+`objc_category` carries a category `+load`. ld64.lld emitted the same record in both `__objc_catlist` and `__objc_nlcatlist`: each section is 8 bytes and holds the same pointer (`08 23 00 00 01 00 00 00` in the classic build). Apple keeps categories with `+load` only in the non-lazy list, so Adapter keys attachment by record address and attaches the category once.
+
+Limits: these are Windows cross-compiled fixtures linked with ld64.lld, not outputs from Apple's linker, and no reference Mac executed them. The `+load` sequence (every class `+load`, then each category `+load`) is implemented from objc4 `load_images`/`prepare_load_methods` and still needs a Darwin differential probe.
+

@@ -123,12 +123,13 @@ kernel personality or security boundary.
    sandbox/entitlement behavior. Gate: a pinned real launchd consumer and a real
    macOS XPC peer, plus queue fairness, right-transfer, failure-order and
    broker-loss behavior compared with a reference Mac.
-4. **Extend the Apple Objective-C runtime.** The raw-isa MRC slice now executes
-   actual metadata, inheritance, initialization, mixed-register/stack dispatch
-   and explicit runtime-owned ownership in classic/chained consumers. Next:
-   relative lists, categories/protocols, native Mac lifecycle comparisons and
-   stronger ownership coverage. See [contract v1](abi/objc-v1.md). ARC/weak,
-   exceptions and dynamic registration remain separate gates.
+4. **Extend the Apple Objective-C runtime.** The raw-isa MRC slice executes
+   actual metadata, absolute and relative method lists, startup categories,
+   inheritance, initialization, mixed-register/stack dispatch and explicit
+   runtime-owned ownership in classic, chained and relative consumers. Next:
+   protocols/properties, native Mac lifecycle comparisons and stronger ownership
+   coverage. See [contract v2](abi/objc-abi.md). ARC/weak, exceptions and
+   dynamic registration remain separate gates.
 5. **Foundation and broader CF.** Follow actual imported types/methods. Start
    with constant CF strings, ownership and collections before bridging. Gate:
    targeted consumers with verified object layouts and lifetime behavior.

@@ -25,11 +25,10 @@ test_version_and_help (test_jq.JqTests.test_version_and_help) ... ok
 test_explicit_exit_finalizes_and_flushes (test_libc.LibcTests.test_explicit_exit_finalizes_and_flushes) ... ok
 test_locale_streams_varargs_and_extended_precision (test_libc.LibcTests.test_locale_streams_varargs_and_extended_precision) ... ok
 test_utf8_file_stat_errors_and_utc_time (test_libc.LibcTests.test_utf8_file_stat_errors_and_utc_time) ... ok
-test_categories_rejected_before_constructor (test_objc.ObjcTests.test_categories_rejected_before_constructor) ... ok
+test_categories_override_and_extend (test_objc.ObjcTests.test_categories_override_and_extend) ... ok
 test_core_classic_and_chained (test_objc.ObjcTests.test_core_classic_and_chained) ... ok
 test_image_flags_rejected_before_constructor (test_objc.ObjcTests.test_image_flags_rejected_before_constructor) ... ok
 test_invalid_method_count_rejected_before_constructor (test_objc.ObjcTests.test_invalid_method_count_rejected_before_constructor) ... ok
-test_relative_lists_rejected_before_constructor (test_objc.ObjcTests.test_relative_lists_rejected_before_constructor) ... ok
 test_binary_detection_and_text_mode (test_ripgrep.RipgrepTests.test_binary_detection_and_text_mode) ... ok
 test_exit_codes_and_regex_errors (test_ripgrep.RipgrepTests.test_exit_codes_and_regex_errors) ... ok
 test_json_stream (test_ripgrep.RipgrepTests.test_json_stream) ... ok
@@ -107,6 +106,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 106 tests in 14.664s
+Ran 105 tests in 14.647s
 
 OK
