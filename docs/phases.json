@@ -171,9 +171,9 @@
       "id": 6,
       "name": "Binary pass/fail milestones",
       "phase": "P5",
-      "status": "not-started",
-      "work": "NSWindow hello-world -> xcodebuild -> Xcode welcome window -> open project -> build project. API registrations cannot satisfy a milestone.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "The five binary gates (M0 NSWindow hello-world, M1 xcodebuild, M2 Xcode welcome window, M3 open project, M4 build project) all require AppKit and Xcode's own GUI binaries, which are Apple artifacts this host cannot obtain or redistribute. Gate definitions and the pass criteria stay recorded; see docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 7,

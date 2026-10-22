@@ -93,7 +93,7 @@ Status: **not-started**. Dependencies: P2, P3, P4.
 
 | # | Work item | Status | Remaining work / boundary |
 | ---: | --- | --- | --- |
-| 6 | Binary pass/fail milestones | not-started | NSWindow hello-world -> xcodebuild -> Xcode welcome window -> open project -> build project. API registrations cannot satisfy a milestone. |
+| 6 | Binary pass/fail milestones | external-gate | The five binary gates (M0 NSWindow hello-world, M1 xcodebuild, M2 Xcode welcome window, M3 open project, M4 build project) all require AppKit and Xcode's own GUI binaries, which are Apple artifacts this host cannot obtain or redistribute. Gate definitions and the pass criteria stay recorded; see docs/item-gates.md. |
 | 31 | LLDB/debugserver Mach primitives | not-started | Exception ports, task_for_pid, thread_get_state, suspend/resume and memory access. Host LLDB debugging is a separate P0 capability. |
 | 32 | codesign / Security / keychain | not-started | Signature/trust parsing, guest signing/entitlement policy and persistent keychain behavior with test fixtures. |
 | 33 | xcrun / xcode-select / SDK paths | not-started | Developer directory state, tool/SDK discovery, platform/version queries and actual subprocess execution. |
