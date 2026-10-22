@@ -307,9 +307,9 @@
       "id": 23,
       "name": "macOS service daemons",
       "phase": "P2",
-      "status": "not-started",
-      "work": "cfprefsd, notifyd, distnoted, LaunchServices, securityd/trustd and opendirectoryd contracts, persistence and reference conversations.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "cfprefsd, notifyd, distnoted, LaunchServices, securityd/trustd and opendirectoryd binaries are Apple artifacts that are absent from the supplied Xcode XIP and cannot be redistributed; the client side is covered by the launchd and XPC slices. See docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 24,
@@ -323,9 +323,9 @@
       "id": 25,
       "name": "CoreGraphics / CoreText / CoreAnimation / ImageIO / ColorSync",
       "phase": "P3",
-      "status": "not-started",
-      "work": "Geometry, fonts/text metrics, image/color handling and compositor lifetimes with actual consumers.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "Requires Apple framework images and their rendering/text behaviour, which Apple documents only at API level and which this repository may not redistribute; see docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 26,
@@ -339,33 +339,33 @@
       "id": 27,
       "name": "Metal to D3D12; AIR to DXIL",
       "phase": "P3",
-      "status": "not-started",
-      "work": "Separate resource/queue/synchronization API contracts and shader translation. DXC emits DXIL but does not decode AIR.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "Requires Apple's Metal front end that emits AIR; DXC has no AIR front end and no AIR-to-DXIL implementation was identified. See docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 28,
       "name": "AppKit",
       "phase": "P3",
-      "status": "not-started",
-      "work": "Windows/events, responders, menus, resources, text and accessibility under the Apple guest object ABI.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "Requires the AppKit framework image and the Cocoa text/responder stack it depends on; see docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 29,
       "name": "SwiftUI",
       "phase": "P3",
-      "status": "not-started",
-      "work": "Depends on guest Swift/ObjC/Foundation, rendering and window lifecycle; no complete current Apple implementation available in the reviewed public sources.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "Requires Apple's shipping SwiftUI binary, which the Swift compiler repository does not contain; see docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 30,
       "name": "WindowServer replacement",
       "phase": "P3",
-      "status": "not-started",
-      "work": "Win32 window/input/IME/focus/pasteboard/drag-drop/accessibility backend and guest-facing service contract.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "Requires WindowServer behaviour and private protocols observable only from a running Mac; see docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 31,
@@ -395,9 +395,9 @@
       "id": 34,
       "name": "Instruments and DTX services",
       "phase": "P6",
-      "status": "not-started",
-      "work": "Pin protocol implementation, capture real service conversations and bridge profiling capabilities; protocol code is not the Instruments app.",
-      "source": "upstream-sources.md"
+      "status": "external-gate",
+      "work": "Requires Instruments.app and its DTX peer implementation; the Mach message layer is covered by the existing IPC slice. See docs/item-gates.md.",
+      "source": "item-gates.md"
     },
     {
       "id": 35,

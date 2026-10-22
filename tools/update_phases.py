@@ -13,7 +13,8 @@ def outputs():
     lines = ['# Delivery phases', '', data['scope'], '',
              'Status describes the listed slice. It is not a percentage of macOS or Xcode.', '',
              '[Phase graph](progress/phases.svg) · [ABI contracts](abi/README.md) · '
-             '[Pinned upstream sources and reuse limits](upstream-sources.md)', '',
+             '[Pinned upstream sources and reuse limits](upstream-sources.md) · '
+             '[Per-item dispositions: host work versus Apple-input gates](item-gates.md)', '',
              '## Architecture decision', '']
     lines += [v for k, v in data['architecture_decision'].items() if isinstance(v, str)]
     for phase in phases:

@@ -27,6 +27,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/dynamic-loading-results.md`
 - `docs/file-changes.md`
 - `docs/guest-debugging.md`
+- `docs/item-gates.md`
 - `docs/jq-libc-results.md`
 - `docs/launchd-results.md`
 - `docs/limitations.md`
@@ -116,6 +117,10 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/debug-build.log`
 - `docs/test-results/differential-candidate-debug.json.gz`
 - `docs/test-results/differential-candidate-release.json.gz`
+- `docs/test-results/differential-cli-candidate-debug.json.gz`
+- `docs/test-results/differential-cli-candidate-release.json.gz`
+- `docs/test-results/differential-cli-debug.json`
+- `docs/test-results/differential-cli-release.json`
 - `docs/test-results/differential-debug.json`
 - `docs/test-results/differential-objc-candidate-debug.json.gz`
 - `docs/test-results/differential-objc-candidate-release.json.gz`
@@ -136,6 +141,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/jq-preflight.json`
 - `docs/test-results/jq-preflight.log`
 - `docs/test-results/latest.json`
+- `docs/test-results/mac-cli-reference-39677072171.json.gz`
 - `docs/test-results/mac-reference-39667131995.json.gz`
 - `docs/test-results/mac-reference-objc-39673099968.json.gz`
 - `docs/test-results/mac-reference-thread-39675626670.json.gz`
@@ -202,6 +208,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/build_fixtures.py`
 - `tests/build_tls_abi.py`
 - `tests/compatibility/targets.json`
+- `tests/differential/cli_cases.json`
 - `tests/differential/libc_cases.c`
 - `tests/differential/objc_cases.m`
 - `tests/differential/thread_cases.c`
@@ -247,10 +254,12 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/integration/test_runtime.py`
 - `tests/unit/macho.rs`
 - `tests/unit/test_archives.py`
+- `tests/unit/test_cli_differential.py`
 - `tests/unit/test_differential.py`
 - `tools/analyze_apple_targets.py`
 - `tools/check_apple_corpus.py`
 - `tools/check_contracts.py`
+- `tools/cli_differential.py`
 - `tools/differential.py`
 - `tools/extract_apple_package.py`
 - `tools/fetch_jq.py`

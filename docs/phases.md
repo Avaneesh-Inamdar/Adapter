@@ -4,7 +4,7 @@ All 36 requested work items. Implemented slices do not imply complete subsystem 
 
 Status describes the listed slice. It is not a percentage of macOS or Xcode.
 
-[Phase graph](progress/phases.svg) · [ABI contracts](abi/README.md) · [Pinned upstream sources and reuse limits](upstream-sources.md)
+[Phase graph](progress/phases.svg) · [ABI contracts](abi/README.md) · [Pinned upstream sources and reuse limits](upstream-sources.md) · [Per-item dispositions: host work versus Apple-input gates](item-gates.md)
 
 ## Architecture decision
 
@@ -55,7 +55,7 @@ Status: **implemented-slices**. Dependencies: P1.
 | 20 | fork / exec / posix_spawn | not-started | Start with spawn and argument/environment/descriptor inheritance; model fork snapshots and atfork separately. |
 | 21 | Signals and syscall personality | not-started | Guest signal numbers/contexts, masking, alternate stacks, restart and direct syscall interception. |
 | 22 | IOKit / sysctl / proc_info | not-started | Target-specific device/process facts and guest object/handle ownership; no host-handle substitution. |
-| 23 | macOS service daemons | not-started | cfprefsd, notifyd, distnoted, LaunchServices, securityd/trustd and opendirectoryd contracts, persistence and reference conversations. |
+| 23 | macOS service daemons | external-gate | cfprefsd, notifyd, distnoted, LaunchServices, securityd/trustd and opendirectoryd binaries are Apple artifacts that are absent from the supplied Xcode XIP and cannot be redistributed; the client side is covered by the launchd and XPC slices. See docs/item-gates.md. |
 | 24 | FSEvents and Spotlight | not-started | Persistent event IDs, rescan/drop semantics, indexing and query behavior; Windows directory notifications are only a backend. |
 
 **Exit gate:** Reference-matched queues/runloops, complex IPC, process behavior and real service consumers; preserve existing broker regressions.
@@ -66,12 +66,12 @@ Status: **not-started**. Dependencies: P2.
 
 | # | Work item | Status | Remaining work / boundary |
 | ---: | --- | --- | --- |
-| 25 | CoreGraphics / CoreText / CoreAnimation / ImageIO / ColorSync | not-started | Geometry, fonts/text metrics, image/color handling and compositor lifetimes with actual consumers. |
+| 25 | CoreGraphics / CoreText / CoreAnimation / ImageIO / ColorSync | external-gate | Requires Apple framework images and their rendering/text behaviour, which Apple documents only at API level and which this repository may not redistribute; see docs/item-gates.md. |
 | 26 | IOSurface | not-started | Pixel layouts, process sharing, rights, synchronization and host GPU resource interop. |
-| 27 | Metal to D3D12; AIR to DXIL | not-started | Separate resource/queue/synchronization API contracts and shader translation. DXC emits DXIL but does not decode AIR. |
-| 28 | AppKit | not-started | Windows/events, responders, menus, resources, text and accessibility under the Apple guest object ABI. |
-| 29 | SwiftUI | not-started | Depends on guest Swift/ObjC/Foundation, rendering and window lifecycle; no complete current Apple implementation available in the reviewed public sources. |
-| 30 | WindowServer replacement | not-started | Win32 window/input/IME/focus/pasteboard/drag-drop/accessibility backend and guest-facing service contract. |
+| 27 | Metal to D3D12; AIR to DXIL | external-gate | Requires Apple's Metal front end that emits AIR; DXC has no AIR front end and no AIR-to-DXIL implementation was identified. See docs/item-gates.md. |
+| 28 | AppKit | external-gate | Requires the AppKit framework image and the Cocoa text/responder stack it depends on; see docs/item-gates.md. |
+| 29 | SwiftUI | external-gate | Requires Apple's shipping SwiftUI binary, which the Swift compiler repository does not contain; see docs/item-gates.md. |
+| 30 | WindowServer replacement | external-gate | Requires WindowServer behaviour and private protocols observable only from a running Mac; see docs/item-gates.md. |
 
 **Exit gate:** NSWindow hello-world with observed drawing, input, pasteboard and orderly teardown; resource/shader tests before claiming graphics coverage.
 
@@ -106,7 +106,7 @@ Status: **not-started**. Dependencies: P5.
 
 | # | Work item | Status | Remaining work / boundary |
 | ---: | --- | --- | --- |
-| 34 | Instruments and DTX services | not-started | Pin protocol implementation, capture real service conversations and bridge profiling capabilities; protocol code is not the Instruments app. |
+| 34 | Instruments and DTX services | external-gate | Requires Instruments.app and its DTX peer implementation; the Mach message layer is covered by the existing IPC slice. See docs/item-gates.md. |
 | 35 | Physical devices / USB / usbmuxd / CoreDevice / pairing | external-gate | Windows transport/drivers, trust records, developer mode and service versions require an actual device acceptance run. |
 | 36 | iOS Simulator / CoreSimulator / iOS runtime | deferred | Defer until earlier Xcode gates pass; automation clients do not replace CoreSimulator or iOS frameworks. |
 
