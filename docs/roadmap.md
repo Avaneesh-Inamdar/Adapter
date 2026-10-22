@@ -127,8 +127,9 @@ kernel personality or security boundary.
    actual metadata, absolute and relative method lists, startup categories,
    inheritance, initialization, mixed-register/stack dispatch and explicit
    runtime-owned ownership in classic, chained and relative consumers. Next:
-   protocols/properties, native Mac lifecycle comparisons and stronger ownership
-   coverage. See [contract v2](abi/objc-abi.md). ARC/weak, exceptions and
+   ARC/weak with native Mac lifetime comparisons and stronger ownership
+   coverage. Protocol/property introspection now has compiled consumers and a
+   same-artifact Mac comparison. See [contract v3](abi/objc-abi.md). Exceptions and
    dynamic registration remain separate gates.
 5. **Foundation and broader CF.** Follow actual imported types/methods. Start
    with constant CF strings, ownership and collections before bridging. Gate:

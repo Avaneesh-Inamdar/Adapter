@@ -1,0 +1,48 @@
+{
+  "candidate": "target\\mac-metadata-release.json",
+  "case_count": 4096,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "accessors": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "categoryproperty": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "classproperty": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "conformance": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "identity": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "optional": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "protocolproperty": {
+      "matched": 512,
+      "mismatched": 0
+    },
+    "required": {
+      "matched": 512,
+      "mismatched": 0
+    }
+  },
+  "matched": 4096,
+  "mismatched": 0,
+  "program_sha256": "49f60699f0f770d29375b7f837c3b435f26b8fc09924201776f3169730dd5c7e",
+  "reference": "target\\mac-metadata-reference-39805811658\\mac-reference-adapter-objc-metadata-v1-eba535fbb9d3c35741df29060026cb2fa7a50a8d\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-objc-metadata-v1"
+}

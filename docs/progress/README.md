@@ -79,7 +79,7 @@ Apple import names and library order against the existing Rust inspection report
 ## Public API surface
 
 The tables above count only symbols the inspected binaries import. This section counts every
-symbol exported by the public headers of the subsystems Adapter implements, taken from pinned
+symbol exported by the selected subsystem headers in this catalog, taken from pinned
 commits of Libc@71bbe350ab, libclosure@3668b0837f, libdispatch@2361ffb78a, libpthread@42d026df5b, xnu@f6217f891a (see [public-api.json](public-api.json); regenerate
 with `python tools/extract_public_api.py`). It does not say which symbols real programs call.
 

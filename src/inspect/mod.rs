@@ -379,6 +379,8 @@ pub fn parse(input: &[u8]) -> Result<Image> {
                                 | "__objc_catlist"
                                 | "__objc_nlcatlist"
                                 | "__objc_methlist"
+                                | "__objc_protolist"
+                                | "__objc_protorefs"
                         )
                     {
                         image

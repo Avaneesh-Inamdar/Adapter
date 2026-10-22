@@ -188,7 +188,7 @@
       "name": "Apple-ABI Objective-C runtime",
       "phase": "P1",
       "status": "verified-slice",
-      "work": "Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms, with all 4096 same-binary Objective-C differential cases matching a hosted Intel Mac. Protocols/properties, ARC, exceptions and dynamic registration remain.",
+      "work": "Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms, with all 4096 same-binary Objective-C differential cases matching a hosted Intel Mac. Compiler-emitted protocols, adoption, method descriptions and property introspection match a second 4096-record Mac suite in debug/release. ARC/weak, exceptions and dynamic registration remain.",
       "source": "upstream-sources.md"
     },
     {

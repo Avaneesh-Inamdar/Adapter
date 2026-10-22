@@ -38,7 +38,7 @@ ARM64 and transitive dependencies are outside this count.
 **239 / 432 catalogued public APIs have adapters: 55.32% (66 of them partial).**
 
 The chart above counts only what the inspected binaries import. This one counts every symbol
-in the public headers of the subsystems Adapter implements or has started (libdispatch, the Block
+in the selected public headers catalogued here (libdispatch, the Block
 runtime, signals, pthread QoS, Mach VM, sysctl, libproc, posix_spawn and process control), pinned
 to Apple open-source commits. Adding a subsystem
 to the catalog is a small change in `tools/extract_public_api.py`.
@@ -71,7 +71,7 @@ When adding a new target, see the inventory refresh command in
 | Mach IPC | Simple messages between unchanged Mach-O processes through a loopback broker; receive/send/send-once rights, XNU header inversion, timeouts, LARGE retry, bootstrap check-in/lookup and retirement errors | [Mach adapter](src/darwin/mach.rs), [broker](src/broker), [fixtures](tests/fixtures/mach_server.c), [results](docs/mach-ipc-results.md) |
 | launchd jobs | Broker loads launchd-style plists, reserves `MachServices` names and starts registered jobs on first lookup or `RunAtLoad`; environment and log redirection, check-in wait, respawn after exit | [job parser](src/broker/job.rs), [broker activation](src/broker/main.rs), [results](docs/launchd-results.md) |
 | XPC | Unchanged libxpc client/server processes exchange typed dictionary messages and replies through the broker; listener check-in, demand spawn, accepted peers, event-handler blocks, typed containers, connection invalidation/interruption | [XPC adapter](src/darwin/xpc.rs), [server](tests/fixtures/xpc_server.c), [client](tests/fixtures/xpc_client.c), [results](docs/xpc-results.md) |
-| Objective-C | Validated raw-isa classes/metaclasses and selectors, absolute and relative method lists, startup categories with class-before-category `+load` order, inheritance, `msgSend`/`Super2`, `+initialize`, scalar GP/SSE/stack calls, nil and explicit runtime-owned ownership/pools | [Runtime](src/objc), [ABI contract](docs/abi/objc-abi.md), [consumers and results](docs/objc-results.md) |
+| Objective-C | Raw-isa classes/metaclasses, selectors, absolute/relative methods, startup categories, protocol adoption/descriptions, class/category/protocol property introspection, `msgSend`/`Super2`, load/initialize, scalar GP/SSE/stack calls, nil and explicit runtime-owned ownership/pools | [Runtime](src/objc), [ABI contract](docs/abi/objc-abi.md), [consumers and results](docs/objc-results.md) |
 | Guest debugging | Windows LLDB captures actual exceptions, relocated Mach-O PCs, registers, disassembly and stacks; VM-address breakpoints and instruction stepping | [Debugger](tools/guest_debug.py), [usage and limits](docs/guest-debugging.md) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
 | Grand Central Dispatch | Serial/concurrent/root/main queues, sync and async submission, barriers, target queues, suspension and inactive queues, groups, `dispatch_once`, `after`, `apply`, block objects (`wait`/`notify`/`cancel`), timer and user-data sources, queue-specific data, finalizers; `_Block_object_assign`/`dispose` so `__block` variables and captured blocks survive copying | [Dispatch](src/darwin/dispatch.rs), [block objects](src/darwin/dispatch/block_objects.rs), [sources](src/darwin/dispatch/sources.rs), [consumers](tests/fixtures/dispatch.c), [sources consumer](tests/fixtures/dispatch_source.c), [results](docs/dispatch-results.md) |
@@ -81,8 +81,8 @@ When adding a new target, see the inventory refresh command in
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 175 distinct tests: 32 Rust, 30 archive
-and 113 integration tests. All 113 integration tests also passed in release. The
+**Test state:** the current run passed 181 distinct tests: 32 Rust, 30 archive
+and 119 integration tests. All 119 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
 ripgrep binary exercising 11 CLI workflows, two unchanged Mach-O processes
@@ -98,7 +98,9 @@ the 4,096-case Objective-C
 , the 1,024-case threading
 [differential run](docs/differential-testing.md#recorded-threading-run-2026-10-22)
 and the 30-case jq/ripgrep
-[CLI differential](docs/differential-testing.md#recorded-cli-run-2026-10-22).
+[CLI differential](docs/differential-testing.md#recorded-cli-run-2026-10-22), plus
+4,096 protocol/property comparisons in the
+[metadata differential](docs/differential-testing.md#recorded-objective-c-metadata-run-2026-10-22).
 [Current run](docs/test-results/latest.json) ·
 [Summary](docs/test-results/summary.json).
 
@@ -137,7 +139,7 @@ private components for which no complete public implementation was found.
 | Synchronization | Condition variables work in-process; no cancellation, process-shared objects, errorcheck/adaptive mutexes or nondefault scheduling | [Sync adapters](src/darwin/sync.rs), [threads](src/darwin/threads.rs) | Cancellation/cleanup and cross-process lifetime tests |
 | Dynamic loading | Runtime load works, but images are never unmapped; dynamic TLS and `@rpath` arguments are rejected, `RTLD_NEXT`/`RTLD_SELF` and `dladdr` are absent, and cross-group dependency sharing, interposition, ObjC registration and cyclic initialization are unsupported | [Dynamic registry](src/runtime/dynamic.rs), [roadmap D1](docs/roadmap.md) | True unload, TLS-bearing plugins, `RTLD_NEXT`/interposition and a pinned real plugin consumer |
 | OS services | Mach ports, simple messages, a bootstrap table, broker-started launchd-style jobs and simple XPC connections work across processes; complex messages, launchd supervision/`launchctl`, XPC beyond the typed dictionary subset and `fork`/`exec` are absent | [Roadmap D2-D5](docs/roadmap.md), [Mach results](docs/mach-ipc-results.md), [launchd results](docs/launchd-results.md), [XPC results](docs/xpc-results.md) | Complex-message and pinned real Mach consumers, launchd supervision/KeepAlive and socket activation, and XPC interoperability with a real macOS peer; none is implied by POSIX adapters |
-| Objective-C | Startup raw-isa MRC slice works; relative lists, categories, protocols, ARC/weak, dynamic registration, exceptions and aggregate/x87 sends remain | [ABI contract](docs/abi/objc-abi.md), [results](docs/objc-results.md), [missing imports](docs/progress/status.json) | Add each metadata/lifetime extension with positive, rejection and native Mac probes |
+| Objective-C | Startup raw-isa MRC, categories and protocol/property introspection work; ARC/weak, custom ownership, dynamic registration, exceptions and aggregate/x87 sends remain | [ABI contract](docs/abi/objc-abi.md), [results](docs/objc-results.md), [missing imports](docs/progress/status.json) | Add each metadata/lifetime extension with positive, rejection and native Mac probes |
 | Frameworks and GUI | Foundation, AppKit and SwiftUI absent; CF limited to strings | [Framework adapters](src/frameworks), [Apple target inventory](docs/reverse-engineering/apple-inputs/targets.json) | Grow APIs from a chosen target; test object lifetime, resources, windows and events |
 | libc completeness | Missing APIs and partial semantics: Unicode locales, cookie streams, wide/positional/long-double formatting, filesystem metadata, date formats and timezone behavior | [ABI adapters](src/darwin/host), [API contracts](docs/compatibility.md) | Focused Mach-O probes and same-artifact output/error comparisons |
 | Grand Central Dispatch | Queues, groups, block objects and timer/user-data sources work; 8 source types (descriptor, process, signal, Mach, vnode, memory pressure), `dispatch_data`, `dispatch_io`, workloops and QoS scheduling are absent | [Dispatch results](docs/dispatch-results.md), [public-API gaps](docs/progress/README.md#public-api-surface) | Kernel-event-backed sources with consumers, then a reference-Mac comparison of ordering and coalescing |

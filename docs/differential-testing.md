@@ -1,6 +1,6 @@
 # Same-binary Darwin/Windows differential testing
 
-The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Three probe suites use it — `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families) and `adapter-thread-v1` (1,024 cases across eight threading families) — and one program suite, `adapter-cli-v1`, compares the pinned jq and ripgrep binaries over a fixed argv/stdin corpus. A generator/build alone does not execute the guest and does not establish reference behavior.
+The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Four probe suites use it — `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families), `adapter-thread-v1` (1,024 cases across eight threading families) and `adapter-objc-metadata-v1` (4,096 comparisons over protocol/property metadata) — and one program suite, `adapter-cli-v1`, compares the pinned jq and ripgrep binaries over a fixed argv/stdin corpus. A generator/build alone does not execute the guest and does not establish reference behavior.
 
 ## Commands
 
@@ -82,6 +82,23 @@ Deliberate exclusions: the suite never probes runtime-owned retain counts, `objc
 | retval | two workers returning distinct computed pointers | both expected return values matched |
 
 This suite runs 1,024 cases (128 per family), not 4,096: every case creates real threads with 1 MiB stacks, so 4,096 cases exceeded the 60-second capture budget on the Windows side and the count is chosen for a bounded run rather than for uniformity with the other suites.
+
+## Protocol/property suite (`adapter-objc-metadata-v1`)
+
+The source is `tests/fixtures/objc_metadata.m`. Without `DIFF_CASE_COUNT` it is
+the constructor-marked integration consumer; the Mac workflow defines that
+macro and emits only JSONL. It tests eight families: protocol identity,
+conformance, inherited class properties, category properties, protocol
+properties, required and optional method descriptions, and scalar accessors.
+Each record has four integer results; names, attributes and type encodings are
+hashed while pointer results are reduced to identities or presence checks.
+
+The suite executes one fixed protocol/property graph. Most families repeat
+fixed metadata queries, while accessor arguments change with the index. Its
+4,096 records are comparisons, not 4,096 independent metadata layouts. It does
+not test protocol-object messages, dynamic mutation, ARC/weak or atomic property
+behavior. [Compiler and source evidence](reverse-engineering/objc-metadata-evidence.md)
+records the admitted layouts and API distinctions.
 
 ## CLI suite (jq and ripgrep)
 
@@ -254,3 +271,23 @@ Limits of this evidence: 30 cases, not the upstream jq test suite or ripgrep's o
 tests. The corpus avoids file-system paths, locales, wall clock, terminal size and
 colour, and each case is a single process with a bounded run. Services (Mach, XPC,
 launchd) still have no reference capture.
+
+## Recorded Objective-C metadata run (2026-10-22)
+
+[GitHub Actions run 39805811658](https://github.com/Avaneesh-Inamdar/Adapter/actions/runs/39805811658), workflow commit `eba535f`, ran the native reference on standard `macos-15-intel` (Darwin 24.6.0, x86_64). Apple clang 17.0.0 built the executable without SDK headers.
+
+| Item | Value |
+| --- | --- |
+| Program SHA-256 | `49f60699f0f770d29375b7f837c3b435f26b8fc09924201776f3169730dd5c7e` |
+| Source SHA-256 | `c1bb41d397c55ccf5bdc078e6a93856f7ab53d016c9b9b183f8a07f59c5ad007` |
+| Result | 4,096/4,096 equal in debug and release; 512 comparisons per family |
+
+| Retained evidence | Bytes | SHA-256 |
+| --- | ---: | --- |
+| [test-results/mac-reference-objc-metadata-39805811658.json.gz](test-results/mac-reference-objc-metadata-39805811658.json.gz) | 62,168 | `883bcb1c21cab94a645770e63e9ca0e5a5aa13766de668a683ad93cbc616fafa` |
+| [test-results/differential-objc-metadata-candidate-debug.json.gz](test-results/differential-objc-metadata-candidate-debug.json.gz) | 62,416 | `ef02d435fdfdeae95ac8db481fa1fcd81e34ce63e4aa6c587db74042371aa4c2` |
+| [test-results/differential-objc-metadata-candidate-release.json.gz](test-results/differential-objc-metadata-candidate-release.json.gz) | 62,407 | `637e52888ffee7c5d24ddbdb1e541d30b9eeb01c931472f5a2a585538674c881` |
+| [test-results/differential-objc-metadata-debug.json](test-results/differential-objc-metadata-debug.json) | 1,102 | `119007fd2229e70aa4e3f85136a6275bb8235c1fb333afd20bce45d35eecffea` |
+| [test-results/differential-objc-metadata-release.json](test-results/differential-objc-metadata-release.json) | 1,104 | `ab3f625d6ab84d36c1c7e2a85d4758fd2d533932ac6d9a686806a992e940bcb0` |
+
+The compressed reference and candidate files retain the complete stdout, parsed records, host and compiler/adapter identities. The reports use the exact same executable hash on both sides. Decode the gzips before passing them to `tools/differential.py compare`. The workflow artifact retains the executable, manifest and source for 14 days; the captures above remain in Git.

@@ -138,7 +138,7 @@ def registry():
             r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*(?:\{[^{}]*?)?\w+\s+as\s+\*const', xpc_text):
         xpc.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
     xpc.update(re.findall(r'"(__xpc_[a-z0-9_]+)"\s*=>\s*addr\(', xpc_text))
-    objc_text = (ROOT / 'src/objc/mod.rs').read_text()
+    objc_text = '\n'.join(p.read_text() for p in (ROOT / 'src/objc').glob('*.rs'))
     objc = set()
     for arm in re.finditer(
             r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*\w+\s+as\s+\*const', objc_text):
@@ -338,7 +338,7 @@ def details(report):
     public = report['public_api']
     lines += ['## Public API surface', '',
               'The tables above count only symbols the inspected binaries import. This section counts every',
-              'symbol exported by the public headers of the subsystems Adapter implements, taken from pinned',
+              'symbol exported by the selected subsystem headers in this catalog, taken from pinned',
               'commits of ' + ', '.join(public['sources']) + ' (see [public-api.json](public-api.json); regenerate',
               'with `python tools/extract_public_api.py`). It does not say which symbols real programs call.', '',
               '| Subsystem | Adapters available | Of which partial | Missing | Coverage |',
@@ -384,7 +384,7 @@ def update_readme(report):
              f"**{public[0]['available']:,} / {public[0]['total']:,} catalogued public APIs have adapters: {public[0]['percent']:.2f}%"
              f" ({public[0]['partial']} of them partial).**", '',
              'The chart above counts only what the inspected binaries import. This one counts every symbol',
-             'in the public headers of the subsystems Adapter implements or has started (libdispatch, the Block',
+             'in the selected public headers catalogued here (libdispatch, the Block',
              'runtime, signals, pthread QoS, Mach VM, sysctl, libproc, posix_spawn and process control), pinned',
              'to Apple open-source commits. Adding a subsystem',
              'to the catalog is a small change in `tools/extract_public_api.py`.', end]

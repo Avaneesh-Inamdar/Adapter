@@ -29,6 +29,12 @@ test_categories_override_and_extend (test_objc.ObjcTests.test_categories_overrid
 test_core_classic_and_chained (test_objc.ObjcTests.test_core_classic_and_chained) ... ok
 test_image_flags_rejected_before_constructor (test_objc.ObjcTests.test_image_flags_rejected_before_constructor) ... ok
 test_invalid_method_count_rejected_before_constructor (test_objc.ObjcTests.test_invalid_method_count_rejected_before_constructor) ... ok
+test_property_count_rejected_before_constructor (test_objc.ObjcTests.test_property_count_rejected_before_constructor) ... ok
+test_protocol_count_rejected_before_constructor (test_objc.ObjcTests.test_protocol_count_rejected_before_constructor) ... ok
+test_protocol_cycle_rejected_before_constructor (test_objc.ObjcTests.test_protocol_cycle_rejected_before_constructor) ... ok
+test_protocol_implementation_rejected_before_constructor (test_objc.ObjcTests.test_protocol_implementation_rejected_before_constructor) ... ok
+test_protocol_size_and_flags_rejected_before_constructor (test_objc.ObjcTests.test_protocol_size_and_flags_rejected_before_constructor) ... ok
+test_protocols_properties_and_accessors (test_objc.ObjcTests.test_protocols_properties_and_accessors) ... ok
 test_binary_detection_and_text_mode (test_ripgrep.RipgrepTests.test_binary_detection_and_text_mode) ... ok
 test_exit_codes_and_regex_errors (test_ripgrep.RipgrepTests.test_exit_codes_and_regex_errors) ... ok
 test_json_stream (test_ripgrep.RipgrepTests.test_json_stream) ... ok
@@ -114,6 +120,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 113 tests in 20.948s
+Ran 119 tests in 25.289s
 
 OK

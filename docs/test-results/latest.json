@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-22T04:03:24.151627+00:00",
+  "run_utc": "2026-10-22T15:35:37.202659+00:00",
   "all_passed": true,
   "stages": [
     {
@@ -12,7 +12,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.218,
+      "seconds": 0.266,
       "log": "format.log"
     },
     {
@@ -22,7 +22,7 @@
         "tools/check_contracts.py"
       ],
       "exit_code": 0,
-      "seconds": 0.063,
+      "seconds": 0.094,
       "log": "abi-contracts.log"
     },
     {
@@ -32,7 +32,7 @@
         "tools/update_phases.py"
       ],
       "exit_code": 0,
-      "seconds": 0.062,
+      "seconds": 0.094,
       "log": "phase-docs.log"
     },
     {
@@ -59,10 +59,11 @@
         "tests/fixtures/xpc_client.c",
         "tests/fixtures/xpc_missing.c",
         "tests/fixtures/objc_core.m",
-        "tests/fixtures/objc_category.m"
+        "tests/fixtures/objc_category.m",
+        "tests/fixtures/objc_metadata.m"
       ],
       "exit_code": 0,
-      "seconds": 0.094,
+      "seconds": 0.109,
       "log": "native-format.log"
     },
     {
@@ -77,7 +78,7 @@
         "warnings"
       ],
       "exit_code": 0,
-      "seconds": 0.156,
+      "seconds": 1.125,
       "log": "clippy.log"
     },
     {
@@ -88,7 +89,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.36,
+      "seconds": 0.359,
       "log": "rust-tests.log"
     },
     {
@@ -99,7 +100,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.047,
+      "seconds": 0.078,
       "log": "debug-build.log"
     },
     {
@@ -109,7 +110,7 @@
         "tools/fetch_jq.py"
       ],
       "exit_code": 0,
-      "seconds": 0.093,
+      "seconds": 0.157,
       "log": "reference-artifact.log"
     },
     {
@@ -119,7 +120,7 @@
         "tools/fetch_ripgrep.py"
       ],
       "exit_code": 0,
-      "seconds": 0.078,
+      "seconds": 0.172,
       "log": "reference-ripgrep.log"
     },
     {
@@ -129,7 +130,7 @@
         "tools/fetch_jq_tests.py"
       ],
       "exit_code": 0,
-      "seconds": 0.11,
+      "seconds": 0.203,
       "log": "reference-test-data.log"
     },
     {
@@ -139,7 +140,7 @@
         "tests/build_fixtures.py"
       ],
       "exit_code": 0,
-      "seconds": 3.39,
+      "seconds": 4.078,
       "log": "fixtures.log"
     },
     {
@@ -154,7 +155,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 0.907,
+      "seconds": 1.265,
       "log": "archive-tests.log"
     },
     {
@@ -169,7 +170,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 21.031,
+      "seconds": 25.454,
       "log": "integration-debug.log"
     },
     {
@@ -181,7 +182,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.047,
+      "seconds": 14.39,
       "log": "release-build.log"
     },
     {
@@ -196,7 +197,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 19.328,
+      "seconds": 18.875,
       "log": "integration-release.log"
     },
     {
@@ -206,7 +207,7 @@
         "tools/report_results.py"
       ],
       "exit_code": 0,
-      "seconds": 0.328,
+      "seconds": 0.485,
       "log": "compatibility-report.log"
     }
   ]

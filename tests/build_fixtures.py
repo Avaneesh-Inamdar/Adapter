@@ -49,6 +49,7 @@ def build():
             "xpc_connection_resume", "xpc_connection_cancel", "xpc_connection_send_message",
             "xpc_connection_send_message_with_reply_sync", "xpc_connection_get_name"],
     }
+    exports["objc"] += ["objc_getProtocol", "protocol_getName", "protocol_isEqual", "protocol_conformsToProtocol", "class_conformsToProtocol", "protocol_getMethodDescription", "class_getProperty", "protocol_getProperty", "property_getName", "property_getAttributes"]
     versions = ["-arch", "x86_64", "-platform_version", "macos", "10.13", "10.13"]
     exports["System"] += ["strtol"]
     exports["System"] += ["signal", "sigaction", "raise", "kill", "getpid", "sigprocmask", "pthread_sigmask", "sigemptyset", "sigfillset", "sigaddset", "sigdelset", "sigismember", "sigpending", "sigwait", "sighold", "sigrelse", "sigignore", "siginterrupt", "killpg", "sigblock", "sigsetmask", "psignal", "bsd_signal"]
@@ -81,7 +82,7 @@ def build():
         run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-c", asm, "-o", OUT / (library + ".o"))
         install = {"System":"/usr/lib/libSystem.B.dylib","CoreFoundation":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation","objc":"/usr/lib/libobjc.A.dylib","xpc":"/usr/lib/system/libxpc.dylib"}[library]
         run(tool("ld64.lld"), *versions, "-dylib", "-install_name", install, "-o", OUT / ("lib" + library + ".dylib"), OUT / (library + ".o"))
-    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "objc_core", "objc_category", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_vm", "signals", "signals_default", "dispatch", "dispatch_deadlock", "dispatch_source", "qos", "sysctl", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
+    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "objc_core", "objc_category", "objc_metadata", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_vm", "signals", "signals_default", "dispatch", "dispatch_deadlock", "dispatch_source", "qos", "sysctl", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
         extension=".m" if name.startswith("objc") else ".cpp" if name=="cxx_tls" else ".c"
         flags=["-O0","-fno-stack-protector","-fno-asynchronous-unwind-tables"]
         flags+= ["-fno-exceptions","-fno-rtti"] if extension==".cpp" else ["-ffreestanding"]
@@ -92,10 +93,10 @@ def build():
         if name.startswith("objc"): libraries += ["-lobjc"]
         if name.startswith("xpc_"): libraries = ["-L", OUT, "-lxpc", "-lSystem"]
         run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main", "-o", OUT / name, OUT / (name + ".o"), *libraries)
-        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "mach_vm", "signals", "dispatch", "dispatch_source", "qos", "sysctl", "objc_core", "objc_category"]:
-            objc_flags = ["-no_objc_relative_method_lists"] if name in ("objc_core", "objc_category") else []
+        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "mach_vm", "signals", "dispatch", "dispatch_source", "qos", "sysctl", "objc_core", "objc_category", "objc_metadata"]:
+            objc_flags = ["-no_objc_relative_method_lists"] if name in ("objc_core", "objc_category", "objc_metadata") else []
             run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains",*objc_flags,"-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
-            if name in ("objc_core", "objc_category"):
+            if name in ("objc_core", "objc_category", "objc_metadata"):
                 run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/(name+"-relative"),OUT/(name+".o"),*libraries)
     # A `dlopen` plugin and its host exercise the runtime image registry.
     run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",

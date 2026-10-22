@@ -9,6 +9,8 @@ use std::{
     sync::{Condvar, Mutex, OnceLock},
     thread::ThreadId,
 };
+mod metadata;
+use metadata::{Property, Protocol};
 
 #[derive(Clone)]
 pub struct Region {
@@ -35,6 +37,8 @@ struct Class {
     size: usize,
     meta: bool,
     methods: BTreeMap<Vec<u8>, u64>,
+    protocols: Vec<u64>,
+    properties: BTreeMap<Vec<u8>, u64>,
 }
 struct Allocation {
     layout: Layout,
@@ -47,6 +51,11 @@ struct Session {
     selectors: BTreeMap<Vec<u8>, CString>,
     allocations: BTreeMap<u64, Allocation>,
     initializing: BTreeMap<u64, Option<ThreadId>>,
+    protocols: BTreeMap<u64, Protocol>,
+    protocol_names: BTreeMap<Vec<u8>, u64>,
+    properties: BTreeMap<u64, Property>,
+    protocol_references: u64,
+    protocol_methods: u64,
     /// Category +load implementations in discovery order; Apple calls a class's
     /// own +load first and then each category +load, so they stay separate.
     category_loads: Vec<(u64, u64)>,
@@ -160,11 +169,9 @@ impl Session {
         if size > 1024 * 1024 || start > size {
             return Err("Objective-C instance layout invalid".into());
         }
-        for offset in [16, 40, 56, 64] {
+        for offset in [16, 56] {
             if self.u64(ro + offset)? != 0 {
-                return Err(
-                    "Objective-C ownership layouts, protocols and properties unsupported".into(),
-                );
+                return Err("Objective-C ownership layouts unsupported".into());
             }
         }
         let name = self.string(self.u64(ro + 24)?)?;
@@ -201,6 +208,8 @@ impl Session {
                 }
             }
         }
+        let protocols = self.read_protocol_list(self.u64(ro + 40)?, 0, &mut BTreeSet::new())?;
+        let properties = self.read_properties(self.u64(ro + 64)?)?;
         self.classes.insert(
             address,
             Class {
@@ -210,6 +219,8 @@ impl Session {
                 size,
                 meta: flags & 1 != 0,
                 methods,
+                protocols,
+                properties,
             },
         );
         self.read_class_at(isa, depth + 1)?;
@@ -341,6 +352,11 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
         selectors: BTreeMap::new(),
         allocations: BTreeMap::new(),
         initializing: BTreeMap::new(),
+        protocols: BTreeMap::new(),
+        protocol_names: BTreeMap::new(),
+        properties: BTreeMap::new(),
+        protocol_references: 0,
+        protocol_methods: 0,
         category_loads: Vec::new(),
         loaded: false,
     };
@@ -362,7 +378,8 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
                     }
                 }
                 "__objc_classlist" | "__objc_nlclslist" | "__objc_selrefs" | "__objc_classrefs"
-                | "__objc_superrefs" | "__objc_catlist" | "__objc_nlcatlist" => {
+                | "__objc_superrefs" | "__objc_catlist" | "__objc_nlcatlist"
+                | "__objc_protolist" | "__objc_protorefs" => {
                     if section.size % 8 != 0 || section.size / 8 > 8192 {
                         return Err("Objective-C pointer section invalid size".into());
                     }
@@ -393,6 +410,9 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
                                 if !categories.contains(&value) {
                                     categories.push(value);
                                 }
+                            }
+                            "__objc_protolist" | "__objc_protorefs" => {
+                                session.read_protocol(value, 0, &mut BTreeSet::new())?;
                             }
                             _ => references.push(value),
                         }
@@ -459,6 +479,7 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
     // methods; one selector supplied by two categories of the same class is
     // ambiguous and rejected rather than resolved by link order.
     let mut claimed: BTreeMap<(u64, bool), BTreeSet<Vec<u8>>> = BTreeMap::new();
+    let mut claimed_properties = BTreeSet::new();
     for category in categories {
         session.range(category, 48, false)?;
         let name = session.string(session.u64(category)?)?;
@@ -476,8 +497,49 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
         if name.is_empty() {
             return Err("Objective-C category has an empty name".into());
         }
-        if session.u64(category + 32)? != 0 || session.u64(category + 40)? != 0 {
-            return Err("Objective-C category protocols and properties unsupported".into());
+        let protocols =
+            session.read_protocol_list(session.u64(category + 32)?, 0, &mut BTreeSet::new())?;
+        let properties = session.read_properties(session.u64(category + 40)?)?;
+        // Category class-property pointer is present only under image-info bit 6.
+        let has_class_properties = images.iter().any(|image| {
+            image
+                .regions
+                .iter()
+                .any(|r| category >= r.address && category < r.address.saturating_add(r.size))
+                && image.sections.iter().any(|s| {
+                    s.name == "__objc_imageinfo"
+                        && session.u32(s.address + 4).is_ok_and(|f| f & 64 != 0)
+                })
+        });
+        let class_properties = if has_class_properties {
+            session.read_properties(session.u64(category + 48)?)?
+        } else {
+            BTreeMap::new()
+        };
+        session
+            .classes
+            .get_mut(&class)
+            .unwrap()
+            .protocols
+            .extend(protocols.iter().copied());
+        session
+            .classes
+            .get_mut(&meta)
+            .unwrap()
+            .protocols
+            .extend(protocols);
+        for (target, additions) in [(class, properties), (meta, class_properties)] {
+            for (name, property) in additions {
+                if !claimed_properties.insert((target, name.clone())) {
+                    return Err("Objective-C property is defined by two categories".into());
+                }
+                session
+                    .classes
+                    .get_mut(&target)
+                    .unwrap()
+                    .properties
+                    .insert(name, property);
+            }
         }
         let instance = session.read_methods(session.u64(category + 16)?)?;
         let class_methods = session.read_methods(session.u64(category + 24)?)?;
@@ -978,6 +1040,9 @@ unsafe extern "sysv64" {
     fn adapter_objc_msg_send_super2();
 }
 pub fn symbol(name: &str) -> Option<u64> {
+    if let Some(address) = metadata::symbol(name) {
+        return Some(address);
+    }
     static EMPTY_CACHE: [u64; 2] = [0; 2];
     Some(match name {
         "__objc_empty_cache" => EMPTY_CACHE.as_ptr() as u64,

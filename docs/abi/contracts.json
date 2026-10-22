@@ -448,17 +448,19 @@
     },
     {
       "id": "objc",
-      "version": 2,
-      "scope": "Validated raw-isa manual-reference-counted startup images with relative method lists and startup categories",
+      "version": 3,
+      "scope": "Validated raw-isa MRC startup images, categories, absolute/relative methods and compiler-emitted protocol/property introspection",
       "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
       "implementation": [
         "src/objc/mod.rs",
-        "src/objc/dispatch.s"
+        "src/objc/dispatch.s",
+        "src/objc/metadata.rs"
       ],
       "tests": [
         "tests/integration/test_objc.py",
         "tests/fixtures/objc_core.m",
-        "tests/fixtures/objc_category.m"
+        "tests/fixtures/objc_category.m",
+        "tests/fixtures/objc_metadata.m"
       ],
       "layouts": [
         {
@@ -625,22 +627,130 @@
               "size": 8
             }
           ]
+        },
+        {
+          "name": "protocol_t compiler record",
+          "size": 96,
+          "align": 8,
+          "fields": [
+            {
+              "name": "isa",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "name",
+              "offset": 8,
+              "size": 8
+            },
+            {
+              "name": "protocols",
+              "offset": 16,
+              "size": 8
+            },
+            {
+              "name": "requiredInstance",
+              "offset": 24,
+              "size": 8
+            },
+            {
+              "name": "requiredClass",
+              "offset": 32,
+              "size": 8
+            },
+            {
+              "name": "optionalInstance",
+              "offset": 40,
+              "size": 8
+            },
+            {
+              "name": "optionalClass",
+              "offset": 48,
+              "size": 8
+            },
+            {
+              "name": "instanceProperties",
+              "offset": 56,
+              "size": 8
+            },
+            {
+              "name": "size",
+              "offset": 64,
+              "size": 4
+            },
+            {
+              "name": "flags",
+              "offset": 68,
+              "size": 4
+            },
+            {
+              "name": "extendedTypes",
+              "offset": 72,
+              "size": 8
+            },
+            {
+              "name": "demangledName",
+              "offset": 80,
+              "size": 8
+            },
+            {
+              "name": "classProperties",
+              "offset": 88,
+              "size": 8
+            }
+          ]
+        },
+        {
+          "name": "property_t",
+          "size": 16,
+          "align": 8,
+          "fields": [
+            {
+              "name": "name",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "attributes",
+              "offset": 8,
+              "size": 8
+            }
+          ]
+        },
+        {
+          "name": "objc_method_description result",
+          "size": 16,
+          "align": 8,
+          "fields": [
+            {
+              "name": "selector",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "types",
+              "offset": 8,
+              "size": 8
+            }
+          ]
         }
       ],
       "ownership": "Runtime-owned instances, counts and explicit balanced autorelease pools; no custom RR interception.",
       "callbacks": "msgSend preserves SysV GP/SSE/stack arguments and tail-jumps; superclass-first load and lazy initialize run outside registry lock.",
       "errors": "Validate metadata before selector patching or constructors; unknown selector terminates125.",
       "lifecycle": "Register complete startup graph, load before C constructors; guard remains live through guest finalizers.",
-      "unsupported": "No protocols/properties/ARC/weak/tagged pointers/nonpointer isa/direct-selector or shared-cache lists/dynamic registration/exception or aggregate-return dispatch.",
+      "unsupported": "No ARC/weak, tagged/nonpointer isa, shared cache, dynamic Objective-C registration, protocol messages/dynamic mutation/copy APIs, duplicate protocol definitions across images, exceptions or aggregate/x87 message sends. Property metadata does not implement object ownership or atomic setters.",
       "sources": [
         "docs/reverse-engineering/objc-runtime-evidence.md",
         "docs/abi/objc-abi.md"
       ],
       "symbols": [
         "__objc_empty_cache",
+        "_class_conformsToProtocol",
         "_class_createInstance",
         "_class_getInstanceSize",
         "_class_getName",
+        "_class_getProperty",
         "_class_getSuperclass",
         "_class_isMetaClass",
         "_objc_alloc",
@@ -649,6 +759,7 @@
         "_objc_autoreleasePoolPop",
         "_objc_autoreleasePoolPush",
         "_objc_getClass",
+        "_objc_getProtocol",
         "_objc_lookUpClass",
         "_objc_msgSend",
         "_objc_msgSendSuper2",
@@ -656,6 +767,13 @@
         "_objc_retain",
         "_object_dispose",
         "_object_getClass",
+        "_property_getAttributes",
+        "_property_getName",
+        "_protocol_conformsToProtocol",
+        "_protocol_getMethodDescription",
+        "_protocol_getName",
+        "_protocol_getProperty",
+        "_protocol_isEqual",
         "_sel_getName",
         "_sel_getUid",
         "_sel_isEqual",

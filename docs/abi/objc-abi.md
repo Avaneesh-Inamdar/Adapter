@@ -1,10 +1,14 @@
-# Objective-C ABI contract v2
+# Objective-C ABI contract v3
 
 Status: implemented bounded Intel slice. Owner: `src/objc/mod.rs` and `src/objc/dispatch.s`. Loader integration: `src/runtime/mod.rs`, `src/loader/link.rs` and `src/inspect/mod.rs`.
 
 This contract describes Adapter's admitted subset, not the complete Apple Objective-C ABI. A subsystem change that expands the admitted metadata, import behavior or calling convention must update this contract and add a consumer or rejection test. Implementations must not replace an unsupported operation with a success no-op.
 
 Revision 2 adds relative ("small") method lists and startup categories. Revision 1 admitted only 24-byte absolute method lists and rejected every `__objc_catlist` image.
+Revision 3 admits compiler-emitted protocols, class/category adoption and property
+records, and adds ten read-only introspection entry points. It leaves protocol
+objects' on-disk isa unchanged; sending Objective-C messages to a protocol object
+is unsupported.
 
 ## Target and evidence
 
@@ -23,7 +27,12 @@ All addresses below are relocated guest addresses. Counts, ranges and strings ar
 | Method-list header | `entsizeAndFlags:u32@0`, `count:u32@4`; entries at 8 | 8 |
 | Absolute method | selector-name pointer at 0, type-string pointer at 8, IMP at 16 | 24 |
 | Relative method | selector-slot offset `i32@0`, types offset `i32@4`, IMP offset `i32@8`; each offset is relative to its own field address | 12 |
-| Category | `name:ptr@0`, `cls:ptr@8`, instance methods at 16, class methods at 24, protocols at 32, instance properties at 40 | 48 |
+| Category | `name:ptr@0`, `cls:ptr@8`, instance methods at 16, class methods at 24, protocols at 32, instance properties at 40; class properties at 48 when image-info bit 6 is set | 48 / 56 |
+| Protocol | isa at 0, name at 8, inherited protocols at 16, required instance/class methods at 24/32, optional instance/class methods at 40/48, instance properties at 56, size/flags at 64/68; optional extended types at 72, demangled name at 80, class properties at 88 | 72 / 80 / 88 / 96 |
+| Protocol adoption list | pointer-sized count at 0, protocol pointers at 8 | 8 + count × 8 |
+| Protocol method | name at 0, type encoding at 8, null implementation at 16; list header has entry size 24 and 32-bit count | 24 |
+| Property | name at 0, attributes at 8; list header has entry size 16 and 32-bit count | 16 |
+| Method-description result | canonical selector at 0, type string at 8; SysV64 returns the two pointers in RAX/RDX | 16 |
 | Ivar-list header | `entsize:u32@0`, `count:u32@4`; entries at 8 | 8 |
 | Ivar | offset-variable pointer at 0, name pointer at 8, type pointer at 16, alignment at 24, size at 28 | 32 |
 | Image info | `version:u32@0`, `flags:u32@4` | 8 |
@@ -38,11 +47,18 @@ Admission rules:
 - A root metaclass's superclass is its ordinary root class and its isa is itself. A child metaclass's superclass is its ordinary superclass's metaclass; its isa is the root metaclass.
 - Outside the dyld shared cache a relative selector field names a `__objc_selrefs` slot, so the name pointer is read from that slot; relative type and IMP fields are direct field-relative addresses. An entry whose points land outside a mapped segment, or whose IMP is not executable, is rejected before registration.
 - Every method IMP must lie in an executable mapped region. Metadata and string pointers must lie in readable mapped regions; selector slots must be writable under the final segment protections.
-- A category must have a nonempty name and a registered ordinary class, may appear after that class in link order, and must have null protocols and null instance properties. Category instance methods attach to the class and category class methods to its metaclass. A category method replaces the class's own method of the same level; one selector supplied by two categories of the same class is ambiguous and rejected instead of resolved by link order.
+- A category must have a nonempty name and a registered ordinary class, and may appear after that class in link order. Category instance methods/properties attach to the class and category class methods/properties to its metaclass. Adopted protocols attach at both levels. Category metadata replaces the class's own matching method/property; two categories supplying the same method or property at one level are rejected as ambiguous.
+- Compiler protocol records require null isa, zero flags, a nonempty unique name and an acyclic inheritance graph. Duplicate names at different addresses are rejected rather than silently coalesced. The optional demangled-name field must be null. All protocol method implementations must be null. Extended type arrays are bounds/string validated but are not used as the method-description API's type encoding.
+- Property names and attribute strings must be nonempty; duplicate names inside one list are rejected. Attributes describe compiler metadata only: this does not implement atomic access, object ownership or synthesized accessors. The latter execute as compiled guest methods.
 - The linker may leave a category that carries `+load` in both `__objc_catlist` and `__objc_nlcatlist`; each record is attached once, keyed by its address.
 - Limits: 8,192 total class/metaclass records; recursive class-graph depth bounded at 128 edges; 8,192 entries per reference section; 65,536 entries per method or ivar list; strings must terminate within 4,096 bytes; compiler instance size at most 1 MiB.
 
-Admitted section names are `__objc_imageinfo`, `__objc_classlist`, `__objc_nlclslist`, `__objc_selrefs`, `__objc_classrefs`, `__objc_superrefs`, `__objc_catlist`, `__objc_nlcatlist`, `__objc_const`, `__objc_data`, `__objc_ivar`, `__objc_methlist`, `__objc_methname`, `__objc_methtype` and `__objc_classname`. Recognizing a section name does not bypass validation of its records. Other Objective-C metadata is rejected.
+The protocol slice additionally caps definitions at 8,192, inheritance depth at
+128, any adoption list at 8,192 entries, total parsed adoption references and
+protocol methods at 65,536 each, and property records at 65,536. Repeatedly parsed
+adoption lists count toward the reference budget.
+
+Admitted section names are `__objc_imageinfo`, `__objc_classlist`, `__objc_nlclslist`, `__objc_selrefs`, `__objc_classrefs`, `__objc_superrefs`, `__objc_catlist`, `__objc_nlcatlist`, `__objc_protolist`, `__objc_protorefs`, `__objc_const`, `__objc_data`, `__objc_ivar`, `__objc_methlist`, `__objc_methname`, `__objc_methtype` and `__objc_classname`. Recognizing a section name does not bypass validation of its records. Other Objective-C metadata is rejected.
 
 ## Registration and lifecycle
 
@@ -84,6 +100,17 @@ Names here use C spelling. Mach-O symbol-table names have an additional leading 
 | `objc_alloc_init` | Guest `+alloc` followed by guest `-init`, nil-safe |
 | `objc_retain`, `objc_release` | Separate reference counts for runtime-owned instances; class objects are immortal; nil is harmless |
 | `objc_autorelease`, `objc_autoreleasePoolPush`, `objc_autoreleasePoolPop` | Explicit per-thread pools; LIFO tokens and reverse release order |
+| `objc_getProtocol`, `protocol_getName`, `protocol_isEqual` | Startup protocol lookup/identity; missing lookup is nil, nil name is `"nil"`, two nil protocols compare equal |
+| `protocol_conformsToProtocol`, `class_conformsToProtocol` | Recursive protocol adoption; the C class API checks the specified class's adoption, without walking its superclasses |
+| `protocol_getMethodDescription` | Required/optional and instance/class method descriptions, including inherited protocol declarations; missing result is two null pointers |
+| `class_getProperty`, `protocol_getProperty` | Class lookup walks superclasses; protocol lookup walks adopted protocols. Protocol optional-property query returns nil as in the pinned runtime |
+| `property_getName`, `property_getAttributes` | Borrowed pointers to validated guest metadata strings; nil property returns null |
+
+Protocol/property handles and returned strings remain valid until image/session
+teardown; callers must not free them. No new caller-owned allocation is returned
+by these ten APIs. These queries do not trigger class `+initialize`. Unknown
+non-null handles terminate with status 125; metadata admission remains atomic
+with respect to selector patching and guest execution.
 
 There can be at most 65,536 live runtime-owned allocations. Reference counts are Adapter bookkeeping, not a claim to implement custom `retain`/`release` overrides or ARC. Final release invokes an available `-dealloc`; it frees the instance if that method did not already call `object_dispose`. Autorelease requires a matching explicit pool. Instance ivar destruction, weak zeroing and exception cleanup are not supplied.
 
@@ -93,7 +120,7 @@ Unknown imports fail static linking/preflight. Unsupported or malformed Objectiv
 
 Unknown selectors, tagged receivers, unknown/nonpointer isa, invalid runtime-owned-object operations and invalid pool order produce an Objective-C diagnostic and terminate the worker with status 125. There is no message forwarding or method-resolution fallback.
 
-Unsupported in v2: dynamic Objective-C `dlopen` registration/unload, protocols and properties (including category protocols and properties), compact direct-selector lists, shared-cache/preoptimized metadata, signed class records, GC, ARC, weak references, custom retain/release semantics, ownership layouts, C++ construction/destruction, Objective-C exceptions, associations, dynamic class/method mutation, tagged pointers, packed/nonpointer isa, Swift classes/runtime, fpret/stret/fp2ret and forwarding. Foundation, AppKit and Apple framework compatibility are separate work.
+Unsupported in v3: dynamic Objective-C `dlopen` registration/unload, protocol messages, runtime protocol/property mutation and copy-list APIs, cross-image duplicate protocol coalescing, compact direct-selector lists, shared-cache/preoptimized metadata, signed class records, GC, ARC, weak references, custom retain/release semantics, ownership layouts, C++ construction/destruction, Objective-C exceptions, associations, dynamic class/method mutation, tagged pointers, packed/nonpointer isa, Swift classes/runtime, fpret/stret/fp2ret and forwarding. Foundation, AppKit and Apple framework compatibility are separate work.
 
 ## Required checks
 
@@ -101,4 +128,11 @@ The consumers are `tests/fixtures/objc_core.m` and `tests/fixtures/objc_category
 
 `tests/integration/test_objc.py` runs all three fixup forms of both consumers and rejects excessive method counts and unsupported image flags without printing a fixture constructor marker. `tests/integration/test_runtime.py` contains the minimal positive probe. The unit test in `src/objc/mod.rs` checks atomic failure before selector patching, malformed IMP and ARC rejection, and actual GPR/SSE/stack/nil dispatch.
 
-Still needed: an explicit rejection test for a category that names an unregistered class or carries protocols; cross-image selector and inheritance consumers; concurrent/reentrant initialization stress; inherited-initialize and inherited-load negatives; invalid metadata pointers, graph/isa cases and additional type encodings; custom ownership boundary probes; reference runs on a real Mac and differential comparison. New support requires positive ABI consumers and a retained rejection test for neighboring unsupported forms.
+`objc_metadata.m` adds protocol inheritance, category adoption, required/optional
+descriptions, instance/class properties, inherited property lookup and scalar
+guest accessors in all three fixup forms. Negative mutations reject oversized
+or flagged protocols, adoption counts/cycles, nonnull description IMPs and
+oversized property lists before its constructor marker. Its standalone
+`adapter-objc-metadata-v1` form is compared against the same Mac-built executable.
+
+Still needed: an explicit rejection test for a category that names an unregistered class; cross-image selector/protocol and inheritance consumers; concurrent/reentrant initialization stress; inherited-initialize and inherited-load negatives; invalid metadata pointers, graph/isa cases and additional type encodings; custom ownership boundary probes. New support requires positive ABI consumers and a retained rejection test for neighboring unsupported forms.
