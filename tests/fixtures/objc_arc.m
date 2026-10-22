@@ -159,6 +159,14 @@ extern void *arc_retained_create(void);
     __atomic_fetch_add(&arc_nodes, 1, __ATOMIC_SEQ_CST);
 }
 @end
+@interface ArcBranch : ArcNode {
+    ArcRoot *_other;
+}
+@property(nonatomic, strong) ArcRoot *other;
+@end
+@implementation ArcBranch
+@synthesize other = _other;
+@end
 static __weak ArcRoot *thread_weak;
 static long bad_weak;
 static void *weak_worker(void *unused) {
@@ -185,16 +193,18 @@ int main(void) {
         @autoreleasepool {
             switch (index % 8) {
             case 0: {
-                ArcNode *parent = [ArcNode new];
+                ArcNode *parent = ((index / 8) & 1) ? [ArcNode new] : [ArcBranch new];
                 ArcRoot *child = [ArcRoot new];
                 __weak ArcRoot *weak = child;
                 parent.child = child;
                 parent.observer = child;
+                if (!((index / 8) & 1))
+                    ((ArcBranch *)parent).other = child;
                 child = 0;
                 out[0] = weak != 0 && parent.observer == weak;
-                parent.child = 0;
-                out[1] = parent.observer == 0 && weak == 0;
                 parent = 0;
+                out[1] = weak == 0;
+                out[2] = !((index / 8) & 1);
                 break;
             }
             case 1: {

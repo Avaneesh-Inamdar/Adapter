@@ -196,9 +196,19 @@ def build_bundle(output, count=4096, suite=LIBC):
                         "-DADAPTER_ARC_ROOT", "-c", str(copied_source), "-o", str(root_object)]
         subprocess.run(root_command, capture_output=True, text=True, timeout=60, check=True)
         prebuild.append(root_command)
-        link_inputs.append(str(root_object))
-    command = [compiler, "-target", "x86_64-apple-macos10.13", *suite.flags,
-               "-Wl,-no_uuid", f"-DDIFF_CASE_COUNT={count}", str(copied_source), *link_inputs, "-o", str(output / suite.program)]
+        arc_object = output / "arc-consumer.o"
+        arc_command = [compiler, "-target", "x86_64-apple-macos10.13",
+                       *[flag for flag in suite.flags if flag != "-lobjc"],
+                       f"-DDIFF_CASE_COUNT={count}", "-c", str(copied_source), "-o", str(arc_object)]
+        subprocess.run(arc_command, capture_output=True, text=True, timeout=60, check=True)
+        prebuild.append(arc_command)
+        # Link already-compiled ARC code without the driver's implicit Foundation
+        # dependency: this consumer uses only its own root class and libobjc.
+        command = [compiler, "-target", "x86_64-apple-macos10.13", "-Wl,-no_uuid",
+                   str(arc_object), str(root_object), "-lobjc", "-o", str(output / suite.program)]
+    else:
+        command = [compiler, "-target", "x86_64-apple-macos10.13", *suite.flags,
+                   "-Wl,-no_uuid", f"-DDIFF_CASE_COUNT={count}", str(copied_source), *link_inputs, "-o", str(output / suite.program)]
     process = subprocess.run(command, capture_output=True, text=True, timeout=60)
     if process.returncode:
         raise ValueError(f"compile/link failed ({process.returncode}):\n{process.stdout}\n{process.stderr}")
