@@ -18,6 +18,11 @@ extern int dlclose(void *);
 
 volatile long unwind_data = 7;
 __attribute__((noinline)) long unwind_leaf(long value) {
+#ifdef UNWIND_FORCE_DWARF
+    /* DW_CFA_def_cfa_expression: DW_OP_breg6(RBP) +16. This preserves the
+     * frame-pointer CFA but requires a DWARF FDE rather than compact encoding. */
+    __asm__ volatile(".cfi_escape 0x0f, 0x02, 0x76, 0x10");
+#endif
     volatile long frame[8];
     for (int i = 0; i < 8; i++)
         frame[i] = value + i;

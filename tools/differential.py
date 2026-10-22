@@ -72,7 +72,7 @@ UNWIND_FLAGS = ["-std=c11", "-O1", "-fno-omit-frame-pointer", "-fno-stack-protec
 UNWIND_COMPACT = Suite("adapter-unwind-compact-v1", UNWIND_FAMILIES, {name: 4 for name in UNWIND_FAMILIES},
                        "unwind-compact-differential", "tests/fixtures/unwind_lookup.c", UNWIND_FLAGS)
 UNWIND_DWARF = Suite("adapter-unwind-dwarf-v1", UNWIND_FAMILIES, {name: 4 for name in UNWIND_FAMILIES},
-                     "unwind-dwarf-differential", "tests/fixtures/unwind_lookup.c", [*UNWIND_FLAGS, "-femit-dwarf-unwind=dwarf-only"])
+                     "unwind-dwarf-differential", "tests/fixtures/unwind_lookup.c", [*UNWIND_FLAGS, "-DUNWIND_FORCE_DWARF"])
 SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD, OBJC_METADATA, ARC_DEBUG, ARC_OPT, UNWIND_COMPACT, UNWIND_DWARF)}
 # Backwards-compatible aliases for the primary libc suite.
 SUITE, FAMILIES, RESULT_LENGTHS, PROGRAM, SOURCE = LIBC.id, LIBC.families, LIBC.result_lengths, LIBC.program, LIBC.source
