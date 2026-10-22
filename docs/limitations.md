@@ -3,7 +3,7 @@
 | Risk | Current status / mitigation | Next evidence needed |
 |---|---|---|
 | ARM64 Xcode/toolchain on x64 host | All sampled core Xcode/CLT images ARM64 only; execution rejected | A separately scoped instruction translator or Intel artifact |
-| Apple Objective-C ABI | Raw-isa MRC startup runtime with relative methods, categories and protocol/property introspection; compiled consumers and same-artifact hosted Mac comparisons | ARC/weak, custom ownership, dynamic registration, exceptions, cross-image protocol coalescing and real-library lifetimes; see [contract v3](abi/objc-abi.md) |
+| Apple Objective-C ABI | Raw-isa startup metadata and runtime-owned ARC/MRC strong/weak lifetimes; same-binary Mac comparisons at O0/O2 | ARC Blocks, foreign objects, atomic/copy properties, dynamic registration, exceptions, cross-image protocols and broader custom RR policies; see [contract v4](abi/objc-abi.md) |
 | Framework surface and GUI | Foundation/AppKit/SwiftUI absent | Minimal real app requirements and reference execution |
 | Grand Central Dispatch | Queues, barriers, groups, once/after/apply, block objects, timer and user-data sources, `__block` promotion and the main queue run with Mach-O consumers ([results](dispatch-results.md)) | Descriptor, process, signal, Mach and vnode sources, `dispatch_data`/`dispatch_io`, workloops, QoS scheduling and a reference-Mac comparison |
 | sysctl and libproc | `sysctl`, `sysctlbyname`, `sysctlnametomib` answer about 75 names from host facts and fixed Darwin 24.6 values, and `libproc` describes the guest's own process ([results](sysctl-results.md)) | `kern.proc`/`procargs2`, `net.*`, disk and performance-level names, writes, other pids, IOKit, and a reference-Mac comparison |

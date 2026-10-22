@@ -50,6 +50,7 @@ def build():
             "xpc_connection_send_message_with_reply_sync", "xpc_connection_get_name"],
     }
     exports["objc"] += ["objc_getProtocol", "protocol_getName", "protocol_isEqual", "protocol_conformsToProtocol", "class_conformsToProtocol", "protocol_getMethodDescription", "class_getProperty", "protocol_getProperty", "property_getName", "property_getAttributes"]
+    exports["objc"] += ["_objc_rootRetain", "_objc_rootRelease", "_objc_rootAutorelease", "_objc_rootRetainCount", "_objc_rootTryRetain", "_objc_rootIsDeallocating", "objc_destructInstance", "objc_storeStrong", "objc_setProperty_nonatomic", "objc_initWeak", "objc_initWeakOrNil", "objc_storeWeak", "objc_storeWeakOrNil", "objc_loadWeak", "objc_loadWeakRetained", "objc_copyWeak", "objc_moveWeak", "objc_destroyWeak", "objc_autoreleaseReturnValue", "objc_retainAutoreleaseReturnValue", "objc_retainAutoreleasedReturnValue", "objc_claimAutoreleasedReturnValue", "objc_unsafeClaimAutoreleasedReturnValue", "objc_retainAutorelease"]
     versions = ["-arch", "x86_64", "-platform_version", "macos", "10.13", "10.13"]
     exports["System"] += ["strtol"]
     exports["System"] += ["signal", "sigaction", "raise", "kill", "getpid", "sigprocmask", "pthread_sigmask", "sigemptyset", "sigfillset", "sigaddset", "sigdelset", "sigismember", "sigpending", "sigwait", "sighold", "sigrelse", "sigignore", "siginterrupt", "killpg", "sigblock", "sigsetmask", "psignal", "bsd_signal"]
@@ -98,6 +99,16 @@ def build():
             run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains",*objc_flags,"-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
             if name in ("objc_core", "objc_category", "objc_metadata"):
                 run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains","-no_uuid","-e","_main","-o",OUT/(name+"-relative"),OUT/(name+".o"),*libraries)
+    # One MRC root and actual ARC consumers at both compiler optimization levels.
+    arc_source = ROOT / "tests/fixtures/objc_arc.m"
+    common = ["-target", "x86_64-apple-macos10.13", "-fno-exceptions", "-fno-objc-exceptions", "-fno-stack-protector", "-fno-asynchronous-unwind-tables"]
+    run(tool("clang"), *common, "-O1", "-fno-objc-arc", "-DADAPTER_ARC_ROOT", "-c", arc_source, "-o", OUT/"arc-root.o")
+    for level in ("O0", "O2"):
+        name = "objc_arc-" + level.lower()
+        obj = OUT/(name + ".o")
+        run(tool("clang"), *common, "-"+level, "-fobjc-arc", "-c", arc_source, "-o", obj)
+        for suffix, options in [("", [*versions, "-no_fixup_chains"]), ("-chained", ["-arch", "x86_64", "-platform_version", "macos", "11.0", "11.0", "-fixup_chains", "-no_objc_relative_method_lists"]), ("-relative", ["-arch", "x86_64", "-platform_version", "macos", "11.0", "11.0", "-fixup_chains"])]:
+            run(tool("ld64.lld"), *options, "-no_uuid", "-e", "_main", "-o", OUT/(name+suffix), obj, OUT/"arc-root.o", "-L", OUT, "-lobjc", "-lSystem")
     # A `dlopen` plugin and its host exercise the runtime image registry.
     run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",
         "-fno-asynchronous-unwind-tables", "-ffreestanding", "-c",

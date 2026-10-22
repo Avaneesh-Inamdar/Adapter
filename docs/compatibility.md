@@ -25,7 +25,7 @@ general macOS application compatibility is established.
 | Mach IPC / bootstrap | Partial | Two unchanged Mach-O processes over a loopback broker; send/receive, send-once replies, retirement and failure semantics in local and broker modes | Simple messages only; no complex messages, port sets, notifications, introspection or launchd-precreated receive rights |
 | launchd jobs | Partial | Broker loads a documented plist subset, reserves `MachServices`, starts jobs on lookup or `RunAtLoad`, applies environment/log paths, waits 15 seconds for check-in, respawns after exit and reports spawn failure as unknown service | No launchd process, `launchctl`/`launch_msg`, KeepAlive/throttling/supervision, socket/event activation, privileged or per-user domains; check-in creates the receive right |
 | XPC | Partial | An unchanged libxpc client/server pair over the broker exchanges a typed dictionary request/reply (bool/int64/double/string/data/array/dictionary), uses listener check-in, a sync reply, remote-connection reply creation, cancel, peer interruption and missing-service invalid events; a broker job starts the listener on demand | Adapter-defined serialization and transport, not Apple's wire format; no real-macOS peer interoperability, `xpc_main`/GCD semantics, date/UUID/fd/shmem/endpoint/rich-error objects, peer validation or sandbox/entitlement enforcement |
-| Objective-C | Bounded raw-isa MRC startup runtime, relative methods, categories, protocol/property introspection | Real compiled consumers in classic/chained/relative forms, native Mac comparisons and pre-constructor malformed-metadata rejection | No ARC/weak, custom ownership, dynamic registration, exceptions or aggregate/x87 sends; no Foundation/AppKit |
+| Objective-C | Raw-isa startup metadata and runtime-owned ARC/MRC strong/weak ownership | Compiled O0/O2 consumers in classic/chained/relative forms, same-binary Mac comparisons and malformed-metadata rejection | No foreign objects, ARC Blocks, atomic/copy properties, dynamic registration, exceptions or aggregate/x87 sends; no Foundation/AppKit |
 | jq macOS amd64 1.8.2 | Demonstrated tested workflows | 13 CLI methods plus the pinned upstream `jq.test` suite: 550/550 with module fixtures, debug and release | No reference-Mac comparison; suite excludes upstream shell/`man.test` harnesses |
 | ripgrep macOS amd64 15.2.0 | Demonstrated tested workflows | 11 CLI methods: version/help, literal/regex/context, ignore/hidden, JSON, PCRE2/UTF-8, stdin, binary, 2 MiB mmap, 40-file threads, exit codes, clean `--pre` failure; debug and release | No reference-Mac comparison; this target does not exercise condition variables; process spawning and signal delivery are absent |
 | Xcode 27.0 build 27A266 | Inspection only | XAR Content checksum, ARM64 header, startup disassembly | Not executable / not compatible |
@@ -148,7 +148,7 @@ authenticate peer code. See [mach-ipc-results](mach-ipc-results.md),
 [XPC evidence](reverse-engineering/xpc-evidence.md).
 
 Latest commands/results are recorded in [test-results/latest.json](test-results/latest.json).
-The current run passed all 16 verification stages, including 119 integration
+The current run passed all 16 verification stages, including 125 integration
 tests in both profiles. The latest iteration and remaining limits are described
 in [jq-libc-results](jq-libc-results.md),
 [ripgrep-results](ripgrep-results.md),

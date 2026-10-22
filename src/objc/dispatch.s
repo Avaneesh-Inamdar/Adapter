@@ -63,3 +63,26 @@ adapter_objc_msg_send_super2:
     pxor xmm0, xmm0
     pxor xmm1, xmm1
     ret
+
+.p2align 4
+.globl adapter_objc_autorelease_return
+adapter_objc_autorelease_return:
+    mov rsi, [rsp]
+    jmp adapter_objc_offer_return
+.p2align 4
+.globl adapter_objc_retain_autorelease_return
+adapter_objc_retain_autorelease_return:
+    mov rsi, [rsp]
+    jmp adapter_objc_retain_offer_return
+.p2align 4
+.globl adapter_objc_claim_return
+adapter_objc_claim_return:
+    mov rsi, [rsp]
+    xor edx, edx
+    jmp adapter_objc_accept_return
+.p2align 4
+.globl adapter_objc_unsafe_claim_return
+adapter_objc_unsafe_claim_return:
+    mov rsi, [rsp]
+    mov edx, 1
+    jmp adapter_objc_accept_return

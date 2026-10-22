@@ -448,19 +448,22 @@
     },
     {
       "id": "objc",
-      "version": 3,
-      "scope": "Validated raw-isa MRC startup images, categories, absolute/relative methods and compiler-emitted protocol/property introspection",
+      "version": 4,
+      "scope": "Raw-isa startup Objective-C, protocols/properties, runtime-owned ARC/MRC strong and zeroing weak ownership, compiler ivar cleanup and recognized x64 return-value handoffs",
       "calling_convention": "Darwin x86-64 little-endian LP64; guest calls/callbacks SysV64; host Windows APIs use their host ABI.",
       "implementation": [
         "src/objc/mod.rs",
         "src/objc/dispatch.s",
-        "src/objc/metadata.rs"
+        "src/objc/metadata.rs",
+        "src/objc/ownership.rs"
       ],
       "tests": [
         "tests/integration/test_objc.py",
         "tests/fixtures/objc_core.m",
         "tests/fixtures/objc_category.m",
-        "tests/fixtures/objc_metadata.m"
+        "tests/fixtures/objc_metadata.m",
+        "tests/fixtures/objc_arc.m",
+        "tests/integration/test_arc.py"
       ],
       "layouts": [
         {
@@ -735,17 +738,25 @@
           ]
         }
       ],
-      "ownership": "Runtime-owned instances, counts and explicit balanced autorelease pools; no custom RR interception.",
-      "callbacks": "msgSend preserves SysV GP/SSE/stack arguments and tail-jumps; superclass-first load and lazy initialize run outside registry lock.",
+      "ownership": "Runtime-owned instances have locked reference counts and allocation generations. RR adapters honor guest retain/release/autorelease methods; root entry points manipulate the counts. Final release marks deallocating before guest dealloc; object_dispose runs own .cxx_destruct methods subclass first, clears weak references, then frees. Strong stores retain new before releasing old. Weak slots are registered and zeroed, and loads pin objects while custom weak callbacks run outside the registry lock.",
+      "callbacks": "SysV message IMPs and .cxx_destruct/weak/RR callbacks execute without the registry lock. Explicit thread-local autorelease pools drain in reverse order, including reentrant autoreleases to the draining pool; explicit pools are also drained during guest thread cleanup.",
       "errors": "Validate metadata before selector patching or constructors; unknown selector terminates125.",
       "lifecycle": "Register complete startup graph, load before C constructors; guard remains live through guest finalizers.",
-      "unsupported": "No ARC/weak, tagged/nonpointer isa, shared cache, dynamic Objective-C registration, protocol messages/dynamic mutation/copy APIs, duplicate protocol definitions across images, exceptions or aggregate/x87 message sends. Property metadata does not implement object ownership or atomic setters.",
+      "unsupported": "No tagged/nonpointer isa, foreign or externally allocated objects, Objective-C Blocks ownership adapters, atomic/copy properties, associations, exceptions/ARC exception cleanup, C++ constructors, dynamic registration or shared cache. Unsupported x64 return-site patterns use retain/autorelease fallback and may extend temporary lifetimes; arbitrary custom weak/RR policies need further reference probes.",
       "sources": [
         "docs/reverse-engineering/objc-runtime-evidence.md",
-        "docs/abi/objc-abi.md"
+        "docs/abi/objc-abi.md",
+        "https://clang.llvm.org/docs/AutomaticReferenceCounting.html",
+        "https://github.com/apple-oss-distributions/objc4/blob/fb265098298302243cd7eeaa1f63f0ba7786dd9a/runtime/NSObject.mm"
       ],
       "symbols": [
         "__objc_empty_cache",
+        "__objc_rootAutorelease",
+        "__objc_rootIsDeallocating",
+        "__objc_rootRelease",
+        "__objc_rootRetain",
+        "__objc_rootRetainCount",
+        "__objc_rootTryRetain",
         "_class_conformsToProtocol",
         "_class_createInstance",
         "_class_getInstanceSize",
@@ -758,13 +769,27 @@
         "_objc_autorelease",
         "_objc_autoreleasePoolPop",
         "_objc_autoreleasePoolPush",
+        "_objc_autoreleaseReturnValue",
+        "_objc_copyWeak",
+        "_objc_destroyWeak",
+        "_objc_destructInstance",
         "_objc_getClass",
         "_objc_getProtocol",
+        "_objc_initWeak",
+        "_objc_initWeakOrNil",
+        "_objc_loadWeak",
+        "_objc_loadWeakRetained",
         "_objc_lookUpClass",
+        "_objc_moveWeak",
         "_objc_msgSend",
         "_objc_msgSendSuper2",
         "_objc_release",
         "_objc_retain",
+        "_objc_retainAutorelease",
+        "_objc_setProperty_nonatomic",
+        "_objc_storeStrong",
+        "_objc_storeWeak",
+        "_objc_storeWeakOrNil",
         "_object_dispose",
         "_object_getClass",
         "_property_getAttributes",

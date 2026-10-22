@@ -157,6 +157,7 @@ pub fn finish_thread() -> Result<()> {
             }
         }
     }
+    crate::objc::finish_thread();
     reset_thread();
     Ok(())
 }

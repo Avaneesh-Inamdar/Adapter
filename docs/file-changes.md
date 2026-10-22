@@ -19,6 +19,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/abi/README.md`
 - `docs/abi/contracts.json`
 - `docs/abi/objc-abi.md`
+- `docs/arc-results.md`
 - `docs/architecture.md`
 - `docs/compatibility.md`
 - `docs/component-research.md`
@@ -130,6 +131,14 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/differential-cli-debug.json`
 - `docs/test-results/differential-cli-release.json`
 - `docs/test-results/differential-debug.json`
+- `docs/test-results/differential-objc-arc-o0-candidate-debug.json.gz`
+- `docs/test-results/differential-objc-arc-o0-candidate-release.json.gz`
+- `docs/test-results/differential-objc-arc-o0-debug.json`
+- `docs/test-results/differential-objc-arc-o0-release.json`
+- `docs/test-results/differential-objc-arc-o2-candidate-debug.json.gz`
+- `docs/test-results/differential-objc-arc-o2-candidate-release.json.gz`
+- `docs/test-results/differential-objc-arc-o2-debug.json`
+- `docs/test-results/differential-objc-arc-o2-release.json`
 - `docs/test-results/differential-objc-candidate-debug.json.gz`
 - `docs/test-results/differential-objc-candidate-release.json.gz`
 - `docs/test-results/differential-objc-debug.json`
@@ -156,6 +165,8 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/mac-cli-reference-39677072171.json.gz`
 - `docs/test-results/mac-reference-39667131995.json.gz`
 - `docs/test-results/mac-reference-objc-39673099968.json.gz`
+- `docs/test-results/mac-reference-objc-arc-o0-39811445457.json.gz`
+- `docs/test-results/mac-reference-objc-arc-o2-39811445457.json.gz`
 - `docs/test-results/mac-reference-objc-metadata-39805811658.json.gz`
 - `docs/test-results/mac-reference-thread-39675626670.json.gz`
 - `docs/test-results/namespace-debug.log`
@@ -219,6 +230,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `src/objc/dispatch.s`
 - `src/objc/metadata.rs`
 - `src/objc/mod.rs`
+- `src/objc/ownership.rs`
 - `src/platform/mod.rs`
 - `src/platform/windows.rs`
 - `src/runtime/debug.rs`
@@ -257,6 +269,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/fixtures/mach_server.c`
 - `tests/fixtures/mach_vm.c`
 - `tests/fixtures/objc.m`
+- `tests/fixtures/objc_arc.m`
 - `tests/fixtures/objc_category.m`
 - `tests/fixtures/objc_core.m`
 - `tests/fixtures/objc_metadata.m`
@@ -276,6 +289,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/fixtures/xpc_client.c`
 - `tests/fixtures/xpc_missing.c`
 - `tests/fixtures/xpc_server.c`
+- `tests/integration/test_arc.py`
 - `tests/integration/test_guest_debug.py`
 - `tests/integration/test_jq.py`
 - `tests/integration/test_libc.py`

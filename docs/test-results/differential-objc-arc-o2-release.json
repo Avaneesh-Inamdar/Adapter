@@ -1,0 +1,48 @@
+{
+  "candidate": "target\\arc-synchronized-o2-release.json",
+  "case_count": 1024,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "bridge": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "customrr": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "pool": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "returnvalue": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "strong": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "threads": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "weak": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "weakops": {
+      "matched": 128,
+      "mismatched": 0
+    }
+  },
+  "matched": 1024,
+  "mismatched": 0,
+  "program_sha256": "e54173483b3ef8c19ad882e6af3ab2525b0581d54c5a1189db43b589a9a47d41",
+  "reference": "target\\mac-arc-reference-39811445457\\mac-reference-adapter-objc-arc-o2-v1-0590119fb1342a0c2736dce237f1e34de505abb0\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-objc-arc-o2-v1"
+}

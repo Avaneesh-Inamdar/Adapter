@@ -1,6 +1,6 @@
 # Same-binary Darwin/Windows differential testing
 
-The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Four probe suites use it — `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families), `adapter-thread-v1` (1,024 cases across eight threading families) and `adapter-objc-metadata-v1` (4,096 comparisons over protocol/property metadata) — and one program suite, `adapter-cli-v1`, compares the pinned jq and ripgrep binaries over a fixed argv/stdin corpus. A generator/build alone does not execute the guest and does not establish reference behavior.
+The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Six probe suites use it — `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families), `adapter-thread-v1` (1,024 cases across eight threading families) and `adapter-objc-metadata-v1` (4,096 comparisons over protocol/property metadata) — plus the [ARC/weak suites](arc-results.md) (`-O0` and `-O2`, 1,024 records each), and one program suite, `adapter-cli-v1`, compares the pinned jq and ripgrep binaries over a fixed argv/stdin corpus. A generator/build alone does not execute the guest and does not establish reference behavior.
 
 ## Commands
 
@@ -291,3 +291,7 @@ launchd) still have no reference capture.
 | [test-results/differential-objc-metadata-release.json](test-results/differential-objc-metadata-release.json) | 1,104 | `ab3f625d6ab84d36c1c7e2a85d4758fd2d533932ac6d9a686806a992e940bcb0` |
 
 The compressed reference and candidate files retain the complete stdout, parsed records, host and compiler/adapter identities. The reports use the exact same executable hash on both sides. Decode the gzips before passing them to `tools/differential.py compare`. The workflow artifact retains the executable, manifest and source for 14 days; the captures above remain in Git.
+
+## ARC/weak suites (`adapter-objc-arc-o0-v1`, `adapter-objc-arc-o2-v1`)
+
+[ARC results](arc-results.md) records the two-stage MRC/ARC compiler recipe, all eight ownership families, exact program hashes, the successful native Mac run and retained captures. Both levels compare 1,024 records with zero differences in debug and release. Use `build --suite adapter-objc-arc-o0-v1 --count 1024` (or the O2 suite); capture and compare retain the same strict identity and completeness checks.

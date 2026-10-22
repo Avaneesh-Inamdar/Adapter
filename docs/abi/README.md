@@ -3,9 +3,9 @@
 The guest ABI is a shared interface between subsystems. A host implementation
 with the same function name is not sufficient. The contracts in
 [contracts.json](contracts.json) define the currently implemented slices;
-[objc-abi.md](objc-abi.md) specifies the Objective-C slice in detail (contract v3
-adds protocol/property metadata and introspection after v2's relative lists and
-startup categories). The `mach_vm` contract declares the allocation,
+[objc-abi.md](objc-abi.md) specifies the Objective-C slice in detail (contract v4
+adds runtime-owned ARC strong/weak lifetimes after v3's protocol/property
+introspection). The `mach_vm` contract declares the allocation,
 release and protection slice with its return codes and the recorded-region rule.
 The threads contract is at
 version 2: it now declares the public `pthread_mutex_t`, `pthread_cond_t`,

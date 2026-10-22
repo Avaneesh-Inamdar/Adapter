@@ -10,19 +10,19 @@ unobserved APIs, implementation completeness or runtime test results. ARM64 imag
 
 | Image | Adapters available | Missing | API coverage |
 | --- | ---: | ---: | ---: |
-| AU Lab | 89 / 603 | 514 | 14.76% |
-| Pixie | 18 / 134 | 116 | 13.43% |
+| AU Lab | 90 / 603 | 513 | 14.93% |
+| Pixie | 21 / 134 | 113 | 15.67% |
 | LogTool | 25 / 34 | 9 | 73.53% |
-| Quartz Debug | 50 / 420 | 370 | 11.90% |
-| Server | 40 / 232 | 192 | 17.24% |
-| HomeKit Accessory Simulator | 28 / 319 | 291 | 8.78% |
+| Quartz Debug | 51 / 420 | 369 | 12.14% |
+| Server | 41 / 232 | 191 | 17.67% |
+| HomeKit Accessory Simulator | 35 / 319 | 284 | 10.97% |
 | IORegistryExplorer | 23 / 188 | 165 | 12.23% |
-| Network Link Conditioner | 22 / 105 | 83 | 20.95% |
+| Network Link Conditioner | 23 / 105 | 82 | 21.90% |
 | NLCBackgroundApp | 15 / 38 | 23 | 39.47% |
 | com.apple.Network-Link-Conditioner.remoteservice | 6 / 16 | 10 | 37.50% |
-| PacketLogger | 44 / 219 | 175 | 20.09% |
+| PacketLogger | 50 / 219 | 169 | 22.83% |
 | Printer Simulator | 30 / 135 | 105 | 22.22% |
-| PrinterSimulatorServer | 81 / 463 | 382 | 17.49% |
+| PrinterSimulatorServer | 84 / 463 | 379 | 18.14% |
 | Clipboard Viewer | 11 / 55 | 44 | 20.00% |
 | CrashReporterPrefs | 3 / 20 | 17 | 15.00% |
 | Icon Composer | 8 / 115 | 107 | 6.96% |

@@ -1,0 +1,48 @@
+{
+  "candidate": "target\\arc-synchronized-o0-debug.json",
+  "case_count": 1024,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "bridge": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "customrr": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "pool": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "returnvalue": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "strong": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "threads": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "weak": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "weakops": {
+      "matched": 128,
+      "mismatched": 0
+    }
+  },
+  "matched": 1024,
+  "mismatched": 0,
+  "program_sha256": "dde1c7f1e0d64d9ae65027657f74a700c74c7211bf8abbbd95a26f5de38a23b6",
+  "reference": "target\\mac-arc-reference-39811445457\\mac-reference-adapter-objc-arc-o0-v1-0590119fb1342a0c2736dce237f1e34de505abb0\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-objc-arc-o0-v1"
+}

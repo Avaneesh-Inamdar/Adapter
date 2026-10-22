@@ -10,6 +10,7 @@ use std::{
     thread::ThreadId,
 };
 mod metadata;
+mod ownership;
 use metadata::{Property, Protocol};
 
 #[derive(Clone)]
@@ -39,10 +40,13 @@ struct Class {
     methods: BTreeMap<Vec<u8>, u64>,
     protocols: Vec<u64>,
     properties: BTreeMap<Vec<u8>, u64>,
+    destructor: bool,
 }
 struct Allocation {
     layout: Layout,
     references: usize,
+    destructed: bool,
+    generation: u64,
 }
 struct Session {
     regions: Vec<Region>,
@@ -50,6 +54,9 @@ struct Session {
     names: BTreeMap<Vec<u8>, u64>,
     selectors: BTreeMap<Vec<u8>, CString>,
     allocations: BTreeMap<u64, Allocation>,
+    weak_slots: BTreeMap<u64, u64>,
+    weak_targets: BTreeMap<u64, BTreeSet<u64>>,
+    next_allocation: u64,
     initializing: BTreeMap<u64, Option<ThreadId>>,
     protocols: BTreeMap<u64, Protocol>,
     protocol_names: BTreeMap<Vec<u8>, u64>,
@@ -156,9 +163,11 @@ impl Session {
         let ro = bits;
         self.range(ro, 72, false)?;
         let flags = self.u32(ro)?;
-        if flags & !(1 | 2 | 16) != 0 {
+        if flags & !(1 | 2 | 4 | 16 | 128 | 256 | 512) != 0
+            || (flags & 4 != 0) != (flags & 256 != 0)
+        {
             return Err(format!(
-                "Objective-C class flags {flags:#x} unsupported (ARC/C++/weak/Swift)"
+                "Objective-C class flags {flags:#x} unsupported (constructors/Swift)"
             ));
         }
         // Darwin answers class_getInstanceSize with ro.instanceSize unchanged, so a
@@ -169,10 +178,10 @@ impl Session {
         if size > 1024 * 1024 || start > size {
             return Err("Objective-C instance layout invalid".into());
         }
-        for offset in [16, 56] {
-            if self.u64(ro + offset)? != 0 {
-                return Err("Objective-C ownership layouts unsupported".into());
-            }
+        let strong = self.ownership_layout(self.u64(ro + 16)?, start, size)?;
+        let weak = self.ownership_layout(self.u64(ro + 56)?, start, size)?;
+        if !strong.is_disjoint(&weak) {
+            return Err("Objective-C strong/weak ownership layouts overlap".into());
         }
         let name = self.string(self.u64(ro + 24)?)?;
         if name.is_empty() {
@@ -182,6 +191,13 @@ impl Session {
         let list = self.u64(ro + 32)?;
         if list != 0 {
             methods = self.read_methods(list)?;
+        }
+        let destructor = flags & 1 == 0 && flags & 256 != 0;
+        if destructor && !methods.contains_key(b".cxx_destruct".as_slice()) {
+            return Err("Objective-C destructor flag without cleanup method".into());
+        }
+        if (!strong.is_empty() || !weak.is_empty()) && !destructor {
+            return Err("Objective-C ownership layout without destructor".into());
         }
         let ivars = self.u64(ro + 48)?;
         if ivars != 0 {
@@ -199,7 +215,7 @@ impl Session {
                 let field_size = self.u32(ivar + 28)? as usize;
                 self.string(self.u64(ivar + 8)?)?;
                 let types = self.string(self.u64(ivar + 16)?)?;
-                if types.first() == Some(&b'@')
+                if (types.first() == Some(&b'@') && (field_size != 8 || offset < 8))
                     || offset.checked_add(field_size).is_none_or(|n| n > size)
                 {
                     return Err(
@@ -221,6 +237,7 @@ impl Session {
                 methods,
                 protocols,
                 properties,
+                destructor,
             },
         );
         self.read_class_at(isa, depth + 1)?;
@@ -351,6 +368,9 @@ pub fn begin(images: Vec<Image>) -> Result<Guard> {
         names: BTreeMap::new(),
         selectors: BTreeMap::new(),
         allocations: BTreeMap::new(),
+        weak_slots: BTreeMap::new(),
+        weak_targets: BTreeMap::new(),
+        next_allocation: 1,
         initializing: BTreeMap::new(),
         protocols: BTreeMap::new(),
         protocol_names: BTreeMap::new(),
@@ -638,6 +658,7 @@ impl Guard {
 }
 impl Drop for Guard {
     fn drop(&mut self) {
+        ownership::clear_return();
         POOLS.with(|p| p.borrow_mut().clear());
         if let Ok(mut lock) = registry().0.lock()
             && let Some(session) = lock.take()
@@ -883,11 +904,17 @@ unsafe extern "sysv64" fn class_create_instance(class: u64, extra: usize) -> u64
     unsafe {
         (object as *mut u64).write(class);
     }
+    let generation = s.next_allocation;
+    s.next_allocation = generation
+        .checked_add(1)
+        .unwrap_or_else(|| fatal("Objective-C allocation generation overflow"));
     s.allocations.insert(
         object as u64,
         Allocation {
             layout,
             references: 1,
+            destructed: false,
+            generation,
         },
     );
     object as u64
@@ -918,85 +945,16 @@ unsafe extern "sysv64" fn objc_alloc_init(class: u64) -> u64 {
     unsafe { send_object(object, b"init") }
 }
 unsafe extern "sysv64" fn object_dispose(object: u64) -> u64 {
-    if object == 0 {
-        return 0;
-    }
-    let allocation = registry()
-        .0
-        .lock()
-        .unwrap()
-        .as_mut()
-        .unwrap()
-        .allocations
-        .remove(&object)
-        .unwrap_or_else(|| fatal("object_dispose requires runtime-owned instance"));
-    unsafe {
-        dealloc(object as *mut u8, allocation.layout);
-    }
-    0
+    unsafe { ownership::dispose(object) }
 }
 unsafe extern "sysv64" fn retain(object: u64) -> u64 {
-    if object == 0 {
-        return 0;
-    }
-    let mut lock = registry().0.lock().unwrap();
-    let s = lock.as_mut().unwrap();
-    if s.classes.contains_key(&object) {
-        return object;
-    }
-    let allocation = s
-        .allocations
-        .get_mut(&object)
-        .unwrap_or_else(|| fatal("retain requires runtime-owned instance"));
-    allocation.references = allocation
-        .references
-        .checked_add(1)
-        .unwrap_or_else(|| fatal("Objective-C retain overflow"));
-    object
+    unsafe { ownership::retain(object) }
 }
 unsafe extern "sysv64" fn release(object: u64) {
-    if object == 0 {
-        return;
-    }
-    let action = {
-        let mut lock = registry().0.lock().unwrap();
-        let s = lock.as_mut().unwrap();
-        if s.classes.contains_key(&object) {
-            return;
-        }
-        let allocation = s
-            .allocations
-            .get_mut(&object)
-            .unwrap_or_else(|| fatal("release requires runtime-owned instance"));
-        if allocation.references == 0 {
-            fatal("recursive Objective-C deallocation");
-        }
-        allocation.references -= 1;
-        if allocation.references != 0 {
-            return;
-        }
-        let class = s.object_class(object).unwrap_or_else(|e| fatal(e));
-        let selector = s.intern(b"dealloc".to_vec());
-        s.lookup(class, b"dealloc").map(|imp| (imp, selector))
-    };
-    if let Some((imp, selector)) = action {
-        unsafe {
-            call_void(imp, object, selector);
-        }
-    }
-    let allocation = registry()
-        .0
-        .lock()
-        .unwrap()
-        .as_mut()
-        .unwrap()
-        .allocations
-        .remove(&object);
-    if let Some(allocation) = allocation {
-        unsafe {
-            dealloc(object as *mut u8, allocation.layout);
-        }
-    }
+    unsafe { ownership::release(object) }
+}
+unsafe extern "sysv64" fn autorelease(object: u64) -> u64 {
+    unsafe { ownership::autorelease(object) }
 }
 thread_local! { static POOLS: RefCell<Vec<Vec<u64>>> = const { RefCell::new(Vec::new()) }; }
 unsafe extern "sysv64" fn pool_push() -> u64 {
@@ -1006,7 +964,7 @@ unsafe extern "sysv64" fn pool_push() -> u64 {
         p.len() as u64
     })
 }
-unsafe extern "sysv64" fn autorelease(object: u64) -> u64 {
+unsafe extern "sysv64" fn autorelease_raw(object: u64) -> u64 {
     if object != 0 {
         POOLS.with(|p| {
             p.borrow_mut()
@@ -1018,16 +976,40 @@ unsafe extern "sysv64" fn autorelease(object: u64) -> u64 {
     object
 }
 unsafe extern "sysv64" fn pool_pop(token: u64) {
-    let objects = POOLS.with(|p| {
-        let mut p = p.borrow_mut();
-        if token == 0 || token != p.len() as u64 {
-            fatal("autorelease pools must pop in stack order");
-        }
-        p.pop().unwrap()
-    });
-    for object in objects.into_iter().rev() {
+    ownership::flush_return();
+    loop {
+        let object = POOLS.with(|p| {
+            let mut p = p.borrow_mut();
+            if token == 0 || token != p.len() as u64 {
+                fatal("autorelease pools must pop in stack order");
+            }
+            let object = p.last_mut().unwrap().pop();
+            if object.is_none() {
+                p.pop();
+            }
+            object
+        });
+        let Some(object) = object else {
+            break;
+        };
         unsafe {
             release(object);
+        }
+    }
+}
+/// Drain explicit pools before a guest thread's stack and TLS disappear.
+pub fn finish_thread() {
+    if registry().0.lock().unwrap().is_none() {
+        return;
+    }
+    ownership::flush_return();
+    loop {
+        let depth = POOLS.with(|p| p.borrow().len());
+        if depth == 0 {
+            break;
+        }
+        unsafe {
+            pool_pop(depth as u64);
         }
     }
 }
@@ -1040,6 +1022,9 @@ unsafe extern "sysv64" {
     fn adapter_objc_msg_send_super2();
 }
 pub fn symbol(name: &str) -> Option<u64> {
+    if let Some(address) = ownership::symbol(name) {
+        return Some(address);
+    }
     if let Some(address) = metadata::symbol(name) {
         return Some(address);
     }
@@ -1068,8 +1053,7 @@ pub fn symbol(name: &str) -> Option<u64> {
         "_objc_autorelease" => autorelease as *const () as u64,
         "_objc_autoreleasePoolPush" => pool_push as *const () as u64,
         "_objc_autoreleasePoolPop" => pool_pop as *const () as u64,
-        // No fpret/stret, weak, ARC return-value handshake, exceptions, protocols,
-        // dynamic class mutation, tagged pointers or nonpointer isa adapters.
+        // No fpret/stret, exceptions, dynamic mutation or packed/tagged isa.
         _ => return None,
     })
 }
@@ -1194,9 +1178,9 @@ mod tests {
             object_dispose(object);
         }
         drop(guard);
-        // ARC metadata fails before any registration or selector patch.
+        // Swift metadata fails before any registration or selector patch.
         fixture.data[33] = original_selector;
-        fixture.data[10] |= 0x80;
+        fixture.data[10] |= 0x40;
         assert!(begin(vec![fixture.image()]).is_err());
         assert_eq!(fixture.data[33], original_selector);
     }

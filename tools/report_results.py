@@ -108,6 +108,8 @@ def report():
     thread_differential = retained('differential-thread-')
     cli_differential = retained('differential-cli-')
     metadata_differential = retained('differential-objc-metadata-')
+    arc_o0_differential = retained('differential-objc-arc-o0-')
+    arc_o2_differential = retained('differential-objc-arc-o2-')
     summary = {'rust_tests_passed':rust_count,'rust_test_status':rust_status,'archive_tests_passed':archive_count,'integration_tests_attempted':counts,
                'integration_status':{k:'passed' if passed[k] else 'blocked' for k in logs},
                'distinct_tests_passed_final':rust_count+archive_count+len(re.findall(r'^test_.* \.\.\. ok$',logs['debug'],re.M)),
@@ -118,7 +120,9 @@ def report():
                'objective_c_differential':{'hosted_intel_mac_run':'39673099968','profiles':objc_differential},
                'thread_differential':{'hosted_intel_mac_run':'39675626670','profiles':thread_differential},
                'cli_differential':{'hosted_intel_mac_run':'39677072171','profiles':cli_differential},
-               'objective_c_metadata_differential':{'hosted_intel_mac_run':'39805811658','profiles':metadata_differential}}
+               'objective_c_metadata_differential':{'hosted_intel_mac_run':'39805811658','profiles':metadata_differential},
+               'objective_c_arc_o0_differential':{'hosted_intel_mac_run':'39811445457','profiles':arc_o0_differential},
+               'objective_c_arc_o2_differential':{'hosted_intel_mac_run':'39811445457','profiles':arc_o2_differential}}
     (OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print('Recorded verification reports:',summary['distinct_tests_passed_final'],'distinct tests passed in final run')
 

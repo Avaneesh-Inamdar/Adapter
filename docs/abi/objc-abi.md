@@ -1,4 +1,4 @@
-# Objective-C ABI contract v3
+# Objective-C ABI contract v4
 
 Status: implemented bounded Intel slice. Owner: `src/objc/mod.rs` and `src/objc/dispatch.s`. Loader integration: `src/runtime/mod.rs`, `src/loader/link.rs` and `src/inspect/mod.rs`.
 
@@ -9,6 +9,8 @@ Revision 3 admits compiler-emitted protocols, class/category adoption and proper
 records, and adds ten read-only introspection entry points. It leaves protocol
 objects' on-disk isa unchanged; sending Objective-C messages to a protocol object
 is unsupported.
+
+Revision 4 adds runtime-owned ARC strong/weak ownership, guest RR dispatch, compiler ivar cleanup and x64 return-value ownership adapters. Its root-class helpers are libobjc adapters, not Foundation's NSObject implementation.
 
 ## Target and evidence
 
@@ -40,9 +42,9 @@ All addresses below are relocated guest addresses. Counts, ranges and strings ar
 
 Admission rules:
 
-- Class data must be an aligned, unflagged pointer to the read-only record. Only class flags `RO_META=1`, `RO_ROOT=2` and `RO_HIDDEN=16` are admitted.
+- Class data must be an aligned, unflagged pointer to the read-only record. Admitted flags are `RO_META=1`, `RO_ROOT=2`, `RO_HIDDEN=16`, `RO_IS_ARC=128`, `RO_HAS_WEAK_WITHOUT_ARC=512`, and the pair `RO_HAS_CXX_STRUCTORS=4` / `RO_HAS_CXX_DTOR_ONLY=256`. Either destructor bit without the other is rejected: C++ construction remains unsupported. An ordinary destructor-marked class must define its own executable `.cxx_destruct` method.
 - Image-info version must be 0; flags must be 0 or `0x40`. Bit `0x40` describes the category-properties ABI and does not mean ARC is enabled.
-- A method-list header is either `entsize == 24` with no flags, or the small flag `0x80000000` with `entsize == 12`. The direct-selector flag `0x40000000` and any other entry size are rejected. Ivar entry size must equal 32. Ivar offset variables are read as low 32-bit offsets; each field must fit the compiler's instance size. Direct object ivars and nonnull ownership layouts are rejected.
+- A method-list header is either `entsize == 24` with no flags, or the small flag `0x80000000` with `entsize == 12`. The direct-selector flag `0x40000000` and any other entry size are rejected. Ivar entry size must equal 32. Ivar offset variables are read as low 32-bit offsets; each field must fit the compiler's instance size. Object ivars must be 8 bytes and cannot overlap isa. Strong/weak bitmap strings are validated as described below.
 - Class names must be nonempty and unique. Class/metaclass links must agree, ordinary superclass chains must be acyclic, and subclass instance sizes cannot shrink below their superclass.
 - A root metaclass's superclass is its ordinary root class and its isa is itself. A child metaclass's superclass is its ordinary superclass's metaclass; its isa is the root metaclass.
 - Outside the dyld shared cache a relative selector field names a `__objc_selrefs` slot, so the name pointer is read from that slot; relative type and IMP fields are direct field-relative addresses. An entry whose points land outside a mapped segment, or whose IMP is not executable, is rejected before registration.
@@ -70,7 +72,7 @@ The loader maps and fixes up the complete startup image graph, validates guest i
 
 The first ordinary message initializes its class's superclass before the class. `+initialize` is looked up through the metaclass chain, so an inherited implementation can run with subclass `self`, and a category-provided `+initialize` takes the same priority as any other category class method. State is maintained per ordinary class: initializing with owner thread, or initialized. Same-thread recursion may proceed; competing threads wait on a condition variable. Registry locks are released before calling guest IMPs. These are implemented synchronization rules; a comprehensive concurrent Darwin differential test has not yet validated them.
 
-The guard remains active through guest entry, owned-thread joins and guest finalizers. Session teardown clears the current thread's pool bookkeeping and frees remaining runtime-owned allocations without invoking guest deallocation methods. Applications must balance explicit pools and ownership before return; this is not Apple's complete process-exit or thread-exit autorelease behavior.
+The guard remains active through guest entry, owned-thread joins and guest finalizers. Guest thread cleanup drains explicit pools. Session teardown clears return-handoff/pool bookkeeping and frees remaining runtime-owned allocations without inventing guest deallocations for leaked objects or cycles. This is not Apple's complete process-exit behavior. Autorelease without an explicit pool remains unsupported.
 
 ## Message calling convention
 
@@ -98,7 +100,7 @@ Names here use C spelling. Mach-O symbol-table names have an additional leading 
 | `object_dispose` | Frees a runtime-owned instance and returns nil |
 | `objc_alloc` | Ordinary lazy initialization and guest `+alloc` dispatch; preserves a guest allocation override |
 | `objc_alloc_init` | Guest `+alloc` followed by guest `-init`, nil-safe |
-| `objc_retain`, `objc_release` | Separate reference counts for runtime-owned instances; class objects are immortal; nil is harmless |
+| `objc_retain`, `objc_release`, `objc_autorelease` | Dispatch available guest RR methods, otherwise preserve the legacy runtime-owned count path; class objects are immortal and nil is harmless |
 | `objc_autorelease`, `objc_autoreleasePoolPush`, `objc_autoreleasePoolPop` | Explicit per-thread pools; LIFO tokens and reverse release order |
 | `objc_getProtocol`, `protocol_getName`, `protocol_isEqual` | Startup protocol lookup/identity; missing lookup is nil, nil name is `"nil"`, two nil protocols compare equal |
 | `protocol_conformsToProtocol`, `class_conformsToProtocol` | Recursive protocol adoption; the C class API checks the specified class's adoption, without walking its superclasses |
@@ -112,7 +114,55 @@ by these ten APIs. These queries do not trigger class `+initialize`. Unknown
 non-null handles terminate with status 125; metadata admission remains atomic
 with respect to selector patching and guest execution.
 
-There can be at most 65,536 live runtime-owned allocations. Reference counts are Adapter bookkeeping, not a claim to implement custom `retain`/`release` overrides or ARC. Final release invokes an available `-dealloc`; it frees the instance if that method did not already call `object_dispose`. Autorelease requires a matching explicit pool. Instance ivar destruction, weak zeroing and exception cleanup are not supplied.
+There can be at most 65,536 live runtime-owned allocations and 65,536 registered weak slots. Counts and allocation generations are host bookkeeping. Generation checks prevent a returning `-dealloc` from freeing a new object that reused its address. ARC ivar destruction and zeroing weak references are implemented below; exception cleanup remains unsupported.
+
+## ARC and weak ownership
+
+| Entry points (C spelling) | Contract |
+| --- | --- |
+| `_objc_rootRetain`, `_objc_rootRelease`, `_objc_rootAutorelease`, `_objc_rootRetainCount`, `_objc_rootTryRetain`, `_objc_rootIsDeallocating` | Root count/pool operations without recursive RR dispatch; try-retain fails once final release marks deallocating |
+| `objc_storeStrong` | Retain incoming value, publish the slot, release old value; self-assignment is harmless |
+| `objc_setProperty_nonatomic` | Strong store at the supplied instance offset; atomic/copy setters remain absent |
+| `objc_initWeak`, `objc_storeWeak`, and `OrNil` variants | Register writable guest storage; pin while `allowsWeakReference` runs outside the registry lock. Normal variants reject a dying/denied value; `OrNil` variants store nil |
+| `objc_loadWeakRetained` | Atomically load/pin a registered value and return +1; a dying value returns nil. An available `retainWeakReference` callback supplies the returned retain while an internal pin protects it |
+| `objc_loadWeak` | Retained load followed by autorelease |
+| `objc_copyWeak`, `objc_moveWeak`, `objc_destroyWeak` | Copy into uninitialized storage, move and nil the source, or unregister the slot; concurrent weak clearing is serialized |
+| `objc_destructInstance` | Each class's own `.cxx_destruct`, subclass first, once; then weak clearing without freeing memory |
+| `object_dispose` | Mark deallocating, destruct, zero remaining weak slots and free the runtime allocation |
+| `objc_autoreleaseReturnValue`, `objc_retainAutoreleaseReturnValue`, `objc_retainAutoreleasedReturnValue`, `objc_claimAutoreleasedReturnValue`, `objc_unsafeClaimAutoreleasedReturnValue` | Matching x64 return handoff, with ordinary autorelease/retain fallback |
+| `objc_retainAutorelease` | Retain followed by autorelease |
+
+Strong/weak layout strings encode high-nibble skips and low-nibble scans in
+pointer words starting at `instanceStart`. They must terminate within 4,096
+bytes, stay inside the instance, avoid isa and not overlap each other. A nonempty
+layout requires the ordinary class's destructor. The compiler's `.cxx_destruct`
+performs field cleanup; the bitmap does not cause a second release pass.
+
+Ownership slots must be aligned writable guest storage: mapped images,
+runtime-owned instances, the calling thread's stack, or previously registered
+weak storage whose lifetime the client still guarantees. Weak registration does
+not keep the target alive. Final release sets count zero before `-dealloc`, so
+concurrent weak loads cannot resurrect it. Guest RR, weak and destructor
+callbacks run outside the registry lock. Client races mutating/destroying the
+same weak variable remain unsupported.
+
+Explicit pools drain backwards, including autoreleases added to the draining
+pool by guest deallocation. The x64 return thunks capture the actual caller
+return address and recognize `mov rax,rdi` followed by a relative or RIP-indirect
+claim call, directly or through a validated Mach-O import stub. A thread-local
+offer is accepted only for the matching object and claim return address. Unsafe
+claim releases the offered +1. Other call sequences use ordinary autorelease
+and retain fallback, which may extend temporary lifetimes compared with Apple's
+optimized path; additional compiler patterns need probes.
+
+The consumer `objc_arc.m` is compiled twice: an MRC root client of libobjc and an
+actual ARC consumer at `-O0` or `-O2`. Both run with classic, chained and relative
+fixups. Mac suites compare the identical downloaded executables. Tests cover
+inherited strong/weak ivar cleanup, weak copy/move/zeroing, deallocating-object
+`OrNil`, reentrant pool draining, return ownership, custom RR, bridges and a
+weak-load/final-release race. Negative tests reject constructor-only flags,
+overlapping/out-of-bounds layouts, missing cleanup and ivars overlapping isa
+before the constructor marker.
 
 ## Failure behavior and exclusions
 
@@ -120,13 +170,13 @@ Unknown imports fail static linking/preflight. Unsupported or malformed Objectiv
 
 Unknown selectors, tagged receivers, unknown/nonpointer isa, invalid runtime-owned-object operations and invalid pool order produce an Objective-C diagnostic and terminate the worker with status 125. There is no message forwarding or method-resolution fallback.
 
-Unsupported in v3: dynamic Objective-C `dlopen` registration/unload, protocol messages, runtime protocol/property mutation and copy-list APIs, cross-image duplicate protocol coalescing, compact direct-selector lists, shared-cache/preoptimized metadata, signed class records, GC, ARC, weak references, custom retain/release semantics, ownership layouts, C++ construction/destruction, Objective-C exceptions, associations, dynamic class/method mutation, tagged pointers, packed/nonpointer isa, Swift classes/runtime, fpret/stret/fp2ret and forwarding. Foundation, AppKit and Apple framework compatibility are separate work.
+Unsupported in v4: foreign/externally allocated objects, ARC Blocks ownership adapters, atomic/copy properties, dynamic Objective-C registration/unload, protocol messages/mutation/copy-list APIs, duplicate-protocol coalescing, direct-selector lists, shared-cache/preoptimized or signed metadata, GC, C++ constructors, exceptions/ARC exception cleanup, associations, dynamic class/method mutation, tagged/packed isa, Swift, fpret/stret/fp2ret and forwarding. Arbitrary custom RR/weak policies need further reference coverage. Foundation and AppKit remain separate work.
 
 ## Required checks
 
 The consumers are `tests/fixtures/objc_core.m` and `tests/fixtures/objc_category.m`, built by `tests/build_fixtures.py` in classic, chained-fixup and relative-method-list forms. `objc_core` covers class/selector registration, inheritance, `+load`/`+initialize`, super sends, mixed GP/SSE/stack arguments, nil sends and explicit ownership. `objc_category` covers class and instance method overriding, a category-only class method, inheritance of category methods and class-before-category `+load` order. `tests/fixtures/objc.m` remains the minimal class-method return-42 probe.
 
-`tests/integration/test_objc.py` runs all three fixup forms of both consumers and rejects excessive method counts and unsupported image flags without printing a fixture constructor marker. `tests/integration/test_runtime.py` contains the minimal positive probe. The unit test in `src/objc/mod.rs` checks atomic failure before selector patching, malformed IMP and ARC rejection, and actual GPR/SSE/stack/nil dispatch.
+`tests/integration/test_objc.py` runs all three fixup forms of both consumers and rejects excessive method counts and unsupported image flags without printing a fixture constructor marker. `tests/integration/test_runtime.py` contains the minimal positive probe. The unit test in `src/objc/mod.rs` checks atomic failure before selector patching, malformed IMP and Swift-flag rejection, and actual GPR/SSE/stack/nil dispatch.
 
 `objc_metadata.m` adds protocol inheritance, category adoption, required/optional
 descriptions, instance/class properties, inherited property lookup and scalar

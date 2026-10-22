@@ -1,4 +1,10 @@
 Verified jq-1.8.2 test data: 20 files, 188d03d029e8242a366d2286f07638924afe997120f6057e606f3c7a33984312
+test_arc_ownership_at_o0_o2_with_all_fixup_forms (test_arc.ArcTests.test_arc_ownership_at_o0_o2_with_all_fixup_forms) ... ok
+test_cxx_constructor_metadata_is_still_rejected (test_arc.ArcTests.test_cxx_constructor_metadata_is_still_rejected) ... ok
+test_object_ivar_cannot_overlap_isa (test_arc.ArcTests.test_object_ivar_cannot_overlap_isa) ... ok
+test_overlapping_strong_and_weak_maps_rejected (test_arc.ArcTests.test_overlapping_strong_and_weak_maps_rejected) ... ok
+test_ownership_map_outside_instance_rejected (test_arc.ArcTests.test_ownership_map_outside_instance_rejected) ... ok
+test_ownership_map_without_destructor_rejected (test_arc.ArcTests.test_ownership_map_without_destructor_rejected) ... ok
 test_bad_guest_breakpoint_is_tool_error (test_guest_debug.GuestDebuggerTests.test_bad_guest_breakpoint_is_tool_error) ... ok
 test_existing_output_is_refused (test_guest_debug.GuestDebuggerTests.test_existing_output_is_refused) ... ok
 test_explicit_guest_vm_breakpoint (test_guest_debug.GuestDebuggerTests.test_explicit_guest_vm_breakpoint) ... ok
@@ -120,6 +126,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 119 tests in 25.289s
+Ran 125 tests in 20.543s
 
 OK

@@ -14,7 +14,7 @@ Recorded 2026-10-22 on Windows x86-64. This slice loads compiler-emitted Intel O
   class/category/protocol properties and scalar compiler-generated accessors. Ten
   read-only introspection APIs return validated, session-lived metadata.
 
-The exact admission rules, imports and remaining exclusions are in [Objective-C ABI contract v3](abi/objc-abi.md). Source evidence, compiler-output hashes and the relative-list observation are in [the pinned evidence report](reverse-engineering/objc-runtime-evidence.md). The new record layouts and query semantics are documented in [metadata evidence](reverse-engineering/objc-metadata-evidence.md).
+The exact admission rules, imports and remaining exclusions are in [Objective-C ABI contract v4](abi/objc-abi.md). Source evidence, compiler-output hashes and the relative-list observation are in [the pinned evidence report](reverse-engineering/objc-runtime-evidence.md). The new record layouts and query semantics are documented in [metadata evidence](reverse-engineering/objc-metadata-evidence.md).
 
 ## Confirmed checks
 
@@ -45,8 +45,8 @@ The consumer sources are [objc_core.m](../tests/fixtures/objc_core.m) and [objc_
 
 ## Verification and remaining work
 
-The full verification run passed all 16 stages with **181 distinct tests: 32 Rust, 30 archive and 119 integration**; every integration test also passed against the release build, and the Objective-C tests are in both profiles.
+The full verification run passed all 16 stages with **187 distinct tests: 32 Rust, 30 archive and 125 integration**; every integration test also passed against the release build, and the Objective-C tests are in both profiles.
 
 A hosted Intel Mac executed the same 4,096-case binary and matched Adapter in every case, so selector registration, dispatch, Super2 sends, category override, nil returns, class identity/size/metaclass state, object creation/identity and `+load` order now have Darwin reference evidence. That reference is a hosted macOS VM, and it covers compiler-emitted classes only. Concurrent initialization, selector uniqueness across multiple startup images, Foundation/AppKit behavior and broader real application behavior remain unverified.
 
-The next runtime work is ARC/weak with its own Mac differential probe and real-library lifecycle coverage. Protocol/property mutation, copy-list APIs, protocol-object messages and cross-image duplicate-protocol coalescing remain unsupported. Foundation and AppKit require additional subsystems. Dynamic Objective-C plugins, shared-cache metadata, exceptions, Swift, packed/tagged isa and aggregate/x87 message returns remain unsupported; the contract lists the precise boundaries.
+[ARC/weak ownership](arc-results.md) now has compiled consumers and a Mac differential probe at O0/O2. The next runtime work is ARC Blocks, atomic/copy properties and real-library lifecycle coverage. Protocol/property mutation, copy-list APIs, protocol-object messages and cross-image duplicate-protocol coalescing remain unsupported. Foundation and AppKit require additional subsystems. Dynamic Objective-C plugins, shared-cache metadata, exceptions, Swift, packed/tagged isa and aggregate/x87 message returns remain unsupported; the contract lists the precise boundaries.
