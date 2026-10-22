@@ -117,9 +117,25 @@ class RuntimeTests(unittest.TestCase):
         for name in ['signals','signals-chained']:
             p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)
             self.assertEqual(p.stdout,'signals:dispositions, masks, raise and pending passed\n')
+            self.assertIn('signals-fixture: User defined signal 1',p.stderr)
+    def test_pthread_qos_classes_are_recorded_per_thread(self):
+        for name in ['qos','qos-chained']:
+            p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)
+            self.assertEqual(p.stdout,'qos:classes, priorities, attributes and overrides passed\n')
     def test_signal_default_action_terminates_guest(self):
         p=call('adapter-run',FIX/'signals_default');self.assertEqual(p.returncode,128+30)
         self.assertEqual(p.stdout,'signals_default:before\n');self.assertIn('terminated by signal 30',p.stderr)
+    def test_dispatch_queues_groups_barriers_and_main_queue(self):
+        for name in ['dispatch','dispatch-chained']:
+            p=call('adapter-run',FIX/name,timeout=60);self.assertEqual(p.returncode,0,p.stderr)
+            self.assertEqual(p.stdout,'dispatch:queues, groups, barriers, once, after, apply and main passed\n')
+    def test_dispatch_block_objects_and_sources(self):
+        for name in ['dispatch_source','dispatch_source-chained']:
+            p=call('adapter-run',FIX/name,timeout=60);self.assertEqual(p.returncode,0,p.stderr)
+            self.assertEqual(p.stdout,'dispatch_source:block objects, data and timer sources passed\n')
+    def test_dispatch_sync_onto_running_queue_traps(self):
+        p=call('adapter-run',FIX/'dispatch_deadlock');self.assertEqual(p.returncode,128+4)
+        self.assertEqual(p.stdout,'dispatch_deadlock:before\n');self.assertIn('deadlock',p.stderr)
     def test_cxx_thread_local_destructors(self):
         for name in ['cxx_tls','cxx_tls-chained']:
             p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)

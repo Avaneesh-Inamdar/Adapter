@@ -46,14 +46,14 @@ Status: **implemented-slices**. Dependencies: P1.
 
 | # | Work item | Status | Remaining work / boundary |
 | ---: | --- | --- | --- |
-| 14 | libdispatch / GCD | not-started | Assess upstream Windows backend, bridge guest Blocks/calling convention, queues, QoS and Mach dispatch sources. |
+| 14 | libdispatch / GCD | implemented-slice | Queues (serial, concurrent, barriers, targets, suspension), sync/async/and_wait, groups, once, after, apply, block objects, timer and user-data sources, the main queue and Block runtime copy/dispose run with verified Mach-O consumers. Remaining: descriptor, process, signal and Mach sources, dispatch_data/io, workloops and QoS scheduling. |
 | 15 | Full CoreFoundation and Foundation | implemented-slice | Current CF strings only; add collections, constant objects, resources, bundles, NSObject lifecycle and toll-free bridging from consumers. |
 | 16 | CFRunLoop on Mach ports | not-started | Modes, sources, observers, timers, wakeups and Mach-port callbacks, with reference ordering. |
 | 17 | Complex Mach messages | implemented-slice | Simple broker messages exist. Add OOL/port descriptors, rights transfer, copy/deallocate rules and partial-failure cleanup. |
 | 18 | XPC | implemented-slice | Typed broker transport exists; Apple interoperability, richer objects, GCD scheduling, peer validation and entitlements remain. |
 | 19 | Real launchd semantics | implemented-slice | Job plist/demand-spawn subset exists. Add domains, KeepAlive, supervision/throttling, socket activation, inherited rights and launchctl behavior. |
 | 20 | fork / exec / posix_spawn | not-started | Start with spawn and argument/environment/descriptor inheritance; model fork snapshots and atfork separately. |
-| 21 | Signals and syscall personality | implemented-slice | Synchronous guest signals: dispositions, masks, pending delivery, sa_mask and default termination run with a verified Mach-O consumer. Remaining: asynchronous delivery, per-thread masks, siginfo/ucontext, alternate stacks, fault mapping, restart and direct syscall interception. |
+| 21 | Signals and syscall personality | implemented-slice | Synchronous guest signals: dispositions, masks, pending sets, sigwait, sa_mask and default termination run with a verified Mach-O consumer. Remaining: asynchronous delivery, per-thread masks, siginfo/ucontext, alternate stacks, fault mapping, restart and direct syscall interception. |
 | 22 | IOKit / sysctl / proc_info | not-started | Target-specific device/process facts and guest object/handle ownership; no host-handle substitution. |
 | 23 | macOS service daemons | external-gate | cfprefsd, notifyd, distnoted, LaunchServices, securityd/trustd and opendirectoryd binaries are Apple artifacts that are absent from the supplied Xcode XIP and cannot be redistributed; the client side is covered by the launchd and XPC slices. See docs/item-gates.md. |
 | 24 | FSEvents and Spotlight | not-started | Persistent event IDs, rescan/drop semantics, indexing and query behavior; Windows directory notifications are only a backend. |

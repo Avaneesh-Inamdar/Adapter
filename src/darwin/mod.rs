@@ -2,10 +2,12 @@
 //! calling convention, including when compiled for the Windows MSVC target.
 pub mod blocks;
 pub mod callbacks;
+pub mod dispatch;
 pub mod dl;
 pub mod dyld;
 pub mod libc;
 pub mod mach;
+pub mod qos;
 pub mod signal;
 pub mod stack;
 pub mod sync;
@@ -71,6 +73,12 @@ unsafe extern "sysv64" fn memcmp(a: *const u8, b: *const u8, n: usize) -> i32 {
     0
 }
 pub fn symbol(name: &str) -> Option<u64> {
+    if let Some(value) = qos::symbol(name) {
+        return Some(value);
+    }
+    if let Some(value) = dispatch::symbol(name) {
+        return Some(value);
+    }
     if let Some(value) = signal::symbol(name) {
         return Some(value);
     }

@@ -5,7 +5,10 @@
 //! asynchronous interruption of other guest threads and no job control, so stop
 //! and continue signals are recorded and ignored rather than faked.
 use crate::darwin::thread_state;
-use std::{collections::BTreeMap, sync::Mutex};
+use std::{
+    collections::BTreeMap,
+    sync::{Condvar, Mutex},
+};
 
 const SIG_DFL: u64 = 0;
 const SIG_IGN: u64 = 1;
@@ -47,6 +50,8 @@ static STATE: Mutex<State> = Mutex::new(State {
     mask: 0,
     pending: 0,
 });
+/// Signalled whenever a blocked signal becomes pending, for `sigwait`.
+static PENDING_CHANGED: Condvar = Condvar::new();
 
 fn bit(signal: i32) -> u32 {
     1u32 << (signal - 1)
@@ -62,7 +67,17 @@ fn ignore_by_default(signal: i32) -> bool {
 
 pub fn symbol(name: &str) -> Option<u64> {
     Some(match name {
-        "_signal" | "__signal" => signal as *const () as u64,
+        "_signal" | "__signal" | "_bsd_signal" => signal as *const () as u64,
+        "_killpg" => killpg as *const () as u64,
+        "_sigpending" => sigpending as *const () as u64,
+        "_sigwait" => sigwait as *const () as u64,
+        "_sighold" => sighold as *const () as u64,
+        "_sigrelse" => sigrelse as *const () as u64,
+        "_sigignore" => sigignore as *const () as u64,
+        "_siginterrupt" => siginterrupt as *const () as u64,
+        "_sigblock" => sigblock as *const () as u64,
+        "_sigsetmask" => sigsetmask as *const () as u64,
+        "_psignal" => psignal as *const () as u64,
         "_sigaction" | "__sigaction" => sigaction as *const () as u64,
         "_raise" | "__raise" => raise as *const () as u64,
         "_kill" | "__kill" => kill as *const () as u64,
@@ -121,6 +136,7 @@ fn deliver(signal: i32) -> i32 {
         Ok(mut guard) => {
             if guard.mask & bit(signal) != 0 {
                 guard.pending |= bit(signal);
+                PENDING_CHANGED.notify_all();
                 return 0;
             }
             let handler = guard.handlers.get(&signal).copied().unwrap_or(SIG_DFL);
@@ -324,4 +340,178 @@ extern "sysv64" fn sigismember(set: *const u32, signal: i32) -> i32 {
         return -1;
     }
     i32::from(read_set(set).unwrap_or(0) & bit(signal) != 0)
+}
+
+/// The guest is its own process group, so only that group (or 0) is addressable.
+extern "sysv64" fn killpg(group: i32, signal: i32) -> i32 {
+    if !valid(signal) && signal != 0 || group == 1 || group < 0 {
+        thread_state::set_errno(EINVAL);
+        return -1;
+    }
+    if group != 0 && group != std::process::id() as i32 {
+        thread_state::set_errno(ESRCH);
+        return -1;
+    }
+    if signal != 0 {
+        deliver(signal);
+    }
+    0
+}
+
+extern "sysv64" fn sigpending(set: *mut u32) -> i32 {
+    if set.is_null() {
+        thread_state::set_errno(EINVAL);
+        return -1;
+    }
+    let pending = STATE.lock().map(|guard| guard.pending).unwrap_or(0);
+    write_set(set, pending);
+    0
+}
+
+/// Waits for one of the signals in `set` to become pending and consumes it. The
+/// signals are expected to be blocked, as POSIX requires; they become pending
+/// when any guest thread raises them.
+extern "sysv64" fn sigwait(set: *const u32, received: *mut i32) -> i32 {
+    let Some(wanted) = read_set(set) else {
+        return EINVAL;
+    };
+    let wanted = wanted & !(bit(SIGKILL) | bit(SIGSTOP));
+    if wanted == 0 || received.is_null() {
+        return EINVAL;
+    }
+    let Ok(mut guard) = STATE.lock() else {
+        return EINVAL;
+    };
+    loop {
+        let ready = guard.pending & wanted;
+        if let Some(signal) = (1..NSIG).find(|signal| ready & bit(*signal) != 0) {
+            guard.pending &= !bit(signal);
+            unsafe { *received = signal };
+            return 0;
+        }
+        guard = match PENDING_CHANGED.wait(guard) {
+            Ok(guard) => guard,
+            Err(_) => return EINVAL,
+        };
+    }
+}
+
+fn change_mask(signal: i32, block: bool) -> i32 {
+    if !valid(signal) {
+        thread_state::set_errno(EINVAL);
+        return -1;
+    }
+    if let Ok(mut guard) = STATE.lock() {
+        if block {
+            guard.mask |= bit(signal) & !(bit(SIGKILL) | bit(SIGSTOP));
+        } else {
+            guard.mask &= !bit(signal);
+        }
+    }
+    if !block {
+        drain_pending();
+    }
+    0
+}
+
+extern "sysv64" fn sighold(signal: i32) -> i32 {
+    change_mask(signal, true)
+}
+
+extern "sysv64" fn sigrelse(signal: i32) -> i32 {
+    change_mask(signal, false)
+}
+
+extern "sysv64" fn sigignore(signal: i32) -> i32 {
+    if !valid(signal) || signal == SIGKILL || signal == SIGSTOP {
+        thread_state::set_errno(EINVAL);
+        return -1;
+    }
+    if let Ok(mut guard) = STATE.lock() {
+        store_handler(&mut guard, signal, SIG_IGN);
+    }
+    0
+}
+
+/// System calls here are never interrupted by a signal, so this only validates.
+extern "sysv64" fn siginterrupt(signal: i32, _interrupt: i32) -> i32 {
+    if !valid(signal) {
+        thread_state::set_errno(EINVAL);
+        return -1;
+    }
+    0
+}
+
+/// Legacy `int`-mask interface; returns the previous mask.
+extern "sysv64" fn sigblock(mask: i32) -> i32 {
+    let mut previous = 0;
+    if let Ok(mut guard) = STATE.lock() {
+        previous = guard.mask;
+        guard.mask |= mask as u32 & !(bit(SIGKILL) | bit(SIGSTOP));
+    }
+    previous as i32
+}
+
+extern "sysv64" fn sigsetmask(mask: i32) -> i32 {
+    let mut previous = 0;
+    if let Ok(mut guard) = STATE.lock() {
+        previous = guard.mask;
+        guard.mask = mask as u32 & !(bit(SIGKILL) | bit(SIGSTOP));
+    }
+    drain_pending();
+    previous as i32
+}
+
+const DESCRIPTIONS: [&str; 31] = [
+    "Hangup",
+    "Interrupt",
+    "Quit",
+    "Illegal instruction",
+    "Trace/BPT trap",
+    "Abort trap",
+    "EMT trap",
+    "Floating point exception",
+    "Killed",
+    "Bus error",
+    "Segmentation fault",
+    "Bad system call",
+    "Broken pipe",
+    "Alarm clock",
+    "Terminated",
+    "Urgent I/O condition",
+    "Suspended (signal)",
+    "Suspended",
+    "Continued",
+    "Child exited",
+    "Stopped (tty input)",
+    "Stopped (tty output)",
+    "I/O possible",
+    "Cputime limit exceeded",
+    "Filesize limit exceeded",
+    "Virtual timer expired",
+    "Profiling timer expired",
+    "Window size changes",
+    "Information request",
+    "User defined signal 1",
+    "User defined signal 2",
+];
+
+extern "sysv64" fn psignal(signal: i32, message: *const std::ffi::c_char) {
+    let description = if valid(signal) {
+        DESCRIPTIONS[(signal - 1) as usize].to_string()
+    } else {
+        format!("Unknown signal: {signal}")
+    };
+    let prefix = if message.is_null() {
+        String::new()
+    } else {
+        unsafe { std::ffi::CStr::from_ptr(message) }
+            .to_string_lossy()
+            .into_owned()
+    };
+    if prefix.is_empty() {
+        eprintln!("{description}");
+    } else {
+        eprintln!("{prefix}: {description}");
+    }
 }

@@ -54,7 +54,7 @@
     "exit_code": 0,
     "source": "LLVM-cross-linked eight-thread probe",
     "reference_macos_verified": false,
-    "sha256": "221189407b2bb153dadfdded3cec3fbcf1991d7e47a036952ccbce2192fd9747",
+    "sha256": "9e9344fbb6539572f4ce31eb71a822ef5dafe1d51fd2b8ad0ce2e2d5214849f4",
     "verified_debug": true,
     "verified_release": true,
     "compatibility_status": "listed Windows behavior verified; reference macOS unverified"

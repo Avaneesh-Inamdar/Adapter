@@ -20,6 +20,17 @@ extern int sigfillset(u32 *set);
 extern int sigaddset(u32 *set, int sig);
 extern int sigdelset(u32 *set, int sig);
 extern int sigismember(const u32 *set, int sig);
+extern int sigpending(u32 *set);
+extern int sigwait(const u32 *set, int *sig);
+extern int sighold(int sig);
+extern int sigrelse(int sig);
+extern int sigignore(int sig);
+extern int siginterrupt(int sig, int flag);
+extern int killpg(int group, int sig);
+extern int sigblock(int mask);
+extern int sigsetmask(int mask);
+extern void psignal(int sig, const char *message);
+extern void *bsd_signal(int sig, void *handler);
 
 #define SIGKILL 9
 #define SIGUSR1 30
@@ -119,6 +130,44 @@ int main(void) {
     act.mask = 0;
     act.handler = (void *)&on_usr1;
 
+    /* Hold/release, pending sets and sigwait consume a blocked signal without running it. */
+    {
+        u32 pending = 1;
+        int got = 0;
+        expect(step++, sighold(SIGUSR1), 0);
+        expect(step++, raise(SIGUSR1), 0);
+        expect(step++, hits, 3);
+        expect(step++, sigpending(&pending), 0);
+        expect(step++, pending, BIT(SIGUSR1));
+        expect(step++, sigwait(&pending, &got), 0);
+        expect(step++, got, SIGUSR1);
+        expect(step++, sigpending(&pending), 0);
+        expect(step++, pending, 0);
+        expect(step++, sigrelse(SIGUSR1), 0);
+        expect(step++, hits, 3);
+
+        /* killpg addresses the own group; other groups are unknown. */
+        expect(step++, killpg(getpid(), SIGUSR1), 0);
+        expect(step++, hits, 4);
+        expect(step++, killpg(getpid() + 1, SIGUSR1), -1);
+        expect(step++, *__error(), 3);
+
+        /* The legacy int-mask calls report the previous mask. */
+        expect(step++, sigblock((int)BIT(SIGUSR2)), 0);
+        expect(step++, sigsetmask(0), (int)BIT(SIGUSR2));
+        expect(step++, siginterrupt(SIGUSR1, 1), 0);
+        expect(step++, siginterrupt(0, 1), -1);
+        expect(step++, bsd_signal(SIGUSR2, SIG_IGN) == (void *)&on_usr2, 1);
+        expect(step++, raise(SIGUSR2), 0);
+        expect(step++, sigignore(SIGUSR1), 0);
+        expect(step++, raise(SIGUSR1), 0);
+        expect(step++, hits, 4);
+        expect(step++, sigignore(SIGKILL), -1);
+        act.handler = (void *)&on_usr1;
+        expect(step++, sigaction(SIGUSR1, &act, (struct sigaction *)0), 0);
+        psignal(SIGUSR1, "signals-fixture");
+    }
+
     /* A disposition that Darwin forbids changes nothing and reports EINVAL. */
     expect(step++, sigaction(SIGKILL, &act, &old), -1);
     expect(step++, *__error(), EINVAL);
@@ -132,7 +181,15 @@ int main(void) {
     expect(step++, sigaction(SIGUSR1, &act, (struct sigaction *)0), 0);
 
     if (failures != 0) {
-        puts("signals:disposition contract failed");
+        char text[] = "signals:disposition contract failed (code 0000000)";
+        int at = 48;
+        int code = failures;
+        while (code > 0 && at >= 42) {
+            text[at] = (char)('0' + code % 10);
+            code = code / 10;
+            at = at - 1;
+        }
+        puts(text);
         return 1;
     }
     puts("signals:dispositions, masks, raise and pending passed");

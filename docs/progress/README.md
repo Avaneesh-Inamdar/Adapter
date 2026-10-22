@@ -10,24 +10,24 @@ unobserved APIs, implementation completeness or runtime test results. ARM64 imag
 
 | Image | Adapters available | Missing | API coverage |
 | --- | ---: | ---: | ---: |
-| AU Lab | 73 / 603 | 530 | 12.11% |
-| Pixie | 15 / 134 | 119 | 11.19% |
+| AU Lab | 88 / 603 | 515 | 14.59% |
+| Pixie | 18 / 134 | 116 | 13.43% |
 | LogTool | 25 / 34 | 9 | 73.53% |
 | Quartz Debug | 50 / 420 | 370 | 11.90% |
 | Server | 40 / 232 | 192 | 17.24% |
-| HomeKit Accessory Simulator | 16 / 319 | 303 | 5.02% |
+| HomeKit Accessory Simulator | 28 / 319 | 291 | 8.78% |
 | IORegistryExplorer | 21 / 188 | 167 | 11.17% |
-| Network Link Conditioner | 18 / 105 | 87 | 17.14% |
+| Network Link Conditioner | 22 / 105 | 83 | 20.95% |
 | NLCBackgroundApp | 15 / 38 | 23 | 39.47% |
 | com.apple.Network-Link-Conditioner.remoteservice | 6 / 16 | 10 | 37.50% |
-| PacketLogger | 34 / 219 | 185 | 15.53% |
-| Printer Simulator | 23 / 135 | 112 | 17.04% |
+| PacketLogger | 44 / 219 | 175 | 20.09% |
+| Printer Simulator | 30 / 135 | 105 | 22.22% |
 | PrinterSimulatorServer | 81 / 463 | 382 | 17.49% |
-| Clipboard Viewer | 8 / 55 | 47 | 14.55% |
+| Clipboard Viewer | 11 / 55 | 44 | 20.00% |
 | CrashReporterPrefs | 3 / 20 | 17 | 15.00% |
 | Icon Composer | 8 / 115 | 107 | 6.96% |
 | Icon Composer QuickLook Preview | 11 / 74 | 63 | 14.86% |
-| Icon Composer Thumbnail | 9 / 64 | 55 | 14.06% |
+| Icon Composer Thumbnail | 10 / 64 | 54 | 15.62% |
 | jq 1.8.2 | 136 / 136 | 0 | 100.00% |
 | ripgrep 15.2.0 | 131 / 131 | 0 | 100.00% |
 
@@ -75,6 +75,35 @@ Refresh source coverage after adding adapters with `python tools/update_progress
 Use `--refresh-imports` only when updating the artifact inventory; this requires the local
 hash-matched files under `target/artifacts` and the pinned jq download. The refresh cross-checks
 Apple import names and library order against the existing Rust inspection reports. No target is executed.
+
+## Public API surface
+
+The tables above count only symbols the inspected binaries import. This section counts every
+symbol exported by the public headers of the subsystems Adapter implements, taken from pinned
+commits of Libc@71bbe350ab, libclosure@3668b0837f, libdispatch@2361ffb78a, libpthread@42d026df5b, xnu@f6217f891a (see [public-api.json](public-api.json); regenerate
+with `python tools/extract_public_api.py`). It does not say which symbols real programs call.
+
+| Subsystem | Adapters available | Of which partial | Missing | Coverage |
+| --- | ---: | ---: | ---: | ---: |
+| All catalogued public APIs | 142 / 210 | 47 | 68 | 67.62% |
+| libdispatch queues | 36 / 36 | 8 | 0 | 100.00% |
+| libdispatch objects | 15 / 15 | 3 | 0 | 100.00% |
+| libdispatch groups | 8 / 8 | 0 | 0 | 100.00% |
+| libdispatch semaphores | 3 / 3 | 0 | 0 | 100.00% |
+| libdispatch once and time | 4 / 4 | 0 | 0 | 100.00% |
+| libdispatch block objects | 7 / 7 | 2 | 0 | 100.00% |
+| libdispatch sources | 26 / 26 | 9 | 0 | 100.00% |
+| libdispatch data | 0 / 10 | 0 | 10 | 0.00% |
+| libdispatch I/O | 0 / 13 | 0 | 13 | 0.00% |
+| libdispatch workloops | 0 / 4 | 0 | 4 | 0.00% |
+| Block runtime | 6 / 6 | 2 | 0 | 100.00% |
+| POSIX signals | 23 / 28 | 10 | 5 | 82.14% |
+| pthread QoS | 8 / 8 | 7 | 0 | 100.00% |
+| Mach VM routines | 6 / 42 | 6 | 36 | 14.29% |
+
+A partial adapter implements only part of its contract; the reason for each is in
+[partial-api.json](partial-api.json). Missing public symbols are listed per subsystem under
+`public_api.missing` in [status.json](status.json).
 
 Registry extraction covers the current Rust symbol matches and C LOOKUP/LM registrations.
 If a new adapter library or registration style is added, update `registry()` and `available()`

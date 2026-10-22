@@ -11,15 +11,23 @@
   "adapter_symbols": {
     "libSystem": [
       "_Block_copy",
+      "_Block_object_assign",
+      "_Block_object_dispose",
       "_Block_release",
       "_CCRandomGenerateBytes",
+      "_NSConcreteGlobalBlock",
+      "_NSConcreteStackBlock",
       "_NSGetArgc",
       "_NSGetArgv",
       "_NSGetEnviron",
       "_NSGetExecutablePath",
       "__Block_copy",
+      "__Block_object_assign",
+      "__Block_object_dispose",
       "__Block_release",
       "__DefaultRuneLocale",
+      "__NSConcreteGlobalBlock",
+      "__NSConcreteStackBlock",
       "__NSGetArgc",
       "__NSGetArgv",
       "__NSGetEnviron",
@@ -56,6 +64,20 @@
       "___swbuf",
       "__bootstrap_check_in",
       "__bootstrap_look_up",
+      "__dispatch_main_q",
+      "__dispatch_queue_attr_concurrent",
+      "__dispatch_source_type_data_add",
+      "__dispatch_source_type_data_or",
+      "__dispatch_source_type_data_replace",
+      "__dispatch_source_type_mach_recv",
+      "__dispatch_source_type_mach_send",
+      "__dispatch_source_type_memorypressure",
+      "__dispatch_source_type_proc",
+      "__dispatch_source_type_read",
+      "__dispatch_source_type_signal",
+      "__dispatch_source_type_timer",
+      "__dispatch_source_type_vnode",
+      "__dispatch_source_type_write",
       "__dyld_get_image_header",
       "__dyld_get_image_name",
       "__dyld_get_image_vmaddr_slide",
@@ -101,6 +123,7 @@
       "_atoi",
       "_bootstrap_check_in",
       "_bootstrap_look_up",
+      "_bsd_signal",
       "_bsearch",
       "_calloc",
       "_cbrt",
@@ -117,11 +140,91 @@
       "_cosh",
       "_dirfd",
       "_dirname",
+      "_dispatch_activate",
+      "_dispatch_after",
+      "_dispatch_after_f",
+      "_dispatch_allow_send_signals",
+      "_dispatch_apply",
+      "_dispatch_apply_f",
+      "_dispatch_assert_queue",
+      "_dispatch_assert_queue_barrier",
+      "_dispatch_assert_queue_not",
+      "_dispatch_async",
+      "_dispatch_async_and_wait",
+      "_dispatch_async_and_wait_f",
+      "_dispatch_async_f",
+      "_dispatch_barrier_async",
+      "_dispatch_barrier_async_and_wait",
+      "_dispatch_barrier_async_and_wait_f",
+      "_dispatch_barrier_async_f",
+      "_dispatch_barrier_sync",
+      "_dispatch_barrier_sync_f",
+      "_dispatch_block_cancel",
+      "_dispatch_block_create",
+      "_dispatch_block_create_with_qos_class",
+      "_dispatch_block_notify",
+      "_dispatch_block_perform",
+      "_dispatch_block_testcancel",
+      "_dispatch_block_wait",
+      "_dispatch_cancel",
+      "_dispatch_debug",
+      "_dispatch_debugv",
+      "_dispatch_get_context",
+      "_dispatch_get_current_queue",
+      "_dispatch_get_global_queue",
+      "_dispatch_get_specific",
+      "_dispatch_group_async",
+      "_dispatch_group_async_f",
+      "_dispatch_group_create",
+      "_dispatch_group_enter",
+      "_dispatch_group_leave",
+      "_dispatch_group_notify",
+      "_dispatch_group_notify_f",
+      "_dispatch_group_wait",
+      "_dispatch_main",
+      "_dispatch_notify",
+      "_dispatch_once",
+      "_dispatch_once_f",
+      "_dispatch_queue_attr_make_initially_inactive",
+      "_dispatch_queue_attr_make_with_autorelease_frequency",
+      "_dispatch_queue_attr_make_with_qos_class",
+      "_dispatch_queue_create",
+      "_dispatch_queue_create_with_target",
+      "_dispatch_queue_get_label",
+      "_dispatch_queue_get_qos_class",
+      "_dispatch_queue_get_specific",
+      "_dispatch_queue_set_specific",
       "_dispatch_release",
+      "_dispatch_resume",
+      "_dispatch_retain",
       "_dispatch_semaphore_create",
       "_dispatch_semaphore_signal",
       "_dispatch_semaphore_wait",
+      "_dispatch_set_context",
+      "_dispatch_set_finalizer_f",
+      "_dispatch_set_qos_class_floor",
+      "_dispatch_set_target_queue",
+      "_dispatch_source_cancel",
+      "_dispatch_source_create",
+      "_dispatch_source_get_data",
+      "_dispatch_source_get_handle",
+      "_dispatch_source_get_mask",
+      "_dispatch_source_merge_data",
+      "_dispatch_source_set_cancel_handler",
+      "_dispatch_source_set_cancel_handler_f",
+      "_dispatch_source_set_event_handler",
+      "_dispatch_source_set_event_handler_f",
+      "_dispatch_source_set_registration_handler",
+      "_dispatch_source_set_registration_handler_f",
+      "_dispatch_source_set_timer",
+      "_dispatch_source_testcancel",
+      "_dispatch_suspend",
+      "_dispatch_sync",
+      "_dispatch_sync_f",
+      "_dispatch_testcancel",
       "_dispatch_time",
+      "_dispatch_wait",
+      "_dispatch_walltime",
       "_dlclose",
       "_dlerror",
       "_dlopen",
@@ -182,6 +285,7 @@
       "_j1",
       "_jn",
       "_kill",
+      "_killpg",
       "_lchown",
       "_ldexp",
       "_lgamma",
@@ -242,8 +346,11 @@
       "_posix_spawnp",
       "_pow",
       "_printf",
+      "_psignal",
       "_pthread_attr_destroy",
+      "_pthread_attr_get_qos_class_np",
       "_pthread_attr_init",
+      "_pthread_attr_set_qos_class_np",
       "_pthread_attr_setstacksize",
       "_pthread_cond_broadcast",
       "_pthread_cond_destroy",
@@ -258,6 +365,7 @@
       "_pthread_create",
       "_pthread_detach",
       "_pthread_equal",
+      "_pthread_get_qos_class_np",
       "_pthread_get_stackaddr_np",
       "_pthread_get_stacksize_np",
       "_pthread_getspecific",
@@ -273,13 +381,18 @@
       "_pthread_mutexattr_init",
       "_pthread_mutexattr_settype",
       "_pthread_once",
+      "_pthread_override_qos_class_end_np",
+      "_pthread_override_qos_class_start_np",
       "_pthread_self",
+      "_pthread_set_qos_class_self_np",
       "_pthread_setname_np",
       "_pthread_setspecific",
       "_pthread_sigmask",
       "_pthread_threadid_np",
       "_putchar",
       "_puts",
+      "_qos_class_main",
+      "_qos_class_self",
       "_qsort",
       "_raise",
       "_random",
@@ -305,12 +418,20 @@
       "_sigaction",
       "_sigaddset",
       "_sigaltstack",
+      "_sigblock",
       "_sigdelset",
       "_sigemptyset",
       "_sigfillset",
+      "_sighold",
+      "_sigignore",
+      "_siginterrupt",
       "_sigismember",
       "_signal",
+      "_sigpending",
       "_sigprocmask",
+      "_sigrelse",
+      "_sigsetmask",
+      "_sigwait",
       "_sin",
       "_sinh",
       "_sleep",
@@ -493,15 +614,15 @@
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 294,
+      "available": 316,
       "total": 1860,
-      "percent": 15.81
+      "percent": 16.99
     },
     {
       "name": "libSystem",
-      "available": 277,
+      "available": 299,
       "total": 382,
-      "percent": 72.51
+      "percent": 78.27
     },
     {
       "name": "Other libraries",
@@ -731,9 +852,9 @@
       "name": "AU Lab",
       "source": "additional-tools27/Additional Tools/Audio/AU Lab.app/Contents/MacOS/AU Lab",
       "sha256": "6b04e361965e2ff23a717d71d8f2c24bf4b02138ad06e09a9d2761f1322f77cf",
-      "available": 73,
+      "available": 88,
       "total": 603,
-      "percent": 12.11,
+      "percent": 14.59,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio",
@@ -2465,31 +2586,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_assign"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_dispose"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteGlobalBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "___sincos_stret"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__dispatch_main_q"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__dispatch_source_type_mach_recv"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -2505,43 +2602,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_async"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_barrier_sync"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dispatch_mig_server"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_resume"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_retain"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_set_target_queue"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_source_cancel"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_source_create"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_source_set_cancel_handler"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_source_set_event_handler"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -2861,9 +2922,9 @@
       "name": "Pixie",
       "source": "additional-tools27/Additional Tools/Graphics/Pixie.app/Contents/MacOS/Pixie",
       "sha256": "b53927c07a96489110c4985837f8dfe410027ed8e57edc0c428b478cf5976951",
-      "available": 15,
+      "available": 18,
       "total": 134,
-      "percent": 11.19,
+      "percent": 13.43,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -3280,18 +3341,6 @@
         {
           "library": "/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight",
           "symbol": "_kSLSCaptureNoTCCs"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_assign"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_dispose"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -5661,9 +5710,9 @@
       "name": "HomeKit Accessory Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/HomeKit Accessory Simulator.app/Contents/MacOS/HomeKit Accessory Simulator",
       "sha256": "1301a2bcf9f46d5b9ddcb4c09c1f0c4bf26f85abc434a357671a4d28a4f06a80",
-      "available": 16,
+      "available": 28,
       "total": 319,
-      "percent": 5.02,
+      "percent": 8.78,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -6303,30 +6352,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_assign"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_dispose"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteGlobalBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__dispatch_main_q"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__dispatch_queue_attr_concurrent"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "__os_log_default"
         },
         {
@@ -6336,30 +6361,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "__os_log_impl"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_async"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_barrier_async"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_get_global_queue"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_once"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_queue_create"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_sync"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -7561,9 +7562,9 @@
       "name": "Network Link Conditioner",
       "source": "additional-tools27/Additional Tools/Hardware/Network Link Conditioner.prefPane/Contents/MacOS/Network Link Conditioner",
       "sha256": "57f582aed1291c6e97f89a99b023405ee5706978757d2a3e18cee7b9a66980d6",
-      "available": 18,
+      "available": 22,
       "total": 105,
-      "percent": 17.14,
+      "percent": 20.95,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -7835,22 +7836,6 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_assign"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_dispose"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteGlobalBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_port"
         },
         {
@@ -8071,9 +8056,9 @@
       "name": "PacketLogger",
       "source": "additional-tools27/Additional Tools/Hardware/PacketLogger.app/Contents/MacOS/PacketLogger",
       "sha256": "10f290584470a84ca205fd7d27302b98d975b464381922fb0c318b4305fdc4f1",
-      "available": 34,
+      "available": 44,
       "total": 219,
-      "percent": 15.53,
+      "percent": 20.09,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -8533,27 +8518,7 @@
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_assign"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_dispose"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteGlobalBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "___strlcpy_chk"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__dispatch_main_q"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -8566,26 +8531,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_bootstrap_port"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_after"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_async"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_get_global_queue"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_queue_create"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_sync"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -8821,9 +8766,9 @@
       "name": "Printer Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/Printer Simulator",
       "sha256": "83f7b928a9cedf70c72b42740bf54c503285dabb9d5090f60747b3181e0d28b7",
-      "available": 23,
+      "available": 30,
       "total": 135,
-      "percent": 17.04,
+      "percent": 22.22,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -9104,34 +9049,6 @@
         {
           "library": "/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation",
           "symbol": "_OBJC_CLASS_$_SFAuthorization"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_assign"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_dispose"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__dispatch_main_q"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_async"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_get_global_queue"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_dispatch_sync"
         },
         {
           "library": "/usr/lib/libcups.2.dylib",
@@ -10817,9 +10734,9 @@
       "name": "Clipboard Viewer",
       "source": "additional-tools27/Additional Tools/Utilities/Clipboard Viewer.app/Contents/MacOS/Clipboard Viewer",
       "sha256": "bd2de66f1344b28376dfc6b68f0df1fc4885337da32efd872da82ef1ff8b97b9",
-      "available": 8,
+      "available": 11,
       "total": 55,
-      "percent": 14.55,
+      "percent": 20.0,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -10964,18 +10881,6 @@
         {
           "library": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
           "symbol": "_OBJC_METACLASS_$_NSValueTransformer"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_assign"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__Block_object_dispose"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
         },
         {
           "library": "/usr/lib/libSystem.B.dylib",
@@ -11793,9 +11698,9 @@
       "name": "Icon Composer Thumbnail",
       "source": "icon-composer27/Icon Composer/Icon Composer.app/Contents/PlugIns/Icon Composer Thumbnail.appex/Contents/MacOS/Icon Composer Thumbnail",
       "sha256": "2d9bb888d6e2760e22ca7039c3e31fd0f779af81b91e3755db2ce02b2193ebc0",
-      "available": 9,
+      "available": 10,
       "total": 64,
-      "percent": 14.06,
+      "percent": 15.62,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -11828,10 +11733,6 @@
         {
           "library": "/System/Library/PrivateFrameworks/CoreSVG.framework/Versions/A/CoreSVG",
           "symbol": "_CGSVGDocumentWriteToData"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "__NSConcreteStackBlock"
         },
         {
           "library": "/usr/lib/libobjc.A.dylib",
@@ -12210,11 +12111,6 @@
       "target_count": 8
     },
     {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__NSConcreteStackBlock",
-      "target_count": 8
-    },
-    {
       "library": "/usr/lib/libobjc.A.dylib",
       "symbol": "_objc_opt_respondsToSelector",
       "target_count": 8
@@ -12237,16 +12133,6 @@
     {
       "library": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
       "symbol": "_OBJC_CLASS_$_NSIndexSet",
-      "target_count": 7
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__Block_object_assign",
-      "target_count": 7
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__Block_object_dispose",
       "target_count": 7
     },
     {
@@ -12642,21 +12528,6 @@
     {
       "library": "/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation",
       "symbol": "_OBJC_CLASS_$_NSPredicate",
-      "target_count": 4
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__NSConcreteGlobalBlock",
-      "target_count": 4
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__dispatch_main_q",
-      "target_count": 4
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_async",
       "target_count": 4
     },
     {
@@ -13112,16 +12983,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "__os_log_impl",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_get_global_queue",
-      "target_count": 3
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_sync",
       "target_count": 3
     },
     {
@@ -14392,11 +14253,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_bootstrap_register2",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_queue_create",
       "target_count": 2
     },
     {
@@ -17771,16 +17627,6 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__dispatch_queue_attr_concurrent",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "__dispatch_source_type_mach_recv",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "__xpc_runtime_is_app_sandboxed",
       "target_count": 1
     },
@@ -17796,62 +17642,7 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_after",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_barrier_async",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_barrier_sync",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_dispatch_mig_server",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_once",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_resume",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_retain",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_set_target_queue",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_source_cancel",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_source_create",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_source_set_cancel_handler",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_dispatch_source_set_event_handler",
       "target_count": 1
     },
     {
@@ -19869,5 +19660,259 @@
       "symbol": "_stringToDate",
       "target_count": 1
     }
-  ]
+  ],
+  "public_api": {
+    "rows": [
+      {
+        "name": "All catalogued public APIs",
+        "available": 142,
+        "partial": 47,
+        "total": 210,
+        "percent": 67.62
+      },
+      {
+        "name": "libdispatch queues",
+        "available": 36,
+        "partial": 8,
+        "total": 36,
+        "percent": 100.0
+      },
+      {
+        "name": "libdispatch objects",
+        "available": 15,
+        "partial": 3,
+        "total": 15,
+        "percent": 100.0
+      },
+      {
+        "name": "libdispatch groups",
+        "available": 8,
+        "partial": 0,
+        "total": 8,
+        "percent": 100.0
+      },
+      {
+        "name": "libdispatch semaphores",
+        "available": 3,
+        "partial": 0,
+        "total": 3,
+        "percent": 100.0
+      },
+      {
+        "name": "libdispatch once and time",
+        "available": 4,
+        "partial": 0,
+        "total": 4,
+        "percent": 100.0
+      },
+      {
+        "name": "libdispatch block objects",
+        "available": 7,
+        "partial": 2,
+        "total": 7,
+        "percent": 100.0
+      },
+      {
+        "name": "libdispatch sources",
+        "available": 26,
+        "partial": 9,
+        "total": 26,
+        "percent": 100.0
+      },
+      {
+        "name": "libdispatch data",
+        "available": 0,
+        "partial": 0,
+        "total": 10,
+        "percent": 0.0
+      },
+      {
+        "name": "libdispatch I/O",
+        "available": 0,
+        "partial": 0,
+        "total": 13,
+        "percent": 0.0
+      },
+      {
+        "name": "libdispatch workloops",
+        "available": 0,
+        "partial": 0,
+        "total": 4,
+        "percent": 0.0
+      },
+      {
+        "name": "Block runtime",
+        "available": 6,
+        "partial": 2,
+        "total": 6,
+        "percent": 100.0
+      },
+      {
+        "name": "POSIX signals",
+        "available": 23,
+        "partial": 10,
+        "total": 28,
+        "percent": 82.14
+      },
+      {
+        "name": "pthread QoS",
+        "available": 8,
+        "partial": 7,
+        "total": 8,
+        "percent": 100.0
+      },
+      {
+        "name": "Mach VM routines",
+        "available": 6,
+        "partial": 6,
+        "total": 42,
+        "percent": 14.29
+      }
+    ],
+    "missing": {
+      "dispatch-queues": [],
+      "dispatch-objects": [],
+      "dispatch-groups": [],
+      "dispatch-semaphore": [],
+      "dispatch-once-time": [],
+      "dispatch-blocks": [],
+      "dispatch-sources": [],
+      "dispatch-data": [
+        "__dispatch_data_destructor_free",
+        "__dispatch_data_destructor_munmap",
+        "__dispatch_data_empty",
+        "_dispatch_data_apply",
+        "_dispatch_data_copy_region",
+        "_dispatch_data_create",
+        "_dispatch_data_create_concat",
+        "_dispatch_data_create_map",
+        "_dispatch_data_create_subrange",
+        "_dispatch_data_get_size"
+      ],
+      "dispatch-io": [
+        "_dispatch_io_barrier",
+        "_dispatch_io_close",
+        "_dispatch_io_create",
+        "_dispatch_io_create_with_io",
+        "_dispatch_io_create_with_path",
+        "_dispatch_io_get_descriptor",
+        "_dispatch_io_read",
+        "_dispatch_io_set_high_water",
+        "_dispatch_io_set_interval",
+        "_dispatch_io_set_low_water",
+        "_dispatch_io_write",
+        "_dispatch_read",
+        "_dispatch_write"
+      ],
+      "dispatch-workloop": [
+        "_dispatch_workloop_create",
+        "_dispatch_workloop_create_inactive",
+        "_dispatch_workloop_set_autorelease_frequency",
+        "_dispatch_workloop_set_os_workgroup"
+      ],
+      "block-runtime": [],
+      "signals": [
+        "_pthread_kill",
+        "_sigpause",
+        "_sigset",
+        "_sigsuspend",
+        "_sigvec"
+      ],
+      "pthread-qos": [],
+      "mach-vm": [
+        "_mach_make_memory_entry",
+        "_mach_make_memory_entry_64",
+        "_mach_vm_behavior_set",
+        "_mach_vm_copy",
+        "_mach_vm_inherit",
+        "_mach_vm_machine_attribute",
+        "_mach_vm_map",
+        "_mach_vm_msync",
+        "_mach_vm_page_info",
+        "_mach_vm_page_query",
+        "_mach_vm_page_range_query",
+        "_mach_vm_purgable_control",
+        "_mach_vm_read",
+        "_mach_vm_read_list",
+        "_mach_vm_read_overwrite",
+        "_mach_vm_region",
+        "_mach_vm_region_recurse",
+        "_mach_vm_remap",
+        "_mach_vm_remap_new",
+        "_mach_vm_write",
+        "_vm_behavior_set",
+        "_vm_copy",
+        "_vm_inherit",
+        "_vm_machine_attribute",
+        "_vm_map",
+        "_vm_map_page_query",
+        "_vm_msync",
+        "_vm_purgable_control",
+        "_vm_read",
+        "_vm_read_list",
+        "_vm_read_overwrite",
+        "_vm_region_64",
+        "_vm_region_recurse_64",
+        "_vm_remap",
+        "_vm_remap_new",
+        "_vm_write"
+      ]
+    },
+    "partial": {
+      "__dispatch_source_type_mach_recv": "identity only; sources of this type cannot be created",
+      "__dispatch_source_type_mach_send": "identity only; sources of this type cannot be created",
+      "__dispatch_source_type_memorypressure": "identity only; sources of this type cannot be created",
+      "__dispatch_source_type_proc": "identity only; sources of this type cannot be created",
+      "__dispatch_source_type_read": "identity only; sources of this type cannot be created",
+      "__dispatch_source_type_signal": "identity only; sources of this type cannot be created",
+      "__dispatch_source_type_vnode": "identity only; sources of this type cannot be created",
+      "__dispatch_source_type_write": "identity only; sources of this type cannot be created",
+      "_dispatch_source_create": "timer and user-data source types only; others return NULL",
+      "_dispatch_block_create": "QoS flags validated, DISPATCH_BLOCK_BARRIER not applied when dispatched",
+      "_dispatch_block_create_with_qos_class": "QoS validated but not applied; barrier flag not applied",
+      "_dispatch_queue_attr_make_with_qos_class": "attribute returned unchanged",
+      "_dispatch_queue_attr_make_with_autorelease_frequency": "attribute returned unchanged",
+      "_dispatch_set_target_queue": "root and main queues are not recorded as targets",
+      "_dispatch_queue_create_with_target": "root and main queues are not recorded as targets",
+      "_dispatch_queue_get_qos_class": "root queues report their class; user queues report unspecified",
+      "_dispatch_apply": "serial queues run iterations on the caller without waiting for queued work",
+      "_dispatch_apply_f": "serial queues run iterations on the caller without waiting for queued work",
+      "_dispatch_allow_send_signals": "accepted; there are no signal sources",
+      "_dispatch_debug": "accepted; no effect",
+      "_dispatch_debugv": "accepted; no effect",
+      "_dispatch_set_qos_class_floor": "accepted; no effect",
+      "__Block_object_assign": "weak and garbage-collected variants are treated as strong",
+      "__Block_object_dispose": "weak and garbage-collected variants are treated as strong",
+      "_pthread_set_qos_class_self_np": "recorded per thread; no scheduling effect",
+      "_pthread_get_qos_class_np": "reports only the calling thread's record",
+      "_pthread_attr_set_qos_class_np": "stored in the attribute; pthread_create does not apply it",
+      "_pthread_attr_get_qos_class_np": "stored in the attribute; pthread_create does not apply it",
+      "_pthread_override_qos_class_start_np": "accepted; no scheduling effect",
+      "_pthread_override_qos_class_end_np": "accepted; no scheduling effect",
+      "_qos_class_self": "reports the recorded class; no scheduling effect",
+      "_signal": "synchronous delivery to the calling thread; sa_flags not stored",
+      "_bsd_signal": "synchronous delivery to the calling thread; sa_flags not stored",
+      "_sigaction": "synchronous delivery to the calling thread; sa_flags not stored, SA_SIGINFO handlers get null siginfo",
+      "_raise": "synchronous delivery to the calling thread only",
+      "_kill": "synchronous delivery to the guest's own pid only",
+      "_killpg": "synchronous delivery to the guest's own group only",
+      "_sigprocmask": "one process-wide mask, not per thread",
+      "_pthread_sigmask": "one process-wide mask, not per thread",
+      "_siginterrupt": "validates only; system calls are never interrupted",
+      "_sigaltstack": "recorded only; never used for delivery",
+      "_mach_vm_allocate": "adapter-created ranges only; 256 MiB ceiling",
+      "_mach_vm_deallocate": "whole adapter-created ranges only; no sub-range release",
+      "_mach_vm_protect": "writable-executable protection rejected; no maximum-protection enforcement",
+      "_vm_allocate": "adapter-created ranges only; 256 MiB ceiling",
+      "_vm_deallocate": "whole adapter-created ranges only; no sub-range release",
+      "_vm_protect": "writable-executable protection rejected; no maximum-protection enforcement"
+    },
+    "sources": [
+      "Libc@71bbe350ab",
+      "libclosure@3668b0837f",
+      "libdispatch@2361ffb78a",
+      "libpthread@42d026df5b",
+      "xnu@f6217f891a"
+    ]
+  }
 }

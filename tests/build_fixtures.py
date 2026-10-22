@@ -51,14 +51,15 @@ def build():
     }
     versions = ["-arch", "x86_64", "-platform_version", "macos", "10.13", "10.13"]
     exports["System"] += ["strtol"]
-    exports["System"] += ["signal", "sigaction", "raise", "kill", "getpid", "sigprocmask", "pthread_sigmask", "sigemptyset", "sigfillset", "sigaddset", "sigdelset", "sigismember"]
+    exports["System"] += ["signal", "sigaction", "raise", "kill", "getpid", "sigprocmask", "pthread_sigmask", "sigemptyset", "sigfillset", "sigaddset", "sigdelset", "sigismember", "sigpending", "sigwait", "sighold", "sigrelse", "sigignore", "siginterrupt", "killpg", "sigblock", "sigsetmask", "psignal", "bsd_signal"]
+    exports["System"] += ["dispatch_queue_create", "dispatch_queue_create_with_target", "dispatch_get_global_queue", "dispatch_queue_get_label", "dispatch_get_current_queue", "dispatch_async", "dispatch_sync", "dispatch_barrier_async", "dispatch_barrier_sync", "dispatch_after", "dispatch_apply", "dispatch_once", "dispatch_group_create", "dispatch_group_async", "dispatch_group_enter", "dispatch_group_leave", "dispatch_group_wait", "dispatch_group_notify", "dispatch_suspend", "dispatch_resume", "dispatch_retain", "dispatch_release", "dispatch_main", "dispatch_semaphore_create", "dispatch_semaphore_signal", "dispatch_semaphore_wait", "dispatch_time", "dispatch_block_create", "dispatch_block_perform", "dispatch_block_wait", "dispatch_block_notify", "dispatch_block_cancel", "dispatch_block_testcancel", "dispatch_source_create", "dispatch_source_set_event_handler", "dispatch_source_set_cancel_handler", "dispatch_source_set_registration_handler", "dispatch_source_set_timer", "dispatch_source_merge_data", "dispatch_source_cancel", "dispatch_source_testcancel", "dispatch_source_get_data", "_Block_object_assign", "_Block_object_dispose", "dispatch_queue_attr_make_initially_inactive", "dispatch_activate", "dispatch_set_context", "dispatch_get_context", "dispatch_set_finalizer_f", "dispatch_queue_set_specific", "dispatch_queue_get_specific", "dispatch_get_specific", "dispatch_async_and_wait", "dispatch_walltime", "dispatch_queue_get_qos_class", "pthread_set_qos_class_self_np", "pthread_get_qos_class_np", "pthread_attr_set_qos_class_np", "pthread_attr_get_qos_class_np", "pthread_override_qos_class_start_np", "pthread_override_qos_class_end_np", "qos_class_self", "qos_class_main"]
     exports["System"] += ["mach_vm_allocate", "mach_vm_deallocate", "mach_vm_protect", "vm_allocate", "vm_deallocate", "vm_protect"]
     exports["System"] += ["fopen$DARWIN_EXTSN", "fdopen$DARWIN_EXTSN", "stat$INODE64", "fstat$INODE64", "realpath$DARWIN_EXTSN", "open", "close", "pathconf", "dirname", "fgets", "timegm", "time", "gmtime_r", "gettimeofday", "strftime", "strptime", "memset", "write", "usleep", "_tlv_atexit"]
     for library, symbols in exports.items():
         asm = OUT / (library + ".s")
         # dyld's binder name is already undecorated in the Mach-O ABI.
         data = {
-            "System": {"mach_task_self_": 0x103, "bootstrap_port": 0x203, "_NSConcreteStackBlock": 0, "_NSConcreteGlobalBlock": 0},
+            "System": {"mach_task_self_": 0x103, "bootstrap_port": 0x203, "_NSConcreteStackBlock": 0, "_NSConcreteGlobalBlock": 0, "_dispatch_main_q": 0, "_dispatch_queue_attr_concurrent": 0, "_dispatch_source_type_data_add": 0, "_dispatch_source_type_data_or": 0, "_dispatch_source_type_data_replace": 0, "_dispatch_source_type_timer": 0, "_dispatch_source_type_mach_send": 0, "_dispatch_source_type_mach_recv": 0, "_dispatch_source_type_memorypressure": 0, "_dispatch_source_type_proc": 0, "_dispatch_source_type_read": 0, "_dispatch_source_type_signal": 0, "_dispatch_source_type_vnode": 0, "_dispatch_source_type_write": 0},
             "xpc": {name: 0 for name in ["_xpc_type_connection", "_xpc_type_endpoint", "_xpc_type_null",
                 "_xpc_type_bool", "_xpc_type_int64", "_xpc_type_uint64", "_xpc_type_double",
                 "_xpc_type_date", "_xpc_type_data", "_xpc_type_string", "_xpc_type_uuid",
@@ -79,7 +80,7 @@ def build():
         run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-c", asm, "-o", OUT / (library + ".o"))
         install = {"System":"/usr/lib/libSystem.B.dylib","CoreFoundation":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation","objc":"/usr/lib/libobjc.A.dylib","xpc":"/usr/lib/system/libxpc.dylib"}[library]
         run(tool("ld64.lld"), *versions, "-dylib", "-install_name", install, "-o", OUT / ("lib" + library + ".dylib"), OUT / (library + ".o"))
-    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "objc_core", "objc_category", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_vm", "signals", "signals_default", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
+    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "objc_core", "objc_category", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_vm", "signals", "signals_default", "dispatch", "dispatch_deadlock", "dispatch_source", "qos", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
         extension=".m" if name.startswith("objc") else ".cpp" if name=="cxx_tls" else ".c"
         flags=["-O0","-fno-stack-protector","-fno-asynchronous-unwind-tables"]
         flags+= ["-fno-exceptions","-fno-rtti"] if extension==".cpp" else ["-ffreestanding"]
@@ -90,7 +91,7 @@ def build():
         if name.startswith("objc"): libraries += ["-lobjc"]
         if name.startswith("xpc_"): libraries = ["-L", OUT, "-lxpc", "-lSystem"]
         run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main", "-o", OUT / name, OUT / (name + ".o"), *libraries)
-        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "mach_vm", "signals", "objc_core", "objc_category"]:
+        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "mach_vm", "signals", "dispatch", "dispatch_source", "qos", "objc_core", "objc_category"]:
             objc_flags = ["-no_objc_relative_method_lists"] if name in ("objc_core", "objc_category") else []
             run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains",*objc_flags,"-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
             if name in ("objc_core", "objc_category"):

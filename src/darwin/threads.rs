@@ -51,6 +51,10 @@ impl Drop for Completion {
     }
 }
 thread_local! {static ID:Cell<usize>=const {Cell::new(1)};}
+/// The calling thread's `pthread_t` token; the main thread is 1.
+pub fn current_id() -> usize {
+    ID.with(|id| id.get())
+}
 pub struct Guard;
 pub fn begin() -> Result<Guard> {
     let mut s = state().lock().map_err(|_| "thread registry poisoned")?;

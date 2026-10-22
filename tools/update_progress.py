@@ -112,7 +112,7 @@ def refresh():
 
 def registry():
     system = set()
-    for p in (ROOT / 'src/darwin').glob('*.rs'):
+    for p in (ROOT / 'src/darwin').rglob('*.rs'):
         if p.name == 'xpc.rs':
             continue
         text = p.read_text()
@@ -120,6 +120,10 @@ def registry():
                 r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*(?:\{[^{}]*?)?\w+\s+as\s+\*const', text):
             system.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
         system.update(re.findall(r'if name == "([^"\n]+)"', text))
+        # Data symbols are registered as addresses: `"name" => cell(0) as u64`.
+        for arm in re.finditer(
+                r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*\w+\([^()\n]*\)\s+as\s+u64', text):
+            system.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
     for p in (ROOT / 'src/darwin/host').glob('*.c'):
         text = p.read_text()
         system.update(re.findall(r'LOOKUP\("([^"\n]+)"\s*,', text))
@@ -207,32 +211,82 @@ def generate():
     chart_rows.append({'name': 'Other APIs', 'available': have, 'total': total,
                        'percent': round(100 * have / total, 2) if total else 0})
     chart(chart_rows, len(targets))
+    public = public_surface(adapters)
+    report['public_api'] = public
+    (OUT / 'status.json').write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8', newline='\n')
+    chart(public['rows'], None, 'Public API surface coverage', 'public-api.svg',
+          f"{len(public['rows']) - 1} subsystems \u00b7 symbols exported by Apple's public headers",
+          'Public header symbols with a complete adapter, a partial adapter or none. '
+          'Does not measure whether programs run.')
     details(report)
     update_readme(report)
     for row in rows:
         print(f"{row['name']}: {row['available']}/{row['total']} ({row['percent']}%)")
 
 
-def chart(rows, target_count):
+def public_surface(adapters):
+    """Coverage of each subsystem's whole public header surface (public-api.json)."""
+    catalog = json.loads((OUT / 'public-api.json').read_text())
+    partial = json.loads((OUT / 'partial-api.json').read_text())['partial']
+    every_symbol = {name for group in catalog['groups'] for name in group['symbols']}
+    for name in partial:
+        if name not in every_symbol or name not in adapters['libSystem']:
+            raise ValueError(f'partial-api.json names an uncatalogued or unregistered symbol: {name}')
+    rows, missing, every = [], {}, set()
+    for group in catalog['groups']:
+        symbols = set(group['symbols'])
+        every |= symbols
+        absent = sorted(name for name in symbols if name not in adapters['libSystem'])
+        missing[group['id']] = absent
+        have = len(symbols) - len(absent)
+        part = sum(name in partial for name in symbols if name not in absent)
+        rows.append({'name': group['name'], 'available': have, 'partial': part, 'total': len(symbols),
+                     'percent': round(100 * have / len(symbols), 2)})
+    have = sum(name in adapters['libSystem'] for name in every)
+    part = sum(name in partial for name in every)
+    rows.insert(0, {'name': 'All catalogued public APIs', 'available': have, 'partial': part,
+                    'total': len(every), 'percent': round(100 * have / len(every), 2)})
+    sources = sorted({f"{f['repository']}@{f['commit'][:10]}" for g in catalog['groups'] for f in g['files']})
+    return {'rows': rows, 'missing': missing, 'partial': partial, 'sources': sources}
+
+
+def chart(rows, target_count, title='Known Intel API adapter coverage', filename='api-coverage.svg',
+          subtitle=None, description=None):
+    description = description or ('Registered adapters divided by imported library and symbol pairs. '
+                                  'Does not measure full software compatibility.')
+    subtitle = subtitle or f'{target_count} Intel images \u00b7 direct imports \u00b7 source registry count'
     width, height = 960, 126 + 44 * len(rows)
     svg = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
-           '<title id="title">Known Intel API adapter coverage</title>',
-           '<desc id="desc">Registered adapters divided by imported library and symbol pairs. Does not measure full software compatibility.</desc>',
+           f'<title id="title">{html.escape(title)}</title>',
+           f'<desc id="desc">{html.escape(description)}</desc>',
            f'<rect width="{width}" height="{height}" rx="12" fill="#111827"/>',
            '<g font-family="sans-serif" fill="#f9fafb">',
-           '<text x="28" y="36" font-size="21" font-weight="600">Known Intel API adapter coverage</text>',
-           f'<text x="28" y="62" font-size="13" fill="#cbd5e1">{target_count} Intel images · direct imports · source registry count</text>']
+           f'<text x="28" y="36" font-size="21" font-weight="600">{html.escape(title)}</text>',
+           f'<text x="28" y="62" font-size="13" fill="#cbd5e1">{html.escape(subtitle)}</text>']
     for i, row in enumerate(rows):
         y = 90 + 44 * i
         pct = row['percent'] or 0
         color = '#34d399' if pct == 100 else '#fbbf24' if pct else '#64748b'
+        part = row.get('partial')
         svg += [f'<text x="28" y="{y+17}" font-size="14">{html.escape(row["name"])}</text>',
-                f'<rect x="270" y="{y}" width="410" height="24" rx="4" fill="#374151"/>',
-                f'<rect x="270" y="{y}" width="{410*pct/100:.2f}" height="24" rx="4" fill="{color}"/>',
-                f'<text x="704" y="{y+17}" font-size="14" font-family="monospace">{pct:.2f}%</text>',
-                f'<text x="804" y="{y+17}" font-size="14" fill="#cbd5e1">{row["available"]} / {row["total"]}</text>']
-    svg += [f'<text x="28" y="{height-18}" font-size="12" fill="#9ca3af">An adapter may implement only part of an API. Missing APIs are listed in status.json.</text>', '</g></svg>']
-    (OUT / 'api-coverage.svg').write_text('\n'.join(svg) + '\n', encoding='utf-8', newline='\n')
+                f'<rect x="270" y="{y}" width="410" height="24" rx="4" fill="#374151"/>']
+        if part is None:
+            svg += [f'<rect x="270" y="{y}" width="{410*pct/100:.2f}" height="24" rx="4" fill="{color}"/>']
+            count = f'{row["available"]} / {row["total"]}'
+        else:
+            # Complete adapters first, then the partial ones in amber.
+            full = (row['available'] - part) * 410 / row['total'] if row['total'] else 0
+            width_all = row['available'] * 410 / row['total'] if row['total'] else 0
+            svg += [f'<rect x="270" y="{y}" width="{width_all:.2f}" height="24" rx="4" fill="#fbbf24"/>',
+                    f'<rect x="270" y="{y}" width="{full:.2f}" height="24" rx="4" fill="#34d399"/>']
+            count = f'{row["available"]} / {row["total"]}' + (f' ({part} partial)' if part else '')
+        svg += [f'<text x="690" y="{y+17}" font-size="14" font-family="monospace">{pct:.2f}%</text>',
+                f'<text x="770" y="{y+17}" font-size="14" fill="#cbd5e1">{count}</text>']
+    note = ('Green: complete adapter. Amber: partial adapter, see partial-api.json. Gray: missing.'
+            if rows and 'partial' in rows[0] else
+            'An adapter may implement only part of an API. Missing APIs are listed in status.json.')
+    svg += [f'<text x="28" y="{height-18}" font-size="12" fill="#9ca3af">{html.escape(note)}</text>', '</g></svg>']
+    (OUT / filename).write_text('\n'.join(svg) + '\n', encoding='utf-8', newline='\n')
 
 
 def details(report):
@@ -260,6 +314,19 @@ def details(report):
               'Use `--refresh-imports` only when updating the artifact inventory; this requires the local',
               'hash-matched files under `target/artifacts` and the pinned jq download. The refresh cross-checks',
               'Apple import names and library order against the existing Rust inspection reports. No target is executed.', '']
+    public = report['public_api']
+    lines += ['## Public API surface', '',
+              'The tables above count only symbols the inspected binaries import. This section counts every',
+              'symbol exported by the public headers of the subsystems Adapter implements, taken from pinned',
+              'commits of ' + ', '.join(public['sources']) + ' (see [public-api.json](public-api.json); regenerate',
+              'with `python tools/extract_public_api.py`). It does not say which symbols real programs call.', '',
+              '| Subsystem | Adapters available | Of which partial | Missing | Coverage |',
+              '| --- | ---: | ---: | ---: | ---: |']
+    for row in public['rows']:
+        lines.append(f"| {row['name']} | {row['available']} / {row['total']} | {row['partial']} | {row['total']-row['available']} | {row['percent']:.2f}% |")
+    lines += ['', 'A partial adapter implements only part of its contract; the reason for each is in',
+              '[partial-api.json](partial-api.json). Missing public symbols are listed per subsystem under',
+              '`public_api.missing` in [status.json](status.json).', '']
     lines += ['Registry extraction covers the current Rust symbol matches and C LOOKUP/LM registrations.',
               'If a new adapter library or registration style is added, update `registry()` and `available()`',
               'in the generator as part of that change. Counts indicate a registration exists, not complete API semantics.', '']
@@ -289,7 +356,19 @@ def update_readme(report):
     lines += ['| Xcode 27 launcher | — | — | ARM64; no translator |', end]
     at = text.index(start)
     stop = text.index(end, at) + len(end)
-    path.write_text(text[:at] + '\n'.join(lines) + text[stop:], encoding='utf-8', newline='\n')
+    text = text[:at] + '\n'.join(lines) + text[stop:]
+    start, end = '<!-- PUBLIC-API:START -->', '<!-- PUBLIC-API:END -->'
+    public = report['public_api']['rows']
+    block = [start, '', '[![Public API surface coverage](docs/progress/public-api.svg)](docs/progress/README.md#public-api-surface)', '',
+             f"**{public[0]['available']:,} / {public[0]['total']:,} catalogued public APIs have adapters: {public[0]['percent']:.2f}%"
+             f" ({public[0]['partial']} of them partial).**", '',
+             'The chart above counts only what the inspected binaries import. This one counts every symbol',
+             'in the public headers of the subsystems Adapter implements (libdispatch, the Block runtime,',
+             'signals, pthread QoS and Mach VM), pinned to Apple open-source commits. Adding a subsystem',
+             'to the catalog is a small change in `tools/extract_public_api.py`.', end]
+    at = text.index(start)
+    stop = text.index(end, at) + len(end)
+    path.write_text(text[:at] + '\n'.join(block) + text[stop:], encoding='utf-8', newline='\n')
 
 
 if __name__ == '__main__':

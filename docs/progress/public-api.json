@@ -1,0 +1,458 @@
+{
+  "schema_version": 1,
+  "note": "Public-header symbol inventory. Counts what a subsystem exports, not what programs import; a symbol with an adapter may implement only part of its contract.",
+  "groups": [
+    {
+      "id": "dispatch-queues",
+      "name": "libdispatch queues",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/queue.h",
+          "sha256": "7ecc56dc552199bd0275e35312597fc5fe7877cf7f026c66544bae905af7a0cd"
+        }
+      ],
+      "symbols": [
+        "__dispatch_main_q",
+        "__dispatch_queue_attr_concurrent",
+        "_dispatch_after",
+        "_dispatch_after_f",
+        "_dispatch_allow_send_signals",
+        "_dispatch_apply",
+        "_dispatch_apply_f",
+        "_dispatch_assert_queue",
+        "_dispatch_assert_queue_barrier",
+        "_dispatch_assert_queue_not",
+        "_dispatch_async",
+        "_dispatch_async_and_wait",
+        "_dispatch_async_and_wait_f",
+        "_dispatch_async_f",
+        "_dispatch_barrier_async",
+        "_dispatch_barrier_async_and_wait",
+        "_dispatch_barrier_async_and_wait_f",
+        "_dispatch_barrier_async_f",
+        "_dispatch_barrier_sync",
+        "_dispatch_barrier_sync_f",
+        "_dispatch_get_current_queue",
+        "_dispatch_get_global_queue",
+        "_dispatch_get_specific",
+        "_dispatch_main",
+        "_dispatch_queue_attr_make_initially_inactive",
+        "_dispatch_queue_attr_make_with_autorelease_frequency",
+        "_dispatch_queue_attr_make_with_qos_class",
+        "_dispatch_queue_create",
+        "_dispatch_queue_create_with_target",
+        "_dispatch_queue_get_label",
+        "_dispatch_queue_get_qos_class",
+        "_dispatch_queue_get_specific",
+        "_dispatch_queue_set_specific",
+        "_dispatch_set_target_queue",
+        "_dispatch_sync",
+        "_dispatch_sync_f"
+      ]
+    },
+    {
+      "id": "dispatch-objects",
+      "name": "libdispatch objects",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/object.h",
+          "sha256": "065c4e2236cde95bff448cfdceea26c98cb2ca5e855744ebc061f21f2af1999e"
+        }
+      ],
+      "symbols": [
+        "_dispatch_activate",
+        "_dispatch_cancel",
+        "_dispatch_debug",
+        "_dispatch_debugv",
+        "_dispatch_get_context",
+        "_dispatch_notify",
+        "_dispatch_release",
+        "_dispatch_resume",
+        "_dispatch_retain",
+        "_dispatch_set_context",
+        "_dispatch_set_finalizer_f",
+        "_dispatch_set_qos_class_floor",
+        "_dispatch_suspend",
+        "_dispatch_testcancel",
+        "_dispatch_wait"
+      ]
+    },
+    {
+      "id": "dispatch-groups",
+      "name": "libdispatch groups",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/group.h",
+          "sha256": "d1542cb13aa2d8b11f4255780438c2be2774a01ed6a94e53d9ded11cf9d754e2"
+        }
+      ],
+      "symbols": [
+        "_dispatch_group_async",
+        "_dispatch_group_async_f",
+        "_dispatch_group_create",
+        "_dispatch_group_enter",
+        "_dispatch_group_leave",
+        "_dispatch_group_notify",
+        "_dispatch_group_notify_f",
+        "_dispatch_group_wait"
+      ]
+    },
+    {
+      "id": "dispatch-semaphore",
+      "name": "libdispatch semaphores",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/semaphore.h",
+          "sha256": "ee4d4b6aa2a6c4839540984224fdafb9241ebd2c435701ece5c7298f12c55559"
+        }
+      ],
+      "symbols": [
+        "_dispatch_semaphore_create",
+        "_dispatch_semaphore_signal",
+        "_dispatch_semaphore_wait"
+      ]
+    },
+    {
+      "id": "dispatch-once-time",
+      "name": "libdispatch once and time",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/once.h",
+          "sha256": "eac4712cd83a89e9b895c52e00408f5eeba18f7bd747dc2a5f5ed04865036119"
+        },
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/time.h",
+          "sha256": "de6d9121b11599dd93c077afee5e6d8255d52ccc44b718eee7829a2308010809"
+        }
+      ],
+      "symbols": [
+        "_dispatch_once",
+        "_dispatch_once_f",
+        "_dispatch_time",
+        "_dispatch_walltime"
+      ]
+    },
+    {
+      "id": "dispatch-blocks",
+      "name": "libdispatch block objects",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/block.h",
+          "sha256": "e07296616a4384f3ed67290fa0e935af0fa3da9508bb44239a2d7270dcbd3682"
+        }
+      ],
+      "symbols": [
+        "_dispatch_block_cancel",
+        "_dispatch_block_create",
+        "_dispatch_block_create_with_qos_class",
+        "_dispatch_block_notify",
+        "_dispatch_block_perform",
+        "_dispatch_block_testcancel",
+        "_dispatch_block_wait"
+      ]
+    },
+    {
+      "id": "dispatch-sources",
+      "name": "libdispatch sources",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/source.h",
+          "sha256": "c0a3c34828c40d761b421d1b595ce1da22110410412facc531b1ac16af12d5d2"
+        }
+      ],
+      "symbols": [
+        "__dispatch_source_type_data_add",
+        "__dispatch_source_type_data_or",
+        "__dispatch_source_type_data_replace",
+        "__dispatch_source_type_mach_recv",
+        "__dispatch_source_type_mach_send",
+        "__dispatch_source_type_memorypressure",
+        "__dispatch_source_type_proc",
+        "__dispatch_source_type_read",
+        "__dispatch_source_type_signal",
+        "__dispatch_source_type_timer",
+        "__dispatch_source_type_vnode",
+        "__dispatch_source_type_write",
+        "_dispatch_source_cancel",
+        "_dispatch_source_create",
+        "_dispatch_source_get_data",
+        "_dispatch_source_get_handle",
+        "_dispatch_source_get_mask",
+        "_dispatch_source_merge_data",
+        "_dispatch_source_set_cancel_handler",
+        "_dispatch_source_set_cancel_handler_f",
+        "_dispatch_source_set_event_handler",
+        "_dispatch_source_set_event_handler_f",
+        "_dispatch_source_set_registration_handler",
+        "_dispatch_source_set_registration_handler_f",
+        "_dispatch_source_set_timer",
+        "_dispatch_source_testcancel"
+      ]
+    },
+    {
+      "id": "dispatch-data",
+      "name": "libdispatch data",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/data.h",
+          "sha256": "99df3b84a5066912b37eb495b1236874bcaf86ce44617945e307fdb855dfee0e"
+        }
+      ],
+      "symbols": [
+        "__dispatch_data_destructor_free",
+        "__dispatch_data_destructor_munmap",
+        "__dispatch_data_empty",
+        "_dispatch_data_apply",
+        "_dispatch_data_copy_region",
+        "_dispatch_data_create",
+        "_dispatch_data_create_concat",
+        "_dispatch_data_create_map",
+        "_dispatch_data_create_subrange",
+        "_dispatch_data_get_size"
+      ]
+    },
+    {
+      "id": "dispatch-io",
+      "name": "libdispatch I/O",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/io.h",
+          "sha256": "aaa3e01d7328fdd2b72de321f2b9dbaf2c7840bf1add3b45c36e749146cdc1b3"
+        }
+      ],
+      "symbols": [
+        "_dispatch_io_barrier",
+        "_dispatch_io_close",
+        "_dispatch_io_create",
+        "_dispatch_io_create_with_io",
+        "_dispatch_io_create_with_path",
+        "_dispatch_io_get_descriptor",
+        "_dispatch_io_read",
+        "_dispatch_io_set_high_water",
+        "_dispatch_io_set_interval",
+        "_dispatch_io_set_low_water",
+        "_dispatch_io_write",
+        "_dispatch_read",
+        "_dispatch_write"
+      ]
+    },
+    {
+      "id": "dispatch-workloop",
+      "name": "libdispatch workloops",
+      "repository": "libdispatch",
+      "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+      "files": [
+        {
+          "repository": "libdispatch",
+          "commit": "2361ffb78a76f7ee488cd052eb0bc5c767118bf9",
+          "path": "dispatch/workloop.h",
+          "sha256": "ddfe19d7fc32eda97f5466260c7f01047af5dd3a75096bb519f0bad2b83cd775"
+        }
+      ],
+      "symbols": [
+        "_dispatch_workloop_create",
+        "_dispatch_workloop_create_inactive",
+        "_dispatch_workloop_set_autorelease_frequency",
+        "_dispatch_workloop_set_os_workgroup"
+      ]
+    },
+    {
+      "id": "block-runtime",
+      "name": "Block runtime",
+      "repository": "libclosure",
+      "commit": "3668b0837f47be3cc1c404fb5e360f4ff178ca13",
+      "files": [
+        {
+          "repository": "libclosure",
+          "commit": "3668b0837f47be3cc1c404fb5e360f4ff178ca13",
+          "path": "Block.h",
+          "sha256": "c1f75e3d4d3b06d7ffbd50697666c874236d269e30307e303609d71f2269bdd9"
+        }
+      ],
+      "symbols": [
+        "__Block_copy",
+        "__Block_object_assign",
+        "__Block_object_dispose",
+        "__Block_release",
+        "__NSConcreteGlobalBlock",
+        "__NSConcreteStackBlock"
+      ]
+    },
+    {
+      "id": "signals",
+      "name": "POSIX signals",
+      "repository": "Libc",
+      "commit": "71bbe350ab79eef58113991d817ccc6165061a64",
+      "files": [
+        {
+          "repository": "Libc",
+          "commit": "71bbe350ab79eef58113991d817ccc6165061a64",
+          "path": "include/signal.h",
+          "sha256": "1af28533ef70b80a17b29e2ed489f1103b1750198b5c8fe97c97fa90576426b3"
+        },
+        {
+          "repository": "xnu",
+          "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+          "path": "bsd/sys/signal.h",
+          "sha256": "2efb1aca5abdfa6f9e8bad155f2db319fdca1a029400cad1558e4df981d6eeea"
+        }
+      ],
+      "symbols": [
+        "_bsd_signal",
+        "_kill",
+        "_killpg",
+        "_psignal",
+        "_pthread_kill",
+        "_pthread_sigmask",
+        "_raise",
+        "_sigaction",
+        "_sigaddset",
+        "_sigaltstack",
+        "_sigblock",
+        "_sigdelset",
+        "_sigemptyset",
+        "_sigfillset",
+        "_sighold",
+        "_sigignore",
+        "_siginterrupt",
+        "_sigismember",
+        "_signal",
+        "_sigpause",
+        "_sigpending",
+        "_sigprocmask",
+        "_sigrelse",
+        "_sigset",
+        "_sigsetmask",
+        "_sigsuspend",
+        "_sigvec",
+        "_sigwait"
+      ]
+    },
+    {
+      "id": "pthread-qos",
+      "name": "pthread QoS",
+      "repository": "libpthread",
+      "commit": "42d026df5b07825070f60134b980a1ec2552dfee",
+      "files": [
+        {
+          "repository": "libpthread",
+          "commit": "42d026df5b07825070f60134b980a1ec2552dfee",
+          "path": "include/pthread/qos.h",
+          "sha256": "bfcfcf23501c328f5aa7f3bb39c0c8167730ab111393063c5b5fb4bd72d074f2"
+        },
+        {
+          "repository": "libpthread",
+          "commit": "42d026df5b07825070f60134b980a1ec2552dfee",
+          "path": "include/sys/qos.h",
+          "sha256": "3f1e1e9a2b707f22407df44ee8a8b270348d3b4b53313ec52d06a6198716e273"
+        }
+      ],
+      "symbols": [
+        "_pthread_attr_get_qos_class_np",
+        "_pthread_attr_set_qos_class_np",
+        "_pthread_get_qos_class_np",
+        "_pthread_override_qos_class_end_np",
+        "_pthread_override_qos_class_start_np",
+        "_pthread_set_qos_class_self_np",
+        "_qos_class_main",
+        "_qos_class_self"
+      ]
+    },
+    {
+      "id": "mach-vm",
+      "name": "Mach VM routines",
+      "repository": "xnu",
+      "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+      "files": [
+        {
+          "repository": "xnu",
+          "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+          "path": "osfmk/mach/mach_vm.defs",
+          "sha256": "14d6a56bff28f5fc046a7e2f48a7347463ed28087645279e6b8b544ce95141ad"
+        }
+      ],
+      "symbols": [
+        "_mach_make_memory_entry",
+        "_mach_make_memory_entry_64",
+        "_mach_vm_allocate",
+        "_mach_vm_behavior_set",
+        "_mach_vm_copy",
+        "_mach_vm_deallocate",
+        "_mach_vm_inherit",
+        "_mach_vm_machine_attribute",
+        "_mach_vm_map",
+        "_mach_vm_msync",
+        "_mach_vm_page_info",
+        "_mach_vm_page_query",
+        "_mach_vm_page_range_query",
+        "_mach_vm_protect",
+        "_mach_vm_purgable_control",
+        "_mach_vm_read",
+        "_mach_vm_read_list",
+        "_mach_vm_read_overwrite",
+        "_mach_vm_region",
+        "_mach_vm_region_recurse",
+        "_mach_vm_remap",
+        "_mach_vm_remap_new",
+        "_mach_vm_write",
+        "_vm_allocate",
+        "_vm_behavior_set",
+        "_vm_copy",
+        "_vm_deallocate",
+        "_vm_inherit",
+        "_vm_machine_attribute",
+        "_vm_map",
+        "_vm_map_page_query",
+        "_vm_msync",
+        "_vm_protect",
+        "_vm_purgable_control",
+        "_vm_read",
+        "_vm_read_list",
+        "_vm_read_overwrite",
+        "_vm_region_64",
+        "_vm_region_recurse_64",
+        "_vm_remap",
+        "_vm_remap_new",
+        "_vm_write"
+      ]
+    }
+  ]
+}

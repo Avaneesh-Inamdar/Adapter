@@ -63,6 +63,9 @@ test_dependency_bad_callback_prevents_all_initializers (test_runtime.RuntimeTest
 test_dependency_cycle_fails_before_constructors (test_runtime.RuntimeTests.test_dependency_cycle_fails_before_constructors) ... ok
 test_dependency_graph (test_runtime.RuntimeTests.test_dependency_graph) ... ok
 test_dependency_missing_import_prevents_all_initializers (test_runtime.RuntimeTests.test_dependency_missing_import_prevents_all_initializers) ... ok
+test_dispatch_block_objects_and_sources (test_runtime.RuntimeTests.test_dispatch_block_objects_and_sources) ... ok
+test_dispatch_queues_groups_barriers_and_main_queue (test_runtime.RuntimeTests.test_dispatch_queues_groups_barriers_and_main_queue) ... ok
+test_dispatch_sync_onto_running_queue_traps (test_runtime.RuntimeTests.test_dispatch_sync_onto_running_queue_traps) ... ok
 test_dlopen_plugin_lifecycle_lookup_and_errors (test_runtime.RuntimeTests.test_dlopen_plugin_lifecycle_lookup_and_errors) ... ok
 test_dylib_constructors_destructors_and_shared_data (test_runtime.RuntimeTests.test_dylib_constructors_destructors_and_shared_data) ... ok
 test_dynamic_library_is_not_an_executable (test_runtime.RuntimeTests.test_dynamic_library_is_not_an_executable) ... ok
@@ -86,6 +89,7 @@ test_missing_library (test_runtime.RuntimeTests.test_missing_library) ... ok
 test_objc_metadata_and_class_dispatch (test_runtime.RuntimeTests.test_objc_metadata_and_class_dispatch) ... ok
 test_overlapping_universal_slices (test_runtime.RuntimeTests.test_overlapping_universal_slices) ... ok
 test_preflight_does_not_execute (test_runtime.RuntimeTests.test_preflight_does_not_execute) ... ok
+test_pthread_qos_classes_are_recorded_per_thread (test_runtime.RuntimeTests.test_pthread_qos_classes_are_recorded_per_thread) ... ok
 test_published_macos_binary_if_fetched (test_runtime.RuntimeTests.test_published_macos_binary_if_fetched) ... ok
 test_reexported_dylib (test_runtime.RuntimeTests.test_reexported_dylib) ... ok
 test_repeated_execution (test_runtime.RuntimeTests.test_repeated_execution) ... ok
@@ -109,6 +113,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 108 tests in 18.477s
+Ran 112 tests in 22.690s
 
 OK

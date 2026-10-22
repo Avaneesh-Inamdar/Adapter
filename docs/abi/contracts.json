@@ -700,10 +700,11 @@
     {
       "id": "signals",
       "version": 1,
-      "scope": "Synchronous Darwin signal dispositions, masks, raise/kill on the guest's own pid and default termination",
+      "scope": "Synchronous Darwin signal dispositions, masks, pending sets, sigwait, raise/kill/killpg on the guest's own pid and default termination",
       "calling_convention": "Darwin x86-64 LP64; sigset_t is a 32-bit mask with bit (signal - 1); handlers take (int) or (int, siginfo*, ucontext*) and are called with the latter two null.",
       "implementation": [
-        "src/darwin/signal.rs"
+        "src/darwin/signal.rs",
+        "src/darwin/host/system.c"
       ],
       "tests": [
         "tests/fixtures/signals.c",
@@ -723,12 +724,105 @@
       ],
       "ownership": "Handler addresses are guest code; the adapter stores them and never frees or relocates them.",
       "callbacks": "Handlers run synchronously on the calling guest thread's stack with the signal and sa_mask blocked.",
-      "errors": "EINVAL for signal 0, out of range, SIGKILL/SIGSTOP dispositions and unknown sigprocmask how; ESRCH for foreign pids; EPERM for pid -1; SIG_ERR from signal.",
+      "errors": "EINVAL for signal 0, out of range, SIGKILL/SIGSTOP dispositions and unknown sigprocmask how; ESRCH for foreign pids and process groups; EPERM for pid -1; SIG_ERR from signal; sigwait returns EINVAL directly.",
       "lifecycle": "Dispositions and the mask live for the run; an unhandled terminating signal exits with 128 + signal.",
-      "unsupported": "No asynchronous delivery, per-thread masks, siginfo/ucontext, sa_flags, alternate stacks, fault mapping, pthread_kill or sigwait.",
+      "unsupported": "No asynchronous delivery, per-thread masks, siginfo/ucontext, sa_flags, alternate stacks, fault mapping, pthread_kill, sigsuspend, sigpause, sigset or sigvec.",
       "sources": [
         "docs/signal-results.md",
         "https://github.com/apple-oss-distributions/xnu"
+      ]
+    },
+    {
+      "id": "dispatch",
+      "version": 1,
+      "scope": "libdispatch queues, groups, once, after, apply, block objects, timer and user-data sources, and the Block runtime copy/dispose helpers",
+      "calling_convention": "Darwin x86-64 LP64; dispatch objects are opaque pointer-width tokens, dispatch_time_t is 64-bit (wall-clock values are the negated nanoseconds since the epoch), blocks follow the libclosure layout and are called with the block pointer as the first argument.",
+      "implementation": [
+        "src/darwin/dispatch.rs",
+        "src/darwin/dispatch/block_objects.rs",
+        "src/darwin/dispatch/sources.rs",
+        "src/darwin/blocks.rs"
+      ],
+      "tests": [
+        "tests/fixtures/dispatch.c",
+        "tests/fixtures/dispatch_source.c",
+        "tests/fixtures/dispatch_deadlock.c"
+      ],
+      "layouts": [
+        {
+          "name": "Block_layout",
+          "size": 32,
+          "align": 8,
+          "fields": [
+            {"name": "isa", "offset": 0, "size": 8},
+            {"name": "flags", "offset": 8, "size": 4},
+            {"name": "reserved", "offset": 12, "size": 4},
+            {"name": "invoke", "offset": 16, "size": 8},
+            {"name": "descriptor", "offset": 24, "size": 8}
+          ]
+        },
+        {
+          "name": "Block_byref",
+          "size": 24,
+          "align": 8,
+          "fields": [
+            {"name": "isa", "offset": 0, "size": 8},
+            {"name": "forwarding", "offset": 8, "size": 8},
+            {"name": "flags", "offset": 16, "size": 4},
+            {"name": "size", "offset": 20, "size": 4}
+          ]
+        },
+        {
+          "name": "timespec",
+          "size": 16,
+          "align": 8,
+          "fields": [
+            {"name": "tv_sec", "offset": 0, "size": 8},
+            {"name": "tv_nsec", "offset": 8, "size": 8}
+          ]
+        }
+      ],
+      "ownership": "Queues, groups and sources are registry records reclaimed when their reference count is zero and no work is queued or running; submitted blocks are copied with Block_copy and released after they run; handler blocks are owned by their source until it is freed.",
+      "callbacks": "Blocks and functions run on host worker threads set up like guest pthreads, on the calling thread for sync submission, or on the thread running dispatch_main for the main queue; destructors and finalizers run on a separate guest thread, never under the registry lock.",
+      "errors": "Client bugs trap with exit status 132 and a diagnostic: sync onto a queue the thread already owns, unbalanced group leave, over-release, over-resume, resume of an inactive queue, invalid objects, NULL or non-executable blocks and functions. dispatch_get_global_queue and dispatch_source_create return NULL for unsupported arguments. Waits return 60 on timeout, matching the semaphore adapter.",
+      "lifecycle": "State begins with the guest run; at normal exit queued work is discarded and running items finish before images are unmapped.",
+      "unsupported": "Sources of type read, write, vnode, proc, signal, Mach and memory pressure; dispatch_data, dispatch_io and workloops; QoS scheduling and DISPATCH_BLOCK_BARRIER; root or main queue as a target; ordering of apply on serial queues.",
+      "sources": [
+        "docs/dispatch-results.md",
+        "https://github.com/apple-oss-distributions/libdispatch",
+        "https://github.com/apple-oss-distributions/libclosure"
+      ]
+    },
+    {
+      "id": "qos",
+      "version": 1,
+      "scope": "pthread and libsystem quality-of-service classes recorded per thread and attribute",
+      "calling_convention": "Darwin x86-64 LP64; qos_class_t is a 32-bit unsigned value (0x21, 0x19, 0x15, 0x11, 0x09); relative priorities are in -15..0.",
+      "implementation": [
+        "src/darwin/qos.rs"
+      ],
+      "tests": [
+        "tests/fixtures/qos.c"
+      ],
+      "layouts": [
+        {
+          "name": "pthread_attr_qos",
+          "size": 8,
+          "align": 4,
+          "fields": [
+            {"name": "qos_class", "offset": 0, "size": 4},
+            {"name": "relative_priority", "offset": 4, "size": 4}
+          ]
+        }
+      ],
+      "ownership": "The class is stored in the guest's pthread_attr_t reserved bytes at offsets 16 and 20; the adapter owns no other state.",
+      "callbacks": "None.",
+      "errors": "EINVAL for unknown classes, relative priorities outside -15..0 and uninitialised attributes; override start returns NULL on invalid input.",
+      "lifecycle": "Per-thread records start at user-interactive for the main thread and default for other threads and end with the thread.",
+      "unsupported": "No scheduling effect, no application of an attribute's class by pthread_create, no reading of another thread's class, no real overrides.",
+      "sources": [
+        "docs/dispatch-results.md",
+        "https://github.com/apple-oss-distributions/libpthread"
       ]
     }
   ]

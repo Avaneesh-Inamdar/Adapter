@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="786" viewBox="0 0 960 786" role="img" aria-labelledby="title desc">
+<title id="title">Public API surface coverage</title>
+<desc id="desc">Public header symbols with a complete adapter, a partial adapter or none. Does not measure whether programs run.</desc>
+<rect width="960" height="786" rx="12" fill="#111827"/>
+<g font-family="sans-serif" fill="#f9fafb">
+<text x="28" y="36" font-size="21" font-weight="600">Public API surface coverage</text>
+<text x="28" y="62" font-size="13" fill="#cbd5e1">14 subsystems · symbols exported by Apple&#x27;s public headers</text>
+<text x="28" y="107" font-size="14">All catalogued public APIs</text>
+<rect x="270" y="90" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="90" width="277.24" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="90" width="185.48" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="107" font-size="14" font-family="monospace">67.62%</text>
+<text x="770" y="107" font-size="14" fill="#cbd5e1">142 / 210 (47 partial)</text>
+<text x="28" y="151" font-size="14">libdispatch queues</text>
+<rect x="270" y="134" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="134" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="134" width="318.89" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="151" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="151" font-size="14" fill="#cbd5e1">36 / 36 (8 partial)</text>
+<text x="28" y="195" font-size="14">libdispatch objects</text>
+<rect x="270" y="178" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="178" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="178" width="328.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="195" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="195" font-size="14" fill="#cbd5e1">15 / 15 (3 partial)</text>
+<text x="28" y="239" font-size="14">libdispatch groups</text>
+<rect x="270" y="222" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="222" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="222" width="410.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="239" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="239" font-size="14" fill="#cbd5e1">8 / 8</text>
+<text x="28" y="283" font-size="14">libdispatch semaphores</text>
+<rect x="270" y="266" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="266" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="266" width="410.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="283" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="283" font-size="14" fill="#cbd5e1">3 / 3</text>
+<text x="28" y="327" font-size="14">libdispatch once and time</text>
+<rect x="270" y="310" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="310" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="310" width="410.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="327" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="327" font-size="14" fill="#cbd5e1">4 / 4</text>
+<text x="28" y="371" font-size="14">libdispatch block objects</text>
+<rect x="270" y="354" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="354" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="354" width="292.86" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="371" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="371" font-size="14" fill="#cbd5e1">7 / 7 (2 partial)</text>
+<text x="28" y="415" font-size="14">libdispatch sources</text>
+<rect x="270" y="398" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="398" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="398" width="268.08" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="415" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="415" font-size="14" fill="#cbd5e1">26 / 26 (9 partial)</text>
+<text x="28" y="459" font-size="14">libdispatch data</text>
+<rect x="270" y="442" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="442" width="0.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="442" width="0.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="459" font-size="14" font-family="monospace">0.00%</text>
+<text x="770" y="459" font-size="14" fill="#cbd5e1">0 / 10</text>
+<text x="28" y="503" font-size="14">libdispatch I/O</text>
+<rect x="270" y="486" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="486" width="0.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="486" width="0.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="503" font-size="14" font-family="monospace">0.00%</text>
+<text x="770" y="503" font-size="14" fill="#cbd5e1">0 / 13</text>
+<text x="28" y="547" font-size="14">libdispatch workloops</text>
+<rect x="270" y="530" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="530" width="0.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="530" width="0.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="547" font-size="14" font-family="monospace">0.00%</text>
+<text x="770" y="547" font-size="14" fill="#cbd5e1">0 / 4</text>
+<text x="28" y="591" font-size="14">Block runtime</text>
+<rect x="270" y="574" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="574" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="574" width="273.33" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="591" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="591" font-size="14" fill="#cbd5e1">6 / 6 (2 partial)</text>
+<text x="28" y="635" font-size="14">POSIX signals</text>
+<rect x="270" y="618" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="618" width="336.79" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="618" width="190.36" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="635" font-size="14" font-family="monospace">82.14%</text>
+<text x="770" y="635" font-size="14" fill="#cbd5e1">23 / 28 (10 partial)</text>
+<text x="28" y="679" font-size="14">pthread QoS</text>
+<rect x="270" y="662" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="662" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="662" width="51.25" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="679" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="679" font-size="14" fill="#cbd5e1">8 / 8 (7 partial)</text>
+<text x="28" y="723" font-size="14">Mach VM routines</text>
+<rect x="270" y="706" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="706" width="58.57" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="706" width="0.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="723" font-size="14" font-family="monospace">14.29%</text>
+<text x="770" y="723" font-size="14" fill="#cbd5e1">6 / 42 (6 partial)</text>
+<text x="28" y="768" font-size="12" fill="#9ca3af">Green: complete adapter. Amber: partial adapter, see partial-api.json. Gray: missing.</text>
+</g></svg>

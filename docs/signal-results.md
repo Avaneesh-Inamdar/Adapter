@@ -25,6 +25,10 @@ is synchronous: the handler runs on the guest's current stack inside `raise` or
   ignored; stop/continue signals are recorded and ignored.
 - `sigemptyset`, `sigfillset`, `sigaddset`, `sigdelset` and `sigismember` use
   Darwin's 32-bit `sigset_t`.
+- `sigpending`, `sigwait` (blocks until another guest thread raises one of the
+  blocked signals), `sighold`, `sigrelse`, `sigignore`, `killpg` on the guest's own
+  group, `bsd_signal`, the legacy `sigblock`/`sigsetmask`, `siginterrupt` (validates
+  only) and `psignal` with Darwin's signal descriptions.
 
 This module replaces the older `signal`/`sigaction`/`raise`/`sigemptyset`/
 `sigaddset` stubs in `src/darwin/host/system.c`, which recorded handlers but never
@@ -48,7 +52,8 @@ Both run in classic and chained form (the default-action fixture runs once).
 - No asynchronous delivery: Windows never interrupts guest threads, so signals
   raised by other threads, timers (`alarm`, `setitimer`) or `Ctrl-C` are not
   delivered.
-- One process-wide mask, not per-thread; `pthread_kill` and `sigwait` are absent.
+- One process-wide mask, not per-thread; `pthread_kill`, `sigsuspend`, `sigpause`,
+  `sigset` and `sigvec` are absent.
 - `sa_flags` are not stored (`sigaction` reports 0), `SA_SIGINFO` handlers receive
   null `siginfo`/`ucontext`, and there is no `SA_RESETHAND`, `SA_NODEFER`,
   `SA_RESTART` or alternate stack use.

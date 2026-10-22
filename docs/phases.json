@@ -235,9 +235,9 @@
       "id": 14,
       "name": "libdispatch / GCD",
       "phase": "P2",
-      "status": "not-started",
-      "work": "Assess upstream Windows backend, bridge guest Blocks/calling convention, queues, QoS and Mach dispatch sources.",
-      "source": "upstream-sources.md"
+      "status": "implemented-slice",
+      "work": "Queues (serial, concurrent, barriers, targets, suspension), sync/async/and_wait, groups, once, after, apply, block objects, timer and user-data sources, the main queue and Block runtime copy/dispose run with verified Mach-O consumers. Remaining: descriptor, process, signal and Mach sources, dispatch_data/io, workloops and QoS scheduling.",
+      "source": "dispatch-results.md"
     },
     {
       "id": 15,
@@ -292,7 +292,7 @@
       "name": "Signals and syscall personality",
       "phase": "P2",
       "status": "implemented-slice",
-      "work": "Synchronous guest signals: dispositions, masks, pending delivery, sa_mask and default termination run with a verified Mach-O consumer. Remaining: asynchronous delivery, per-thread masks, siginfo/ucontext, alternate stacks, fault mapping, restart and direct syscall interception.",
+      "work": "Synchronous guest signals: dispositions, masks, pending sets, sigwait, sa_mask and default termination run with a verified Mach-O consumer. Remaining: asynchronous delivery, per-thread masks, siginfo/ucontext, alternate stacks, fault mapping, restart and direct syscall interception.",
       "source": "signal-results.md"
     },
     {

@@ -386,6 +386,7 @@ mod native {
             let _tls = crate::darwin::tlv::begin(self.tls.clone())?;
             let _thread_state = crate::darwin::thread_state::begin()?;
             let _threads = crate::darwin::threads::begin()?;
+            crate::darwin::dispatch::begin();
             crate::darwin::mach::begin(trace)?;
             crate::darwin::libc::begin();
             crate::darwin::libc::set_executable_path(&argv[0]);
@@ -448,6 +449,7 @@ mod native {
                 unsafe { std::mem::transmute(self.mappings[0].relocated(entry)? as usize) };
             let result = unsafe { main(argv.len() as i32, av.as_ptr(), ev.as_ptr(), ap.as_ptr()) };
             // Never unmap code/TLS while an owned guest thread can still use it.
+            crate::darwin::dispatch::finish()?;
             crate::darwin::threads::finish()?;
             crate::darwin::callbacks::finalize(0)?;
             super::dynamic::finalize_all()?;

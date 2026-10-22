@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-22T03:16:00.039098+00:00",
+  "run_utc": "2026-10-22T03:48:49.817805+00:00",
   "all_passed": true,
   "stages": [
     {
@@ -12,7 +12,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.234,
+      "seconds": 0.235,
       "log": "format.log"
     },
     {
@@ -22,7 +22,7 @@
         "tools/check_contracts.py"
       ],
       "exit_code": 0,
-      "seconds": 0.063,
+      "seconds": 0.062,
       "log": "abi-contracts.log"
     },
     {
@@ -32,7 +32,7 @@
         "tools/update_phases.py"
       ],
       "exit_code": 0,
-      "seconds": 0.047,
+      "seconds": 0.063,
       "log": "phase-docs.log"
     },
     {
@@ -77,7 +77,7 @@
         "warnings"
       ],
       "exit_code": 0,
-      "seconds": 0.156,
+      "seconds": 0.109,
       "log": "clippy.log"
     },
     {
@@ -88,7 +88,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.359,
+      "seconds": 5.063,
       "log": "rust-tests.log"
     },
     {
@@ -99,7 +99,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.063,
+      "seconds": 0.078,
       "log": "debug-build.log"
     },
     {
@@ -129,7 +129,7 @@
         "tools/fetch_jq_tests.py"
       ],
       "exit_code": 0,
-      "seconds": 0.094,
+      "seconds": 0.109,
       "log": "reference-test-data.log"
     },
     {
@@ -139,7 +139,7 @@
         "tests/build_fixtures.py"
       ],
       "exit_code": 0,
-      "seconds": 2.968,
+      "seconds": 3.219,
       "log": "fixtures.log"
     },
     {
@@ -154,7 +154,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 0.985,
+      "seconds": 1.0,
       "log": "archive-tests.log"
     },
     {
@@ -169,7 +169,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 18.578,
+      "seconds": 22.797,
       "log": "integration-debug.log"
     },
     {
@@ -181,7 +181,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.062,
+      "seconds": 8.734,
       "log": "release-build.log"
     },
     {
@@ -196,7 +196,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 16.563,
+      "seconds": 19.406,
       "log": "integration-release.log"
     },
     {
@@ -206,7 +206,7 @@
         "tools/report_results.py"
       ],
       "exit_code": 0,
-      "seconds": 0.297,
+      "seconds": 0.344,
       "log": "compatibility-report.log"
     }
   ]
