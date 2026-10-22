@@ -61,7 +61,13 @@ OBJC_METADATA = Suite("adapter-objc-metadata-v1",
                       {family: 4 for family in ("identity", "conformance", "classproperty", "categoryproperty", "protocolproperty", "required", "optional", "accessors")},
                       "objc-metadata-differential", "tests/fixtures/objc_metadata.m",
                       ["-std=c11", "-O1", "-fno-objc-arc", "-fno-stack-protector", "-fno-asynchronous-unwind-tables", "-lobjc"])
-SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD, OBJC_METADATA)}
+ARC_FAMILIES = ("strong", "weak", "weakops", "pool", "returnvalue", "customrr", "bridge", "threads")
+ARC_FLAGS = ["-std=c11", "-fobjc-arc", "-fno-objc-exceptions", "-fno-exceptions", "-fno-stack-protector", "-fno-asynchronous-unwind-tables", "-lobjc"]
+ARC_DEBUG = Suite("adapter-objc-arc-o0-v1", ARC_FAMILIES, {name: 4 for name in ARC_FAMILIES},
+                  "objc-arc-o0-differential", "tests/fixtures/objc_arc.m", ["-O0", *ARC_FLAGS])
+ARC_OPT = Suite("adapter-objc-arc-o2-v1", ARC_FAMILIES, {name: 4 for name in ARC_FAMILIES},
+                "objc-arc-o2-differential", "tests/fixtures/objc_arc.m", ["-O2", *ARC_FLAGS])
+SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD, OBJC_METADATA, ARC_DEBUG, ARC_OPT)}
 # Backwards-compatible aliases for the primary libc suite.
 SUITE, FAMILIES, RESULT_LENGTHS, PROGRAM, SOURCE = LIBC.id, LIBC.families, LIBC.result_lengths, LIBC.program, LIBC.source
 
@@ -181,8 +187,18 @@ def build_bundle(output, count=4096, suite=LIBC):
     output.mkdir(parents=True, exist_ok=True)
     copied_source = output / Path(suite.source).name
     shutil.copyfile(ROOT / suite.source, copied_source)
+    prebuild = []
+    link_inputs = []
+    if suite in (ARC_DEBUG, ARC_OPT):
+        root_object = output / "arc-root.o"
+        root_command = [compiler, "-target", "x86_64-apple-macos10.13", "-O1", "-fno-objc-arc",
+                        "-fno-exceptions", "-fno-objc-exceptions", "-fno-stack-protector", "-fno-asynchronous-unwind-tables",
+                        "-DADAPTER_ARC_ROOT", "-c", str(copied_source), "-o", str(root_object)]
+        subprocess.run(root_command, capture_output=True, text=True, timeout=60, check=True)
+        prebuild.append(root_command)
+        link_inputs.append(str(root_object))
     command = [compiler, "-target", "x86_64-apple-macos10.13", *suite.flags,
-               "-Wl,-no_uuid", f"-DDIFF_CASE_COUNT={count}", str(copied_source), "-o", str(output / suite.program)]
+               "-Wl,-no_uuid", f"-DDIFF_CASE_COUNT={count}", str(copied_source), *link_inputs, "-o", str(output / suite.program)]
     process = subprocess.run(command, capture_output=True, text=True, timeout=60)
     if process.returncode:
         raise ValueError(f"compile/link failed ({process.returncode}):\n{process.stdout}\n{process.stderr}")
@@ -191,7 +207,7 @@ def build_bundle(output, count=4096, suite=LIBC):
                 "families": list(suite.families),
                 "program": {"file": suite.program, "sha256": sha256(output / suite.program)},
                 "source": {"file": copied_source.name, "sha256": sha256(copied_source)},
-                "build": {"command": command, "compiler": {"path": compiler, "sha256": sha256(compiler), "version": version},
+                "build": {"command": command, "prebuild": prebuild, "compiler": {"path": compiler, "sha256": sha256(compiler), "version": version},
                           "host": host_metadata(), "stdout": process.stdout, "stderr": process.stderr}}
     write_json(output / "manifest.json", manifest)
     return manifest

@@ -57,7 +57,7 @@ class DifferentialTests(unittest.TestCase):
             self.assertEqual(sum(item["family"] == family for item in items), 512)
 
     def test_registered_suites_pin_their_own_record_and_manifest_identity(self):
-        for identifier in ("adapter-objc-v1", "adapter-thread-v1", "adapter-objc-metadata-v1"):
+        for identifier in ("adapter-objc-v1", "adapter-thread-v1", "adapter-objc-metadata-v1", "adapter-objc-arc-o0-v1", "adapter-objc-arc-o2-v1"):
             suite = diff.SUITES[identifier]
             items = [{"id": f"{suite.families[i % 8]}:{i}", "family": suite.families[i % 8], "index": i,
                       "result": [0] * suite.result_lengths[suite.families[i % 8]]} for i in range(16)]
