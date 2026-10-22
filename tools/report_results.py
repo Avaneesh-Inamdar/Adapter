@@ -95,13 +95,18 @@ def report():
             if not path.exists():
                 continue
             value = json.loads(path.read_text(encoding='utf-8'))
-            block[profile] = {'status': value['status'], 'cases': value['case_count'],
-                              'matched': value['matched'], 'mismatched': value['mismatched'],
-                              'program_sha256': value.get('program_sha256')}
+            entry = {'status': value['status'], 'cases': value['case_count'],
+                     'matched': value['matched'], 'mismatched': value['mismatched'],
+                     'program_sha256': value.get('program_sha256')}
+            if 'binaries' in value:
+                entry['artifacts'] = {name: identity['sha256']
+                                      for name, identity in value['binaries'].items()}
+            block[profile] = entry
         return block
     differential = retained('differential-')
     objc_differential = retained('differential-objc-')
     thread_differential = retained('differential-thread-')
+    cli_differential = retained('differential-cli-')
     summary = {'rust_tests_passed':rust_count,'rust_test_status':rust_status,'archive_tests_passed':archive_count,'integration_tests_attempted':counts,
                'integration_status':{k:'passed' if passed[k] else 'blocked' for k in logs},
                'distinct_tests_passed_final':rust_count+archive_count+len(re.findall(r'^test_.* \.\.\. ok$',logs['debug'],re.M)),
@@ -110,7 +115,8 @@ def report():
                'compatibility_rows_reference_macos_verified':False,
                'libc_differential':{'hosted_intel_mac_run':'39667131995','profiles':differential},
                'objective_c_differential':{'hosted_intel_mac_run':'39673099968','profiles':objc_differential},
-               'thread_differential':{'hosted_intel_mac_run':'39675626670','profiles':thread_differential}}
+               'thread_differential':{'hosted_intel_mac_run':'39675626670','profiles':thread_differential},
+               'cli_differential':{'hosted_intel_mac_run':'39677072171','profiles':cli_differential}}
     (OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print('Recorded verification reports:',summary['distinct_tests_passed_final'],'distinct tests passed in final run')
 

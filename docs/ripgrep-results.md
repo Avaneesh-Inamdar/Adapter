@@ -72,7 +72,10 @@ crash.
 
 ## Boundaries and unknowns
 
-- All evidence is Windows-side. No reference Mac has run this artifact.
+- The same 4,387,000-byte artifact produced byte-identical stdout, stderr and exit
+  status on a hosted Intel Mac and through Adapter for the ripgrep cases of the
+  [CLI differential](differential-testing.md#recorded-cli-run-2026-10-22); the
+  integration suite below remains Windows-side and is broader than that slice.
 - Signal handlers, masks and alternate stacks are recorded, never delivered.
 - Condition variables, cancellation and errorcheck/adaptive mutexes are absent.
 - The preprocessor path is a failure-path observation, not spawn support.

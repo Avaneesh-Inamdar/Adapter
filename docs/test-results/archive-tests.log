@@ -1,6 +1,6 @@
 Selected: Xcode.app/Contents/MacOS/Xcode (10 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpfbiekm87\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpz2whlio2\\test.xip",
   "source_size": 674,
   "source_sha256": "12672b5c294034b1d92a7a20dd7ead3fa7c6d14acc72a283c7f6a0d9aa4d8801",
   "content_sha1_verified": true,
@@ -16,7 +16,7 @@ Selected: Xcode.app/Contents/MacOS/Xcode (10 bytes)
 }
 Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpku94he7s\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmp_d2l2nm0\\test.xip",
   "source_size": 706,
   "source_sha256": "ebf62e7ec1099deaf668ee286cb9db82d68049c1096807cb902910ddb488488d",
   "content_sha1_verified": true,
@@ -28,7 +28,7 @@ Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
   "file_data_bytes": 24,
   "decoded_bytes": 382,
   "pbzx_blocks": 1,
-  "seconds": 0.02
+  "seconds": 0.0
 }
 {
   "source_sha256": "ebf62e7ec1099deaf668ee286cb9db82d68049c1096807cb902910ddb488488d",
@@ -42,7 +42,7 @@ Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
 }
 Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpd9v2cyh8\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpqyljpqjx\\test.xip",
   "source_size": 696,
   "source_sha256": "383439cf39de8e9a37a09c97c36d627f36b40ac96631ebb54cdc07f7a3445696",
   "content_sha1_verified": true,
@@ -54,11 +54,11 @@ Selected: Xcode.app/Contents/MacOS/Xcode (13 bytes)
   "file_data_bytes": 24,
   "decoded_bytes": 304,
   "pbzx_blocks": 1,
-  "seconds": 0.0
+  "seconds": 0.02
 }
 Selected: Xcode.app/Contents/MacOS/Xcode (42 bytes)
 {
-  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmp8ojeh150\\test.xip",
+  "source": "C:\\Users\\avane\\AppData\\Local\\Temp\\tmpoaq86sjy\\test.xip",
   "source_size": 678,
   "source_sha256": "4a93d4affff6dc8d0e1a0d007c19a760863dcc12242d0818a50db746c600a408",
   "content_sha1_verified": true,
@@ -91,6 +91,13 @@ test_random_access_member_rejects_wrong_inventory_offset (test_archives.ArchiveT
 test_raw_filesystem_placeholder_is_reported (test_archives.ArchiveTests.test_raw_filesystem_placeholder_is_reported) ... ok
 test_traversal_rejected (test_archives.ArchiveTests.test_traversal_rejected) ... ok
 test_truncated_xar (test_archives.ArchiveTests.test_truncated_xar) ... ok
+test_any_field_difference_is_a_mismatch_with_detail (test_cli_differential.CliDifferentialTests.test_any_field_difference_is_a_mismatch_with_detail) ... ok
+test_committed_corpus_is_valid_and_names_both_programs (test_cli_differential.CliDifferentialTests.test_committed_corpus_is_valid_and_names_both_programs) ... ok
+test_corpus_or_binary_drift_invalidates_the_comparison (test_cli_differential.CliDifferentialTests.test_corpus_or_binary_drift_invalidates_the_comparison) ... ok
+test_corpus_rejects_duplicate_ids_unknown_binaries_and_bad_argv (test_cli_differential.CliDifferentialTests.test_corpus_rejects_duplicate_ids_unknown_binaries_and_bad_argv) ... ok
+test_incomplete_capture_is_invalid (test_cli_differential.CliDifferentialTests.test_incomplete_capture_is_invalid) ... ok
+test_same_evidence_compares_equal_including_adapter_capture (test_cli_differential.CliDifferentialTests.test_same_evidence_compares_equal_including_adapter_capture) ... ok
+test_windows_capture_is_never_accepted_as_the_reference (test_cli_differential.CliDifferentialTests.test_windows_capture_is_never_accepted_as_the_reference) ... ok
 test_build_only_calls_compiler_and_never_runs_guest (test_differential.DifferentialTests.test_build_only_calls_compiler_and_never_runs_guest) ... ok
 test_capture_timeout_and_hash_tampering_never_pass (test_differential.DifferentialTests.test_capture_timeout_and_hash_tampering_never_pass) ... ok
 test_complete_4096_balanced_records (test_differential.DifferentialTests.test_complete_4096_balanced_records) ... ok
@@ -107,6 +114,6 @@ test_tampered_records_and_duplicate_json_keys_fail (test_differential.Differenti
 test_windows_reference_is_not_accepted (test_differential.DifferentialTests.test_windows_reference_is_not_accepted) ... ok
 
 ----------------------------------------------------------------------
-Ran 23 tests in 0.521s
+Ran 30 tests in 0.804s
 
 OK

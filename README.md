@@ -64,7 +64,7 @@ When adding a new target, see the inventory refresh command in
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 160 distinct tests: 32 Rust, 23 archive
+**Test state:** the current run passed 167 distinct tests: 32 Rust, 30 archive
 and 105 integration tests. All 105 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
@@ -78,8 +78,10 @@ Windows-side evidence; the only reference-Mac executions are the hosted
 4,096-case libc [differential run](docs/differential-testing.md#recorded-run-2026-10-22),
 the 4,096-case Objective-C
 [differential run](docs/differential-testing.md#recorded-objective-c-run-2026-10-22)
-and the 1,024-case threading
-[differential run](docs/differential-testing.md#recorded-threading-run-2026-10-22).
+, the 1,024-case threading
+[differential run](docs/differential-testing.md#recorded-threading-run-2026-10-22)
+and the 30-case jq/ripgrep
+[CLI differential](docs/differential-testing.md#recorded-cli-run-2026-10-22).
 [Current run](docs/test-results/latest.json) ·
 [Summary](docs/test-results/summary.json).
 

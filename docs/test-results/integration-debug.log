@@ -106,6 +106,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 105 tests in 15.747s
+Ran 105 tests in 15.294s
 
 OK

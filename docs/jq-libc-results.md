@@ -53,7 +53,10 @@ stream, seeded sorting/grouping, Unicode/regex/escaping, CRLF/NUL preservation,
 Unicode filenames/slurp/rawfile, filter files and module search, missing-file/
 directory diagnostics, parse/compile/halt statuses, UTC dates/negative epoch,
 math including nexttoward, environment and CLI variables. They assert expected
-outputs and errors; they are not a full upstream jq suite or reference-Mac run.
+outputs and errors; they are not a full upstream jq suite. A reference-Mac run now
+exists for a fixed CLI slice: the same 871,768-byte artifact produced byte-identical
+stdout, stderr and exit status on a hosted Intel Mac and through Adapter for the
+jq cases of the [CLI differential](differential-testing.md#recorded-cli-run-2026-10-22).
 
 Three focused libc integration tests exercise classic/chained Mach-O consumers:
 GP/SSE register exhaustion and stack arguments, 64-bit longs, va_list, width/

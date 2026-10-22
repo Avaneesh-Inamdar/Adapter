@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "suite": "adapter-cli-v1",
+  "status": "equal",
+  "errors": [],
+  "reference": "target\\cli-ref\\cli-reference.json",
+  "candidate": "target\\cli-candidate.json",
+  "case_count": 30,
+  "matched": 30,
+  "mismatched": 0,
+  "differences": [],
+  "binaries": {
+    "jq": {
+      "file": "jq-macos-amd64",
+      "bytes": 871768,
+      "sha256": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0"
+    },
+    "rg": {
+      "file": "ripgrep-macos-amd64",
+      "bytes": 4387000,
+      "sha256": "0c9a0066db0d26b640777db88045b0ccdd58509a746700e43e1c4ff8707a5ed0"
+    }
+  },
+  "differences_truncated": false
+}

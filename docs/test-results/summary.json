@@ -1,7 +1,7 @@
 {
   "rust_tests_passed": 32,
   "rust_test_status": "passed",
-  "archive_tests_passed": 23,
+  "archive_tests_passed": 30,
   "integration_tests_attempted": {
     "debug": 105,
     "release": 105
@@ -10,7 +10,7 @@
     "debug": "passed",
     "release": "passed"
   },
-  "distinct_tests_passed_final": 160,
+  "distinct_tests_passed_final": 167,
   "jq_test_methods": 14,
   "ripgrep_test_methods": 11,
   "compatibility_rows_reference_macos_verified": false,
@@ -68,6 +68,33 @@
         "matched": 1024,
         "mismatched": 0,
         "program_sha256": "c8533b6eaca23d21d698f15ff7aca361ce2d21ed5f144c0a5b7b82107f64540b"
+      }
+    }
+  },
+  "cli_differential": {
+    "hosted_intel_mac_run": "39677072171",
+    "profiles": {
+      "debug": {
+        "status": "equal",
+        "cases": 30,
+        "matched": 30,
+        "mismatched": 0,
+        "program_sha256": null,
+        "artifacts": {
+          "jq": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0",
+          "rg": "0c9a0066db0d26b640777db88045b0ccdd58509a746700e43e1c4ff8707a5ed0"
+        }
+      },
+      "release": {
+        "status": "equal",
+        "cases": 30,
+        "matched": 30,
+        "mismatched": 0,
+        "program_sha256": null,
+        "artifacts": {
+          "jq": "e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0",
+          "rg": "0c9a0066db0d26b640777db88045b0ccdd58509a746700e43e1c4ff8707a5ed0"
+        }
       }
     }
   }

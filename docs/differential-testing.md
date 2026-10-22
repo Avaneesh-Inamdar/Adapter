@@ -1,6 +1,6 @@
 # Same-binary Darwin/Windows differential testing
 
-The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Three suites use it: `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families) and `adapter-thread-v1` (1,024 cases across eight threading families). A generator/build alone does not execute the guest and does not establish reference behavior.
+The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Three probe suites use it — `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families) and `adapter-thread-v1` (1,024 cases across eight threading families) — and one program suite, `adapter-cli-v1`, compares the pinned jq and ripgrep binaries over a fixed argv/stdin corpus. A generator/build alone does not execute the guest and does not establish reference behavior.
 
 ## Commands
 
@@ -82,6 +82,14 @@ Deliberate exclusions: the suite never probes runtime-owned retain counts, `objc
 | retval | two workers returning distinct computed pointers | both expected return values matched |
 
 This suite runs 1,024 cases (128 per family), not 4,096: every case creates real threads with 1 MiB stacks, so 4,096 cases exceeded the 60-second capture budget on the Windows side and the count is chosen for a bounded run rather than for uniformity with the other suites.
+
+## CLI suite (jq and ripgrep)
+
+`tools/cli_differential.py` runs complete programs rather than probes: the pinned jq 1.8.2 and ripgrep 15.2.0 macOS binaries are the artifacts under test, so the suite cannot be satisfied by a recompiled substitute. Each case fixes argv and stdin and records the exit status plus the SHA-256 and length of stdout and stderr, and both sides run with `LC_ALL=C`, `LANG=C` and `TZ=UTC0`. The corpus is `tests/differential/cli_cases.json` (30 cases: 19 jq, 11 rg).
+
+Two probes were removed after measurement because they are not stable same-binary records: `rg --json` embeds elapsed statistics in every end event, and `rg --version` prints the runtime SIMD features of the host CPU. Neither reflects Adapter behavior, so both would report a mismatch that no implementation could fix.
+
+A capture is only accepted as the reference when it is a native Darwin run; a Windows capture is rejected by `mode`, host and adapter identity checks, and a comparison additionally requires identical corpus bytes, identical binary hashes and identical case order.
 
 ## Recorded run (2026-10-22)
 
@@ -213,9 +221,36 @@ the value is that `pthread_once`, per-thread keys, condition handoff and thread
 return values now have Darwin reference evidence instead of only Windows-side
 integration tests.
 
-Limits of this evidence: the reference is a hosted macOS VM, not a physical Mac.
-The suites cover eight libc, eight Objective-C and eight threading families and
-exclude addresses, wall clock, locale strings, zone names, ARC/weak ownership and
-thread cancellation, priority or scheduling policy; JSONL equality is exact but
-`memcmp`/`memmove` and `classinfo` vectors carry 32-bit hashes. Mach/XPC/launchd,
-jq and ripgrep still have no reference capture.
+## Recorded CLI run (2026-10-22)
+
+| Item | Recorded value |
+| --- | --- |
+| Native reference | GitHub Actions run `39677072171`, `cli-reference` job, standard `macos-15-intel` hosted VM, workflow commit `5eeb3eb` |
+| Reference host | `Darwin 24.6.0`, `x86_64`, Python 3.14.7 |
+| jq artifact | `jq-macos-amd64`, 871,768 bytes, SHA-256 `e94b266e3c26690550006abe63152b782280f4e14374accdf04cbde844f00bc0` |
+| ripgrep artifact | `ripgrep-macos-amd64`, 4,387,000 bytes, SHA-256 `0c9a0066db0d26b640777db88045b0ccdd58509a746700e43e1c4ff8707a5ed0` |
+| Corpus | `cli_cases.json`, SHA-256 `ea35f7620cbb61de5ecb8827e577633bd72d3915cb7500b33b5e09e2df778f0e` |
+| Windows candidates | `target/release/adapter-run.exe` SHA-256 `51bc98eea423f46cee072bb4b3a57a1c0a63778b167a7e42735e5a2c6ec7e92a`; `target/debug/adapter-run.exe` SHA-256 `679f2856d568c00e50dba4255b75329539653ab1baa4e9a9433473fc963d1f0d` |
+| Result | `equal` in both profiles: 30 matched, 0 mismatched |
+
+| File | Bytes | SHA-256 (stored bytes) |
+| --- | ---: | --- |
+| `docs/test-results/mac-cli-reference-39677072171.json.gz` | 2,414 | `58d227945084e4ea68c7b6fce9193a7d3a7cb92c29f1d8fe01d51549d4175b27` |
+| `docs/test-results/differential-cli-candidate-debug.json.gz` | 2,498 | `3e6b9f6f19131ed422aa9ee40f0d94e6c8010f87edcf48fc273760d98c59ce3d` |
+| `docs/test-results/differential-cli-candidate-release.json.gz` | 2,493 | `3932df10611b740160d11e83fe87f4f20a414e643f20b023b0159f1fb194825d` |
+| `docs/test-results/differential-cli-debug.json` | 665 | `b2ceabf8e8af462602412d9d2f016ea9a720d660970bacab5cb35078899d3329` |
+| `docs/test-results/differential-cli-release.json` | 659 | `edff1f6bb2d5bd532bd3d9fa6777cff6f9793d3573597796e7d8a645a337867e` |
+
+The reference gzip decodes to the 12,602-byte native capture `cli-reference.json`
+(SHA-256 `521be4536b15b0e542015abfca4832dcb897cdabd0f6612ca4bbc55f7e1a57b7`,
+`mode: native`, `system: Darwin`). The candidate gzips decode to captures with
+SHA-256 `6d9643c686372594cb952327802b5ee91c3450277e20b17e5b7f97eb6bb646b9`
+(debug) and `a7e740c753e7d361c2a428a168ccc8af28e2ddca52cefe55e6bab09e853ea228`
+(release). The first dispatch of this job failed with `EACCES` because a fetched
+artifact has no executable bit, which is why the fetchers now set the mode after
+verifying the hash.
+
+Limits of this evidence: 30 cases, not the upstream jq test suite or ripgrep's own
+tests. The corpus avoids file-system paths, locales, wall clock, terminal size and
+colour, and each case is a single process with a bounded run. Services (Mach, XPC,
+launchd) still have no reference capture.

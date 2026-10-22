@@ -140,7 +140,7 @@
       "name": "Differential harness: thousands of probes",
       "phase": "P0",
       "status": "verified-slice",
-      "work": "Three same-artifact suites match a hosted Intel Mac in debug and release: 4096 libc cases (after correcting strtol no-conversion errno and timegm pre-1900 rejection), 4096 Objective-C cases over eight dispatch/metadata families (after the Darwin capture disproved an isa-inclusive instance-size assumption) and 1024 threading cases over create/join, mutex, once, TLS keys, condition handoff, attributes and return values. Expand to services and whole programs.",
+      "work": "Three same-artifact suites match a hosted Intel Mac in debug and release: 4096 libc cases (after correcting strtol no-conversion errno and timegm pre-1900 rejection), 4096 Objective-C cases over eight dispatch/metadata families (after the Darwin capture disproved an isa-inclusive instance-size assumption) 1024 threading cases over create/join, mutex, once, TLS keys, condition handoff, attributes and return values, and 30 whole-program cases over the pinned jq 1.8.2 and ripgrep 15.2.0 artifacts (stdout/stderr/exit status). Expand to services (Mach, XPC, launchd).",
       "source": "upstream-sources.md"
     },
     {
