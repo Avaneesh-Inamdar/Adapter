@@ -152,6 +152,14 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/differential-thread-candidate-release.json.gz`
 - `docs/test-results/differential-thread-debug.json`
 - `docs/test-results/differential-thread-release.json`
+- `docs/test-results/differential-unwind-compact-candidate-debug.json.gz`
+- `docs/test-results/differential-unwind-compact-candidate-release.json.gz`
+- `docs/test-results/differential-unwind-compact-debug.json`
+- `docs/test-results/differential-unwind-compact-release.json`
+- `docs/test-results/differential-unwind-dwarf-candidate-debug.json.gz`
+- `docs/test-results/differential-unwind-dwarf-candidate-release.json.gz`
+- `docs/test-results/differential-unwind-dwarf-debug.json`
+- `docs/test-results/differential-unwind-dwarf-release.json`
 - `docs/test-results/fixtures.log`
 - `docs/test-results/format.log`
 - `docs/test-results/integration-debug-previous-pass.log`
@@ -169,6 +177,8 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/mac-reference-objc-arc-o2-39811445457.json.gz`
 - `docs/test-results/mac-reference-objc-metadata-39805811658.json.gz`
 - `docs/test-results/mac-reference-thread-39675626670.json.gz`
+- `docs/test-results/mac-reference-unwind-compact-39813333933.json.gz`
+- `docs/test-results/mac-reference-unwind-dwarf-39813333933.json.gz`
 - `docs/test-results/namespace-debug.log`
 - `docs/test-results/namespace-regression.json`
 - `docs/test-results/namespace-release.log`
@@ -187,6 +197,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `docs/test-results/summary-previous-pass.json`
 - `docs/test-results/summary.json`
 - `docs/thread-lifecycle-results.md`
+- `docs/unwind-results.md`
 - `docs/upstream-sources.md`
 - `docs/xpc-results.md`
 - `src/broker/job.rs`
@@ -286,6 +297,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/fixtures/tls_library.c`
 - `tests/fixtures/tls_threads.c`
 - `tests/fixtures/unknown.c`
+- `tests/fixtures/unwind_lookup.c`
 - `tests/fixtures/xpc_client.c`
 - `tests/fixtures/xpc_missing.c`
 - `tests/fixtures/xpc_server.c`
@@ -296,6 +308,7 @@ stay out of Git and out of this list. No user input was overwritten.
 - `tests/integration/test_objc.py`
 - `tests/integration/test_ripgrep.py`
 - `tests/integration/test_runtime.py`
+- `tests/integration/test_unwind.py`
 - `tests/unit/macho.rs`
 - `tests/unit/test_archives.py`
 - `tests/unit/test_cli_differential.py`

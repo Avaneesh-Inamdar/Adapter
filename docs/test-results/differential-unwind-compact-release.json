@@ -1,0 +1,48 @@
+{
+  "candidate": "target\\unwind-final-compact-release.json",
+  "case_count": 1024,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "compact": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "data": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "dwarf": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "foreign": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "function": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "header": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "null": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "path": {
+      "matched": 128,
+      "mismatched": 0
+    }
+  },
+  "matched": 1024,
+  "mismatched": 0,
+  "program_sha256": "0b376c9e96d0d14b686607bef187f55d8fbe2908297752cb751cfcdb6d4cbdae",
+  "reference": "target\\mac-unwind-reference-39813333933\\mac-reference-adapter-unwind-compact-v1-3e5c83b848d88719dd48930c65afc08cf6e4a7aa\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-unwind-compact-v1"
+}

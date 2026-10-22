@@ -18,7 +18,7 @@
 <rect x="290" y="45" width="240" height="105" rx="8" fill="#1e293b" stroke="#fbbf24"/>
 <g font-family="Segoe UI,Arial,sans-serif"><text x="304" y="70" fill="#fbbf24" font-size="15">P1 · implemented-slices</text>
 <text x="304" y="98" fill="#f8fafc" font-size="18">Loaders and runtimes</text>
-<text x="304" y="125" fill="#cbd5e1" font-size="14">ObjC slice verified</text></g>
+<text x="304" y="125" fill="#cbd5e1" font-size="14">ARC / unwind discovery</text></g>
 <rect x="555" y="45" width="240" height="105" rx="8" fill="#1e293b" stroke="#fbbf24"/>
 <g font-family="Segoe UI,Arial,sans-serif"><text x="569" y="70" fill="#fbbf24" font-size="15">P2 · implemented-slices</text>
 <text x="569" y="98" fill="#f8fafc" font-size="18">System services</text>

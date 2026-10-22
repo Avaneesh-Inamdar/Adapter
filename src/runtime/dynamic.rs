@@ -19,6 +19,7 @@ pub struct ImageRecord {
     pub slide: i64,
     pub exports: BTreeMap<String, u64>,
     pub executable: Vec<(u64, u64)>,
+    pub unwind: crate::darwin::dyld::UnwindImage,
 }
 
 struct Group {
@@ -246,6 +247,7 @@ pub fn load(name: &str, mode: i32) -> Result<usize> {
                 record.path.display().to_string(),
                 record.header,
                 record.slide,
+                record.unwind.clone(),
             )
         })
         .collect();

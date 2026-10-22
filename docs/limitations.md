@@ -12,7 +12,7 @@
 | Service management and XPC | D3 lets the broker start launchd-style jobs on lookup or `RunAtLoad`, with a documented plist subset, environment/log redirection and check-in wait. D4 adds typed dictionary XPC between Adapter workers with listener check-in, demand spawn, blocks on a dispatcher thread, replies and invalidation. There is no launchd process, `launchctl`/`launch_msg`, KeepAlive, supervision, throttling, socket/event activation or per-user domain. XPC has no Apple wire format, `xpc_main`, GCD semantics, richer object types, peer validation or sandbox/entitlement enforcement, and `fork`/`exec` remain absent | KeepAlive/supervision, socket activation, pre-created receive rights, a real macOS XPC peer, and explicit sandbox/entitlement policy |
 | TLS and pthread semantics | Basic TLV templates, threads, keys, once, errno, stack-size attributes, naming, normal/recursive mutexes, condition variables and C++ thread-exit destructors verified; a hosted Intel Mac matched all 1,024 same-binary threading probes | Cancellation, process-shared condition variables and TLV destructor ordering against `atexit` |
 | Dynamic libraries | Local Intel graph execution, reexports and runtime `dlopen`/`dlclose` of classic/chained/bundle plugins verified; cycles rejected; close runs finalizers but never unmaps; no dynamic TLS, cross-group sharing, `RTLD_NEXT` or interposition | True unload, TLS-bearing and cyclic plugins, symbol interposition and a real plugin consumer |
-| Exceptions/unwind/signals | No Darwin unwinder. Signals are synchronous only: dispositions, masks, pending delivery and default termination are verified for the calling thread; no asynchronous delivery, per-thread masks, siginfo or fault mapping ([results](signal-results.md)) | Cross-image C++/ObjC throws, Windows SEH interaction |
+| Exceptions/unwind/signals | [dyld section discovery](unwind-results.md) is verified; compact/DWARF decoding, frame walking and exception propagation remain absent. Signals are synchronous only: dispositions, masks, pending delivery and default termination are verified for the calling thread; no asynchronous delivery, per-thread masks, siginfo or fault mapping ([results](signal-results.md)) | Cross-image C++/ObjC throws, Windows SEH interaction |
 | Modern dyld variants | Chained formats restricted; no weak/flat binding | Real target-specific encodings + negative regression corpus |
 | ABI differences | SysV calls plus measured printf-family varargs and x87 argument adapters | General aggregates/vectors, wide/positional/long-double formatting, exception/unwind interaction |
 | Runtime semantic equivalence | First 4,096-case libc same-artifact hosted-Mac comparison; jq/ripgrep and other subsystem tests remain Windows-side | Expand reference coverage beyond eight C library families; see [harness](differential-testing.md) |
@@ -25,7 +25,7 @@
 Unsupported executable formats include Mach-O32, swapped-endian thin files,
 ARM execution, non-PIE files, LC_UNIXTHREAD entry, encrypted/protected images,
 section relocations and shared-cache/preinitialized TLVs. Objective-C admission is
-limited to the metadata and message ABI in [contract v1](abi/objc-abi.md).
+limited to the metadata and message ABI in [contract v4](abi/objc-abi.md).
 Thin C++ TLV initialization functions execute as guest code through the adapter's
 TLV lookup; shared-cache TLV layouts remain unsupported. Code signatures
 are reported by command location, not verified or enforced. Unknown required

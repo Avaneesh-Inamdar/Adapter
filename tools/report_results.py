@@ -110,6 +110,8 @@ def report():
     metadata_differential = retained('differential-objc-metadata-')
     arc_o0_differential = retained('differential-objc-arc-o0-')
     arc_o2_differential = retained('differential-objc-arc-o2-')
+    unwind_compact = retained('differential-unwind-compact-')
+    unwind_dwarf = retained('differential-unwind-dwarf-')
     summary = {'rust_tests_passed':rust_count,'rust_test_status':rust_status,'archive_tests_passed':archive_count,'integration_tests_attempted':counts,
                'integration_status':{k:'passed' if passed[k] else 'blocked' for k in logs},
                'distinct_tests_passed_final':rust_count+archive_count+len(re.findall(r'^test_.* \.\.\. ok$',logs['debug'],re.M)),
@@ -122,7 +124,9 @@ def report():
                'cli_differential':{'hosted_intel_mac_run':'39677072171','profiles':cli_differential},
                'objective_c_metadata_differential':{'hosted_intel_mac_run':'39805811658','profiles':metadata_differential},
                'objective_c_arc_o0_differential':{'hosted_intel_mac_run':'39811445457','profiles':arc_o0_differential},
-               'objective_c_arc_o2_differential':{'hosted_intel_mac_run':'39811445457','profiles':arc_o2_differential}}
+               'objective_c_arc_o2_differential':{'hosted_intel_mac_run':'39811445457','profiles':arc_o2_differential},
+               'unwind_compact_discovery_differential':{'hosted_intel_mac_run':'39813333933','profiles':unwind_compact},
+               'unwind_dwarf_discovery_differential':{'hosted_intel_mac_run':'39813333933','profiles':unwind_dwarf}}
     (OUT/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print('Recorded verification reports:',summary['distinct_tests_passed_final'],'distinct tests passed in final run')
 

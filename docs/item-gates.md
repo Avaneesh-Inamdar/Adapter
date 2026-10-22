@@ -22,7 +22,7 @@ classes. This page records which, with the exact input each gate would need, so
 | --- | --- |
 | 7. System image and dyld shared cache | Parse and rebase a user-supplied cache from the XIP extracts already pinned. |
 | 9. Swift guest runtime | Build Swift fixtures on the hosted Mac runner, commit them by hash, then load metadata/refcounting. |
-| 10. Darwin compact unwind and DWARF | `__unwind_info` and FDE lookup over guest images, distinct from Windows SEH. |
+| 10. Darwin compact unwind and DWARF | dyld section discovery now exists; decode compact indexes and DWARF CIE/FDE records, then recover guest frames separately from Windows SEH. |
 
 | 12. 16K guest pages and ARM memory ordering | Page-granular placement and ordering tests once an ARM64 guest exists. |
 | 13. arm64e pointer authentication | Documented QARMA-based signing with synthetic arm64e fixtures. |

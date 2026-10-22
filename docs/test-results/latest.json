@@ -1,5 +1,5 @@
 {
-  "run_utc": "2026-10-22T16:10:36.395525+00:00",
+  "run_utc": "2026-10-22T16:23:24.452186+00:00",
   "all_passed": true,
   "stages": [
     {
@@ -12,7 +12,7 @@
         "--check"
       ],
       "exit_code": 0,
-      "seconds": 0.281,
+      "seconds": 0.282,
       "log": "format.log"
     },
     {
@@ -32,7 +32,7 @@
         "tools/update_phases.py"
       ],
       "exit_code": 0,
-      "seconds": 0.062,
+      "seconds": 0.109,
       "log": "phase-docs.log"
     },
     {
@@ -61,10 +61,11 @@
         "tests/fixtures/objc_core.m",
         "tests/fixtures/objc_category.m",
         "tests/fixtures/objc_metadata.m",
-        "tests/fixtures/objc_arc.m"
+        "tests/fixtures/objc_arc.m",
+        "tests/fixtures/unwind_lookup.c"
       ],
       "exit_code": 0,
-      "seconds": 0.094,
+      "seconds": 0.078,
       "log": "native-format.log"
     },
     {
@@ -79,7 +80,7 @@
         "warnings"
       ],
       "exit_code": 0,
-      "seconds": 0.203,
+      "seconds": 0.141,
       "log": "clippy.log"
     },
     {
@@ -90,7 +91,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.344,
+      "seconds": 4.844,
       "log": "rust-tests.log"
     },
     {
@@ -101,7 +102,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.078,
+      "seconds": 0.094,
       "log": "debug-build.log"
     },
     {
@@ -111,7 +112,7 @@
         "tools/fetch_jq.py"
       ],
       "exit_code": 0,
-      "seconds": 0.11,
+      "seconds": 0.125,
       "log": "reference-artifact.log"
     },
     {
@@ -141,7 +142,7 @@
         "tests/build_fixtures.py"
       ],
       "exit_code": 0,
-      "seconds": 3.969,
+      "seconds": 4.281,
       "log": "fixtures.log"
     },
     {
@@ -156,7 +157,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 1.0,
+      "seconds": 1.157,
       "log": "archive-tests.log"
     },
     {
@@ -171,7 +172,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 20.656,
+      "seconds": 22.281,
       "log": "integration-debug.log"
     },
     {
@@ -183,7 +184,7 @@
         "--locked"
       ],
       "exit_code": 0,
-      "seconds": 0.062,
+      "seconds": 10.297,
       "log": "release-build.log"
     },
     {
@@ -198,7 +199,7 @@
         "-v"
       ],
       "exit_code": 0,
-      "seconds": 19.141,
+      "seconds": 21.094,
       "log": "integration-release.log"
     },
     {
@@ -208,7 +209,7 @@
         "tools/report_results.py"
       ],
       "exit_code": 0,
-      "seconds": 0.453,
+      "seconds": 0.375,
       "log": "compatibility-report.log"
     }
   ]

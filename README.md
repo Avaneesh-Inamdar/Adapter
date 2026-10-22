@@ -73,6 +73,7 @@ When adding a new target, see the inventory refresh command in
 | XPC | Unchanged libxpc client/server processes exchange typed dictionary messages and replies through the broker; listener check-in, demand spawn, accepted peers, event-handler blocks, typed containers, connection invalidation/interruption | [XPC adapter](src/darwin/xpc.rs), [server](tests/fixtures/xpc_server.c), [client](tests/fixtures/xpc_client.c), [results](docs/xpc-results.md) |
 | Objective-C | Raw-isa metadata, categories, protocols/properties, message dispatch, runtime-owned ARC/MRC strong and zeroing weak references, inherited ivar cleanup, custom RR and explicit pools | [Runtime](src/objc), [ABI contract](docs/abi/objc-abi.md), [ARC results](docs/arc-results.md), [other results](docs/objc-results.md) |
 | Guest debugging | Windows LLDB captures actual exceptions, relocated Mach-O PCs, registers, disassembly and stacks; VM-address breakpoints and instruction stepping | [Debugger](tools/guest_debug.py), [usage and limits](docs/guest-debugging.md) |
+| Unwind-section discovery | dyld image/header/path queries locate mapped compact-unwind and DWARF sections in startup images and runtime plugins; no frame walking or exception propagation yet | [dyld adapters](src/darwin/dyld.rs), [consumers and results](docs/unwind-results.md) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
 | Grand Central Dispatch | Serial/concurrent/root/main queues, sync and async submission, barriers, target queues, suspension and inactive queues, groups, `dispatch_once`, `after`, `apply`, block objects (`wait`/`notify`/`cancel`), timer and user-data sources, queue-specific data, finalizers; `_Block_object_assign`/`dispose` so `__block` variables and captured blocks survive copying | [Dispatch](src/darwin/dispatch.rs), [block objects](src/darwin/dispatch/block_objects.rs), [sources](src/darwin/dispatch/sources.rs), [consumers](tests/fixtures/dispatch.c), [sources consumer](tests/fixtures/dispatch_source.c), [results](docs/dispatch-results.md) |
 | sysctl and libproc | `sysctl`, `sysctlbyname` and `sysctlnametomib` answer about 75 `kern`/`hw`/`machdep`/`user`/`vm` names from host facts (processors, caches, memory, CPUID, boot time) and fixed Darwin 24.6 values that agree with `uname`; size queries, short buffers, read-only and error rules follow `sysctl(3)`; `libproc` describes the guest's own process | [sysctl adapter](src/darwin/sysctl.rs), [consumer](tests/fixtures/sysctl.c), [results](docs/sysctl-results.md) |
@@ -81,8 +82,8 @@ When adding a new target, see the inventory refresh command in
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 187 distinct tests: 32 Rust, 30 archive
-and 125 integration tests. All 125 integration tests also passed in release. The
+**Test state:** the current run passed 192 distinct tests: 32 Rust, 30 archive
+and 130 integration tests. All 130 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
 ripgrep binary exercising 11 CLI workflows, two unchanged Mach-O processes
@@ -103,6 +104,8 @@ and the 30-case jq/ripgrep
 [metadata differential](docs/differential-testing.md#recorded-objective-c-metadata-run-2026-10-22).
 The [ARC/weak run](docs/arc-results.md) adds 1,024 comparisons at each compiler
 optimization level (`-O0`, `-O2`), matching in debug and release.
+Two [unwind-discovery suites](docs/unwind-results.md) add 1,024 comparisons each
+for compact and DWARF-fallback executables, also matching in both builds.
 [Current run](docs/test-results/latest.json) ·
 [Summary](docs/test-results/summary.json).
 
@@ -117,7 +120,7 @@ uses a measured import inventory; it is not a percentage of macOS completed.
 | Phase | Scope | Current state |
 | --- | --- | --- |
 | P0 | Mac reference, differential probes, guest debugging, ABI contracts | First 4,096-case Mac comparison matches in debug and release; nine debugger tests pass in both profiles; expand coverage per subsystem |
-| P1 | Shared cache, Objective-C, Swift, unwind, Mach VM | Intel loader and bounded Objective-C slice work; other listed runtimes remain |
+| P1 | Shared cache, Objective-C, Swift, unwind, Mach VM | Intel loader, runtime-owned ARC/weak references, dyld unwind-section discovery and Mach VM slices work; shared cache, Swift and frame unwinding remain |
 | P2 | GCD, Foundation, runloops, IPC, XPC, launchd, processes, daemons, signals | Simple IPC, job, XPC, synchronous signal, GCD and sysctl slices work; broader system behavior remains |
 | P3 | Graphics, IOSurface, Metal, AppKit, SwiftUI, WindowServer | Not started |
 | P4 | ARM64 backend, 16K pages, memory ordering, arm64e | Native Windows ARM64 preferred when hardware is available; no ARM execution yet |

@@ -203,8 +203,8 @@
       "id": 10,
       "name": "Darwin compact unwind and DWARF",
       "phase": "P1",
-      "status": "not-started",
-      "work": "Loaded-image unwind lookup, personalities and C++/ObjC exceptions across guest/host frames; distinguish Windows SEH.",
+      "status": "verified-discovery-slice",
+      "work": "dyld section discovery and image containment work for startup/dlopen images, including compact, DWARF-fallback and absent sections. Both Mac-built 1024-record suites match in debug/release. Compact/DWARF decoding, frame walking, personalities and C++/ObjC exception propagation remain.",
       "source": "upstream-sources.md"
     },
     {

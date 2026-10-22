@@ -45,8 +45,8 @@ cover the positive variants plus rejection of constructor-only flags,
 overlapping/out-of-bounds ownership maps, missing cleanup and object ivars that
 overlap isa. Rejections happen before `objc:ARC constructor` is printed.
 
-The full verifier passes **187 distinct tests**: 32 Rust, 30 Python unit/archive
-and 125 integration. All 125 integration tests also pass against the release
+At the ARC checkpoint (`a6efb8c`), the full verifier passed **187 distinct tests**: 32 Rust, 30 Python unit/archive
+and 125 integration. All 125 integration tests also passed against the release
 build. The Mac comparisons below are additional evidence, not an increase in
 that unit/integration count.
 

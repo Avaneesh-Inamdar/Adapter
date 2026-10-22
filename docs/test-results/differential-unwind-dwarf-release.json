@@ -1,0 +1,48 @@
+{
+  "candidate": "target\\unwind-final-dwarf-release.json",
+  "case_count": 1024,
+  "differences": [],
+  "differences_truncated": false,
+  "errors": [],
+  "families": {
+    "compact": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "data": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "dwarf": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "foreign": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "function": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "header": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "null": {
+      "matched": 128,
+      "mismatched": 0
+    },
+    "path": {
+      "matched": 128,
+      "mismatched": 0
+    }
+  },
+  "matched": 1024,
+  "mismatched": 0,
+  "program_sha256": "1a9e5a1f43643e1ee001a4616fb8a1506a576740b40c79305d5dc0ffa479a3a6",
+  "reference": "target\\mac-unwind-reference-39813333933\\mac-reference-adapter-unwind-dwarf-v1-3e5c83b848d88719dd48930c65afc08cf6e4a7aa\\reference.json",
+  "schema": 1,
+  "status": "equal",
+  "suite": "adapter-unwind-dwarf-v1"
+}

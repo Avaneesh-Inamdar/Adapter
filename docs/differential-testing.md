@@ -1,6 +1,6 @@
 # Same-binary Darwin/Windows differential testing
 
-The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Six probe suites use it — `adapter-libc-v1` (4,096 deterministic cases across eight libc families), `adapter-objc-v1` (4,096 cases across eight Objective-C families), `adapter-thread-v1` (1,024 cases across eight threading families) and `adapter-objc-metadata-v1` (4,096 comparisons over protocol/property metadata) — plus the [ARC/weak suites](arc-results.md) (`-O0` and `-O2`, 1,024 records each), and one program suite, `adapter-cli-v1`, compares the pinned jq and ripgrep binaries over a fixed argv/stdin corpus. A generator/build alone does not execute the guest and does not establish reference behavior.
+The harness executes one Intel Mach-O on native macOS and then the **same downloaded bytes** through `adapter-run.exe` on Windows. Eight probe suites cover libc (4,096 cases), Objective-C (4,096), threading (1,024), protocol/property metadata (4,096), [ARC/weak ownership](arc-results.md) at `-O0` and `-O2` (1,024 each), and [unwind-section discovery](unwind-results.md) with compact and DWARF-fallback metadata (1,024 each). A separate program suite, `adapter-cli-v1`, compares the pinned jq and ripgrep binaries over a fixed argv/stdin corpus. A generator/build alone does not execute the guest and does not establish reference behavior.
 
 ## Commands
 
@@ -43,11 +43,11 @@ Darwin LP64 `struct tm` is declared and statically checked as 56 bytes, with gmt
 
 ## Manual hosted Mac reference workflow
 
-`.github/workflows/mac-reference.yml` runs only on `workflow_dispatch`, at the selected workflow commit. It uses standard `macos-15-intel`, read-only repository contents permission, pinned checkout/upload actions and no secret, paid/custom runner or package installation. It builds `reference-bundle`, explicitly captures `reference-bundle/reference.json`, then uploads the entire bundle as `mac-reference-<suite>-<commit>` for 14 days. A matrix job covers both suites, so one dispatch produces the libc and Objective-C bundles independently; either can fail without hiding the other. Failed captures remain invalid; an uploaded artifact alone does not mean the workflow passed.
+`.github/workflows/mac-reference.yml` runs only on `workflow_dispatch`, at the selected workflow commit. It uses standard `macos-15-intel`, read-only repository contents permission, pinned checkout/upload actions and no secret, paid/custom runner or package installation. It builds `reference-bundle`, explicitly captures `reference-bundle/reference.json`, then uploads the entire bundle as `mac-reference-<suite>-<commit>` for 14 days. The matrix builds all eight probe suites independently; a separate job captures the CLI corpus. A failure in one suite does not hide another. Failed captures remain invalid; an uploaded artifact alone does not mean the workflow passed.
 
 GitHub's [official runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners) lists Intel `macos-15-intel` among standard runners free for public repositories. This is a hosted macOS **VM on Apple's infrastructure**, not a physical Mac measurement. The workflow does not claim a physical reference machine. Checkout v7 was resolved through GitHub's primary API to `3d3c42e5aac5ba805825da76410c181273ba90b1`; upload-artifact v7.0.2 was verified as `cf430e030ddbb5b0abf93d22962f4752f3646cd9` on 2026-10-22.
 
-Offline verifier tests: `python -m unittest discover -s tests/unit -p test_differential.py`. Synthetic unit-test captures exercise evidence validation only and are never published as macOS compatibility results, and they cover both suites' record contracts.
+Offline verifier tests: `python -m unittest discover -s tests/unit -p test_differential.py`. Synthetic unit-test captures exercise evidence validation only and are never published as macOS compatibility results, and they cover the registered suites' record contracts.
 
 ## Objective-C suite (`adapter-objc-v1`)
 
@@ -295,3 +295,7 @@ The compressed reference and candidate files retain the complete stdout, parsed 
 ## ARC/weak suites (`adapter-objc-arc-o0-v1`, `adapter-objc-arc-o2-v1`)
 
 [ARC results](arc-results.md) records the two-stage MRC/ARC compiler recipe, all eight ownership families, exact program hashes, the successful native Mac run and retained captures. Both levels compare 1,024 records with zero differences in debug and release. Use `build --suite adapter-objc-arc-o0-v1 --count 1024` (or the O2 suite); capture and compare retain the same strict identity and completeness checks.
+
+## Unwind-discovery suites
+
+`adapter-unwind-compact-v1` and `adapter-unwind-dwarf-v1` compare 1,024 records each. [Unwind results](unwind-results.md) records the same-binary Mac run, section/containment semantics, retained hashes and remaining frame-walking work. These are discovery probes; they never throw or recover a stack frame. Use `build --suite adapter-unwind-compact-v1 --count 1024` (or the DWARF suite), followed by the existing capture/compare commands.

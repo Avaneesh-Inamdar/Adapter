@@ -235,9 +235,18 @@ mod native {
                     }
                 }
                 let mut executable = Vec::new();
+                let mut unwind = crate::darwin::dyld::UnwindImage::default();
                 for segment in &node.image.segments {
                     if segment.name == "__PAGEZERO" || segment.vmsize == 0 {
                         continue;
+                    }
+                    if segment.initprot != 0 {
+                        let low = self.mappings[index].relocated(segment.vmaddr)?;
+                        unwind.ranges.push((
+                            low,
+                            low.checked_add(segment.vmsize)
+                                .ok_or("unwind image range overflow")?,
+                        ));
                     }
                     if segment.initprot & 4 != 0 {
                         let low = self.mappings[index].relocated(segment.vmaddr)?;
@@ -247,12 +256,49 @@ mod native {
                         executable.push((low, high));
                     }
                 }
+                for section in node.image.sections.iter().filter(|s| {
+                    s.segment == "__TEXT"
+                        && matches!(s.name.as_str(), "__eh_frame" | "__unwind_info")
+                }) {
+                    let end = section
+                        .address
+                        .checked_add(section.size)
+                        .ok_or("unwind section range overflow")?;
+                    let text_end = text
+                        .vmaddr
+                        .checked_add(text.filesize)
+                        .ok_or("unwind text range overflow")?;
+                    if section.address < text.vmaddr
+                        || end > text_end
+                        || text.initprot & 1 == 0
+                        || u64::from(section.offset)
+                            != text.fileoff + (section.address - text.vmaddr)
+                    {
+                        return Err(format!(
+                            "unwind section {} outside file-backed __TEXT",
+                            section.name
+                        ));
+                    }
+                    let target = if section.name == "__eh_frame" {
+                        &mut unwind.dwarf
+                    } else {
+                        &mut unwind.compact
+                    };
+                    if target.0 != 0 {
+                        return Err("duplicate unwind metadata section".into());
+                    }
+                    *target = (
+                        self.mappings[index].relocated(section.address)?,
+                        section.size,
+                    );
+                }
                 out.push(super::dynamic::ImageRecord {
                     path: node.path.clone(),
                     header,
                     slide: header as i64 - text.vmaddr as i64,
                     exports,
                     executable,
+                    unwind,
                 });
             }
             Ok(out)
@@ -379,6 +425,7 @@ mod native {
                             record.path.display().to_string(),
                             record.header,
                             record.slide,
+                            record.unwind.clone(),
                         )
                     })
                     .collect(),

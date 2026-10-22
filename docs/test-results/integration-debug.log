@@ -124,8 +124,13 @@ test_wrong_architecture_dependency (test_runtime.RuntimeTests.test_wrong_archite
 test_wrong_argv (test_runtime.RuntimeTests.test_wrong_argv) ... ok
 test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_roundtrip) ... ok
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
+test_dlopen_images_registered_before_plugin_constructor (test_unwind.UnwindTests.test_dlopen_images_registered_before_plugin_constructor) ... ok
+test_duplicate_unwind_sections_rejected (test_unwind.UnwindTests.test_duplicate_unwind_sections_rejected) ... ok
+test_section_cannot_escape_text (test_unwind.UnwindTests.test_section_cannot_escape_text) ... ok
+test_section_file_offset_must_match_mapped_bytes (test_unwind.UnwindTests.test_section_file_offset_must_match_mapped_bytes) ... ok
+test_startup_compact_dwarf_and_absent_sections (test_unwind.UnwindTests.test_startup_compact_dwarf_and_absent_sections) ... ok
 
 ----------------------------------------------------------------------
-Ran 125 tests in 20.543s
+Ran 130 tests in 22.151s
 
 OK

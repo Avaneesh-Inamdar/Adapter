@@ -7,6 +7,9 @@ with the same function name is not sufficient. The contracts in
 adds runtime-owned ARC strong/weak lifetimes after v3's protocol/property
 introspection). The `mach_vm` contract declares the allocation,
 release and protection slice with its return codes and the recorded-region rule.
+The `dyld-unwind` contract declares image containment and the 40-byte
+section-discovery result for startup and runtime-loaded images. Decoding unwind
+records, stack walking and exception propagation remain separate work.
 The threads contract is at
 version 2: it now declares the public `pthread_mutex_t`, `pthread_cond_t`,
 `pthread_attr_t` and `pthread_once_t` sizes that the same-binary threading

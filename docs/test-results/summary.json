@@ -3,14 +3,14 @@
   "rust_test_status": "passed",
   "archive_tests_passed": 30,
   "integration_tests_attempted": {
-    "debug": 125,
-    "release": 125
+    "debug": 130,
+    "release": 130
   },
   "integration_status": {
     "debug": "passed",
     "release": "passed"
   },
-  "distinct_tests_passed_final": 187,
+  "distinct_tests_passed_final": 192,
   "jq_test_methods": 14,
   "ripgrep_test_methods": 11,
   "compatibility_rows_reference_macos_verified": false,
@@ -152,6 +152,44 @@
         "matched": 1024,
         "mismatched": 0,
         "program_sha256": "e54173483b3ef8c19ad882e6af3ab2525b0581d54c5a1189db43b589a9a47d41"
+      }
+    }
+  },
+  "unwind_compact_discovery_differential": {
+    "hosted_intel_mac_run": "39813333933",
+    "profiles": {
+      "debug": {
+        "status": "equal",
+        "cases": 1024,
+        "matched": 1024,
+        "mismatched": 0,
+        "program_sha256": "0b376c9e96d0d14b686607bef187f55d8fbe2908297752cb751cfcdb6d4cbdae"
+      },
+      "release": {
+        "status": "equal",
+        "cases": 1024,
+        "matched": 1024,
+        "mismatched": 0,
+        "program_sha256": "0b376c9e96d0d14b686607bef187f55d8fbe2908297752cb751cfcdb6d4cbdae"
+      }
+    }
+  },
+  "unwind_dwarf_discovery_differential": {
+    "hosted_intel_mac_run": "39813333933",
+    "profiles": {
+      "debug": {
+        "status": "equal",
+        "cases": 1024,
+        "matched": 1024,
+        "mismatched": 0,
+        "program_sha256": "1a9e5a1f43643e1ee001a4616fb8a1506a576740b40c79305d5dc0ffa479a3a6"
+      },
+      "release": {
+        "status": "equal",
+        "cases": 1024,
+        "matched": 1024,
+        "mismatched": 0,
+        "program_sha256": "1a9e5a1f43643e1ee001a4616fb8a1506a576740b40c79305d5dc0ffa479a3a6"
       }
     }
   }

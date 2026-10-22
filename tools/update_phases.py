@@ -60,7 +60,7 @@ def outputs():
             path = f'M{x + 120} {y + 105}L{x + 120} {y + 145}L{ex + 120} {y + 145}L{ex + 120} {ey - 6}'
         svg += [f'<path d="{path}" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>']
     labels = {'P0': ('Evidence and contracts', 'Mac probes / guest debugger'),
-              'P1': ('Loaders and runtimes', 'ObjC slice verified'),
+              'P1': ('Loaders and runtimes', 'ARC / unwind discovery'),
               'P2': ('System services', 'IPC / XPC slices'),
               'P3': ('Graphics and desktop', 'NSWindow gate pending'),
               'P4': ('ARM64 / arm64e', 'Backend decision recorded'),

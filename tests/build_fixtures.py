@@ -51,6 +51,7 @@ def build():
     }
     exports["objc"] += ["objc_getProtocol", "protocol_getName", "protocol_isEqual", "protocol_conformsToProtocol", "class_conformsToProtocol", "protocol_getMethodDescription", "class_getProperty", "protocol_getProperty", "property_getName", "property_getAttributes"]
     exports["objc"] += ["_objc_rootRetain", "_objc_rootRelease", "_objc_rootAutorelease", "_objc_rootRetainCount", "_objc_rootTryRetain", "_objc_rootIsDeallocating", "objc_destructInstance", "objc_storeStrong", "objc_setProperty_nonatomic", "objc_initWeak", "objc_initWeakOrNil", "objc_storeWeak", "objc_storeWeakOrNil", "objc_loadWeak", "objc_loadWeakRetained", "objc_copyWeak", "objc_moveWeak", "objc_destroyWeak", "objc_autoreleaseReturnValue", "objc_retainAutoreleaseReturnValue", "objc_retainAutoreleasedReturnValue", "objc_claimAutoreleasedReturnValue", "objc_unsafeClaimAutoreleasedReturnValue", "objc_retainAutorelease"]
+    exports["System"] += ["_dyld_find_unwind_sections", "dyld_image_header_containing_address", "dyld_image_path_containing_address", "_dyld_get_image_header", "_dyld_get_image_name"]
     versions = ["-arch", "x86_64", "-platform_version", "macos", "10.13", "10.13"]
     exports["System"] += ["strtol"]
     exports["System"] += ["signal", "sigaction", "raise", "kill", "getpid", "sigprocmask", "pthread_sigmask", "sigemptyset", "sigfillset", "sigaddset", "sigdelset", "sigismember", "sigpending", "sigwait", "sighold", "sigrelse", "sigignore", "siginterrupt", "killpg", "sigblock", "sigsetmask", "psignal", "bsd_signal"]
@@ -109,6 +110,16 @@ def build():
         run(tool("clang"), *common, "-"+level, "-fobjc-arc", "-c", arc_source, "-o", obj)
         for suffix, options in [("", [*versions, "-no_fixup_chains"]), ("-chained", ["-arch", "x86_64", "-platform_version", "macos", "11.0", "11.0", "-fixup_chains", "-no_objc_relative_method_lists"]), ("-relative", ["-arch", "x86_64", "-platform_version", "macos", "11.0", "11.0", "-fixup_chains"])]:
             run(tool("ld64.lld"), *options, "-no_uuid", "-e", "_main", "-o", OUT/(name+suffix), obj, OUT/"arc-root.o", "-L", OUT, "-lobjc", "-lSystem")
+    unwind_source = ROOT / "tests/fixtures/unwind_lookup.c"
+    unwind_flags = ["-target", "x86_64-apple-macos10.13", "-O1", "-fno-omit-frame-pointer", "-fno-stack-protector", "-funwind-tables", "-fasynchronous-unwind-tables"]
+    for mode, dwarf_flags in [("compact", []), ("dwarf", ["-DUNWIND_FORCE_DWARF"]), ("none", ["-fno-unwind-tables", "-fno-asynchronous-unwind-tables"])]:
+        extra = []
+        run(tool("clang"), *unwind_flags, *dwarf_flags, "-c", unwind_source, "-o", OUT/"unwind_lookup.o")
+        run(tool("clang"), *unwind_flags, *dwarf_flags, "-DUNWIND_PLUGIN", "-c", unwind_source, "-o", OUT/"unwind_plugin.o")
+        for suffix, fixups in [("", ["-no_fixup_chains"]), ("-chained", ["-fixup_chains"])]:
+            platform = ["-arch", "x86_64", "-platform_version", "macos", "11.0", "11.0"]
+            run(tool("ld64.lld"), *platform, *fixups, *extra, "-no_uuid", "-e", "_main", "-o", OUT/("unwind-"+mode+suffix), OUT/"unwind_lookup.o", "-L", OUT, "-lSystem")
+            run(tool("ld64.lld"), *platform, *fixups, *extra, "-no_uuid", "-dylib", "-install_name", "@rpath/libunwind-probe.dylib", "-o", OUT/("libunwind-"+mode+suffix+".dylib"), OUT/"unwind_plugin.o", "-L", OUT, "-lSystem")
     # A `dlopen` plugin and its host exercise the runtime image registry.
     run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-O0", "-fno-stack-protector",
         "-fno-asynchronous-unwind-tables", "-ffreestanding", "-c",

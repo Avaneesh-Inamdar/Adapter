@@ -37,6 +37,7 @@ Module boundaries:
 | `src/runtime/debug.rs` | Optional flushed image/slide/symbol records and LLDB mapped-image breakpoint hook |
 | `src/broker` | Loopback Mach transport protocol, endpoint/token handshake, per-connection request dispatch, payload routing, launchd-style job plist loading and on-demand job activation |
 | `src/broker/main.rs` | `adapter-broker`: endpoint file creation, service namespace, connection liveness and port retirement |
+| `src/darwin/dyld.rs` | Mapped-image headers/names/slides, containment and borrowed compact/DWARF section descriptors; startup and runtime groups publish before constructors |
 | `src/darwin` | Rust pthread lifecycle/state, recursive mutexes, condition variables, C++ TLV destruction, dyld image introspection, `dlfcn`, Mach IPC and TLV ABI bridges, Darwin stack probe and exit callbacks |
 | `src/darwin/host` | C adapters for libSystem stdio/files/stat/time/locale, signals, process stubs, dispatch, mmap and directory iteration |
 | `src/frameworks/corefoundation.rs` | Five opaque immutable-string/ownership adapters |
@@ -58,7 +59,7 @@ verify integer argument passing across this boundary and internal guest float
 and stack arguments. A native C/assembly layer captures SysV printf-family
 varargs into a 24-byte guest va_list and translates each conversion into a typed
 Windows CRT call. LP64 long is explicitly widened; guest va_list objects are
-never passed to the CRT. General aggregate returns remain unsupported.
+never passed to the CRT. General aggregate message returns remain unsupported.
 Rust documents this ABI in its [external-block reference](https://doc.rust-lang.org/reference/items/external-blocks.html).
 
 The worker reserves a bounded VM span, leaves gaps inaccessible, commits

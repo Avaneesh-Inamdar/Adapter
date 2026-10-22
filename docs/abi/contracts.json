@@ -1047,6 +1047,64 @@
         "docs/sysctl-results.md",
         "https://github.com/apple-oss-distributions/xnu"
       ]
+    },
+    {
+      "id": "dyld-unwind",
+      "version": 1,
+      "scope": "Loaded-image containment and compact/DWARF section discovery for startup and runtime dlopen images; no stack walking or exceptions",
+      "calling_convention": "Darwin x86-64 SysV; bool in AL; dyld_unwind_sections is five LP64 pointer/length words (40 bytes, align8).",
+      "implementation": [
+        "src/darwin/dyld.rs",
+        "src/runtime/mod.rs",
+        "src/runtime/dynamic.rs"
+      ],
+      "tests": [
+        "tests/fixtures/unwind_lookup.c",
+        "tests/integration/test_unwind.py"
+      ],
+      "layouts": [
+        {
+          "name": "dyld_unwind_sections",
+          "size": 40,
+          "align": 8,
+          "fields": [
+            {
+              "name": "mh",
+              "offset": 0,
+              "size": 8
+            },
+            {
+              "name": "dwarf_section",
+              "offset": 8,
+              "size": 8
+            },
+            {
+              "name": "dwarf_section_length",
+              "offset": 16,
+              "size": 8
+            },
+            {
+              "name": "compact_unwind_section",
+              "offset": 24,
+              "size": 8
+            },
+            {
+              "name": "compact_unwind_section_length",
+              "offset": 32,
+              "size": 8
+            }
+          ]
+        }
+      ],
+      "ownership": "Borrowed pointers into mapped images and stable registry CString paths; no allocations returned to caller. Sections remain valid while the mapping exists. Runtime dlclose retains mappings in the existing loader subset.",
+      "callbacks": "No callbacks. Dynamic image records are published before plugin constructors.",
+      "errors": "Unknown/unmapped address returns false or null. A failed unwind query leaves the output buffer unchanged; a recognized image succeeds even with no unwind sections. Unwind sections must be unique, file-backed readable __TEXT ranges with consistent VM/file offsets; malformed metadata rejects execution before constructors.",
+      "lifecycle": "Build relocated section/range records from validated image plans at startup and append for dlopen groups before initialization. No independent host-module or shared-cache registration.",
+      "unsupported": "No FDE/index decoding, compact encoding interpretation, DWARF CFI execution, personalities, exception propagation, host-frame unwinding, JIT/shared-cache images or true unload. Invalid output-pointer behavior is not claimed as a Darwin equivalence.",
+      "sources": [
+        "https://github.com/apple-oss-distributions/dyld/blob/fd8d0c4d52320ebf64db34f3cb280310d905c5ae/include/mach-o/dyld_priv.h",
+        "https://github.com/apple-oss-distributions/dyld/blob/fd8d0c4d52320ebf64db34f3cb280310d905c5ae/dyld/DyldAPIs.cpp"
+      ]
     }
   ]
 }
