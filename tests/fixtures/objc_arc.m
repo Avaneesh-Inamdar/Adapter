@@ -169,9 +169,19 @@ extern void *arc_retained_create(void);
 @end
 static __weak ArcRoot *thread_weak;
 static long bad_weak;
+static int worker_started, creator_released;
 static void *weak_worker(void *unused) {
     (void)unused;
     @autoreleasepool {
+        ArcRoot *first __attribute__((objc_precise_lifetime)) = thread_weak;
+        if (!first)
+            __atomic_store_n(&bad_weak, 1, __ATOMIC_SEQ_CST);
+        __atomic_store_n(&worker_started, 1, __ATOMIC_SEQ_CST);
+        while (!__atomic_load_n(&creator_released, __ATOMIC_SEQ_CST)) {
+        }
+        if ([first magic] != 42)
+            __atomic_store_n(&bad_weak, 1, __ATOMIC_SEQ_CST);
+        first = 0;
         for (int i = 0; i < 64; i++) {
             ArcRoot *held = thread_weak;
             if (held && [held magic] != 42)
@@ -265,12 +275,17 @@ int main(void) {
                 break;
             }
             default: {
-                ArcRoot *owner = [ArcRoot new];
+                ArcRoot *owner __attribute__((objc_precise_lifetime)) = [ArcRoot new];
                 thread_weak = owner;
                 bad_weak = 0;
+                worker_started = creator_released = 0;
                 unsigned long worker;
                 int error = pthread_create(&worker, 0, weak_worker, 0);
+                if (!error)
+                    while (!__atomic_load_n(&worker_started, __ATOMIC_SEQ_CST)) {
+                    }
                 owner = 0;
+                __atomic_store_n(&creator_released, 1, __ATOMIC_SEQ_CST);
                 if (!error)
                     error = pthread_join(worker, 0);
                 out[0] = error;
