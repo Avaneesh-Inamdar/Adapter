@@ -67,7 +67,13 @@ ARC_DEBUG = Suite("adapter-objc-arc-o0-v1", ARC_FAMILIES, {name: 4 for name in A
                   "objc-arc-o0-differential", "tests/fixtures/objc_arc.m", ["-O0", *ARC_FLAGS])
 ARC_OPT = Suite("adapter-objc-arc-o2-v1", ARC_FAMILIES, {name: 4 for name in ARC_FAMILIES},
                 "objc-arc-o2-differential", "tests/fixtures/objc_arc.m", ["-O2", *ARC_FLAGS])
-SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD, OBJC_METADATA, ARC_DEBUG, ARC_OPT)}
+UNWIND_FAMILIES = ("function", "data", "null", "header", "dwarf", "compact", "path", "foreign")
+UNWIND_FLAGS = ["-std=c11", "-O1", "-fno-omit-frame-pointer", "-fno-stack-protector", "-funwind-tables", "-fasynchronous-unwind-tables"]
+UNWIND_COMPACT = Suite("adapter-unwind-compact-v1", UNWIND_FAMILIES, {name: 4 for name in UNWIND_FAMILIES},
+                       "unwind-compact-differential", "tests/fixtures/unwind_lookup.c", UNWIND_FLAGS)
+UNWIND_DWARF = Suite("adapter-unwind-dwarf-v1", UNWIND_FAMILIES, {name: 4 for name in UNWIND_FAMILIES},
+                     "unwind-dwarf-differential", "tests/fixtures/unwind_lookup.c", [*UNWIND_FLAGS, "-femit-dwarf-unwind=dwarf-only"])
+SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD, OBJC_METADATA, ARC_DEBUG, ARC_OPT, UNWIND_COMPACT, UNWIND_DWARF)}
 # Backwards-compatible aliases for the primary libc suite.
 SUITE, FAMILIES, RESULT_LENGTHS, PROGRAM, SOURCE = LIBC.id, LIBC.families, LIBC.result_lengths, LIBC.program, LIBC.source
 
