@@ -56,7 +56,12 @@ THREAD = Suite("adapter-thread-v1",
                 "thread-differential", "tests/differential/thread_cases.c",
                 ["-std=c11", "-O1", "-fno-builtin", "-fno-stack-protector",
                  "-fno-asynchronous-unwind-tables"])
-SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD)}
+OBJC_METADATA = Suite("adapter-objc-metadata-v1",
+                      ("identity", "conformance", "classproperty", "categoryproperty", "protocolproperty", "required", "optional", "accessors"),
+                      {family: 4 for family in ("identity", "conformance", "classproperty", "categoryproperty", "protocolproperty", "required", "optional", "accessors")},
+                      "objc-metadata-differential", "tests/fixtures/objc_metadata.m",
+                      ["-std=c11", "-O1", "-fno-objc-arc", "-fno-stack-protector", "-fno-asynchronous-unwind-tables", "-lobjc"])
+SUITES = {suite.id: suite for suite in (LIBC, OBJC, THREAD, OBJC_METADATA)}
 # Backwards-compatible aliases for the primary libc suite.
 SUITE, FAMILIES, RESULT_LENGTHS, PROGRAM, SOURCE = LIBC.id, LIBC.families, LIBC.result_lengths, LIBC.program, LIBC.source
 

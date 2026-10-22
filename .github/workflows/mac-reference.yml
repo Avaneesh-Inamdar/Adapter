@@ -20,6 +20,8 @@ jobs:
             count: 4096
           - suite: adapter-thread-v1
             count: 1024
+          - suite: adapter-objc-metadata-v1
+            count: 4096
     steps:
       - name: Check out the workflow commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7, resolved 2026-10-22
