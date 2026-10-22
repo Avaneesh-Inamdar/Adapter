@@ -14,7 +14,7 @@ on the CPU. ARM64 translation is not implemented.
 
 [![API adapter coverage](docs/progress/api-coverage.svg)](docs/progress/README.md)
 
-**292 / 1,860 known Intel imports have adapters: 15.70%.**
+**294 / 1,860 known Intel imports have adapters: 15.81%.**
 
 This counts unique **(library install name, imported symbol)** pairs from
 18 inspected Apple Intel images, jq 1.8.2 and ripgrep 15.2.0. It includes imported data.
@@ -61,11 +61,12 @@ When adding a new target, see the inventory refresh command in
 | Objective-C | Validated raw-isa classes/metaclasses and selectors, absolute and relative method lists, startup categories with class-before-category `+load` order, inheritance, `msgSend`/`Super2`, `+initialize`, scalar GP/SSE/stack calls, nil and explicit runtime-owned ownership/pools | [Runtime](src/objc), [ABI contract](docs/abi/objc-abi.md), [consumers and results](docs/objc-results.md) |
 | Guest debugging | Windows LLDB captures actual exceptions, relocated Mach-O PCs, registers, disassembly and stacks; VM-address breakpoints and instruction stepping | [Debugger](tools/guest_debug.py), [usage and limits](docs/guest-debugging.md) |
 | CoreFoundation | Five functions for runtime-created UTF-8 strings, UTF-16 length and retain/release | [CF adapter](src/frameworks/corefoundation.rs), [consumer](tests/fixtures/corefoundation.c) |
+| Signals | Synchronous Darwin signals for the calling thread: `signal`/`sigaction` dispositions, `sigprocmask`/`pthread_sigmask`, `sigset_t` helpers, `raise`/`kill` on the guest pid, pending delivery on unblock, `sa_mask` and default termination (`128 + signal`) | [Signal adapter](src/darwin/signal.rs), [consumer](tests/fixtures/signals.c), [default action](tests/fixtures/signals_default.c), [results](docs/signal-results.md) |
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 168 distinct tests: 32 Rust, 30 archive
-and 106 integration tests. All 105 integration tests also passed in release. The
+**Test state:** the current run passed 170 distinct tests: 32 Rust, 30 archive
+and 108 integration tests. All 108 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
 ripgrep binary exercising 11 CLI workflows, two unchanged Mach-O processes
@@ -97,7 +98,7 @@ uses a measured import inventory; it is not a percentage of macOS completed.
 | --- | --- | --- |
 | P0 | Mac reference, differential probes, guest debugging, ABI contracts | First 4,096-case Mac comparison matches in debug and release; nine debugger tests pass in both profiles; expand coverage per subsystem |
 | P1 | Shared cache, Objective-C, Swift, unwind, Mach VM | Intel loader and bounded Objective-C slice work; other listed runtimes remain |
-| P2 | GCD, Foundation, runloops, IPC, XPC, launchd, processes, daemons | Simple IPC, job and XPC slices work; broader system behavior remains |
+| P2 | GCD, Foundation, runloops, IPC, XPC, launchd, processes, daemons, signals | Simple IPC, job, XPC and synchronous signal slices work; broader system behavior remains |
 | P3 | Graphics, IOSurface, Metal, AppKit, SwiftUI, WindowServer | Not started |
 | P4 | ARM64 backend, 16K pages, memory ordering, arm64e | Native Windows ARM64 preferred when hardware is available; no ARM execution yet |
 | P5 | Debugserver primitives, signing/keychain, tool/SDK paths, Xcode | Not started; all five application gates pending |
@@ -123,7 +124,7 @@ private components for which no complete public implementation was found.
 | Objective-C | Startup raw-isa MRC slice works; relative lists, categories, protocols, ARC/weak, dynamic registration, exceptions and aggregate/x87 sends remain | [ABI contract](docs/abi/objc-abi.md), [results](docs/objc-results.md), [missing imports](docs/progress/status.json) | Add each metadata/lifetime extension with positive, rejection and native Mac probes |
 | Frameworks and GUI | Foundation, AppKit and SwiftUI absent; CF limited to strings | [Framework adapters](src/frameworks), [Apple target inventory](docs/reverse-engineering/apple-inputs/targets.json) | Grow APIs from a chosen target; test object lifetime, resources, windows and events |
 | libc completeness | Missing APIs and partial semantics: Unicode locales, cookie streams, wide/positional/long-double formatting, filesystem metadata, date formats and timezone behavior | [ABI adapters](src/darwin/host), [API contracts](docs/compatibility.md) | Focused Mach-O probes and same-artifact output/error comparisons |
-| Exceptions and OS services | No Darwin unwinder, general signal model, syscall personality, complex Mach messages, networking or fork/exec | [Runtime](src/runtime), [limitations](docs/limitations.md) | Separate consumers for each service and failure path |
+| Exceptions and OS services | No Darwin unwinder, asynchronous/per-thread signals, `siginfo`, fault-to-signal mapping, syscall personality, complex Mach messages, networking or fork/exec | [Runtime](src/runtime), [limitations](docs/limitations.md) | Separate consumers for each service and failure path |
 | ARM64 and Xcode | ARM instructions cannot execute through the Intel loader; private frameworks/services also missing | [Xcode findings](docs/reverse-engineering/xcode27.md), [roadmap](docs/roadmap.md) | ARM64 execution first, then measured framework/service bring-up |
 
 Choose a consumer from the missing-API inventory, implement the required

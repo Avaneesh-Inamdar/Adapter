@@ -696,6 +696,40 @@
         "docs/mach-vm-results.md",
         "https://github.com/apple-oss-distributions/xnu"
       ]
+    },
+    {
+      "id": "signals",
+      "version": 1,
+      "scope": "Synchronous Darwin signal dispositions, masks, raise/kill on the guest's own pid and default termination",
+      "calling_convention": "Darwin x86-64 LP64; sigset_t is a 32-bit mask with bit (signal - 1); handlers take (int) or (int, siginfo*, ucontext*) and are called with the latter two null.",
+      "implementation": [
+        "src/darwin/signal.rs"
+      ],
+      "tests": [
+        "tests/fixtures/signals.c",
+        "tests/fixtures/signals_default.c"
+      ],
+      "layouts": [
+        {
+          "name": "sigaction",
+          "size": 16,
+          "align": 8,
+          "fields": [
+            {"name": "handler", "offset": 0, "size": 8},
+            {"name": "sa_mask", "offset": 8, "size": 4},
+            {"name": "sa_flags", "offset": 12, "size": 4}
+          ]
+        }
+      ],
+      "ownership": "Handler addresses are guest code; the adapter stores them and never frees or relocates them.",
+      "callbacks": "Handlers run synchronously on the calling guest thread's stack with the signal and sa_mask blocked.",
+      "errors": "EINVAL for signal 0, out of range, SIGKILL/SIGSTOP dispositions and unknown sigprocmask how; ESRCH for foreign pids; EPERM for pid -1; SIG_ERR from signal.",
+      "lifecycle": "Dispositions and the mask live for the run; an unhandled terminating signal exits with 128 + signal.",
+      "unsupported": "No asynchronous delivery, per-thread masks, siginfo/ucontext, sa_flags, alternate stacks, fault mapping, pthread_kill or sigwait.",
+      "sources": [
+        "docs/signal-results.md",
+        "https://github.com/apple-oss-distributions/xnu"
+      ]
     }
   ]
 }

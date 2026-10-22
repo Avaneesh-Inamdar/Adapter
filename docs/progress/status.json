@@ -61,14 +61,31 @@
       "__dyld_get_image_vmaddr_slide",
       "__dyld_image_count",
       "__exit",
+      "__kill",
       "__mach_msg",
       "__mach_port_allocate",
       "__mach_port_deallocate",
       "__mach_port_destroy",
       "__mach_port_insert_right",
       "__mach_port_mod_refs",
+      "__mach_vm_allocate",
+      "__mach_vm_deallocate",
+      "__mach_vm_protect",
+      "__pthread_sigmask",
+      "__raise",
+      "__sigaction",
+      "__sigaddset",
+      "__sigdelset",
+      "__sigemptyset",
+      "__sigfillset",
+      "__sigismember",
+      "__signal",
+      "__sigprocmask",
       "__tlv_atexit",
       "__tlv_bootstrap",
+      "__vm_allocate",
+      "__vm_deallocate",
+      "__vm_protect",
       "_abort",
       "_access",
       "_acos",
@@ -164,6 +181,7 @@
       "_j0",
       "_j1",
       "_jn",
+      "_kill",
       "_lchown",
       "_ldexp",
       "_lgamma",
@@ -183,6 +201,9 @@
       "_mach_port_destroy",
       "_mach_port_insert_right",
       "_mach_port_mod_refs",
+      "_mach_vm_allocate",
+      "_mach_vm_deallocate",
+      "_mach_vm_protect",
       "_madvise",
       "_malloc",
       "_memchr",
@@ -255,6 +276,7 @@
       "_pthread_self",
       "_pthread_setname_np",
       "_pthread_setspecific",
+      "_pthread_sigmask",
       "_pthread_threadid_np",
       "_putchar",
       "_puts",
@@ -283,8 +305,12 @@
       "_sigaction",
       "_sigaddset",
       "_sigaltstack",
+      "_sigdelset",
       "_sigemptyset",
+      "_sigfillset",
+      "_sigismember",
       "_signal",
+      "_sigprocmask",
       "_sin",
       "_sinh",
       "_sleep",
@@ -318,6 +344,9 @@
       "_unsetenv",
       "_usleep",
       "_utimes",
+      "_vm_allocate",
+      "_vm_deallocate",
+      "_vm_protect",
       "_vsnprintf",
       "_vsscanf",
       "_waitpid",
@@ -464,15 +493,15 @@
   "libraries": [
     {
       "name": "All known Intel imports",
-      "available": 292,
+      "available": 294,
       "total": 1860,
-      "percent": 15.7
+      "percent": 15.81
     },
     {
       "name": "libSystem",
-      "available": 275,
+      "available": 277,
       "total": 382,
-      "percent": 71.99
+      "percent": 72.51
     },
     {
       "name": "Other libraries",
@@ -3364,9 +3393,9 @@
       "name": "Quartz Debug",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Quartz Debug",
       "sha256": "efc44dd7adf3db75a246952e6c626c0284ca9dfd981c72e0908a1e7825d1fabc",
-      "available": 49,
+      "available": 50,
       "total": 420,
-      "percent": 11.67,
+      "percent": 11.9,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -4709,10 +4738,6 @@
           "symbol": "_sinf"
         },
         {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_vm_deallocate"
-        },
-        {
           "library": "/usr/lib/libicucore.A.dylib",
           "symbol": "_u_errorName"
         },
@@ -4858,9 +4883,9 @@
       "name": "Server",
       "source": "additional-tools27/Additional Tools/Graphics/Quartz Debug.app/Contents/MacOS/Server",
       "sha256": "bb655c463178450b3889013a99ca449c6b06ca840b0a25b11a2b8c24fa410543",
-      "available": 39,
+      "available": 40,
       "total": 232,
-      "percent": 16.81,
+      "percent": 17.24,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -5525,10 +5550,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_sinf"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_vm_deallocate"
         },
         {
           "library": "/usr/lib/libicucore.A.dylib",
@@ -8800,9 +8821,9 @@
       "name": "Printer Simulator",
       "source": "additional-tools27/Additional Tools/Hardware/Printer Simulator.app/Contents/MacOS/Printer Simulator",
       "sha256": "83f7b928a9cedf70c72b42740bf54c503285dabb9d5090f60747b3181e0d28b7",
-      "available": 22,
+      "available": 23,
       "total": 135,
-      "percent": 16.3,
+      "percent": 17.04,
       "missing": [
         {
           "library": "/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit",
@@ -9111,10 +9132,6 @@
         {
           "library": "/usr/lib/libSystem.B.dylib",
           "symbol": "_dispatch_sync"
-        },
-        {
-          "library": "/usr/lib/libSystem.B.dylib",
-          "symbol": "_kill"
         },
         {
           "library": "/usr/lib/libcups.2.dylib",
@@ -14454,11 +14471,6 @@
     },
     {
       "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_vm_deallocate",
-      "target_count": 2
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_voucher_mach_msg_set",
       "target_count": 2
     },
@@ -17880,11 +17892,6 @@
     {
       "library": "/usr/lib/libSystem.B.dylib",
       "symbol": "_inet_ntoa",
-      "target_count": 1
-    },
-    {
-      "library": "/usr/lib/libSystem.B.dylib",
-      "symbol": "_kill",
       "target_count": 1
     },
     {

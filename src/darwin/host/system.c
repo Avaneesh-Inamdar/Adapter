@@ -398,65 +398,17 @@ static G char *db_dirname(char *path) {
     path[n] = 0;
     return path;
 }
-static G int db_raise(int signal) {
-    /* Darwin signal numbers do not match the CRT. No guest signal handlers. */
-    if (signal == 0)
-        return 0;
-    if (signal == 6) {
-        fprintf(stderr, "adapter-run [signal]: guest raised SIGABRT\n");
-        ExitProcess(134);
-    }
-    db_set_errno(45);
-    return -1;
-}
-
-/* Signal handlers are recorded faithfully so probing code sees success, but
- * Windows never delivers POSIX signals to this adapter, so stored handlers are
- * never invoked. sigaltstack is recorded for the same reason. */
-typedef struct {
-    uint64_t handler;
-    uint32_t mask;
-    int32_t flags;
-} DbSigaction;
+/* Dispositions, masks and delivery live in src/darwin/signal.rs. sigaltstack is
+ * recorded only: Windows never delivers POSIX signals to this adapter. */
 typedef struct {
     void *sp;
     size_t size;
     int32_t flags;
     int32_t pad;
 } DbStack;
-static DbSigaction signal_actions[32];
 static DbStack alternate_stack;
 static SRWLOCK signal_lock = SRWLOCK_INIT;
 
-static G int db_sigaction(int sig, const DbSigaction *act, DbSigaction *old) {
-    if (sig <= 0 || sig >= 32 || sig == 9 || sig == 17) {
-        db_set_errno(22);
-        return -1;
-    }
-    AcquireSRWLockExclusive(&signal_lock);
-    if (old)
-        *old = signal_actions[sig];
-    if (act)
-        signal_actions[sig] = *act;
-    ReleaseSRWLockExclusive(&signal_lock);
-    return 0;
-}
-static G int db_sigemptyset(uint32_t *set) {
-    if (!set) {
-        db_set_errno(14);
-        return -1;
-    }
-    *set = 0;
-    return 0;
-}
-static G int db_sigaddset(uint32_t *set, int sig) {
-    if (!set || sig <= 0 || sig >= 32) {
-        db_set_errno(22);
-        return -1;
-    }
-    *set |= 1u << (sig - 1);
-    return 0;
-}
 static G int db_sigaltstack(const DbStack *ss, DbStack *old) {
     AcquireSRWLockExclusive(&signal_lock);
     if (old)
@@ -465,19 +417,6 @@ static G int db_sigaltstack(const DbStack *ss, DbStack *old) {
         alternate_stack = *ss;
     ReleaseSRWLockExclusive(&signal_lock);
     return 0;
-}
-static G uint64_t db_signal(int sig, uint64_t handler) {
-    if (sig <= 0 || sig >= 32 || sig == 9 || sig == 17) {
-        db_set_errno(22);
-        return UINT64_MAX;
-    }
-    AcquireSRWLockExclusive(&signal_lock);
-    uint64_t old = signal_actions[sig].handler;
-    signal_actions[sig].handler = handler;
-    signal_actions[sig].mask = 0;
-    signal_actions[sig].flags = 0;
-    ReleaseSRWLockExclusive(&signal_lock);
-    return old;
 }
 static G int db_pause(void) {
     for (;;)
@@ -2570,7 +2509,6 @@ uintptr_t db_system_symbol(const char *name) {
     LOOKUP("_realpath$DARWIN_EXTSN", db_realpath);
     LOOKUP("_dirname", db_dirname);
     LOOKUP("_pathconf", db_pathconf);
-    LOOKUP("_raise", db_raise);
     LOOKUP("_gmtime_r", db_gmtime);
     LOOKUP("_localtime_r", db_localtime);
     LOOKUP("_timegm", db_timegm);
@@ -2624,11 +2562,7 @@ uintptr_t db_system_symbol(const char *name) {
     LOOKUP("_dispatch_semaphore_signal", db_dispatch_semaphore_signal);
     LOOKUP("_dispatch_semaphore_wait", db_dispatch_semaphore_wait);
     LOOKUP("_dispatch_time", db_dispatch_time);
-    LOOKUP("_sigaction", db_sigaction);
-    LOOKUP("_sigemptyset", db_sigemptyset);
-    LOOKUP("_sigaddset", db_sigaddset);
     LOOKUP("_sigaltstack", db_sigaltstack);
-    LOOKUP("_signal", db_signal);
     LOOKUP("_pause", db_pause);
     LOOKUP("_fork", db_fork);
     LOOKUP("_execvp", db_execvp);

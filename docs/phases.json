@@ -291,9 +291,9 @@
       "id": 21,
       "name": "Signals and syscall personality",
       "phase": "P2",
-      "status": "not-started",
-      "work": "Guest signal numbers/contexts, masking, alternate stacks, restart and direct syscall interception.",
-      "source": "upstream-sources.md"
+      "status": "implemented-slice",
+      "work": "Synchronous guest signals: dispositions, masks, pending delivery, sa_mask and default termination run with a verified Mach-O consumer. Remaining: asynchronous delivery, per-thread masks, siginfo/ucontext, alternate stacks, fault mapping, restart and direct syscall interception.",
+      "source": "signal-results.md"
     },
     {
       "id": 22,

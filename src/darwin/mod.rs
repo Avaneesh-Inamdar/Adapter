@@ -6,6 +6,7 @@ pub mod dl;
 pub mod dyld;
 pub mod libc;
 pub mod mach;
+pub mod signal;
 pub mod stack;
 pub mod sync;
 pub mod thread_state;
@@ -70,6 +71,9 @@ unsafe extern "sysv64" fn memcmp(a: *const u8, b: *const u8, n: usize) -> i32 {
     0
 }
 pub fn symbol(name: &str) -> Option<u64> {
+    if let Some(value) = signal::symbol(name) {
+        return Some(value);
+    }
     if let Some(value) = libc::symbol(name) {
         return Some(value);
     }

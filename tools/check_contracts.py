@@ -40,7 +40,7 @@ def validate():
             assert set(declared) == actual, (
                 f'ObjC contract drift: undeclared={actual - set(declared)}, '
                 f'absent={set(declared) - actual}')
-    assert seen == {'loader', 'libc', 'threads', 'mach', 'mach_vm', 'blocks-xpc', 'cf',
+    assert seen == {'loader', 'libc', 'threads', 'mach', 'mach_vm', 'signals', 'blocks-xpc', 'cf',
                    'objc'}
     phases = json.loads((ROOT / 'docs/phases.json').read_text())
     assert phases['schema_version'] == 1

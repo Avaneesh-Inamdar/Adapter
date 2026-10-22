@@ -147,7 +147,7 @@ authenticate peer code. See [mach-ipc-results](mach-ipc-results.md),
 [XPC evidence](reverse-engineering/xpc-evidence.md).
 
 Latest commands/results are recorded in [test-results/latest.json](test-results/latest.json).
-The current run passed all 16 verification stages, including 106 integration
+The current run passed all 16 verification stages, including 108 integration
 tests in both profiles. The latest iteration and remaining limits are described
 in [jq-libc-results](jq-libc-results.md),
 [ripgrep-results](ripgrep-results.md),

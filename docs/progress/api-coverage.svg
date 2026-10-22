@@ -7,14 +7,14 @@
 <text x="28" y="62" font-size="13" fill="#cbd5e1">20 Intel images · direct imports · source registry count</text>
 <text x="28" y="107" font-size="14">All known Intel imports</text>
 <rect x="270" y="90" width="410" height="24" rx="4" fill="#374151"/>
-<rect x="270" y="90" width="64.37" height="24" rx="4" fill="#fbbf24"/>
-<text x="704" y="107" font-size="14" font-family="monospace">15.70%</text>
-<text x="804" y="107" font-size="14" fill="#cbd5e1">292 / 1860</text>
+<rect x="270" y="90" width="64.82" height="24" rx="4" fill="#fbbf24"/>
+<text x="704" y="107" font-size="14" font-family="monospace">15.81%</text>
+<text x="804" y="107" font-size="14" fill="#cbd5e1">294 / 1860</text>
 <text x="28" y="151" font-size="14">libSystem</text>
 <rect x="270" y="134" width="410" height="24" rx="4" fill="#374151"/>
-<rect x="270" y="134" width="295.16" height="24" rx="4" fill="#fbbf24"/>
-<text x="704" y="151" font-size="14" font-family="monospace">71.99%</text>
-<text x="804" y="151" font-size="14" fill="#cbd5e1">275 / 382</text>
+<rect x="270" y="134" width="297.29" height="24" rx="4" fill="#fbbf24"/>
+<text x="704" y="151" font-size="14" font-family="monospace">72.51%</text>
+<text x="804" y="151" font-size="14" fill="#cbd5e1">277 / 382</text>
 <text x="28" y="195" font-size="14">CoreFoundation</text>
 <rect x="270" y="178" width="410" height="24" rx="4" fill="#374151"/>
 <rect x="270" y="178" width="10.91" height="24" rx="4" fill="#fbbf24"/>

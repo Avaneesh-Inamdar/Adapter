@@ -53,7 +53,7 @@ Status: **implemented-slices**. Dependencies: P1.
 | 18 | XPC | implemented-slice | Typed broker transport exists; Apple interoperability, richer objects, GCD scheduling, peer validation and entitlements remain. |
 | 19 | Real launchd semantics | implemented-slice | Job plist/demand-spawn subset exists. Add domains, KeepAlive, supervision/throttling, socket activation, inherited rights and launchctl behavior. |
 | 20 | fork / exec / posix_spawn | not-started | Start with spawn and argument/environment/descriptor inheritance; model fork snapshots and atfork separately. |
-| 21 | Signals and syscall personality | not-started | Guest signal numbers/contexts, masking, alternate stacks, restart and direct syscall interception. |
+| 21 | Signals and syscall personality | implemented-slice | Synchronous guest signals: dispositions, masks, pending delivery, sa_mask and default termination run with a verified Mach-O consumer. Remaining: asynchronous delivery, per-thread masks, siginfo/ucontext, alternate stacks, fault mapping, restart and direct syscall interception. |
 | 22 | IOKit / sysctl / proc_info | not-started | Target-specific device/process facts and guest object/handle ownership; no host-handle substitution. |
 | 23 | macOS service daemons | external-gate | cfprefsd, notifyd, distnoted, LaunchServices, securityd/trustd and opendirectoryd binaries are Apple artifacts that are absent from the supplied Xcode XIP and cannot be redistributed; the client side is covered by the launchd and XPC slices. See docs/item-gates.md. |
 | 24 | FSEvents and Spotlight | not-started | Persistent event IDs, rescan/drop semantics, indexing and query behavior; Windows directory notifications are only a backend. |

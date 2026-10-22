@@ -113,6 +113,13 @@ class RuntimeTests(unittest.TestCase):
         for name in ['mach_vm','mach_vm-chained']:
             p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)
             self.assertEqual(p.stdout,'mach_vm:allocate, write, protect, fixed and errors passed\n')
+    def test_signal_dispositions_masks_and_delivery(self):
+        for name in ['signals','signals-chained']:
+            p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)
+            self.assertEqual(p.stdout,'signals:dispositions, masks, raise and pending passed\n')
+    def test_signal_default_action_terminates_guest(self):
+        p=call('adapter-run',FIX/'signals_default');self.assertEqual(p.returncode,128+30)
+        self.assertEqual(p.stdout,'signals_default:before\n');self.assertIn('terminated by signal 30',p.stderr)
     def test_cxx_thread_local_destructors(self):
         for name in ['cxx_tls','cxx_tls-chained']:
             p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)
