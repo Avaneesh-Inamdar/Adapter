@@ -11,6 +11,7 @@ pub mod qos;
 pub mod signal;
 pub mod stack;
 pub mod sync;
+pub mod sysctl;
 pub mod thread_state;
 pub mod threads;
 pub mod tlv;
@@ -73,6 +74,9 @@ unsafe extern "sysv64" fn memcmp(a: *const u8, b: *const u8, n: usize) -> i32 {
     0
 }
 pub fn symbol(name: &str) -> Option<u64> {
+    if let Some(value) = sysctl::symbol(name) {
+        return Some(value);
+    }
     if let Some(value) = qos::symbol(name) {
         return Some(value);
     }

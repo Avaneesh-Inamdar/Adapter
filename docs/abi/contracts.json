@@ -824,6 +824,86 @@
         "docs/dispatch-results.md",
         "https://github.com/apple-oss-distributions/libpthread"
       ]
+    },
+    {
+      "id": "sysctl",
+      "version": 1,
+      "scope": "sysctl, sysctlbyname and sysctlnametomib over host-derived and fixed Darwin values, plus libproc queries about the guest's own process",
+      "calling_convention": "Darwin x86-64 LP64; MIB components are 32-bit ints, lengths are size_t, integer values are 32-bit unless the header documents a 64-bit byte count or frequency, strings include their NUL.",
+      "implementation": [
+        "src/darwin/sysctl.rs"
+      ],
+      "tests": [
+        "tests/fixtures/sysctl.c"
+      ],
+      "layouts": [
+        {
+          "name": "timeval",
+          "size": 16,
+          "align": 8,
+          "fields": [
+            {"name": "tv_sec", "offset": 0, "size": 8},
+            {"name": "tv_usec", "offset": 8, "size": 4}
+          ]
+        },
+        {
+          "name": "loadavg",
+          "size": 24,
+          "align": 8,
+          "fields": [
+            {"name": "ldavg", "offset": 0, "size": 12},
+            {"name": "fscale", "offset": 16, "size": 8}
+          ]
+        },
+        {
+          "name": "xsw_usage",
+          "size": 32,
+          "align": 8,
+          "fields": [
+            {"name": "xsu_total", "offset": 0, "size": 8},
+            {"name": "xsu_avail", "offset": 8, "size": 8},
+            {"name": "xsu_used", "offset": 16, "size": 8},
+            {"name": "xsu_pagesize", "offset": 24, "size": 4},
+            {"name": "xsu_encrypted", "offset": 28, "size": 1}
+          ]
+        },
+        {
+          "name": "proc_taskinfo",
+          "size": 96,
+          "align": 8,
+          "fields": [
+            {"name": "pti_virtual_size", "offset": 0, "size": 8},
+            {"name": "pti_resident_size", "offset": 8, "size": 8},
+            {"name": "pti_total_user", "offset": 16, "size": 8},
+            {"name": "pti_total_system", "offset": 24, "size": 8},
+            {"name": "pti_threadnum", "offset": 84, "size": 4}
+          ]
+        },
+        {
+          "name": "proc_bsdinfo",
+          "size": 136,
+          "align": 8,
+          "fields": [
+            {"name": "pbi_status", "offset": 4, "size": 4},
+            {"name": "pbi_pid", "offset": 12, "size": 4},
+            {"name": "pbi_ppid", "offset": 16, "size": 4},
+            {"name": "pbi_comm", "offset": 48, "size": 16},
+            {"name": "pbi_name", "offset": 64, "size": 32},
+            {"name": "pbi_pgid", "offset": 100, "size": 4},
+            {"name": "pbi_start_tvsec", "offset": 120, "size": 8},
+            {"name": "pbi_start_tvusec", "offset": 128, "size": 8}
+          ]
+        }
+      ],
+      "ownership": "Returned values are copied into the caller's buffer; the adapter keeps only a lazily built name table and cached processor information.",
+      "callbacks": "None.",
+      "errors": "-1 with errno: ENOENT for unknown names and MIBs, EPERM for any write, ENOMEM for a short buffer or MIB array (the required size is still reported), EINVAL for NULL names, MIB lengths outside 2..12 and undersized libproc buffers, ESRCH for libproc pids other than the guest's. libproc functions return 0 on error.",
+      "lifecycle": "Values are computed at call time except processor information, which is read once.",
+      "unsupported": "kern.proc and kern.procargs2, kern.clockrate, vm.vmmeter, net.* and debug.* subtrees, disk statistics, performance levels, writes, libproc process listing by other filters, file-descriptor and region flavors, proc_pid_rusage and dirty tracking.",
+      "sources": [
+        "docs/sysctl-results.md",
+        "https://github.com/apple-oss-distributions/xnu"
+      ]
     }
   ]
 }

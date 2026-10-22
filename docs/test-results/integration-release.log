@@ -97,6 +97,7 @@ test_return_value (test_runtime.RuntimeTests.test_return_value) ... ok
 test_rpath_resolution (test_runtime.RuntimeTests.test_rpath_resolution) ... ok
 test_signal_default_action_terminates_guest (test_runtime.RuntimeTests.test_signal_default_action_terminates_guest) ... ok
 test_signal_dispositions_masks_and_delivery (test_runtime.RuntimeTests.test_signal_dispositions_masks_and_delivery) ... ok
+test_sysctl_names_mibs_errors_and_libproc (test_runtime.RuntimeTests.test_sysctl_names_mibs_errors_and_libproc) ... ok
 test_thread_local_storage_main_thread (test_runtime.RuntimeTests.test_thread_local_storage_main_thread) ... ok
 test_thread_once_keys_destructors_and_errno (test_runtime.RuntimeTests.test_thread_once_keys_destructors_and_errno) ... ok
 test_timeout (test_runtime.RuntimeTests.test_timeout) ... ok
@@ -113,6 +114,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 112 tests in 19.329s
+Ran 113 tests in 19.242s
 
 OK

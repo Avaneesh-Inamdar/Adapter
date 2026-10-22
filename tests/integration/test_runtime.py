@@ -133,6 +133,10 @@ class RuntimeTests(unittest.TestCase):
         for name in ['dispatch_source','dispatch_source-chained']:
             p=call('adapter-run',FIX/name,timeout=60);self.assertEqual(p.returncode,0,p.stderr)
             self.assertEqual(p.stdout,'dispatch_source:block objects, data and timer sources passed\n')
+    def test_sysctl_names_mibs_errors_and_libproc(self):
+        for name in ['sysctl','sysctl-chained']:
+            p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr+p.stdout)
+            self.assertEqual(p.stdout,'sysctl:names, MIB paths, size rules, errors and libproc passed\n')
     def test_dispatch_sync_onto_running_queue_traps(self):
         p=call('adapter-run',FIX/'dispatch_deadlock');self.assertEqual(p.returncode,128+4)
         self.assertEqual(p.stdout,'dispatch_deadlock:before\n');self.assertIn('deadlock',p.stderr)

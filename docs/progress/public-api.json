@@ -453,6 +453,741 @@
         "_vm_remap_new",
         "_vm_write"
       ]
+    },
+    {
+      "id": "sysctl-calls",
+      "name": "sysctl calls",
+      "repository": "xnu",
+      "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+      "files": [
+        {
+          "repository": "xnu",
+          "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+          "path": "bsd/sys/sysctl.h",
+          "sha256": "adbdc68ccd8e8dece9c1914fd056c48e421d343d5d6d93553ef33473f5688dda"
+        }
+      ],
+      "symbols": [
+        "_sysctl",
+        "_sysctlbyname",
+        "_sysctlnametomib"
+      ]
+    },
+    {
+      "id": "sysctl-names",
+      "name": "sysctl names",
+      "repository": "xnu",
+      "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+      "files": [
+        {
+          "repository": "xnu",
+          "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+          "path": "bsd/sys/sysctl.h",
+          "sha256": "adbdc68ccd8e8dece9c1914fd056c48e421d343d5d6d93553ef33473f5688dda"
+        }
+      ],
+      "registry": "sysctl",
+      "symbols": [
+        "hw.activecpu",
+        "hw.availcpu",
+        "hw.busfrequency",
+        "hw.busfrequency_max",
+        "hw.busfrequency_min",
+        "hw.byteorder",
+        "hw.cachelinesize",
+        "hw.cpufrequency",
+        "hw.cpufrequency_max",
+        "hw.cpufrequency_min",
+        "hw.cpusubtype",
+        "hw.cputhreadtype",
+        "hw.cputype",
+        "hw.disknames",
+        "hw.diskstats",
+        "hw.epoch",
+        "hw.floatingpoint",
+        "hw.l1dcachesize",
+        "hw.l1icachesize",
+        "hw.l2cachesize",
+        "hw.l2settings",
+        "hw.l3cachesize",
+        "hw.l3settings",
+        "hw.logicalcpu",
+        "hw.logicalcpu_max",
+        "hw.machine",
+        "hw.machinearch",
+        "hw.memsize",
+        "hw.model",
+        "hw.ncpu",
+        "hw.nperflevels",
+        "hw.optional.64bitops",
+        "hw.optional.altivec",
+        "hw.optional.datastreams",
+        "hw.optional.dcba",
+        "hw.optional.dcbtstreams",
+        "hw.optional.floatingpoint",
+        "hw.optional.fsqrt",
+        "hw.optional.graphicsops",
+        "hw.optional.mmx",
+        "hw.optional.sse",
+        "hw.optional.sse2",
+        "hw.optional.sse3",
+        "hw.optional.stfiwx",
+        "hw.optional.supplementalsse3",
+        "hw.optional.x86_64",
+        "hw.packages",
+        "hw.pagesize",
+        "hw.physicalcpu",
+        "hw.physicalcpu_max",
+        "hw.physmem",
+        "hw.product",
+        "hw.target",
+        "hw.tbfrequency",
+        "hw.usermem",
+        "hw.vectorunit",
+        "kern.aiomax",
+        "kern.aioprocmax",
+        "kern.aiothreads",
+        "kern.argmax",
+        "kern.bootfile",
+        "kern.boottime",
+        "kern.check_openevt",
+        "kern.clockrate",
+        "kern.coredump",
+        "kern.corefile",
+        "kern.delayterm",
+        "kern.dumpdev",
+        "kern.file",
+        "kern.hostid",
+        "kern.hostname",
+        "kern.job_control",
+        "kern.kdebug",
+        "kern.logsigexit",
+        "kern.low_pri_delay",
+        "kern.low_pri_window",
+        "kern.maxfiles",
+        "kern.maxfilesperproc",
+        "kern.maxpartitions",
+        "kern.maxproc",
+        "kern.maxprocperuid",
+        "kern.maxvnodes",
+        "kern.netboot",
+        "kern.ngroups",
+        "kern.nisdomainname",
+        "kern.nx",
+        "kern.osreldate",
+        "kern.osrelease",
+        "kern.osrevision",
+        "kern.ostype",
+        "kern.osversion",
+        "kern.posix1version",
+        "kern.proc",
+        "kern.proc_low_pri_io",
+        "kern.procargs",
+        "kern.procargs2",
+        "kern.procname",
+        "kern.rage_vnode",
+        "kern.safeboot",
+        "kern.saved_ids",
+        "kern.securelevel",
+        "kern.shreg_private",
+        "kern.speculative_reads_disabled",
+        "kern.sugid_coredump",
+        "kern.symfile",
+        "kern.thread_name",
+        "kern.threadsigaltstack",
+        "kern.update",
+        "kern.usrstack",
+        "kern.usrstack64",
+        "kern.version",
+        "kern.vnode",
+        "user.bc_base_max",
+        "user.bc_dim_max",
+        "user.bc_scale_max",
+        "user.bc_string_max",
+        "user.coll_weights_max",
+        "user.cs_path",
+        "user.expr_nest_max",
+        "user.line_max",
+        "user.posix2_c_bind",
+        "user.posix2_c_dev",
+        "user.posix2_char_term",
+        "user.posix2_fort_dev",
+        "user.posix2_fort_run",
+        "user.posix2_localedef",
+        "user.posix2_sw_dev",
+        "user.posix2_upe",
+        "user.posix2_version",
+        "user.re_dup_max",
+        "user.stream_max",
+        "user.tzname_max",
+        "vm.loadavg",
+        "vm.swapusage",
+        "vm.vmmeter"
+      ],
+      "mibs": {
+        "hw.availcpu": [
+          6,
+          25
+        ],
+        "hw.busfrequency": [
+          6,
+          14
+        ],
+        "hw.byteorder": [
+          6,
+          4
+        ],
+        "hw.cachelinesize": [
+          6,
+          16
+        ],
+        "hw.cpufrequency": [
+          6,
+          15
+        ],
+        "hw.disknames": [
+          6,
+          8
+        ],
+        "hw.diskstats": [
+          6,
+          9
+        ],
+        "hw.epoch": [
+          6,
+          10
+        ],
+        "hw.floatingpoint": [
+          6,
+          11
+        ],
+        "hw.l1dcachesize": [
+          6,
+          18
+        ],
+        "hw.l1icachesize": [
+          6,
+          17
+        ],
+        "hw.l2cachesize": [
+          6,
+          20
+        ],
+        "hw.l2settings": [
+          6,
+          19
+        ],
+        "hw.l3cachesize": [
+          6,
+          22
+        ],
+        "hw.l3settings": [
+          6,
+          21
+        ],
+        "hw.machine": [
+          6,
+          1
+        ],
+        "hw.machinearch": [
+          6,
+          12
+        ],
+        "hw.memsize": [
+          6,
+          24
+        ],
+        "hw.model": [
+          6,
+          2
+        ],
+        "hw.ncpu": [
+          6,
+          3
+        ],
+        "hw.pagesize": [
+          6,
+          7
+        ],
+        "hw.physmem": [
+          6,
+          5
+        ],
+        "hw.product": [
+          6,
+          27
+        ],
+        "hw.target": [
+          6,
+          26
+        ],
+        "hw.tbfrequency": [
+          6,
+          23
+        ],
+        "hw.usermem": [
+          6,
+          6
+        ],
+        "hw.vectorunit": [
+          6,
+          13
+        ],
+        "kern.aiomax": [
+          1,
+          46
+        ],
+        "kern.aioprocmax": [
+          1,
+          47
+        ],
+        "kern.aiothreads": [
+          1,
+          48
+        ],
+        "kern.argmax": [
+          1,
+          8
+        ],
+        "kern.bootfile": [
+          1,
+          28
+        ],
+        "kern.boottime": [
+          1,
+          21
+        ],
+        "kern.check_openevt": [
+          1,
+          70
+        ],
+        "kern.clockrate": [
+          1,
+          12
+        ],
+        "kern.coredump": [
+          1,
+          51
+        ],
+        "kern.corefile": [
+          1,
+          50
+        ],
+        "kern.delayterm": [
+          1,
+          53
+        ],
+        "kern.dumpdev": [
+          1,
+          31
+        ],
+        "kern.file": [
+          1,
+          15
+        ],
+        "kern.hostid": [
+          1,
+          11
+        ],
+        "kern.hostname": [
+          1,
+          10
+        ],
+        "kern.job_control": [
+          1,
+          19
+        ],
+        "kern.kdebug": [
+          1,
+          24
+        ],
+        "kern.logsigexit": [
+          1,
+          36
+        ],
+        "kern.low_pri_delay": [
+          1,
+          57
+        ],
+        "kern.low_pri_window": [
+          1,
+          56
+        ],
+        "kern.maxfiles": [
+          1,
+          7
+        ],
+        "kern.maxfilesperproc": [
+          1,
+          29
+        ],
+        "kern.maxpartitions": [
+          1,
+          23
+        ],
+        "kern.maxproc": [
+          1,
+          6
+        ],
+        "kern.maxprocperuid": [
+          1,
+          30
+        ],
+        "kern.maxvnodes": [
+          1,
+          5
+        ],
+        "kern.netboot": [
+          1,
+          40
+        ],
+        "kern.ngroups": [
+          1,
+          18
+        ],
+        "kern.nisdomainname": [
+          1,
+          22
+        ],
+        "kern.nx": [
+          1,
+          60
+        ],
+        "kern.osreldate": [
+          1,
+          26
+        ],
+        "kern.osrelease": [
+          1,
+          2
+        ],
+        "kern.osrevision": [
+          1,
+          3
+        ],
+        "kern.ostype": [
+          1,
+          1
+        ],
+        "kern.osversion": [
+          1,
+          65
+        ],
+        "kern.posix1version": [
+          1,
+          17
+        ],
+        "kern.proc": [
+          1,
+          14
+        ],
+        "kern.proc_low_pri_io": [
+          1,
+          55
+        ],
+        "kern.procargs": [
+          1,
+          38
+        ],
+        "kern.procargs2": [
+          1,
+          49
+        ],
+        "kern.procname": [
+          1,
+          62
+        ],
+        "kern.rage_vnode": [
+          1,
+          68
+        ],
+        "kern.safeboot": [
+          1,
+          66
+        ],
+        "kern.saved_ids": [
+          1,
+          20
+        ],
+        "kern.securelevel": [
+          1,
+          9
+        ],
+        "kern.shreg_private": [
+          1,
+          54
+        ],
+        "kern.speculative_reads_disabled": [
+          1,
+          64
+        ],
+        "kern.sugid_coredump": [
+          1,
+          52
+        ],
+        "kern.symfile": [
+          1,
+          37
+        ],
+        "kern.thread_name": [
+          1,
+          71
+        ],
+        "kern.threadsigaltstack": [
+          1,
+          63
+        ],
+        "kern.update": [
+          1,
+          25
+        ],
+        "kern.usrstack": [
+          1,
+          35
+        ],
+        "kern.usrstack64": [
+          1,
+          59
+        ],
+        "kern.version": [
+          1,
+          4
+        ],
+        "kern.vnode": [
+          1,
+          13
+        ],
+        "user.bc_base_max": [
+          8,
+          2
+        ],
+        "user.bc_dim_max": [
+          8,
+          3
+        ],
+        "user.bc_scale_max": [
+          8,
+          4
+        ],
+        "user.bc_string_max": [
+          8,
+          5
+        ],
+        "user.coll_weights_max": [
+          8,
+          6
+        ],
+        "user.cs_path": [
+          8,
+          1
+        ],
+        "user.expr_nest_max": [
+          8,
+          7
+        ],
+        "user.line_max": [
+          8,
+          8
+        ],
+        "user.posix2_c_bind": [
+          8,
+          11
+        ],
+        "user.posix2_c_dev": [
+          8,
+          12
+        ],
+        "user.posix2_char_term": [
+          8,
+          13
+        ],
+        "user.posix2_fort_dev": [
+          8,
+          14
+        ],
+        "user.posix2_fort_run": [
+          8,
+          15
+        ],
+        "user.posix2_localedef": [
+          8,
+          16
+        ],
+        "user.posix2_sw_dev": [
+          8,
+          17
+        ],
+        "user.posix2_upe": [
+          8,
+          18
+        ],
+        "user.posix2_version": [
+          8,
+          10
+        ],
+        "user.re_dup_max": [
+          8,
+          9
+        ],
+        "user.stream_max": [
+          8,
+          19
+        ],
+        "user.tzname_max": [
+          8,
+          20
+        ],
+        "vm.loadavg": [
+          2,
+          2
+        ],
+        "vm.swapusage": [
+          2,
+          5
+        ],
+        "vm.vmmeter": [
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "id": "libproc",
+      "name": "libproc",
+      "repository": "xnu",
+      "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+      "files": [
+        {
+          "repository": "xnu",
+          "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+          "path": "libsyscall/wrappers/libproc/libproc.h",
+          "sha256": "37c7629819a18c5ef10d19a9bea00eb7e0bd31e0b127ecd2ae108c74f47c39e2"
+        }
+      ],
+      "symbols": [
+        "_proc_clear_dirty",
+        "_proc_get_dirty",
+        "_proc_kmsgbuf",
+        "_proc_libversion",
+        "_proc_listallpids",
+        "_proc_listchildpids",
+        "_proc_listpgrppids",
+        "_proc_listpids",
+        "_proc_listpidspath",
+        "_proc_name",
+        "_proc_pid_rusage",
+        "_proc_pidfdinfo",
+        "_proc_pidfileportinfo",
+        "_proc_pidinfo",
+        "_proc_pidpath",
+        "_proc_pidpath_audittoken",
+        "_proc_regionfilename",
+        "_proc_set_csm",
+        "_proc_set_dirty",
+        "_proc_set_no_smt",
+        "_proc_setpcontrol",
+        "_proc_setthread_csm",
+        "_proc_setthread_no_smt",
+        "_proc_signal_delegate",
+        "_proc_signal_with_audittoken",
+        "_proc_terminate",
+        "_proc_terminate_all_rsr",
+        "_proc_terminate_delegate",
+        "_proc_terminate_with_audittoken",
+        "_proc_track_dirty",
+        "_proc_udata_info"
+      ]
+    },
+    {
+      "id": "spawn",
+      "name": "posix_spawn",
+      "repository": "xnu",
+      "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+      "files": [
+        {
+          "repository": "xnu",
+          "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+          "path": "libsyscall/wrappers/spawn/spawn.h",
+          "sha256": "4b196764e478b25c2fdfcdd240b2f1601fbc59410ce9c8cb59780354ff1ebf3e"
+        }
+      ],
+      "symbols": [
+        "_posix_spawn",
+        "_posix_spawn_file_actions_addchdir",
+        "_posix_spawn_file_actions_addchdir_np",
+        "_posix_spawn_file_actions_addclose",
+        "_posix_spawn_file_actions_adddup2",
+        "_posix_spawn_file_actions_addfchdir",
+        "_posix_spawn_file_actions_addfchdir_np",
+        "_posix_spawn_file_actions_addinherit_np",
+        "_posix_spawn_file_actions_addopen",
+        "_posix_spawn_file_actions_destroy",
+        "_posix_spawn_file_actions_init",
+        "_posix_spawnattr_destroy",
+        "_posix_spawnattr_getarchpref_np",
+        "_posix_spawnattr_getbinpref_np",
+        "_posix_spawnattr_getflags",
+        "_posix_spawnattr_getpgroup",
+        "_posix_spawnattr_getschedparam",
+        "_posix_spawnattr_getschedpolicy",
+        "_posix_spawnattr_getsigdefault",
+        "_posix_spawnattr_getsigmask",
+        "_posix_spawnattr_init",
+        "_posix_spawnattr_set_csm_np",
+        "_posix_spawnattr_setarchpref_np",
+        "_posix_spawnattr_setauditsessionport_np",
+        "_posix_spawnattr_setbinpref_np",
+        "_posix_spawnattr_setexceptionports_np",
+        "_posix_spawnattr_setflags",
+        "_posix_spawnattr_setnosmt_np",
+        "_posix_spawnattr_setpgroup",
+        "_posix_spawnattr_setschedparam",
+        "_posix_spawnattr_setschedpolicy",
+        "_posix_spawnattr_setsigdefault",
+        "_posix_spawnattr_setsigmask",
+        "_posix_spawnattr_setspecialport_np",
+        "_posix_spawnp"
+      ]
+    },
+    {
+      "id": "process-control",
+      "name": "fork, exec and wait",
+      "repository": "Libc",
+      "commit": "71bbe350ab79eef58113991d817ccc6165061a64",
+      "files": [
+        {
+          "repository": "Libc",
+          "commit": "71bbe350ab79eef58113991d817ccc6165061a64",
+          "path": "include/unistd.h",
+          "sha256": "e5b597caa8cbd84dbfc927b50b1e0d95a89a4bbb6c97ba552824df81b8a370fa"
+        },
+        {
+          "repository": "xnu",
+          "commit": "f6217f891ac0bb64f3d375211650a4c1ff8ca1ea",
+          "path": "bsd/sys/wait.h",
+          "sha256": "3a82112a1dc8025e7d3a09cb6d9d39bb60c13018052838d3f8ade1b208f83983"
+        }
+      ],
+      "symbols": [
+        "_execl",
+        "_execle",
+        "_execlp",
+        "_execv",
+        "_execvP",
+        "_execvp",
+        "_fork",
+        "_getpgid",
+        "_getpgrp",
+        "_getppid",
+        "_setpgid",
+        "_setsid",
+        "_vfork",
+        "_wait",
+        "_wait3",
+        "_wait4",
+        "_waitid",
+        "_waitpid"
+      ]
     }
   ]
 }

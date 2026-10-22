@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "note": "Symbols that have an adapter but implement only part of the public contract. tools/update_progress.py counts these as 'partial' in the public-API chart and fails if an entry names a symbol that is not catalogued or not registered.",
+  "note": "Symbols that have an adapter but implement only part of the public contract, or that are registered only to fail with a fixed error. tools/update_progress.py counts these as 'partial' in the public-API chart and fails if an entry names a symbol that is not catalogued or not registered.",
   "partial": {
     "__dispatch_source_type_mach_recv": "identity only; sources of this type cannot be created",
     "__dispatch_source_type_mach_send": "identity only; sources of this type cannot be created",
@@ -48,6 +48,25 @@
     "_mach_vm_protect": "writable-executable protection rejected; no maximum-protection enforcement",
     "_vm_allocate": "adapter-created ranges only; 256 MiB ceiling",
     "_vm_deallocate": "whole adapter-created ranges only; no sub-range release",
-    "_vm_protect": "writable-executable protection rejected; no maximum-protection enforcement"
+    "_vm_protect": "writable-executable protection rejected; no maximum-protection enforcement",
+    "_proc_name": "the guest's own pid only",
+    "_proc_pidpath": "the guest's own pid only; returns the adapter's executable path spelling",
+    "_proc_listpids": "reports only the guest's own pid",
+    "_proc_pidinfo": "PROC_PIDTBSDINFO and PROC_PIDTASKINFO for the guest's own pid only",
+    "hw.cpufrequency": "absent when Windows does not report a nominal frequency",
+    "_posix_spawnp": "always fails with ENOSYS; no child process can be created yet",
+    "_posix_spawn_file_actions_init": "state is recorded; no child process can be created yet",
+    "_posix_spawn_file_actions_destroy": "state is recorded; no child process can be created yet",
+    "_posix_spawn_file_actions_adddup2": "state is recorded; no child process can be created yet",
+    "_posix_spawnattr_init": "state is recorded; no child process can be created yet",
+    "_posix_spawnattr_destroy": "state is recorded; no child process can be created yet",
+    "_posix_spawnattr_setflags": "state is recorded; no child process can be created yet",
+    "_posix_spawnattr_setpgroup": "state is recorded; no child process can be created yet",
+    "_posix_spawnattr_setsigdefault": "state is recorded; no child process can be created yet",
+    "_fork": "always fails with ENOSYS",
+    "_execvp": "always fails with ENOSYS",
+    "_waitpid": "always fails with ECHILD; no child can exist",
+    "_setpgid": "always fails with ENOSYS",
+    "_setsid": "always fails with ENOSYS"
   }
 }

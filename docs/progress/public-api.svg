@@ -1,16 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="786" viewBox="0 0 960 786" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1006" viewBox="0 0 960 1006" role="img" aria-labelledby="title desc">
 <title id="title">Public API surface coverage</title>
 <desc id="desc">Public header symbols with a complete adapter, a partial adapter or none. Does not measure whether programs run.</desc>
-<rect width="960" height="786" rx="12" fill="#111827"/>
+<rect width="960" height="1006" rx="12" fill="#111827"/>
 <g font-family="sans-serif" fill="#f9fafb">
 <text x="28" y="36" font-size="21" font-weight="600">Public API surface coverage</text>
-<text x="28" y="62" font-size="13" fill="#cbd5e1">14 subsystems · symbols exported by Apple&#x27;s public headers</text>
+<text x="28" y="62" font-size="13" fill="#cbd5e1">19 subsystems · symbols exported by Apple&#x27;s public headers</text>
 <text x="28" y="107" font-size="14">All catalogued public APIs</text>
 <rect x="270" y="90" width="410" height="24" rx="4" fill="#374151"/>
-<rect x="270" y="90" width="277.24" height="24" rx="4" fill="#fbbf24"/>
-<rect x="270" y="90" width="185.48" height="24" rx="4" fill="#34d399"/>
-<text x="690" y="107" font-size="14" font-family="monospace">67.62%</text>
-<text x="770" y="107" font-size="14" fill="#cbd5e1">142 / 210 (47 partial)</text>
+<rect x="270" y="90" width="226.83" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="90" width="164.19" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="107" font-size="14" font-family="monospace">55.32%</text>
+<text x="770" y="107" font-size="14" fill="#cbd5e1">239 / 432 (66 partial)</text>
 <text x="28" y="151" font-size="14">libdispatch queues</text>
 <rect x="270" y="134" width="410" height="24" rx="4" fill="#374151"/>
 <rect x="270" y="134" width="410.00" height="24" rx="4" fill="#fbbf24"/>
@@ -95,5 +95,35 @@
 <rect x="270" y="706" width="0.00" height="24" rx="4" fill="#34d399"/>
 <text x="690" y="723" font-size="14" font-family="monospace">14.29%</text>
 <text x="770" y="723" font-size="14" fill="#cbd5e1">6 / 42 (6 partial)</text>
-<text x="28" y="768" font-size="12" fill="#9ca3af">Green: complete adapter. Amber: partial adapter, see partial-api.json. Gray: missing.</text>
+<text x="28" y="767" font-size="14">sysctl calls</text>
+<rect x="270" y="750" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="750" width="410.00" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="750" width="410.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="767" font-size="14" font-family="monospace">100.00%</text>
+<text x="770" y="767" font-size="14" fill="#cbd5e1">3 / 3</text>
+<text x="28" y="811" font-size="14">sysctl names</text>
+<rect x="270" y="794" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="794" width="227.78" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="794" width="224.74" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="811" font-size="14" font-family="monospace">55.56%</text>
+<text x="770" y="811" font-size="14" fill="#cbd5e1">75 / 135 (1 partial)</text>
+<text x="28" y="855" font-size="14">libproc</text>
+<rect x="270" y="838" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="838" width="66.13" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="838" width="13.23" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="855" font-size="14" font-family="monospace">16.13%</text>
+<text x="770" y="855" font-size="14" fill="#cbd5e1">5 / 31 (4 partial)</text>
+<text x="28" y="899" font-size="14">posix_spawn</text>
+<rect x="270" y="882" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="882" width="105.43" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="882" width="0.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="899" font-size="14" font-family="monospace">25.71%</text>
+<text x="770" y="899" font-size="14" fill="#cbd5e1">9 / 35 (9 partial)</text>
+<text x="28" y="943" font-size="14">fork, exec and wait</text>
+<rect x="270" y="926" width="410" height="24" rx="4" fill="#374151"/>
+<rect x="270" y="926" width="113.89" height="24" rx="4" fill="#fbbf24"/>
+<rect x="270" y="926" width="0.00" height="24" rx="4" fill="#34d399"/>
+<text x="690" y="943" font-size="14" font-family="monospace">27.78%</text>
+<text x="770" y="943" font-size="14" fill="#cbd5e1">5 / 18 (5 partial)</text>
+<text x="28" y="988" font-size="12" fill="#9ca3af">Green: complete adapter. Amber: partial or always-failing adapter, see partial-api.json. Gray: missing.</text>
 </g></svg>

@@ -144,7 +144,9 @@ def registry():
             r'((?:"[^"\n]+"\s*(?:\|\s*)?)+)=>\s*\w+\s+as\s+\*const', objc_text):
         objc.update(re.findall(r'"([^"\n]+)"', arm.group(1)))
     objc.update(re.findall(r'"([^"\n]+)"\s*=>\s*\w+\.as_ptr\(\)\s+as\s+u64', objc_text))
-    return {'libSystem': system, 'CoreFoundation': cf, 'libxpc': xpc, 'Objective-C': objc}
+    sysctl = set(re.findall(r'e!\("([a-z0-9_.]+)"', (ROOT / 'src/darwin/sysctl.rs').read_text()))
+    return {'libSystem': system, 'CoreFoundation': cf, 'libxpc': xpc, 'Objective-C': objc,
+            'sysctl': sysctl}
 
 
 def family(library):
@@ -228,26 +230,45 @@ def public_surface(adapters):
     """Coverage of each subsystem's whole public header surface (public-api.json)."""
     catalog = json.loads((OUT / 'public-api.json').read_text())
     partial = json.loads((OUT / 'partial-api.json').read_text())['partial']
-    every_symbol = {name for group in catalog['groups'] for name in group['symbols']}
+
+    def registered(group):
+        return adapters[group.get('registry', 'libSystem')]
+
+    catalogued = {name for group in catalog['groups'] for name in group['symbols']}
     for name in partial:
-        if name not in every_symbol or name not in adapters['libSystem']:
+        if name not in catalogued or not any(name in registered(g) for g in catalog['groups']
+                                              if name in g['symbols']):
             raise ValueError(f'partial-api.json names an uncatalogued or unregistered symbol: {name}')
-    rows, missing, every = [], {}, set()
+    check_sysctl_numbers(catalog)
+    rows, missing = [], {}
+    total = have = part = 0
     for group in catalog['groups']:
         symbols = set(group['symbols'])
-        every |= symbols
-        absent = sorted(name for name in symbols if name not in adapters['libSystem'])
+        absent = sorted(name for name in symbols if name not in registered(group))
         missing[group['id']] = absent
-        have = len(symbols) - len(absent)
-        part = sum(name in partial for name in symbols if name not in absent)
-        rows.append({'name': group['name'], 'available': have, 'partial': part, 'total': len(symbols),
-                     'percent': round(100 * have / len(symbols), 2)})
-    have = sum(name in adapters['libSystem'] for name in every)
-    part = sum(name in partial for name in every)
+        present = symbols - set(absent)
+        rows.append({'name': group['name'], 'available': len(present),
+                     'partial': sum(name in partial for name in present), 'total': len(symbols),
+                     'percent': round(100 * len(present) / len(symbols), 2)})
+        total += len(symbols)
+        have += len(present)
+        part += rows[-1]['partial']
     rows.insert(0, {'name': 'All catalogued public APIs', 'available': have, 'partial': part,
-                    'total': len(every), 'percent': round(100 * have / len(every), 2)})
+                    'total': total, 'percent': round(100 * have / total, 2)})
     sources = sorted({f"{f['repository']}@{f['commit'][:10]}" for g in catalog['groups'] for f in g['files']})
     return {'rows': rows, 'missing': missing, 'partial': partial, 'sources': sources}
+
+
+def check_sysctl_numbers(catalog):
+    """Statically numbered sysctl names in the adapter must match the pinned header."""
+    tops = {'CTL_KERN': 1, 'CTL_VM': 2, 'CTL_HW': 6, 'CTL_MACHDEP': 7, 'CTL_USER': 8}
+    header = {}
+    for group in catalog['groups']:
+        header.update(group.get('mibs', {}))
+    text = (ROOT / 'src/darwin/sysctl.rs').read_text()
+    for name, top, index in re.findall(r'e!\("([a-z0-9_.]+)",\s*&\[(CTL_[A-Z]+),\s*(\d+)\]', text):
+        if name in header and header[name] != [tops[top], int(index)]:
+            raise ValueError(f'{name}: adapter MIB {[tops[top], int(index)]} differs from header {header[name]}')
 
 
 def chart(rows, target_count, title='Known Intel API adapter coverage', filename='api-coverage.svg',
@@ -282,7 +303,7 @@ def chart(rows, target_count, title='Known Intel API adapter coverage', filename
             count = f'{row["available"]} / {row["total"]}' + (f' ({part} partial)' if part else '')
         svg += [f'<text x="690" y="{y+17}" font-size="14" font-family="monospace">{pct:.2f}%</text>',
                 f'<text x="770" y="{y+17}" font-size="14" fill="#cbd5e1">{count}</text>']
-    note = ('Green: complete adapter. Amber: partial adapter, see partial-api.json. Gray: missing.'
+    note = ('Green: complete adapter. Amber: partial or always-failing adapter, see partial-api.json. Gray: missing.'
             if rows and 'partial' in rows[0] else
             'An adapter may implement only part of an API. Missing APIs are listed in status.json.')
     svg += [f'<text x="28" y="{height-18}" font-size="12" fill="#9ca3af">{html.escape(note)}</text>', '</g></svg>']
@@ -363,8 +384,9 @@ def update_readme(report):
              f"**{public[0]['available']:,} / {public[0]['total']:,} catalogued public APIs have adapters: {public[0]['percent']:.2f}%"
              f" ({public[0]['partial']} of them partial).**", '',
              'The chart above counts only what the inspected binaries import. This one counts every symbol',
-             'in the public headers of the subsystems Adapter implements (libdispatch, the Block runtime,',
-             'signals, pthread QoS and Mach VM), pinned to Apple open-source commits. Adding a subsystem',
+             'in the public headers of the subsystems Adapter implements or has started (libdispatch, the Block',
+             'runtime, signals, pthread QoS, Mach VM, sysctl, libproc, posix_spawn and process control), pinned',
+             'to Apple open-source commits. Adding a subsystem',
              'to the catalog is a small change in `tools/extract_public_api.py`.', end]
     at = text.index(start)
     stop = text.index(end, at) + len(end)

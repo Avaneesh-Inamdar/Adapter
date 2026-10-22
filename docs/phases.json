@@ -299,9 +299,9 @@
       "id": 22,
       "name": "IOKit / sysctl / proc_info",
       "phase": "P2",
-      "status": "not-started",
-      "work": "Target-specific device/process facts and guest object/handle ownership; no host-handle substitution.",
-      "source": "upstream-sources.md"
+      "status": "implemented-slice",
+      "work": "sysctl, sysctlbyname and sysctlnametomib answer about 75 kern/hw/machdep/user/vm names from host facts and fixed Darwin values, and libproc describes the guest's own process, with a verified Mach-O consumer. Remaining: kern.proc and procargs2, net/debug subtrees, disk and performance-level names, other pids, file-descriptor and region flavors, and IOKit.",
+      "source": "sysctl-results.md"
     },
     {
       "id": 23,

@@ -47,6 +47,14 @@ GROUPS = [
     ('pthread-qos', 'pthread QoS', 'libpthread',
      ['include/pthread/qos.h', 'include/sys/qos.h'], 'c'),
     ('mach-vm', 'Mach VM routines', 'xnu', 'osfmk/mach/mach_vm.defs', 'mig'),
+    ('sysctl-calls', 'sysctl calls', 'xnu', 'bsd/sys/sysctl.h', 'names:sysctl,sysctlbyname,sysctlnametomib'),
+    ('sysctl-names', 'sysctl names', 'xnu', 'bsd/sys/sysctl.h', 'sysctl'),
+    ('libproc', 'libproc', 'xnu', 'libsyscall/wrappers/libproc/libproc.h', 'c'),
+    ('spawn', 'posix_spawn', 'xnu', 'libsyscall/wrappers/spawn/spawn.h', 'c'),
+    ('process-control', 'fork, exec and wait', 'Libc',
+     ['include/unistd.h', ('xnu', 'bsd/sys/wait.h')],
+     'names:fork,vfork,execl,execle,execlp,execv,execvP,execvp,getppid,getpgrp,getpgid,setpgid,'
+     'setsid,wait,wait3,wait4,waitpid,waitid'),
 ]
 
 
@@ -158,7 +166,44 @@ def mig_symbols(text):
     return names
 
 
+def sysctl_names(text):
+    """Statically numbered sysctl names plus the selectors the header documents.
+
+    Returns {name: mib or None}. The CTL_*_NAMES tables give each name's second MIB
+    component by position; `dummy` slots and interior nodes are skipped.
+    """
+    # The documented dynamic selectors live in a block comment, so read them first.
+    documented = re.findall(r'^\s*\*\s+(hw\.[a-z0-9_.]+)\s+-', text, re.M)
+    text = re.sub(r'/\*.*?\*/', '', text, flags=re.S).replace('\\\n', '\n')
+
+    def table(macro):
+        match = re.search(r'#define\s+' + macro + r'\s*\{(.*?)\n\}', text, re.S)
+        if not match:
+            raise RuntimeError(f'{macro} not found')
+        return re.findall(r'\{\s*(?:"([^"]*)"|0)\s*,\s*(\w+)\s*\}', match[1])
+
+    top = [name for name, _ in table('CTL_NAMES')]
+    found = {}
+    for macro, prefix in [('CTL_KERN_NAMES', 'kern'), ('CTL_VM_NAMES', 'vm'), ('CTL_HW_NAMES', 'hw'),
+                          ('CTL_USER_NAMES', 'user')]:
+        for index, (name, kind) in enumerate(table(macro)):
+            if name and name != 'dummy' and kind != 'CTLTYPE_NODE':
+                found[f'{prefix}.{name}'] = [top.index(prefix), index]
+    for name in documented:
+        found.setdefault(name, None)
+    return found
+
+
+def explicit_names(kind, text):
+    wanted = kind.split(':', 1)[1].split(',')
+    return {name for name in wanted if re.search(r'\b' + re.escape(name) + r'\s*\(', text)}
+
+
 def parse(kind, text):
+    if kind.startswith('names:'):
+        return explicit_names(kind, text)
+    if kind == 'sysctl':
+        return sysctl_names(text)
     return {'dispatch': dispatch_symbols, 'block': block_symbols, 'c': c_symbols,
             'mig': mig_symbols}[kind](text)
 
@@ -176,14 +221,24 @@ def build():
             data = cache[(source_repo, path)]
             files.append({'repository': source_repo, 'commit': REPOS[source_repo], 'path': path,
                           'sha256': hashlib.sha256(data).hexdigest()})
-            symbols |= parse(kind, data.decode('utf-8', errors='replace'))
+            symbols |= set(parse(kind, data.decode('utf-8', errors='replace')))
+            if kind == 'sysctl':
+                mibs = parse(kind, data.decode('utf-8', errors='replace'))
         symbols = {name for name in symbols if not name.startswith(PRIVATE.get(kind, ()))}
+        if kind.startswith('names:') and symbols != set(kind.split(':', 1)[1].split(',')):
+            raise RuntimeError(f'{gid}: not every listed name was found in its headers')
         if not symbols:
             raise RuntimeError(f'no symbols parsed for {gid}')
-        groups.append({'id': gid, 'name': label, 'repository': repo, 'commit': REPOS[repo],
-                       'files': files,
-                       # Mach-O symbol names carry the C leading underscore.
-                       'symbols': sorted('_' + name for name in symbols)})
+        group = {'id': gid, 'name': label, 'repository': repo, 'commit': REPOS[repo], 'files': files}
+        if kind == 'sysctl':
+            # sysctl names are not C symbols: no leading underscore, and a separate registry.
+            group['registry'] = 'sysctl'
+            group['symbols'] = sorted(symbols)
+            group['mibs'] = {name: mibs[name] for name in sorted(mibs) if mibs[name]}
+        else:
+            # Mach-O symbol names carry the C leading underscore.
+            group['symbols'] = sorted('_' + name for name in symbols)
+        groups.append(group)
     return {'schema_version': 1,
             'note': 'Public-header symbol inventory. Counts what a subsystem exports, not what '
                     'programs import; a symbol with an adapter may implement only part of its contract.',

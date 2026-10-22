@@ -10,13 +10,13 @@ unobserved APIs, implementation completeness or runtime test results. ARM64 imag
 
 | Image | Adapters available | Missing | API coverage |
 | --- | ---: | ---: | ---: |
-| AU Lab | 88 / 603 | 515 | 14.59% |
+| AU Lab | 89 / 603 | 514 | 14.76% |
 | Pixie | 18 / 134 | 116 | 13.43% |
 | LogTool | 25 / 34 | 9 | 73.53% |
 | Quartz Debug | 50 / 420 | 370 | 11.90% |
 | Server | 40 / 232 | 192 | 17.24% |
 | HomeKit Accessory Simulator | 28 / 319 | 291 | 8.78% |
-| IORegistryExplorer | 21 / 188 | 167 | 11.17% |
+| IORegistryExplorer | 23 / 188 | 165 | 12.23% |
 | Network Link Conditioner | 22 / 105 | 83 | 20.95% |
 | NLCBackgroundApp | 15 / 38 | 23 | 39.47% |
 | com.apple.Network-Link-Conditioner.remoteservice | 6 / 16 | 10 | 37.50% |
@@ -85,7 +85,7 @@ with `python tools/extract_public_api.py`). It does not say which symbols real p
 
 | Subsystem | Adapters available | Of which partial | Missing | Coverage |
 | --- | ---: | ---: | ---: | ---: |
-| All catalogued public APIs | 142 / 210 | 47 | 68 | 67.62% |
+| All catalogued public APIs | 239 / 432 | 66 | 193 | 55.32% |
 | libdispatch queues | 36 / 36 | 8 | 0 | 100.00% |
 | libdispatch objects | 15 / 15 | 3 | 0 | 100.00% |
 | libdispatch groups | 8 / 8 | 0 | 0 | 100.00% |
@@ -100,6 +100,11 @@ with `python tools/extract_public_api.py`). It does not say which symbols real p
 | POSIX signals | 23 / 28 | 10 | 5 | 82.14% |
 | pthread QoS | 8 / 8 | 7 | 0 | 100.00% |
 | Mach VM routines | 6 / 42 | 6 | 36 | 14.29% |
+| sysctl calls | 3 / 3 | 0 | 0 | 100.00% |
+| sysctl names | 75 / 135 | 1 | 60 | 55.56% |
+| libproc | 5 / 31 | 4 | 26 | 16.13% |
+| posix_spawn | 9 / 35 | 9 | 26 | 25.71% |
+| fork, exec and wait | 5 / 18 | 5 | 13 | 27.78% |
 
 A partial adapter implements only part of its contract; the reason for each is in
 [partial-api.json](partial-api.json). Missing public symbols are listed per subsystem under
