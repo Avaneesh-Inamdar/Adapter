@@ -51,6 +51,7 @@ def build():
     }
     versions = ["-arch", "x86_64", "-platform_version", "macos", "10.13", "10.13"]
     exports["System"] += ["strtol"]
+    exports["System"] += ["mach_vm_allocate", "mach_vm_deallocate", "mach_vm_protect", "vm_allocate", "vm_deallocate", "vm_protect"]
     exports["System"] += ["fopen$DARWIN_EXTSN", "fdopen$DARWIN_EXTSN", "stat$INODE64", "fstat$INODE64", "realpath$DARWIN_EXTSN", "open", "close", "pathconf", "dirname", "fgets", "timegm", "time", "gmtime_r", "gettimeofday", "strftime", "strptime", "memset", "write", "usleep", "_tlv_atexit"]
     for library, symbols in exports.items():
         asm = OUT / (library + ".s")
@@ -77,7 +78,7 @@ def build():
         run(tool("clang"), "-target", "x86_64-apple-macos10.13", "-c", asm, "-o", OUT / (library + ".o"))
         install = {"System":"/usr/lib/libSystem.B.dylib","CoreFoundation":"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation","objc":"/usr/lib/libobjc.A.dylib","xpc":"/usr/lib/system/libxpc.dylib"}[library]
         run(tool("ld64.lld"), *versions, "-dylib", "-install_name", install, "-o", OUT / ("lib" + library + ".dylib"), OUT / (library + ".o"))
-    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "objc_core", "objc_category", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
+    for name in ["return37", "hello", "corefoundation", "unknown", "loop", "crash", "abi", "objc", "objc_core", "objc_category", "tls", "exit_callbacks", "thread_state", "libc", "file_time", "condvars", "cxx_tls", "mach_vm", "mach_server", "mach_client", "mach_errors", "blocks", "xpc_server", "xpc_client", "xpc_missing"]:
         extension=".m" if name.startswith("objc") else ".cpp" if name=="cxx_tls" else ".c"
         flags=["-O0","-fno-stack-protector","-fno-asynchronous-unwind-tables"]
         flags+= ["-fno-exceptions","-fno-rtti"] if extension==".cpp" else ["-ffreestanding"]
@@ -88,7 +89,7 @@ def build():
         if name.startswith("objc"): libraries += ["-lobjc"]
         if name.startswith("xpc_"): libraries = ["-L", OUT, "-lxpc", "-lSystem"]
         run(tool("ld64.lld"), *versions, "-no_fixup_chains", "-no_uuid", "-e", "_main", "-o", OUT / name, OUT / (name + ".o"), *libraries)
-        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "objc_core", "objc_category"]:
+        if name in ["hello","corefoundation","tls","thread_state","libc","condvars","cxx_tls", "mach_vm", "objc_core", "objc_category"]:
             objc_flags = ["-no_objc_relative_method_lists"] if name in ("objc_core", "objc_category") else []
             run(tool("ld64.lld"),"-arch","x86_64","-platform_version","macos","11.0","11.0","-fixup_chains",*objc_flags,"-no_uuid","-e","_main","-o",OUT/(name+"-chained"),OUT/(name+".o"),*libraries)
             if name in ("objc_core", "objc_category"):

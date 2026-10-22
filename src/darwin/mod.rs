@@ -11,6 +11,7 @@ pub mod sync;
 pub mod thread_state;
 pub mod threads;
 pub mod tlv;
+pub mod vm;
 pub mod xpc;
 use std::{
     ffi::{CStr, c_char, c_void},
@@ -100,6 +101,9 @@ pub fn symbol(name: &str) -> Option<u64> {
         return Some(value);
     }
     if let Some(value) = mach::symbol(name) {
+        return Some(value);
+    }
+    if let Some(value) = vm::symbol(name) {
         return Some(value);
     }
     if let Some(value) = stack::symbol(name) {

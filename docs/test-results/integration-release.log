@@ -81,6 +81,7 @@ test_mach_cross_process_echo_and_retire (test_runtime.RuntimeTests.test_mach_cro
 test_mach_failure_semantics_local (test_runtime.RuntimeTests.test_mach_failure_semantics_local) ... ok
 test_mach_failure_semantics_with_broker (test_runtime.RuntimeTests.test_mach_failure_semantics_with_broker) ... ok
 test_mach_missing_broker_endpoint_fails_before_entry (test_runtime.RuntimeTests.test_mach_missing_broker_endpoint_fails_before_entry) ... ok
+test_mach_vm_allocation_protection_and_errors (test_runtime.RuntimeTests.test_mach_vm_allocation_protection_and_errors) ... ok
 test_missing_library (test_runtime.RuntimeTests.test_missing_library) ... ok
 test_objc_metadata_and_class_dispatch (test_runtime.RuntimeTests.test_objc_metadata_and_class_dispatch) ... ok
 test_overlapping_universal_slices (test_runtime.RuntimeTests.test_overlapping_universal_slices) ... ok
@@ -106,6 +107,6 @@ test_xpc_dictionary_roundtrip (test_runtime.RuntimeTests.test_xpc_dictionary_rou
 test_xpc_missing_service_is_invalid (test_runtime.RuntimeTests.test_xpc_missing_service_is_invalid) ... ok
 
 ----------------------------------------------------------------------
-Ran 105 tests in 13.802s
+Ran 106 tests in 14.399s
 
 OK

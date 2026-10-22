@@ -64,8 +64,8 @@ When adding a new target, see the inventory refresh command in
 | Real binary | Original jq: JSON pipelines, Unicode, regex, files/modules, dates, math, diagnostics and exit codes; pinned upstream jq.test passes 550/550 | [jq tests](tests/integration/test_jq.py), [results](docs/jq-libc-results.md) |
 | Second real binary | Original ripgrep 15.2.0: recursive search, gitignore/hidden rules, JSON, PCRE2, UTF-8, stdin, binary detection, mmap, multithreaded search and exit codes | [ripgrep tests](tests/integration/test_ripgrep.py), [results](docs/ripgrep-results.md) |
 
-**Test state:** the current run passed 167 distinct tests: 32 Rust, 30 archive
-and 105 integration tests. All 105 integration tests also passed in release. The
+**Test state:** the current run passed 168 distinct tests: 32 Rust, 30 archive
+and 106 integration tests. All 105 integration tests also passed in release. The
 integration run includes the unmodified jq binary executing jq's pinned upstream
 `tests/jq.test` suite with its module fixtures (550/550), the unmodified
 ripgrep binary exercising 11 CLI workflows, two unchanged Mach-O processes

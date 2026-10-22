@@ -36,7 +36,7 @@ Status: **implemented-slices**. Dependencies: P0.
 | 8 | Apple-ABI Objective-C runtime | verified-slice | Raw-isa MRC classes/metaclasses, selectors, inheritance, msgSend/Super2, load/initialize, startup categories and absolute/relative method lists across classic, chained and relative fixup forms, with all 4096 same-binary Objective-C differential cases matching a hosted Intel Mac. Protocols/properties, ARC, exceptions and dynamic registration remain. |
 | 9 | Swift guest runtime | not-started | Apple Mach-O Swift metadata/refcounting/concurrency/reflection and ObjC interop. Native Windows Swift alone does not satisfy this ABI. |
 | 10 | Darwin compact unwind and DWARF | not-started | Loaded-image unwind lookup, personalities and C++/ObjC exceptions across guest/host frames; distinguish Windows SEH. |
-| 11 | Mach VM emulation | not-started | vm_*/mach_vm_* address spaces, protection, region queries, task rights, sharing and exact errors over host VM. |
+| 11 | Mach VM emulation | implemented-slice | mach_vm_allocate/deallocate/protect plus the vm_* spellings execute over the host address space with Darwin return codes, a recorded-region rule and a verified Mach-O consumer. Remaining: region queries, sharing, sub-range release, inheritance and ledger accounting. |
 
 **Exit gate:** Measured shared-cache images, ObjC/Swift consumers, cross-image unwinding and Mach VM error/lifetime probes.
 

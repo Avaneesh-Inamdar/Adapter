@@ -109,6 +109,10 @@ class RuntimeTests(unittest.TestCase):
     def test_condition_variables(self):
         for name in ['condvars','condvars-chained']:
             p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr);self.assertEqual(p.stdout,'conds:wait, signal, broadcast and timedwait passed\n')
+    def test_mach_vm_allocation_protection_and_errors(self):
+        for name in ['mach_vm','mach_vm-chained']:
+            p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)
+            self.assertEqual(p.stdout,'mach_vm:allocate, write, protect, fixed and errors passed\n')
     def test_cxx_thread_local_destructors(self):
         for name in ['cxx_tls','cxx_tls-chained']:
             p=call('adapter-run',FIX/name);self.assertEqual(p.returncode,0,p.stderr)

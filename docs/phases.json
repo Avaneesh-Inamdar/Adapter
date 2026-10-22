@@ -211,9 +211,9 @@
       "id": 11,
       "name": "Mach VM emulation",
       "phase": "P1",
-      "status": "not-started",
-      "work": "vm_*/mach_vm_* address spaces, protection, region queries, task rights, sharing and exact errors over host VM.",
-      "source": "upstream-sources.md"
+      "status": "implemented-slice",
+      "work": "mach_vm_allocate/deallocate/protect plus the vm_* spellings execute over the host address space with Darwin return codes, a recorded-region rule and a verified Mach-O consumer. Remaining: region queries, sharing, sub-range release, inheritance and ledger accounting.",
+      "source": "mach-vm-results.md"
     },
     {
       "id": 12,

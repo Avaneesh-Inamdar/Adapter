@@ -661,6 +661,41 @@
         "_sel_isEqual",
         "_sel_registerName"
       ]
+    },
+    {
+      "id": "mach_vm",
+      "version": 1,
+      "scope": "Mach VM allocation, release and protection for the guest's own task",
+      "calling_convention": "Darwin x86-64 LP64; mach_vm_address_t and mach_vm_size_t are 64-bit, kern_return_t is a 32-bit int, task ports are 32-bit names.",
+      "implementation": [
+        "src/darwin/vm.rs"
+      ],
+      "tests": [
+        "tests/fixtures/mach_vm.c"
+      ],
+      "layouts": [
+        {
+          "name": "kern_return_t",
+          "size": 4,
+          "align": 4,
+          "fields": [
+            {
+              "name": "value",
+              "offset": 0,
+              "size": 4
+            }
+          ]
+        }
+      ],
+      "ownership": "An allocation is a host reservation recorded by the runtime; only recorded ranges are releasable.",
+      "callbacks": "None.",
+      "errors": "KERN_SUCCESS 0, KERN_INVALID_ADDRESS 1, KERN_PROTECTION_FAILURE 2, KERN_NO_SPACE 3, KERN_INVALID_ARGUMENT 4; task ports other than mach_task_self are refused.",
+      "lifecycle": "Regions live until released or the run ends; release returns the host reservation to the operating system.",
+      "unsupported": "No region queries, sharing, sub-range release, inheritance, ledger accounting, copy/read/write or purgeable flags.",
+      "sources": [
+        "docs/mach-vm-results.md",
+        "https://github.com/apple-oss-distributions/xnu"
+      ]
     }
   ]
 }
